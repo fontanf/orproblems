@@ -43,7 +43,6 @@ typedef int64_t JobPos;
 typedef int64_t Time;
 typedef double Weight;
 typedef double Profit;
-typedef int64_t GuideId;
 
 struct Job
 {

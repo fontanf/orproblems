@@ -45,7 +45,6 @@ typedef int64_t ItemId;
 typedef int64_t ItemPos;
 typedef int64_t Profit;
 typedef int64_t Weight;
-typedef int64_t GuideId;
 
 struct Item
 {

@@ -30,7 +30,6 @@ namespace travellingrepairman
 typedef int64_t LocationId;
 typedef int64_t LocationPos;
 typedef double Time;
-typedef int64_t GuideId;
 
 struct Location
 {

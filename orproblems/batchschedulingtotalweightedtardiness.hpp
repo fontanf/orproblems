@@ -38,7 +38,6 @@ typedef int64_t Time;
 typedef int64_t Weight;
 typedef int64_t Size;
 typedef int64_t Area;
-typedef int64_t GuideId;
 
 struct Job
 {

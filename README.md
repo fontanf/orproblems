@@ -144,7 +144,7 @@ The data also include CSV files listing the instances for each problem and their
 
 ### Single machine scheduling
 
-[Single machine scheduling problem with sequence-dependent setup times, Total weighted Tardiness](orproblems/schedulingwithsdsttwt.hpp)
+[Single machine scheduling problem with sequence-dependent setup times, Total weighted tardiness](orproblems/schedulingwithsdsttwt.hpp)
 * Three field classification: `1 | sᵢⱼ | ∑wⱼTⱼ`
 
 <details><summary>Literature</summary>

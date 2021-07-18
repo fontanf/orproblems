@@ -36,7 +36,6 @@ namespace sequentialordering
 typedef int64_t VertexId;
 typedef int64_t VertexPos;
 typedef int64_t Distance;
-typedef int64_t GuideId;
 
 struct Location
 {

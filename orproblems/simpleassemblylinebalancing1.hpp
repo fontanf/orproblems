@@ -32,7 +32,6 @@ typedef int64_t JobId;
 typedef int64_t JobPos;
 typedef int64_t StationId;
 typedef int64_t Time;
-typedef int64_t GuideId;
 
 struct Job
 {
