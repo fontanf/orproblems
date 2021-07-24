@@ -8,12 +8,30 @@ The data also include CSV files listing the instances for each problem and their
 
 ## Packing
 
-[Knapsack Problem with Conflicts](orproblems/knapsackwithconflicts.hpp)
+[Knapsack Problem with Conflicts / Disjunctively Constrained Knapsack Problem](orproblems/knapsackwithconflicts.hpp)
+
+<details><summary>Literature</summary>
+<p>
+
 * Literature:
+  * "Heuristic and exact algorithms for the disjunctively constrained knapsack problem" (Yamada et al., 2002)
+  * "A reactive local search-based algorithm for the disjunctively constrained knapsack problem" ()Hifi et Michrafy, 2006) [DOI](https://doi.org/10.1057/palgrave.jors.2602046)
+  * "Reduction strategies and exact algorithms for the disjunctively constrained knapsack problem" (Hifi et Michrafy, 2007) [DOI](https://doi.org/10.1016/j.cor.2005.10.004)
   * "Local branching-based algorithms for the disjunctively constrained knapsack problem" (Akeb et al., 2011) [DOI](https://doi.org/10.1016/j.cie.2011.01.019)
+  * "An algorithm for the disjunctively constrained knapsack problem" (Hifi et Otmani, 2012) [DOI](https://doi.org/10.1504/IJOR.2012.044026)
   * "Bin Packing with Conflicts: A Generic Branch-and-Price Algorithm" (Sadykov et Vanderbeck, 2012) [DOI](https://doi.org/10.1287/ijoc.1120.0499)
+  * "An iterative rounding search-based algorithm for the disjunctively constrained knapsack problem" (Hifi, 2014) [DOI](https://doi.org/10.1080/0305215X.2013.819096)
+  * "Design and evaluation of a parallel neighbor algorithm for the disjunctively constrained knapsack problem" (Quan et Wu, 2016) [DOI](https://doi.org/10.1002/cpe.3848)
+  * "Cooperative parallel adaptive neighbourhood search for the disjunctively constrained knapsack problem" (Quan et Wu, 2017) [DOI](https://doi.org/10.1080/0305215X.2016.1257854)
+  * "Probabilistic Tabu search with multiple neighborhoods for the Disjunctively Constrained Knapsack Problem" (Salem et al., 2017) [DOI](https://doi.org/10.1051/ro/2016049)
   * "A Branch-and-Bound Algorithm for the Knapsack Problem with Conflict Graph" (Bettinelli et al., 2017) [DOI](https://doi.org/10.1287/ijoc.2016.0742)
+  * "Optimization algorithms for the disjunctively constrained knapsack problem" (Salem et al., 2018) [DOI](https://doi.org/10.1007/s00500-016-2465-7)
   * "A new combinatorial branch-and-bound algorithm for the Knapsack Problem with Conflicts" (Coniglio et al., 2020) [DOI](https://doi.org/10.1016/j.ejor.2020.07.023)
+  * "A threshold search based memetic algorithm for the disjunctively constrained knapsack problem" (Wei et Hao, 2021) [DOI](https://doi.org/10.1016/j.cor.2021.105447)
+
+</p>
+</details>
+
 * Data: [knapsackwithconflicts.7z](https://github.com/fontanf/orproblems/releases/download/data/knapsackwithconflicts.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/knapsackwithconflicts.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/knapsackwithconflicts.hpp)
 
@@ -25,6 +43,7 @@ The data also include CSV files listing the instances for each problem and their
 * Literature:
   * "Heuristic algorithms for the multiple-choice multidimensional knapsack problem" (Hifi et al., 2004) [DOI](https://doi.org/10.1057/palgrave.jors.2601796)
   * "A Reactive Local Search-Based Algorithm for the Multiple-Choice Multi-Dimensional Knapsack Problem" (Hifi et al., 2005) [DOI](https://doi.org/10.1007/s10589-005-3057-0)
+  * "A column generation method for the multiple-choice multi-dimensional knapsack problem" (Cherfi et Hifi, 2010) [DOI](https://doi.org/10.1007/s10589-008-9184-7)
   * "Development of core to solve the multidimensional multiple-choice knapsack problem" (Ghasemia et Razzaz, 2011) [DOI](https://doi.org/10.1016/j.cie.2010.12.001)
   * "Iterative semi-continuous relaxation heuristics for the multiple-choice multidimensional knapsack problem" (Crévits et al., 2012) [DOI](https://doi.org/10.1016/j.cor.2010.12.016)
   * "A hybrid heuristic for the multiple choice multidimensional knapsack problem" (Mansi et al., 2012) [DOI](https://doi.org/10.1080/0305215X.2012.717072)
@@ -69,9 +88,59 @@ The data also include CSV files listing the instances for each problem and their
 * Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/cuttingstock.hpp)
 
 [Multiple Knapsack Problem](orproblems/multipleknapsack.hpp)
-* Literature: TODO
+
+<details><summary>Literature</summary>
+<p>
+
+* Literature:
+  * "An Algorithm for the Solution of 0-1 Loading Problems" (Ingargiola et Korsh, 1975) [DOI](https://doi.org/10.1287/opre.23.6.1110)
+  * "An algorithm for 0-1 multiple-knapsack problems" (Hung et Fisk, 1978) [DOI](https://doi.org/10.1002/nav.3800250316)
+  * "Solution of the zero-one multiple knapsack problem" (Martello et Toth, 1980) [DOI](https://doi.org/10.1016/0377-2217(80)90112-5)
+  * "A Bound and Bound algorithm for the zero-one multiple knapsack problem" (Martello et Toth, 1981) [DOI](https://doi.org/10.1016/0166-218X(81)90005-6)
+  * "Heuristic algorithms for the multiple knapsack problem" (Martello et Toth, 1981) [DOI](https://doi.org/10.1007/BF02243544)
+  * "An exact algorithm for large multiple knapsack problems" (Pisinger, 1999) [DOI](https://doi.org/10.1016/S0377-2217(98)00120-9)
+  * "Bin Completion Algorithms for Multicontainer Packing, Knapsack, and Covering Problems" (Fukunaga et Korf, 2007) [DOI](https://doi.org/10.1613/jair.2106)
+  * "A new grouping genetic algorithm for the Multiple Knapsack Problem" (Fukunaga, 2008) [DOI](https://doi.org/10.1109/CEC.2008.4631094)
+  * "Combining multiple representations in a genetic algorithm for the multiple knapsack problem" (Fukunaga et Tazoe, 2009) [DOI](https://doi.org/10.1109/CEC.2009.4983244)
+  * "A branch-and-bound algorithm for hard multiple knapsack problems" (Fukunaga, 2011) [DOI](https://doi.org/10.1007/s10479-009-0660-y)
+  * "A procedure-based heuristic for 0-1 Multiple Knapsack Problems" (Lalami et al., 2012) [DOI](https://doi.org/10.1504/IJMOR.2012.046684)
+  * "Improved Swap Heuristic for the Multiple Knapsack Problem" (Laalaoui, 2013) [DOI](https://doi.org/10.1007/978-3-642-38679-4_55)
+  * "A binary multiple knapsack model for single machine scheduling with machine unavailability" (Laalaouia et M’Hallah, 2016) [DOI](https://doi.org/10.1016/j.cor.2016.02.005)
+  * "Mathematical models and decomposition methods for the multiple knapsack problem" (Dell’Amico et al., 2019) [DOI](https://doi.org/10.1016/j.ejor.2018.10.043)
+
+</p>
+</details>
+
 * Data: [multipleknapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/multipleknapsack.7z)
 * Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/multipleknapsack.hpp)
+
+<!---
+[Quadratic Multiple Knapsack Problem](orproblems/quadraticmultipleknapsack.hpp)
+
+<details><summary>Literature</summary>
+<p>
+
+* Literature:
+  * "The quadratic multiple knapsack problem and three heuristic approaches to it" (Hiley et Julstrom, 2006) [DOI](https://doi.org/10.1145/1143997.1144096)
+  * "A Genetic Algorithm for the Quadratic Multiple Knapsack Problem" (Sara et Sipahioglu, 2007) [DOI](https://doi.org/10.1007/978-3-540-75555-5_47)
+  * "A New Grouping Genetic Algorithm for the Quadratic Multiple Knapsack Problem" (Singh et Baghel, 2007) [DOI](https://doi.org/10.1007/978-3-540-71615-0_19)
+  * "A Swarm Intelligence Approach to the Quadratic Multiple Knapsack Problem" (Sundar et Singh, 2010) [DOI](https://doi.org/10.1007/978-3-642-17537-4_76)
+  * "Strategic oscillation for the quadratic multiple knapsack problem" (García-Martínez et al., 2013) [DOI](https://doi.org/10.1007/s10589-013-9623-y)
+  * "Tabu-enhanced iterated greedy algorithm: A case study in the quadratic multiple knapsack problem" (García-Martínez et al., 2014) [DOI](https://doi.org/10.1016/j.ejor.2013.07.035)
+  * "Iterated responsive threshold search for the quadratic multiple knapsack problem" (Chen et Hao, 2015) [DOI](https://doi.org/10.1007/s10479-014-1720-5)
+  * "An evolutionary path relinking approach for the quadratic multiple knapsack problem" (Chen et al., 2016) [DOI](https://doi.org/10.1016/j.knosys.2015.10.004)
+  * "Hybridization of tabu search with feasible and infeasible local searches for the quadratic multiple knapsack problem" (Qin et al., 2016) [DOI](https://doi.org/10.1016/j.cor.2015.08.002)
+  * "An ejection chain approach for the quadratic multiple knapsack problem" (Peng et al., 2016) [DOI](https://doi.org/10.1016/j.ejor.2016.02.043)
+  * "An Exact Algorithm for the Quadratic Multiknapsack Problem with an Application to Event Seating" (Bergman, 2019) [DOI](https://doi.org/10.1287/ijoc.2018.0840)
+  * "Branch and solve strategies-based algorithm for the quadratic multiple knapsack problem" (Aïder et al., 2020) [DOI](https://doi.org/10.1080/01605682.2020.1843982)
+  * "A branch-and-bound algorithm for the quadratic multiple knapsack problem" (Fleszar, 2021) [DOI](https://doi.org/10.1016/j.ejor.2021.06.018)
+  * "Polynomial-size formulations and relaxations for the quadratic multiple knapsack problem" (Galli et al., 2021) [DOI](https://doi.org/10.1016/j.ejor.2020.10.047)
+
+</p>
+</details>
+
+* Data: [quadraticmultipleknapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/quadraticmultipleknapsack.7z)
+--->
 
 [Bin Packing Problem with Conflicts](orproblems/binpackingwithconflicts.hpp)
 * Literature:

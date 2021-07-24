@@ -56,6 +56,8 @@ public:
         item.profit = p;
         items_.push_back(item);
     }
+    void set_weight(ItemId j, Weight w) { items_[j].weight = w; }
+    void set_profit(ItemId j, Profit p) { items_[j].profit = p; }
     void add_conflict(ItemId j1, ItemId j2)
     {
         assert(j1 >= 0);
@@ -75,8 +77,10 @@ public:
             assert(false);
             return;
         }
-        if (format == "" || format == "default") {
-            read_default(file);
+        if (format == "" || format == "default" || format == "hifi2006") {
+            read_hifi2006(file);
+        } else if (format == "bettinelli2017") {
+            read_bettinelli2017(file);
         } else {
             std::cerr << "\033[31m" << "ERROR, unknown instance format \"" << format << "\"" << "\033[0m" << std::endl;
         }
@@ -140,7 +144,39 @@ public:
 
 private:
 
-    void read_default(std::ifstream& file)
+    void read_hifi2006(std::ifstream& file)
+    {
+        ItemId n = -1;
+        file >> n;
+
+        ItemPos conflict_number = -1;
+        file >> conflict_number;
+
+        Weight c = -1;
+        file >> c;
+        set_capacity(c);
+
+        Profit p = -1;
+        for (ItemId j = 0; j < n; ++j) {
+            file >> p;
+            add_item(0, p);
+        }
+
+        Weight w = -1;
+        for (ItemId j = 0; j < n; ++j) {
+            file >> w;
+            set_weight(j, w);
+        }
+
+        ItemId j1 = -1;
+        ItemId j2 = -1;
+        for (ItemPos conflict_id = 0; conflict_id < conflict_number; ++conflict_id) {
+            file >> j1 >> j2;
+            add_conflict(j1 - 1, j2 - 1);
+        }
+    }
+
+    void read_bettinelli2017(std::ifstream& file)
     {
         ItemId n = -1;
         Weight c = -1;
