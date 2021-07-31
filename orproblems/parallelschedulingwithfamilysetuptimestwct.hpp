@@ -56,11 +56,11 @@ class Instance
 
 public:
 
-    Instance(MachineId machine_number, FamilyId family_number):
-        machine_number_(machine_number),
-        families_(family_number)
+    Instance(MachineId number_of_machines, FamilyId number_of_familiess):
+        number_of_machines_(number_of_machines),
+        families_(number_of_familiess)
     {
-        for (FamilyId k = 0; k < family_number; ++k)
+        for (FamilyId k = 0; k < number_of_familiess; ++k)
             families_[k].id = k;
     }
     void set_setup_time(FamilyId k, Time setup_time) { families_[k].setup_time = setup_time; }
@@ -97,9 +97,9 @@ public:
 
     virtual ~Instance() { }
 
-    MachineId machine_number() const { return machine_number_; }
-    FamilyId family_number() const { return families_.size(); }
-    JobId job_number() const { return jobs_.size(); }
+    MachineId number_of_machines() const { return number_of_machines_; }
+    FamilyId number_of_familiess() const { return families_.size(); }
+    JobId number_of_jobs() const { return jobs_.size(); }
     const Job& job(JobId j) const { return jobs_[j]; }
     const Family& family(FamilyId k) const { return families_[k]; }
 
@@ -107,7 +107,7 @@ private:
 
     void read_default(std::ifstream& file)
     {
-        file >> machine_number_;
+        file >> number_of_machines_;
 
         FamilyId o = -1;
 
@@ -132,7 +132,7 @@ private:
         }
     }
 
-    MachineId machine_number_;
+    MachineId number_of_machines_;
     std::vector<Job> jobs_;
     std::vector<Family> families_;
 
@@ -140,16 +140,16 @@ private:
 
 static std::ostream& operator<<(std::ostream &os, const Instance& instance)
 {
-    os << "machine number " << instance.machine_number() << std::endl;
-    os << "job number " << instance.job_number() << std::endl;
-    os << "family number " << instance.family_number() << std::endl;
-    for (JobId j = 0; j < instance.job_number(); ++j)
+    os << "number of machines " << instance.number_of_machines() << std::endl;
+    os << "number of jobs " << instance.number_of_jobs() << std::endl;
+    os << "number of families " << instance.number_of_familiess() << std::endl;
+    for (JobId j = 0; j < instance.number_of_jobs(); ++j)
         os << "job " << j
             << " p " << instance.job(j).processing_time
             << " w " << instance.job(j).weight
             << " f " << instance.job(j).family
             << std::endl;
-    for (FamilyId k = 0; k < instance.family_number(); ++k) {
+    for (FamilyId k = 0; k < instance.number_of_familiess(); ++k) {
         os << "family " << k
             << " s " << instance.family(k).setup_time
             << " j";

@@ -59,8 +59,8 @@ public:
     {
         assert(j1 >= 0);
         assert(j2 >= 0);
-        assert(j1 < job_number());
-        assert(j2 < job_number());
+        assert(j1 < number_of_jobs());
+        assert(j2 < number_of_jobs());
         jobs_[j1].predecessors.push_back(j2);
         jobs_[j2].successors.push_back(j1);
     }
@@ -86,7 +86,7 @@ public:
 
     virtual ~Instance() { }
 
-    inline JobId job_number() const { return jobs_.size(); }
+    inline JobId number_of_jobs() const { return jobs_.size(); }
     inline const Job& job(JobId j) const { return jobs_[j]; }
     inline Time cycle_time() const { return cycle_time_; }
     inline Time processing_time_sum() const { return processing_time_sum_; }
@@ -100,18 +100,18 @@ public:
             return {false, 0};
         }
 
-        JobId n = job_number();
+        JobId n = number_of_jobs();
         JobPos s = -1;
         optimizationtools::IndexedSet jobs(n);
         JobPos duplicates = 0;
-        JobPos precedence_violation_number = 0;
-        StationId overloaded_station_number = 0;
-        StationId station_number = 0;
+        JobPos number_of_precedence_violations = 0;
+        StationId number_of_overloaded_stations = 0;
+        StationId number_of_stations = 0;
         while (file >> s) {
             JobId j = -1;
             Time t = 0;
-            station_number++;
-            std::cout << "Station: " << station_number - 1 << "; Jobs";
+            number_of_stations++;
+            std::cout << "Station: " << number_of_stations - 1 << "; Jobs";
             for (JobPos j_pos = 0; j_pos < s; ++j_pos) {
                 file >> j;
                 // Check duplicates.
@@ -122,7 +122,7 @@ public:
                 // Check predecessors.
                 for (JobId j_pred: job(j).predecessors) {
                     if (!jobs.contains(j_pred)) {
-                        precedence_violation_number++;
+                        number_of_precedence_violations++;
                         std::cout << std::endl << "Job " << j << " depends on job "
                             << j_pred << " which has not been scheduled yet."
                             << std::endl;
@@ -134,24 +134,24 @@ public:
             }
             std::cout << "; Cycle time: " << t << " / " << cycle_time() << std::endl;
             if (t > cycle_time()) {
-                overloaded_station_number++;
-                std::cout << "Station " << station_number - 1 << " is overloaded." << std::endl;
+                number_of_overloaded_stations++;
+                std::cout << "Station " << number_of_stations - 1 << " is overloaded." << std::endl;
             }
         }
         bool feasible
             = (jobs.size() == n)
             && (duplicates == 0)
-            && (precedence_violation_number == 0)
-            && (overloaded_station_number == 0);
+            && (number_of_precedence_violations == 0)
+            && (number_of_overloaded_stations == 0);
 
         std::cout << "---" << std::endl;
         std::cout << "Job number:                   " << jobs.size() << " / " << n  << std::endl;
         std::cout << "Duplicates:                   " << duplicates << std::endl;
-        std::cout << "Precedence violation number:  " << precedence_violation_number << std::endl;
-        std::cout << "Overloaded station number:    " << overloaded_station_number << std::endl;
+        std::cout << "Precedence violation number:  " << number_of_precedence_violations << std::endl;
+        std::cout << "Overloaded station number:    " << number_of_overloaded_stations << std::endl;
         std::cout << "Feasible:                     " << feasible << std::endl;
-        std::cout << "Station number:               " << station_number << std::endl;
-        return {feasible, station_number};
+        std::cout << "Station number:               " << number_of_stations << std::endl;
+        return {feasible, number_of_stations};
     }
 
 private:
@@ -230,8 +230,8 @@ std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
     os << "cycle time " << instance.cycle_time() << std::endl;
-    os << "job number " << instance.job_number() << std::endl;
-    for (JobId j = 0; j < instance.job_number(); ++j) {
+    os << "number of jobs " << instance.number_of_jobs() << std::endl;
+    for (JobId j = 0; j < instance.number_of_jobs(); ++j) {
         os << "job " << j
             << " p " << instance.job(j).processing_time
             << " pred";

@@ -99,7 +99,7 @@ struct Intervention
     std::vector<InterventionResource> resources;
     /** exclusions[season] = {j1, j2, ..., j3}. */
     std::vector<std::vector<ExclusionId>> exclusions;
-    InterventionPos exclusion_number = 0;
+    InterventionPos number_of_exclusions = 0;
     std::vector<int8_t> fixed_assignments;
     double duration_mean = 0;
     std::vector<double> workload_mean;
@@ -128,23 +128,17 @@ public:
     /** Create instance from file. */
     Instance(std::string filepath, std::string format);
 
-    /**
-     * Return a new instance containing only the subset of interventions of
-     * 'interventions'.
-     */
-    Instance reduced_instance(const std::vector<bool>& interventions) const;
-
     /*
      * getters
      */
 
-    inline double                        alpha() const { return alpha_; }
-    inline double                     quantile() const { return quantile_; }
-    inline Time                        horizon() const { return horizon_; }
-    inline InterventionId  intervention_number() const { return interventions_.size(); }
-    inline ResourceId          resource_number() const { return resources_.size(); }
-    inline SeasonId              season_number() const { return season_strings_.size(); }
-    inline ExclusionId        exclusion_number() const { return exclusions_.size(); }
+    inline double                            alpha() const { return alpha_; }
+    inline double                         quantile() const { return quantile_; }
+    inline Time                            horizon() const { return horizon_; }
+    inline InterventionId  number_of_interventions() const { return interventions_.size(); }
+    inline ResourceId          number_of_resources() const { return resources_.size(); }
+    inline SeasonId              number_of_seasons() const { return season_strings_.size(); }
+    inline ExclusionId        number_of_exclusions() const { return exclusions_.size(); }
 
     inline ScenarioId    least_common_multiple() const { return least_common_multiple_; }
     inline Risk                        alpha_1() const { return alpha_1_; }
@@ -152,16 +146,16 @@ public:
     inline Risk               alpha_multiplier() const { return alpha_multiplier_; }
     inline Risk                risk_multiplier() const { return risk_multiplier_; }
 
-    inline ScenarioId  scenario_number(Time t) const { return scenario_numbers_[t]; }
+    inline ScenarioId  number_of_scenarios(Time t) const { return number_of_scenarioss_[t]; }
     inline SeasonId             season(Time t) const { return (t < (Time)seasons_.size())? seasons_[t]: -1; }
 
     inline Time                start_max(InterventionId j) const { return interventions_[j].t_start_max; }
     inline Time                 duration(InterventionId j, Time t) const { return interventions_[j].deltas[t]; }
     inline double          duration_mean(InterventionId j) const { return interventions_[j].duration_mean; }
     inline double          workload_mean(InterventionId j, ResourceId r) const { return interventions_[j].workload_mean[r]; }
-    inline ExclusionId  exclusion_number(InterventionId j) const { return interventions_[j].exclusion_number; }
+    inline ExclusionId  number_of_exclusions(InterventionId j) const { return interventions_[j].number_of_exclusions; }
     inline Risk                     risk(InterventionId j, Time t_cur, Time t_start, ScenarioId s) const { return interventions_[j].risks[t_cur].risk(t_start, s); }
-    inline ResourcePos   resource_number(InterventionId j) const { return interventions_[j].resources.size(); }
+    inline ResourcePos   number_of_resources(InterventionId j) const { return interventions_[j].resources.size(); }
     inline ResourceId           resource(InterventionId j, ResourcePos r_pos) const { return interventions_[j].resources[r_pos].r; }
     inline Workload             workload(InterventionId j, ResourcePos r_pos, Time t_cur, Time t_start) const { return interventions_[j].resources[r_pos].workload(t_cur, t_start); }
     inline const std::vector<ExclusionId>& exclusions(InterventionId j, SeasonId season) const { return interventions_[j].exclusions[season]; }
@@ -181,8 +175,6 @@ public:
     int fixed(InterventionId j, Time t_start) const { return interventions_[j].fixed_assignments[t_start]; }
     bool unconstrained(ResourceId r, Time t_cur) const { return resources_[r].unconstrained[t_cur]; }
 
-    const Instance* reduced_instance() const { return reduced_instance_.get(); }
-
 private:
 
     /*
@@ -194,8 +186,8 @@ private:
     Time horizon_;
     std::vector<Intervention> interventions_;
     std::vector<Resource> resources_;
-    /** scenario_numbers_[t]. */
-    std::vector<ScenarioId> scenario_numbers_;
+    /** number_of_scenarioss_[t]. */
+    std::vector<ScenarioId> number_of_scenarioss_;
     /** seasons_[t]. */
     std::vector<SeasonId> seasons_;
     std::vector<Exclusion> exclusions_;
@@ -210,8 +202,6 @@ private:
     Risk alpha_2_;
     Risk alpha_multiplier_ = 1;
     Risk risk_multiplier_ = 1;
-
-    std::unique_ptr<Instance> reduced_instance_ = nullptr;
 
     void fix_assignments();
 

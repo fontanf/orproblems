@@ -52,8 +52,8 @@ public:
     Instance(LocationId n):
         locations_(n),
         distances_(n, std::vector<Distance>(n, -1)),
-        vehicle_number_(n) { }
-    void set_vehicle_number(VehicleId m) { vehicle_number_ = m; }
+        number_of_vehicles_(n) { }
+    void set_number_of_vehicles(VehicleId m) { number_of_vehicles_ = m; }
     void set_maximum_route_length(Distance maximum_route_length) { maximum_route_length_ = maximum_route_length; }
     void set_demand(LocationId j, Demand q) { locations_[j].demand = q; }
     void set_xy(LocationId j, double x, double y)
@@ -86,8 +86,8 @@ public:
 
     virtual ~Instance() { }
 
-    VehicleId vehicle_number() const { return vehicle_number_; }
-    LocationId location_number() const { return locations_.size(); }
+    VehicleId number_of_vehicles() const { return number_of_vehicles_; }
+    LocationId number_of_locations() const { return locations_.size(); }
     Distance maximum_route_length() const { return maximum_route_length_; }
     Demand capacity() const { return locations_[0].demand; }
     Demand demand(LocationId j) const { return locations_[j].demand; }
@@ -95,7 +95,7 @@ public:
     Distance y(LocationId j) const { return locations_[j].y; }
     Distance distance(LocationId j1, LocationId j2) const { return distances_[j1][j2]; }
     Distance maximum_distance() const { return distance_max_; }
-    Distance bound() const { return powf(10.0f, ceil(log10f(location_number() * maximum_distance()))); }
+    Distance bound() const { return powf(10.0f, ceil(log10f(number_of_locations() * maximum_distance()))); }
 
 private:
 
@@ -119,7 +119,7 @@ private:
                 n = std::stol(line.back());
                 locations_ = std::vector<Location>(n);
                 distances_ = std::vector<std::vector<Distance>>(n, std::vector<Distance>(n, -1));
-                vehicle_number_ = n;
+                number_of_vehicles_ = n;
             } else if (tmp.rfind("EDGE_WEIGHT_TYPE", 0) == 0) {
                 edge_weight_type = line.back();
             } else if (tmp.rfind("DISTANCE", 0) == 0) {
@@ -169,7 +169,7 @@ private:
 
     std::vector<Location> locations_;
     std::vector<std::vector<Distance>> distances_;
-    VehicleId vehicle_number_ = 0;
+    VehicleId number_of_vehicles_ = 0;
     Distance maximum_route_length_ = std::numeric_limits<Distance>::infinity();;
     Distance distance_max_ = 0;
 
@@ -177,12 +177,12 @@ private:
 
 static std::ostream& operator<<(std::ostream &os, const Instance& instance)
 {
-    os << "location number " << instance.location_number() << std::endl;
-    os << "vehicle number " << instance.vehicle_number() << std::endl;
+    os << "number of locations " << instance.number_of_locations() << std::endl;
+    os << "number of vehicles " << instance.number_of_vehicles() << std::endl;
     os << "capacity " << instance.capacity() << std::endl;
     os << "maximum route length " << instance.maximum_route_length() << std::endl;
     os << "bound " << instance.bound() << std::endl;
-    for (LocationId j = 0; j < instance.location_number(); ++j)
+    for (LocationId j = 0; j < instance.number_of_locations(); ++j)
         os << "location " << j
             << " d " << instance.demand(j)
             << std::endl;

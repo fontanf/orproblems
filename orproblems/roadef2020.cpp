@@ -96,7 +96,7 @@ Instance::Instance(
                 interventions_.push_back({});
                 Intervention& intervention = interventions_.back();
                 intervention.name = intervention_name.to_string();
-                intervention.exclusions = std::vector<std::vector<ExclusionId>>(season_number());
+                intervention.exclusions = std::vector<std::vector<ExclusionId>>(number_of_seasons());
                 for (auto m: intervention_field.value().get_object()) {
                     auto m_str = std::string_view(m.unescaped_key());
                     if (m_str == "tmax") {
@@ -191,9 +191,9 @@ Instance::Instance(
                     id++;
                 }
                 interventions_[exclusion.j1].exclusions[exclusion.season].push_back(exclusion_id);
-                interventions_[exclusion.j1].exclusion_number++;
+                interventions_[exclusion.j1].number_of_exclusions++;
                 interventions_[exclusion.j2].exclusions[exclusion.season].push_back(exclusion_id);
-                interventions_[exclusion.j2].exclusion_number++;
+                interventions_[exclusion.j2].number_of_exclusions++;
                 exclusion_id++;
             }
         } else if (key == "T") {
@@ -201,9 +201,9 @@ Instance::Instance(
             horizon_ = (int64_t)field.value();
         } else if (key == "Scenarios_number") {
             std::cout << "* Read scenarios..." << std::endl;
-            for (ScenarioId scenario_number: field.value().get_array()) {
-                scenario_numbers_.push_back(scenario_number);
-                least_common_multiple_ = lcm(least_common_multiple_, scenario_number);
+            for (ScenarioId number_of_scenarios: field.value().get_array()) {
+                number_of_scenarioss_.push_back(number_of_scenarios);
+                least_common_multiple_ = lcm(least_common_multiple_, number_of_scenarios);
                 if (least_common_multiple_ >= 10000000)
                     least_common_multiple_ =  10000000;
                 assert(least_common_multiple_ >= 0);
@@ -231,7 +231,7 @@ Instance::Instance(
 
     // Convert resources.
     std::cout << "* Convert resources..." << std::endl;
-    for (ResourceId r = 0; r < resource_number(); ++r) {
+    for (ResourceId r = 0; r < number_of_resources(); ++r) {
         Resource& resource = resources_[r];
         resource.multiplier = std::min((ResourceId)1000000, resources_[r].multiplier);
         for (double val: resource.min_double)
@@ -247,7 +247,7 @@ Instance::Instance(
     // Convert risks.
     std::cout << "* Convert risks..." << std::endl;
     risk_multiplier_ = std::min((ResourceId)10000, risk_multiplier_);
-    for (InterventionId j = 0; j < intervention_number(); ++j) {
+    for (InterventionId j = 0; j < number_of_interventions(); ++j) {
         for (Time t_cur = 0; t_cur < (Time)interventions_[j].risks.size(); ++t_cur) {
             InterventionRisk& irisk = interventions_[j].risks[t_cur];
             for (const auto& vec: irisk.risks_double) {
@@ -259,11 +259,11 @@ Instance::Instance(
             irisk.risks_double.swap(tmp);
         }
     }
-    //for (InterventionId j = 0; j < intervention_number(); ++j) {
+    //for (InterventionId j = 0; j < number_of_interventions(); ++j) {
     //    for (Time t_start = 0; t_start <= start_max(j); ++t_start) {
     //        Time t_end = t_start + duration(j, t_start);
     //        for (Time t_cur = t_start; t_cur < t_end; ++t_cur) {
-    //            for (ScenarioId s = 0; s < scenario_number(t_cur); ++s) {
+    //            for (ScenarioId s = 0; s < number_of_scenarios(t_cur); ++s) {
     //                std::cout << "j " << j
     //                    << " t_cur " << t_cur
     //                    << " t_start " << t_start
@@ -279,8 +279,8 @@ Instance::Instance(
 
     // Convert workloads.
     std::cout << "* Convert workloads..." << std::endl;
-    for (InterventionId j = 0; j < intervention_number(); ++j) {
-        for (ResourcePos r_pos = 0; r_pos < resource_number(j); ++r_pos) {
+    for (InterventionId j = 0; j < number_of_interventions(); ++j) {
+        for (ResourcePos r_pos = 0; r_pos < number_of_resources(j); ++r_pos) {
             ResourceId r = resource(j, r_pos);
             for (Time t_cur = 0; t_cur < (Time)interventions_[j].resources[r_pos].workloads.size(); ++t_cur) {
                 InterventionResourceWorkload& iworkload
@@ -293,9 +293,9 @@ Instance::Instance(
             }
         }
     }
-    //for (InterventionId j = 0; j < intervention_number(); ++j) {
+    //for (InterventionId j = 0; j < number_of_interventions(); ++j) {
     //    std::cout << "j " << j << " name " << intervention_name(j) << std::endl;
-    //    for (ResourcePos r_pos = 0; r_pos < resource_number(j); ++r_pos) {
+    //    for (ResourcePos r_pos = 0; r_pos < number_of_resources(j); ++r_pos) {
     //        ResourceId r = resource(j, r_pos);
     //        std::cout << "r_pos " << r_pos << " r " << r
     //            << " name " << resource_name(r)
@@ -318,21 +318,21 @@ Instance::Instance(
 void Instance::fix_assignments()
 {
     std::cout << "Fix assignments..." << std::endl;
-    Counter fixed_assignment_number = 0;
-    Counter assignment_number = 0;
-    for (InterventionId j = 0; j < intervention_number(); ++j) {
+    Counter number_of_fixed_assignments = 0;
+    Counter number_of_assignments = 0;
+    for (InterventionId j = 0; j < number_of_interventions(); ++j) {
         interventions_[j].fixed_assignments = std::vector<int8_t>(start_max(j) + 1, -1);
-        assignment_number += start_max(j) + 1;
+        number_of_assignments += start_max(j) + 1;
     }
-    Counter total_resource_number = 0;
-    Counter unconstrained_resource_number = 0;
-    for (ResourceId r = 0; r < resource_number(); ++r) {
+    Counter total_number_of_resources = 0;
+    Counter number_of_unconstrained_resources = 0;
+    for (ResourceId r = 0; r < number_of_resources(); ++r) {
         resources_[r].unconstrained = std::vector<bool>(horizon(), false);
-        total_resource_number += horizon();
+        total_number_of_resources += horizon();
     }
 
     // Dominated starts.
-    for (InterventionId j = 0; j < intervention_number(); ++j) {
+    for (InterventionId j = 0; j < number_of_interventions(); ++j) {
         for (Time t_start = 0; t_start < start_max(j); ++t_start) {
             if (fixed(j, t_start) != -1)
                 continue;
@@ -342,7 +342,7 @@ void Instance::fix_assignments()
                 continue;
             bool dominated = true;
             for (Time t_cur = t_start + 1; t_cur < t_end; ++t_cur) {
-                for (ResourcePos r_pos = 0; r_pos < resource_number(j); ++r_pos) {
+                for (ResourcePos r_pos = 0; r_pos < number_of_resources(j); ++r_pos) {
                     Workload w = workload(j, r_pos, t_cur, t_start);
                     Workload w2 = workload(j, r_pos, t_cur, t_start + 1);
                     if (w < w2) {
@@ -352,7 +352,7 @@ void Instance::fix_assignments()
                 }
                 if (!dominated)
                     break;
-                for (ScenarioId s = 0; s < scenario_number(t_cur); ++s) {
+                for (ScenarioId s = 0; s < number_of_scenarios(t_cur); ++s) {
                     Risk r = risk(j, t_cur, t_start, s);
                     Risk r2 = risk(j, t_cur, t_start + 1, s);
                     if (r < r2) {
@@ -365,18 +365,18 @@ void Instance::fix_assignments()
             }
             if (dominated) {
                 interventions_[j].fixed_assignments[t_start] = 0;
-                fixed_assignment_number++;
+                number_of_fixed_assignments++;
             }
         }
     }
     std::cout << "* Dominated starts:                "
-        << fixed_assignment_number << " / " << assignment_number << std::endl;
+        << number_of_fixed_assignments << " / " << number_of_assignments << std::endl;
 
     for (;;) {
         bool new_fixed = false;
 
         // Conflicts.
-        for (InterventionId j = 0; j < intervention_number(); ++j) {
+        for (InterventionId j = 0; j < number_of_interventions(); ++j) {
             std::vector<bool> mandatory(horizon(), true);
             for (Time t_start = 0; t_start <= start_max(j); ++t_start) {
                 if (fixed(j, t_start) == 0)
@@ -398,7 +398,7 @@ void Instance::fix_assignments()
                         if (t_start_2 <= t_cur
                                 && t_cur < t_start_2 + duration(j2, t_start_2)) {
                             interventions_[j2].fixed_assignments[t_start_2] = 0;
-                            fixed_assignment_number++;
+                            number_of_fixed_assignments++;
                             new_fixed = true;
                         }
                     }
@@ -406,40 +406,40 @@ void Instance::fix_assignments()
             }
         }
         std::cout << "* Conflicts:                       "
-            << fixed_assignment_number << " / " << assignment_number << std::endl;
+            << number_of_fixed_assignments << " / " << number_of_assignments << std::endl;
 
         if (!new_fixed)
             break;
     }
 
     // Single starts.
-    for (InterventionId j = 0; j < intervention_number(); ++j) {
+    for (InterventionId j = 0; j < number_of_interventions(); ++j) {
         std::vector<Time> starts;
         for (Time t_start = 0; t_start <= start_max(j); ++t_start)
             if (fixed(j, t_start) != 0)
                 starts.push_back(t_start);
         if (starts.size() == 1) {
             interventions_[j].fixed_assignments[starts.front()] = 1;
-            fixed_assignment_number++;
+            number_of_fixed_assignments++;
         }
     }
     std::cout << "* Single starts:                   "
-        << fixed_assignment_number << " / " << assignment_number << std::endl;
+        << number_of_fixed_assignments << " / " << number_of_assignments << std::endl;
 
     // Unconstrained resources.
     std::vector<std::vector<Workload>> workloads_max(
             horizon(),
-            std::vector<Workload>(resource_number(), 0));
-    for (InterventionId j = 0; j < intervention_number(); ++j) {
+            std::vector<Workload>(number_of_resources(), 0));
+    for (InterventionId j = 0; j < number_of_interventions(); ++j) {
         std::vector<std::vector<Workload>> workloads_max_j(
                 horizon(),
-                std::vector<Workload>(resource_number(), 0));
+                std::vector<Workload>(number_of_resources(), 0));
         for (Time t_start = 0; t_start <= start_max(j); ++t_start) {
             if (fixed(j, t_start) == 0)
                 continue;
             Time t_end = t_start + duration(j, t_start);
             for (Time t_cur = t_start; t_cur < t_end; ++t_cur) {
-                for (ResourcePos r_pos = 0; r_pos < resource_number(j); ++r_pos) {
+                for (ResourcePos r_pos = 0; r_pos < number_of_resources(j); ++r_pos) {
                     ResourceId r = resource(j, r_pos);
                     Workload w = workload(j, r_pos, t_cur, t_start);
                     if (workloads_max_j[t_cur][r] < w)
@@ -448,19 +448,19 @@ void Instance::fix_assignments()
             }
         }
         for (Time t_cur = 0; t_cur < horizon(); ++t_cur) {
-            for (ResourcePos r_pos = 0; r_pos < resource_number(j); ++r_pos) {
+            for (ResourcePos r_pos = 0; r_pos < number_of_resources(j); ++r_pos) {
                 ResourceId r = resource(j, r_pos);
                 workloads_max[t_cur][r] += workloads_max_j[t_cur][r];
             }
         }
     }
     for (Time t_cur = 0; t_cur < horizon(); ++t_cur) {
-        for (ResourceId r = 0; r < resource_number(); ++r) {
+        for (ResourceId r = 0; r < number_of_resources(); ++r) {
             if (resources_[r].unconstrained[t_cur])
                 continue;
             if (workloads_max[t_cur][r] <= workload_max(r, t_cur)) {
                 resources_[r].unconstrained[t_cur] = true;
-                unconstrained_resource_number++;
+                number_of_unconstrained_resources++;
                 //std::cout << "t " << t_cur << " r " << r
                 //    << " w " << workloads_max[t_cur][r] << " / " << workload_max(r, t_cur)
                 //    << std::endl;
@@ -468,14 +468,14 @@ void Instance::fix_assignments()
         }
     }
     std::cout << "* Unconstrained resources:         "
-        << unconstrained_resource_number << " / " << total_resource_number << std::endl;
+        << number_of_unconstrained_resources << " / " << total_number_of_resources << std::endl;
 
-    for (InterventionId j = 0; j < intervention_number(); ++j) {
+    for (InterventionId j = 0; j < number_of_interventions(); ++j) {
 
-        interventions_[j].workload_mean.resize(resource_number(), 0);
-        for (ResourcePos r_pos = 0; r_pos < resource_number(j); ++r_pos) {
+        interventions_[j].workload_mean.resize(number_of_resources(), 0);
+        for (ResourcePos r_pos = 0; r_pos < number_of_resources(j); ++r_pos) {
             ResourceId r = resource(j, r_pos);
-            Time start_number = 0;
+            Time number_of_starts = 0;
             for (Time t_start = 0; t_start <= start_max(j); ++t_start) {
                 double r_max = 0;
                 Time t_end = t_start + duration(j, t_start);
@@ -487,35 +487,35 @@ void Instance::fix_assignments()
                         r_max = r;
                 }
                 interventions_[j].workload_mean[r] += r_max;
-                start_number++;
+                number_of_starts++;
             }
-            interventions_[j].workload_mean[r] /= start_number;
+            interventions_[j].workload_mean[r] /= number_of_starts;
         }
 
         Time d_sum = 0;
-        Time start_number = 0;
+        Time number_of_starts = 0;
         for (Time t_start = 0; t_start <= start_max(j); ++t_start) {
             if (fixed(j, t_start) == 0)
                 continue;
             d_sum += duration(j, t_start);
-            start_number++;
+            number_of_starts++;
         }
-        interventions_[j].duration_mean = (double)d_sum / start_number;
+        interventions_[j].duration_mean = (double)d_sum / number_of_starts;
     }
 
     // Reduced instance.
-    std::vector<InterventionId> interventions(intervention_number());
+    std::vector<InterventionId> interventions(number_of_interventions());
     std::iota(interventions.begin(), interventions.end(), 0);
     std::sort(interventions.begin(), interventions.end(),
             [this](InterventionId j1, InterventionId j2) {
                     return duration_mean(j1) < duration_mean(j2);
             });
-    std::vector<bool> selected_interventions(intervention_number(), true);
-    InterventionId n = intervention_number();
+    std::vector<bool> selected_interventions(number_of_interventions(), true);
+    InterventionId n = number_of_interventions();
     Time d_max = 0;
     for (InterventionId j: interventions) {
         Time d = duration_mean(j);
-        if (n < (double)intervention_number() / 2
+        if (n < (double)number_of_interventions() / 2
                 && d > d_max)
             break;
         if (d_max < ceil(d - 0.5) + 0.5) {
@@ -529,61 +529,11 @@ void Instance::fix_assignments()
     for (InterventionId j: interventions) {
         if (selected_interventions[j])
             continue;
-        if (exclusion_number(j) > 0) {
+        if (number_of_exclusions(j) > 0) {
             selected_interventions[j] = true;
             n++;
         }
     }
-    if (n < intervention_number()) {
-        reduced_instance_ = std::unique_ptr<Instance>(new Instance(
-                    reduced_instance(selected_interventions)));
-        //std::cout << *reduced_instance << std::endl;
-    }
-}
-
-Instance Instance::reduced_instance(const std::vector<bool>& interventions) const
-{
-    Instance instance_new;
-    instance_new.alpha_ = alpha_;
-    instance_new.quantile_ = quantile_;
-    instance_new.horizon_ = horizon_;
-    instance_new.resources_ = resources_;
-    instance_new.scenario_numbers_ = scenario_numbers_;
-    instance_new.seasons_ = seasons_;
-    instance_new.string_to_resource_ = string_to_resource_;
-    instance_new.string_to_season_ = string_to_season_;
-    instance_new.season_strings_ = season_strings_;
-    instance_new.least_common_multiple_ = least_common_multiple_;
-    instance_new.alpha_1_ = alpha_1_;
-    instance_new.alpha_2_ = alpha_2_;
-    instance_new.alpha_multiplier_ = alpha_multiplier_;
-    instance_new.risk_multiplier_ = risk_multiplier_ ;
-    for (InterventionId j = 0; j < intervention_number(); ++j) {
-        if (!interventions[j])
-            continue;
-        instance_new.string_to_interv_[interventions_[j].name] = instance_new.interventions_.size();
-        instance_new.interventions_.push_back(interventions_[j]);
-        for (auto& e: instance_new.interventions_.back().exclusions)
-            e.clear();
-        instance_new.interventions_.back().exclusion_number = 0;
-    }
-    for (const Exclusion exclusion: exclusions_) {
-        if (!interventions[exclusion.j1])
-            continue;
-        if (!interventions[exclusion.j2])
-            continue;
-        ExclusionId exclusion_id = instance_new.exclusions_.size();
-        Exclusion e;
-        e.j1 = instance_new.string_to_interv_[intervention_name(exclusion.j1)];
-        e.j2 = instance_new.string_to_interv_[intervention_name(exclusion.j2)];
-        e.season = exclusion.season;
-        instance_new.exclusions_.push_back(e);
-        instance_new.interventions_[e.j1].exclusions[e.season].push_back(exclusion_id);
-        instance_new.interventions_[e.j1].exclusion_number++;
-        instance_new.interventions_[e.j2].exclusions[e.season].push_back(exclusion_id);
-        instance_new.interventions_[e.j2].exclusion_number++;
-    }
-    return instance_new;
 }
 
 std::ostream& orproblems::roadef2020::operator<<(
@@ -591,11 +541,11 @@ std::ostream& orproblems::roadef2020::operator<<(
         const Instance& instance)
 {
     os << "Instance:" << std::endl;
-    os << "* Intervention number:             " << instance.intervention_number() << std::endl;
     os << "* Horizon:                         " << instance.horizon() << std::endl;
-    os << "* Resource number:                 " << instance.resource_number() << std::endl;
-    os << "* Season number:                   " << instance.season_number() << std::endl;
-    os << "* Exclusion number:                " << instance.exclusion_number() << std::endl;
+    os << "* Number of interventions:         " << instance.number_of_interventions() << std::endl;
+    os << "* Number of resources:             " << instance.number_of_resources() << std::endl;
+    os << "* Number of seasons:               " << instance.number_of_seasons() << std::endl;
+    os << "* Number of exclusions:            " << instance.number_of_exclusions() << std::endl;
     os << "* Alpha:                           " << instance.alpha() << std::endl;
     os << "* Quantile:                        " << instance.quantile() << std::endl;
     return os;

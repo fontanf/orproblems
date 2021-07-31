@@ -88,7 +88,7 @@ public:
 
     virtual ~Instance() { }
 
-    inline VertexId vertex_number() const { return locations_.size(); }
+    inline VertexId number_of_vertices() const { return locations_.size(); }
     inline double x(VertexId j) const { return locations_[j].x; }
     inline double y(VertexId j) const { return locations_[j].y; }
     inline Distance distance(VertexId j1, VertexId j2) const { return distances_[j1][j2]; }
@@ -103,7 +103,7 @@ public:
             return {false, 0};
         }
 
-        VertexId n = vertex_number();
+        VertexId n = number_of_vertices();
         VertexId j_prec = 0;
         VertexId j = -1;
         optimizationtools::IndexedSet vertices(n);
@@ -306,10 +306,10 @@ private:
 std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
-    os << "vertex number " << instance.vertex_number() << std::endl;
-    for (VertexId j1 = 0; j1 < instance.vertex_number(); ++j1) {
+    os << "number of vertices " << instance.number_of_vertices() << std::endl;
+    for (VertexId j1 = 0; j1 < instance.number_of_vertices(); ++j1) {
         os << "vertex " << j1 << ":";
-        for (VertexId j2 = 0; j2 < instance.vertex_number(); ++j2)
+        for (VertexId j2 = 0; j2 < instance.number_of_vertices(); ++j2)
             os << " " << instance.distance(j1, j2);
         os << std::endl;
     }

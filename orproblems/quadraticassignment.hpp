@@ -29,9 +29,9 @@ class Instance
 
 public:
 
-    Instance(FacilityId facility_number):
-        flows_(facility_number, std::vector<Cost>(facility_number, 0)),
-        distances_(facility_number, std::vector<Cost>(facility_number, 0))
+    Instance(FacilityId number_of_facilities):
+        flows_(number_of_facilities, std::vector<Cost>(number_of_facilities, 0)),
+        distances_(number_of_facilities, std::vector<Cost>(number_of_facilities, 0))
     { }
     void set_flow(FacilityId facility_id_1, FacilityId facility_id_2, Cost flow)
     {
@@ -60,7 +60,7 @@ public:
 
     virtual ~Instance() { }
 
-    inline FacilityId facility_number() const { return flows_.size(); }
+    inline FacilityId number_of_facilities() const { return flows_.size(); }
     inline Cost flow(FacilityId facility_id_1, FacilityId facility_id_2) const { return flows_[facility_id_1][facility_id_2]; }
     inline Cost distance(LocationId location_id_1, LocationId location_id_2) const { return distances_[location_id_1][location_id_2]; }
 
@@ -73,13 +73,17 @@ public:
             return {false, 0};
         }
 
-        FacilityId n = facility_number();
+        FacilityId n = number_of_facilities();
         LocationId location_id = -1;
         optimizationtools::IndexedSet location_set(n);
         std::vector<LocationId> locations(n, -1);
         LocationId duplicates = 0;
         FacilityId facility_id = 0;
         while (file >> location_id) {
+            if (location_id < 0 || location_id >= number_of_facilities()) {
+                std::cout << "Invalid location: " << location_id << "." << std::endl;
+                continue;
+            }
             if (location_set.contains(location_id)) {
                 duplicates++;
                 std::cout << "Location " << location_id << " already assigned." << std::endl;
@@ -94,8 +98,12 @@ public:
         Cost cost = 0;
         for (FacilityId facility_id_1 = 0; facility_id_1 < n; ++facility_id_1)
             for (FacilityId facility_id_2 = 0; facility_id_2 < n; ++facility_id_2)
-                cost += flow(facility_id_1, facility_id_2)
-                    * distance(locations[facility_id_1], locations[facility_id_2]);
+                if (locations[facility_id_1] != -1
+                        && locations[facility_id_2] != -1)
+                    cost += flow(facility_id_1, facility_id_2)
+                        * distance(
+                                locations[facility_id_1],
+                                locations[facility_id_2]);
         bool feasible
             = (duplicates == 0)
             && (location_set.size() == n);
@@ -139,8 +147,8 @@ private:
 std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
-    FacilityId n = instance.facility_number();
-    os << "facility number " << n << std::endl;
+    FacilityId n = instance.number_of_facilities();
+    os << "number of facilities " << n << std::endl;
     os << "flows" << std::endl;
     for (FacilityId facility_id_1 = 0; facility_id_1 < n; ++facility_id_1) {
         for (FacilityId facility_id_2 = 0; facility_id_2 < n; ++facility_id_2)

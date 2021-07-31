@@ -62,8 +62,8 @@ public:
     {
         assert(j1 >= 0);
         assert(j2 >= 0);
-        assert(j1 < item_number());
-        assert(j2 < item_number());
+        assert(j1 < number_of_items());
+        assert(j2 < number_of_items());
         items_[j1].neighbors.push_back(j2);
         items_[j2].neighbors.push_back(j1);
     }
@@ -89,7 +89,7 @@ public:
 
     virtual ~Instance() { }
 
-    inline ItemId item_number() const { return items_.size(); }
+    inline ItemId number_of_items() const { return items_.size(); }
     inline const Item& item(ItemId j) const { return items_[j]; }
     inline Weight capacity() const { return capacity_; }
 
@@ -102,13 +102,13 @@ public:
             return {false, 0};
         }
 
-        ItemId n = item_number();
+        ItemId n = number_of_items();
         Weight weight = 0;
         Profit profit = 0;
         ItemId j = 0;
         optimizationtools::IndexedSet items(n);
         ItemPos duplicates = 0;
-        ItemPos conflict_violation_number = 0;
+        ItemPos number_of_conflict_violations = 0;
         while (file >> j) {
             if (items.contains(j)) {
                 duplicates++;
@@ -116,7 +116,7 @@ public:
             }
             for (ItemId j_con: item(j).neighbors) {
                 if (items.contains(j_con)) {
-                    conflict_violation_number++;
+                    number_of_conflict_violations++;
                     std::cout << "Job " << j << " is in conflict with job " << j_con << "." << std::endl;
                 }
             }
@@ -131,11 +131,11 @@ public:
         bool feasible
             = (duplicates == 0)
             && (weight <= capacity())
-            && (conflict_violation_number == 0);
+            && (number_of_conflict_violations == 0);
         std::cout << "---" << std::endl;
         std::cout << "Item number:                " << items.size() << " / " << n  << std::endl;
         std::cout << "Duplicates:                 " << duplicates << std::endl;
-        std::cout << "Conflict violation number:  " << conflict_violation_number << std::endl;
+        std::cout << "Conflict violation number:  " << number_of_conflict_violations << std::endl;
         std::cout << "Weight:                     " << weight << " / " << capacity() << std::endl;
         std::cout << "Feasible:                   " << feasible << std::endl;
         std::cout << "Profit:                     " << profit << std::endl;
@@ -149,8 +149,8 @@ private:
         ItemId n = -1;
         file >> n;
 
-        ItemPos conflict_number = -1;
-        file >> conflict_number;
+        ItemPos number_of_conflicts = -1;
+        file >> number_of_conflicts;
 
         Weight c = -1;
         file >> c;
@@ -170,7 +170,7 @@ private:
 
         ItemId j1 = -1;
         ItemId j2 = -1;
-        for (ItemPos conflict_id = 0; conflict_id < conflict_number; ++conflict_id) {
+        for (ItemPos conflict_id = 0; conflict_id < number_of_conflicts; ++conflict_id) {
             file >> j1 >> j2;
             add_conflict(j1 - 1, j2 - 1);
         }
@@ -215,8 +215,8 @@ std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
     os << "capacity " << instance.capacity() << std::endl;
-    os << "item number " << instance.item_number() << std::endl;
-    for (ItemId j = 0; j < instance.item_number(); ++j) {
+    os << "number of items " << instance.number_of_items() << std::endl;
+    for (ItemId j = 0; j < instance.number_of_items(); ++j) {
         os << "item " << j
             << " w " << instance.item(j).weight
             << " p " << instance.item(j).profit

@@ -60,15 +60,15 @@ public:
     void set_weight(JobId j, Weight weight)
     {
         if (jobs_[j].weight == 0)
-            zero_weight_job_number_--;
+            number_of_zero_weight_jobs_--;
         jobs_[j].weight = weight;
         if (jobs_[j].weight == 0)
-            zero_weight_job_number_++;
+            number_of_zero_weight_jobs_++;
     }
     void set_setup_time(JobId j1, JobId j2, Time d)
     {
         if (j1 == -1)
-            j1 = job_number();
+            j1 = number_of_jobs();
         setup_times_[j1][j2] = d;
     }
 
@@ -90,8 +90,8 @@ public:
 
     virtual ~Instance() { }
 
-    inline JobId job_number() const { return jobs_.size(); }
-    inline JobId zero_weight_job_number() const { return zero_weight_job_number_; }
+    inline JobId number_of_jobs() const { return jobs_.size(); }
+    inline JobId number_of_zero_weight_jobs() const { return number_of_zero_weight_jobs_; }
     inline const Job& job(JobId j) const { return jobs_[j]; }
     inline Time setup_time(JobId j1, JobId j2) const { return setup_times_[j1][j2]; }
 
@@ -104,7 +104,7 @@ public:
             return {false, 0};
         }
 
-        JobId n = job_number();
+        JobId n = number_of_jobs();
         JobId j = -1;
         JobId j_prec = n;
         optimizationtools::IndexedSet jobs(n);
@@ -208,23 +208,23 @@ private:
 
     std::vector<Job> jobs_;
     std::vector<std::vector<Time>> setup_times_;
-    JobPos zero_weight_job_number_ = 0;
+    JobPos number_of_zero_weight_jobs_ = 0;
 
 };
 
 std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
-    os << "job number: " << instance.job_number() << std::endl;
-    for (JobId j = 0; j < instance.job_number(); ++j)
+    os << "number of jobs: " << instance.number_of_jobs() << std::endl;
+    for (JobId j = 0; j < instance.number_of_jobs(); ++j)
         os << "job: " << j
             << "; processing time: " << instance.job(j).processing_time
             << "; due date: " << instance.job(j).due_date
             << "; weight: " << instance.job(j).weight
             << std::endl;
-    for (JobId j1 = 0; j1 <= instance.job_number(); ++j1) {
+    for (JobId j1 = 0; j1 <= instance.number_of_jobs(); ++j1) {
         os << "job " << j1 << ":";
-        for (JobId j2 = 0; j2 < instance.job_number(); ++j2)
+        for (JobId j2 = 0; j2 < instance.number_of_jobs(); ++j2)
             os << " " << instance.setup_time(j1, j2);
         os << std::endl;
     }

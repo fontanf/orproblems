@@ -59,7 +59,7 @@ public:
     Instance(LocationId n):
         locations_(n),
         times_(n, std::vector<Time>(n, -1)) { }
-    void set_vehicle_number(VehicleId m) { vehicle_number_ = m; }
+    void set_number_of_vehicles(VehicleId m) { number_of_vehicles_ = m; }
     void set_capacity(Demand capacity) { locations_[0].demand = capacity; }
     void set_location(
             LocationId j,
@@ -106,8 +106,8 @@ public:
 
     virtual ~Instance() { }
 
-    VehicleId vehicle_number() const { return vehicle_number_; }
-    LocationId location_number() const { return locations_.size(); }
+    VehicleId number_of_vehicles() const { return number_of_vehicles_; }
+    LocationId number_of_locations() const { return locations_.size(); }
     Demand capacity() const { return locations_[0].demand; }
     inline const Location& location(LocationId j) const { return locations_[j]; }
     Time time(LocationId j1, LocationId j2) const { return times_[j1][j2]; }
@@ -121,10 +121,10 @@ private:
         std::string tmp;
         file >> tmp >> tmp >> tmp >> tmp;
 
-        // Read location number.
+        // Read number of locations.
         VehicleId m = -1;
         file >> m;
-        set_vehicle_number(m);
+        set_number_of_vehicles(m);
 
         // Read capacity.
         Demand capacity = -1;
@@ -203,7 +203,7 @@ private:
 
         // Vehicle number.
         VehicleId m = doc.child("instance").child("fleet").child("vehicle_profile").attribute("number").as_int();
-        set_vehicle_number(m);
+        set_number_of_vehicles(m);
         // Vehicle capacity.
         Demand c = std::stod(doc.child("instance").child("fleet").child("vehicle_profile").child("capacity").child_value());
         set_capacity(c);
@@ -227,7 +227,7 @@ private:
 
     std::vector<Location> locations_;
     std::vector<std::vector<Time>> times_;
-    VehicleId vehicle_number_ = 0;
+    VehicleId number_of_vehicles_ = 0;
     Time time_max_ = 0;
     Time service_time_max_ = 0;
 

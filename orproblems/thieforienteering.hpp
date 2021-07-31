@@ -118,7 +118,7 @@ public:
 
     virtual ~Instance() { }
 
-    inline LocationId location_number() const { return locations_.size(); }
+    inline LocationId number_of_locations() const { return locations_.size(); }
     inline double x(LocationId j) const { return locations_[j].x; }
     inline double y(LocationId j) const { return locations_[j].y; }
     inline Distance distance(LocationId j1, LocationId j2) const { return distances_[j1][j2]; }
@@ -130,7 +130,7 @@ public:
         return (double)distance(j1, j2) / speed;
     }
 
-    inline ItemId item_number() const { return items_.size(); }
+    inline ItemId number_of_items() const { return items_.size(); }
     inline const Item& item(ItemId i) const { return items_[i]; }
     inline const Location& location(LocationId j) const { return locations_[j]; }
     inline Weight capacity() const { return capacity_; }
@@ -149,7 +149,7 @@ public:
         Weight w = 0;
         LocationId j = 0;
         ItemId i = -1;
-        optimizationtools::IndexedSet items(item_number());
+        optimizationtools::IndexedSet items(number_of_items());
         ItemPos duplicates = 0;
         while (file >> i) {
             //i--;
@@ -168,7 +168,7 @@ public:
                 << "; Profit: " << p << std::endl;
             j = j_next;
         }
-        t += duration(j, location_number() - 1, w);
+        t += duration(j, number_of_locations() - 1, w);
 
         bool feasible = (duplicates == 0)
             && (t <= time_limit())
@@ -381,24 +381,24 @@ private:
 std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
-    os << "location number: " << instance.location_number() << std::endl;
-    os << "item number: " << instance.item_number() << std::endl;
-    for (ItemId i = 0; i < instance.item_number(); ++i)
+    os << "number of locations: " << instance.number_of_locations() << std::endl;
+    os << "number of items: " << instance.number_of_items() << std::endl;
+    for (ItemId i = 0; i < instance.number_of_items(); ++i)
         os << "item: " << i
             << "; location: " << instance.item(i).location
             << "; weight: " << instance.item(i).weight
             << "; profit: " << instance.item(i).profit
             << std::endl;
-    for (LocationId j = 0; j < instance.location_number(); ++j) {
+    for (LocationId j = 0; j < instance.number_of_locations(); ++j) {
         os << "location: " << j
             << "; items:";
         for (ItemId i: instance.location(j).items)
             os << " " << i;
         os << std::endl;
     }
-    for (LocationId j1 = 0; j1 < instance.location_number(); ++j1) {
+    for (LocationId j1 = 0; j1 < instance.number_of_locations(); ++j1) {
         os << "location " << j1 << ":";
-        for (LocationId j2 = 0; j2 < instance.location_number(); ++j2)
+        for (LocationId j2 = 0; j2 < instance.number_of_locations(); ++j2)
             os << " " << instance.distance(j1, j2);
         os << std::endl;
     }

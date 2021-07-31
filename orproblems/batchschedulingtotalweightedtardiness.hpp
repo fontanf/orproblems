@@ -86,7 +86,7 @@ public:
 
     virtual ~Instance() { }
 
-    inline JobId job_number() const { return jobs_.size(); }
+    inline JobId number_of_jobs() const { return jobs_.size(); }
     inline const Job& job(JobId j) const { return jobs_[j]; }
     inline Size capacity() const { return capacity_; }
 
@@ -99,12 +99,12 @@ public:
             return {false, 0};
         }
 
-        JobId n = job_number();
+        JobId n = number_of_jobs();
         JobPos s = -1;
         optimizationtools::IndexedSet jobs(n);
-        JobPos batch_number = 0;
+        JobPos number_of_batches = 0;
         JobPos duplicates = 0;
-        JobPos overloaded_batch_number = 0;
+        JobPos number_of_overloaded_batches = 0;
         Time total_weighted_tardiness = 0;
         Time current_batch_start = 0;
         Time current_batch_end = 0;
@@ -112,8 +112,8 @@ public:
         while (file >> s) {
             JobId j = -1;
             Size size = 0;
-            batch_number++;
-            std::cout << "batch: " << batch_number - 1 << "; Jobs";
+            number_of_batches++;
+            std::cout << "batch: " << number_of_batches - 1 << "; Jobs";
             std::vector<JobId> batch_jobs;
             for (JobPos j_pos = 0; j_pos < s; ++j_pos) {
                 file >> j;
@@ -139,22 +139,22 @@ public:
                     total_weighted_tardiness += job(j).weight * (current_batch_end - job(j).due_date);
             std::cout << "; Size: " << size << " / " << capacity() << std::endl;
             if (size > capacity()) {
-                overloaded_batch_number++;
-                std::cout << "Batch " << batch_number - 1 << " is overloaded." << std::endl;
+                number_of_overloaded_batches++;
+                std::cout << "Batch " << number_of_batches - 1 << " is overloaded." << std::endl;
             }
             current_batch_start = current_batch_end;
         }
         bool feasible
             = (jobs.size() == n)
             && (duplicates == 0)
-            && (overloaded_batch_number == 0);
+            && (number_of_overloaded_batches == 0);
 
         std::cout << "---" << std::endl;
         std::cout << "Job number:                   " << jobs.size() << " / " << n  << std::endl;
         std::cout << "Duplicates:                   " << duplicates << std::endl;
-        std::cout << "Overloaded batch number:      " << overloaded_batch_number << std::endl;
+        std::cout << "Overloaded batch number:      " << number_of_overloaded_batches << std::endl;
         std::cout << "Feasible:                     " << feasible << std::endl;
-        std::cout << "Batch number:                 " << batch_number << std::endl;
+        std::cout << "Batch number:                 " << number_of_batches << std::endl;
         std::cout << "Total weighted tardiness:     " << total_weighted_tardiness << std::endl;
         return {feasible, total_weighted_tardiness};
     }
@@ -185,9 +185,9 @@ private:
 std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
-    os << "job number: " << instance.job_number() << std::endl;
+    os << "number of jobs: " << instance.number_of_jobs() << std::endl;
     os << "capacity: " << instance.capacity() << std::endl;
-    for (JobId j = 0; j < instance.job_number(); ++j)
+    for (JobId j = 0; j < instance.number_of_jobs(); ++j)
         os << "job: " << j
             << "; processing time: " << instance.job(j).processing_time
             << "; release date: " << instance.job(j).release_date

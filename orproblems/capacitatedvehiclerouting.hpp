@@ -79,8 +79,8 @@ public:
 
     virtual ~Instance() { }
 
-    LocationId location_number() const { return locations_.size(); }
-    RouteId route_number() const { return route_number_; }
+    LocationId number_of_locations() const { return locations_.size(); }
+    RouteId number_of_routes() const { return number_of_routes_; }
     Demand capacity() const { return locations_[0].demand; }
     Demand demand(LocationId j) const { return locations_[j].demand; }
     Distance x(LocationId j) const { return locations_[j].x; }
@@ -155,7 +155,7 @@ private:
 
     std::vector<Location> locations_;
     std::vector<std::vector<Distance>> distances_;
-    RouteId route_number_ = -1;
+    RouteId number_of_routes_ = -1;
     Distance distance_max_ = 0;
 
 };

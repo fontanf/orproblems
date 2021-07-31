@@ -73,9 +73,9 @@ public:
 
     virtual ~Instance() { }
 
-    NightId night_number() const { return observables_.size(); }
-    TargetId target_number() const { return profits_.size(); }
-    TargetId observable_number(NightId i) const { return observables_[i].size(); }
+    NightId number_of_nights() const { return observables_.size(); }
+    TargetId number_of_targets() const { return profits_.size(); }
+    TargetId number_of_observables(NightId i) const { return observables_[i].size(); }
     const Observable& observable(NightId i, TargetId j_pos) const { return observables_[i][j_pos]; }
     Profit profit(TargetId j) const { return profits_[j]; }
     Profit total_profit() const { return profit_sum_; }

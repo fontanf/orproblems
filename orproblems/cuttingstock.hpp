@@ -70,7 +70,7 @@ public:
 
     virtual ~Instance() { }
 
-    ItemTypeId item_type_number() const { return item_types_.size(); }
+    ItemTypeId number_of_item_types() const { return item_types_.size(); }
     Weight capacity() const { return capacity_; }
     Weight weight(ItemTypeId j) const { return item_types_[j].weight; }
     Demand demand(ItemTypeId j) const { return item_types_[j].demand; }

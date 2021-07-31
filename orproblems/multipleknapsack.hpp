@@ -67,8 +67,8 @@ public:
 
     virtual ~Instance() { }
 
-    KnapsackId knapsack_number() const { return capacities_.size(); }
-    ItemId item_number() const { return items_.size(); }
+    KnapsackId number_of_knapsacks() const { return capacities_.size(); }
+    ItemId number_of_items() const { return items_.size(); }
     Weight weight(ItemId j) const { return items_[j].weight; }
     Weight profit(ItemId j) const { return items_[j].profit; }
     Weight capacity(KnapsackId i) const { return capacities_[i]; }

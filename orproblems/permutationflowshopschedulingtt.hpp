@@ -76,8 +76,8 @@ public:
 
     virtual ~Instance() { }
 
-    inline JobId job_number() const { return jobs_.size(); }
-    inline MachineId machine_number() const { return jobs_[0].processing_times.size(); }
+    inline JobId number_of_jobs() const { return jobs_.size(); }
+    inline MachineId number_of_machines() const { return jobs_[0].processing_times.size(); }
     inline const Job& job(JobId j) const { return jobs_[j]; }
 
     std::pair<bool, Time> check(std::string certificate_path)
@@ -89,8 +89,8 @@ public:
             return {false, 0};
         }
 
-        MachineId m = machine_number();
-        JobId n = job_number();
+        MachineId m = number_of_machines();
+        JobId n = number_of_jobs();
         std::vector<Time> times(m, 0);
         JobId j = 0;
         optimizationtools::IndexedSet jobs(n);
@@ -165,11 +165,11 @@ private:
 std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
-    os << "machine number " << instance.machine_number() << std::endl;
-    os << "job number " << instance.job_number() << std::endl;
-    for (JobId j = 0; j < instance.job_number(); ++j) {
+    os << "number of machines " << instance.number_of_machines() << std::endl;
+    os << "number of jobs " << instance.number_of_jobs() << std::endl;
+    for (JobId j = 0; j < instance.number_of_jobs(); ++j) {
         os << "job " << j << "; due date " << instance.job(j).due_date << "; processing times:";
-        for (MachineId i = 0; i < instance.machine_number(); ++i)
+        for (MachineId i = 0; i < instance.number_of_machines(); ++i)
             os << " " << instance.job(j).processing_times[i];
         os << std::endl;
     }

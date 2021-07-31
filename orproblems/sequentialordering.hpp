@@ -84,7 +84,7 @@ public:
 
     virtual ~Instance() { }
 
-    inline VertexId vertex_number() const { return locations_.size(); }
+    inline VertexId number_of_vertices() const { return locations_.size(); }
     inline Distance distance(VertexId j1, VertexId j2) const { return distances_[j1][j2]; }
     inline const std::vector<VertexId>& predecessors(VertexId j) const { return locations_[j].predecessors; }
     inline Distance maximum_distance() const { return distance_max_; }
@@ -98,13 +98,13 @@ public:
             return {false, 0};
         }
 
-        VertexId n = vertex_number();
+        VertexId n = number_of_vertices();
         VertexId j_prec = 0;
         VertexId j = -1;
         optimizationtools::IndexedSet vertices(n);
         vertices.add(0);
         VertexPos duplicates = 0;
-        VertexPos precedence_violation_number = 0;
+        VertexPos number_of_precedence_violations = 0;
         Distance total_distance = 0;
         while (file >> j) {
             if (vertices.contains(j)) {
@@ -114,7 +114,7 @@ public:
             // Check predecessors.
             for (VertexId j_pred: predecessors(j)) {
                 if (!vertices.contains(j_pred)) {
-                    precedence_violation_number++;
+                    number_of_precedence_violations++;
                     std::cout << std::endl << "Vertex " << j << " depends on vertex "
                         << j_pred << " which has not been visited yet."
                         << std::endl;
@@ -131,12 +131,12 @@ public:
         bool feasible
             = (vertices.size() == n)
             && (duplicates == 0)
-            && (precedence_violation_number == 0);
+            && (number_of_precedence_violations == 0);
 
         std::cout << "---" << std::endl;
         std::cout << "Vertices number:              " << vertices.size() << " / " << n  << std::endl;
         std::cout << "Duplicates:                   " << duplicates << std::endl;
-        std::cout << "Precedence violation number:  " << precedence_violation_number << std::endl;
+        std::cout << "Precedence violation number:  " << number_of_precedence_violations << std::endl;
         std::cout << "Feasible:                     " << feasible << std::endl;
         std::cout << "Total distance:               " << total_distance << std::endl;
         return {feasible, total_distance};
@@ -210,7 +210,7 @@ private:
                 locations_ = std::vector<Location>(n);
                 distances_ = std::vector<std::vector<Distance>>(n, std::vector<Distance>(n, -1));
             }
-            for (VertexId j2 = 0; j2 < vertex_number(); ++j2) {
+            for (VertexId j2 = 0; j2 < number_of_vertices(); ++j2) {
                 Distance d = std::stol(line[j2]);
                 if (d == -1)
                     add_predecessor(j1, j2);
@@ -230,17 +230,17 @@ private:
 std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
-    os << "vertex number: " << instance.vertex_number() << std::endl;
-    for (VertexId j = 0; j < instance.vertex_number(); ++j) {
+    os << "number of vertices: " << instance.number_of_vertices() << std::endl;
+    for (VertexId j = 0; j < instance.number_of_vertices(); ++j) {
         os << "vertex: " << j
             << "; predecessors:";
         for (VertexId j_pred: instance.predecessors(j))
             os << " " << j_pred;
         os << std::endl;
     }
-    for (VertexId j1 = 0; j1 < instance.vertex_number(); ++j1) {
+    for (VertexId j1 = 0; j1 < instance.number_of_vertices(); ++j1) {
         os << "vertex " << j1 << ":";
-        for (VertexId j2 = 0; j2 < instance.vertex_number(); ++j2)
+        for (VertexId j2 = 0; j2 < instance.number_of_vertices(); ++j2)
             os << " " << instance.distance(j1, j2);
         os << std::endl;
     }

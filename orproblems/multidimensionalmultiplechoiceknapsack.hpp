@@ -47,7 +47,7 @@ public:
         item.id = items_.size();
         item.group_id = group_id;
         item.profit = profit;
-        item.weights.resize(resource_number(), 0);
+        item.weights.resize(number_of_resources(), 0);
         items_.push_back(item);
         while ((GroupId)groups_.size() <= group_id)
             groups_.push_back({});
@@ -77,9 +77,9 @@ public:
 
     virtual ~Instance() { }
 
-    inline ItemId item_number() const { return items_.size(); }
-    inline GroupId group_number() const { return groups_.size(); }
-    inline ResourceId resource_number() const { return capacities_.size(); }
+    inline ItemId number_of_items() const { return items_.size(); }
+    inline GroupId number_of_groups() const { return groups_.size(); }
+    inline ResourceId number_of_resources() const { return capacities_.size(); }
     inline const Item& item(ItemId j) const { return items_[j]; }
     inline const std::vector<ItemId>& items(GroupId group_id) const { return groups_[group_id]; }
     inline Weight capacity(ResourceId r) const { return capacities_[r]; }
@@ -93,8 +93,8 @@ public:
             return {false, 0};
         }
 
-        optimizationtools::IndexedSet groups(group_number());
-        std::vector<Weight> weights(resource_number(), 0);
+        optimizationtools::IndexedSet groups(number_of_groups());
+        std::vector<Weight> weights(number_of_resources(), 0);
         Profit profit = 0;
         GroupId duplicates = 0;
         ItemId j = 0;
@@ -104,7 +104,7 @@ public:
                 std::cout << "GroupId " << item(j).group_id << " already in the knapsack." << std::endl;
             }
             groups.add(item(j).group_id);
-            for (ResourceId r = 0; r < resource_number(); ++r)
+            for (ResourceId r = 0; r < number_of_resources(); ++r)
                 weights[r] += item(j).weights[r];
             profit += item(j).profit;
             std::cout << "Item: " << j
@@ -113,15 +113,15 @@ public:
                 << std::endl;
         }
         Weight overweight = 0;
-        for (ResourceId r = 0; r < resource_number(); ++r)
+        for (ResourceId r = 0; r < number_of_resources(); ++r)
             if (weights[r] > capacity(r))
                 overweight += (weights[r] - capacity(r));
         bool feasible
             = (duplicates == 0)
-            && (groups.size() == group_number())
+            && (groups.size() == number_of_groups())
             && (overweight == 0);
         std::cout << "---" << std::endl;
-        std::cout << "Groups:                     " << groups.size() << " / " << group_number() << std::endl;
+        std::cout << "Groups:                     " << groups.size() << " / " << number_of_groups() << std::endl;
         std::cout << "Duplicates:                 " << duplicates << std::endl;
         std::cout << "Overweight:                 " << overweight << std::endl;
         std::cout << "Feasible:                   " << feasible << std::endl;
@@ -133,13 +133,13 @@ private:
 
     void read_khan2002(std::ifstream& file)
     {
-        ItemId group_number = -1;
+        ItemId number_of_groups = -1;
         ItemId group_size = -1;
-        ResourceId resource_number = -1;
-        file >> group_number >> group_size >> resource_number;
+        ResourceId number_of_resources = -1;
+        file >> number_of_groups >> group_size >> number_of_resources;
 
         ResourceId capacity = -1;
-        for (ResourceId r = 0; r < resource_number; ++r) {
+        for (ResourceId r = 0; r < number_of_resources; ++r) {
             file >> capacity;
             add_resource(capacity);
         }
@@ -148,12 +148,12 @@ private:
         Profit profit = -1;
         Weight weight = -1;
         ItemId j = 0;
-        for (GroupId group_id = 0; group_id < group_number; group_id++) {
+        for (GroupId group_id = 0; group_id < number_of_groups; group_id++) {
             file >> tmp;
             for (ItemId j_pos = 0; j_pos < group_size; ++j_pos) {
                 file >> profit;
                 add_item(group_id, profit);
-                for (ResourceId r = 0; r < resource_number; ++r) {
+                for (ResourceId r = 0; r < number_of_resources; ++r) {
                     file >> weight;
                     set_weight(j, r, weight);
                 }
@@ -164,12 +164,12 @@ private:
 
     void read_shojaei2013(std::ifstream& file)
     {
-        ItemId group_number = -1;
-        ResourceId resource_number = -1;
-        file >> group_number >> resource_number;
+        ItemId number_of_groups = -1;
+        ResourceId number_of_resources = -1;
+        file >> number_of_groups >> number_of_resources;
 
         ResourceId capacity = -1;
-        for (ResourceId r = 0; r < resource_number; ++r) {
+        for (ResourceId r = 0; r < number_of_resources; ++r) {
             file >> capacity;
             add_resource(capacity);
         }
@@ -178,12 +178,12 @@ private:
         Profit profit = -1;
         Weight weight = -1;
         ItemId j = 0;
-        for (GroupId group_id = 0; group_id < group_number; group_id++) {
+        for (GroupId group_id = 0; group_id < number_of_groups; group_id++) {
             file >> group_size;
             for (ItemId j_pos = 0; j_pos < group_size; ++j_pos) {
                 file >> profit;
                 add_item(group_id, profit);
-                for (ResourceId r = 0; r < resource_number; ++r) {
+                for (ResourceId r = 0; r < number_of_resources; ++r) {
                     file >> weight;
                     set_weight(j, r, weight);
                 }
@@ -194,13 +194,13 @@ private:
 
     void read_mansi2013(std::ifstream& file)
     {
-        ItemId group_number = -1;
+        ItemId number_of_groups = -1;
         ItemId group_size = -1;
-        ResourceId resource_number = -1;
-        file >> group_number >> group_size >> resource_number;
+        ResourceId number_of_resources = -1;
+        file >> number_of_groups >> group_size >> number_of_resources;
 
         ResourceId capacity = -1;
-        for (ResourceId r = 0; r < resource_number; ++r) {
+        for (ResourceId r = 0; r < number_of_resources; ++r) {
             file >> capacity;
             add_resource(capacity);
         }
@@ -208,11 +208,11 @@ private:
         Profit profit = -1;
         Weight weight = -1;
         ItemId j = 0;
-        for (GroupId group_id = 0; group_id < group_number; group_id++) {
+        for (GroupId group_id = 0; group_id < number_of_groups; group_id++) {
             for (ItemId j_pos = 0; j_pos < group_size; ++j_pos) {
                 file >> profit;
                 add_item(group_id, profit);
-                for (ResourceId r = 0; r < resource_number; ++r) {
+                for (ResourceId r = 0; r < number_of_resources; ++r) {
                     file >> weight;
                     set_weight(j, r, weight);
                 }
@@ -230,20 +230,20 @@ private:
 std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
-    os << "item number " << instance.item_number() << std::endl;
-    os << "group number " << instance.group_number() << std::endl;
-    os << "resource number " << instance.resource_number() << std::endl;
+    os << "number of items " << instance.number_of_items() << std::endl;
+    os << "number of groups " << instance.number_of_groups() << std::endl;
+    os << "number of resources " << instance.number_of_resources() << std::endl;
     os << "capacities";
-    for (ResourceId r = 0; r < instance.resource_number(); ++r)
+    for (ResourceId r = 0; r < instance.number_of_resources(); ++r)
         os << " " << instance.capacity(r);
     os << std::endl;
     os << "items" << std::endl;
-    for (ItemId j = 0; j < instance.item_number(); ++j) {
+    for (ItemId j = 0; j < instance.number_of_items(); ++j) {
         os << "item " << instance.item(j).id
             << " group " << instance.item(j).group_id
             << " profit " << instance.item(j).profit
             << " weights";
-        for (ResourceId r = 0; r < instance.resource_number(); ++r)
+        for (ResourceId r = 0; r < instance.number_of_resources(); ++r)
             os << " " << instance.item(j).weights[r];
         os << std::endl;
     }

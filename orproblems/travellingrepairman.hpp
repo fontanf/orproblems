@@ -72,7 +72,7 @@ public:
 
     virtual ~Instance() { }
 
-    inline LocationId location_number() const { return travel_times_.size(); }
+    inline LocationId number_of_locations() const { return travel_times_.size(); }
     inline Time travel_time(LocationId j1, LocationId j2) const { return travel_times_[j1][j2]; }
 
     std::pair<bool, Time> check(std::string certificate_path)
@@ -84,7 +84,7 @@ public:
             return {false, 0};
         }
 
-        LocationId n = location_number();
+        LocationId n = number_of_locations();
         LocationId j = -1;
         LocationId j_prec = 0;
         optimizationtools::IndexedSet locations(n);
@@ -149,10 +149,10 @@ private:
 std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
-    os << "location number: " << instance.location_number() << std::endl;
-    for (LocationId j1 = 0; j1 < instance.location_number(); ++j1) {
+    os << "number of locations: " << instance.number_of_locations() << std::endl;
+    for (LocationId j1 = 0; j1 < instance.number_of_locations(); ++j1) {
         os << "location " << j1 << ":";
-        for (LocationId j2 = 0; j2 < instance.location_number(); ++j2)
+        for (LocationId j2 = 0; j2 < instance.number_of_locations(); ++j2)
             os << " " << instance.travel_time(j1, j2);
         os << std::endl;
     }

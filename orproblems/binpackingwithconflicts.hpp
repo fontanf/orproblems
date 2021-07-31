@@ -58,8 +58,8 @@ public:
     {
         assert(j1 >= 0);
         assert(j2 >= 0);
-        assert(j1 < item_number());
-        assert(j2 < item_number());
+        assert(j1 < number_of_items());
+        assert(j2 < number_of_items());
         items_[j1].neighbors.push_back(j2);
         items_[j2].neighbors.push_back(j1);
     }
@@ -82,7 +82,7 @@ public:
 
     virtual ~Instance() { }
 
-    ItemId item_number() const { return items_.size(); }
+    ItemId number_of_items() const { return items_.size(); }
     Weight capacity() const { return capacity_; }
     const Item& item(ItemId j) const { return items_[j]; }
 
