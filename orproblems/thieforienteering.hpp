@@ -103,15 +103,14 @@ public:
     Instance(std::string instance_path, std::string format = "")
     {
         std::ifstream file(instance_path);
-        if (!file.good()) {
-            std::cerr << "\033[31m" << "ERROR, unable to open file \"" << instance_path << "\"" << "\033[0m" << std::endl;
-            assert(false);
-            return;
-        }
+        if (!file.good())
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
         if (format == "" || format == "santos2018") {
             read_santos2018(file);
         } else {
-            std::cerr << "\033[31m" << "ERROR, unknown instance format \"" << format << "\"" << "\033[0m" << std::endl;
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
         }
         file.close();
     }
@@ -138,11 +137,9 @@ public:
     std::pair<bool, Time> check(std::string certificate_path)
     {
         std::ifstream file(certificate_path);
-        if (!file.good()) {
-            std::cerr << "\033[31m" << "ERROR, unable to open file \"" << certificate_path << "\"" << "\033[0m" << std::endl;
-            assert(false);
-            return {false, 0};
-        }
+        if (!file.good())
+            throw std::runtime_error(
+                    "Unable to open file \"" + certificate_path + "\".");
 
         Time t = 0;
         Profit p = 0;

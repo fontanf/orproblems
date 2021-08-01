@@ -199,7 +199,8 @@ int main(int argc, char *argv[])
         instance.check(certificate_path);
 
     } else {
-        std::cerr << "\033[31m" << "ERROR, unknown problem: '" << problem << "'.\033[0m" << std::endl;
+        throw std::invalid_argument(
+                "Unknown problem: '" + problem + "'.");
         return 1;
     }
 

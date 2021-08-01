@@ -1,7 +1,6 @@
 #pragma once
 
 #include "optimizationtools/utils.hpp"
-#include "optimizationtools/sorted_on_demand_array.hpp"
 #include "optimizationtools/indexed_set.hpp"
 
 /**
@@ -20,10 +19,6 @@
  *   - precedence constraints are satisfied
  * Objective:
  * - minimize the total length of the tour
- *
- * Tree search:
- * - forward branching
- * - guide: current length + distance to the closest next child
  *
  */
 
@@ -47,6 +42,7 @@ class Instance
 
 public:
 
+    /** Create an instance manually. */
     Instance(VertexId n):
         locations_(n),
         distances_(n, std::vector<Distance>(n, -1))
@@ -54,49 +50,60 @@ public:
         for (VertexId j = 0; j < n; ++j)
             distances_[j][j] = 0;
     }
+    /** Set the distance between vertex 'j1' and vertex 'j2' to 'd'. */
     void set_distance(VertexId j1, VertexId j2, Distance d)
     {
+        check_vertex_index(j1);
+        check_vertex_index(j2);
         distances_[j1][j2] = d;
         distance_max_ = std::max(distance_max_, d);
     }
+    /** Add vertex 'j2' as predecessor of vertex 'j1'. */
     void add_predecessor(VertexId j1, VertexId j2)
     {
+        check_vertex_index(j1);
+        check_vertex_index(j2);
         locations_[j1].predecessors.push_back(j2);
     }
 
+    /** Create an instance from a file. */
     Instance(std::string instance_path, std::string format = "")
     {
         std::ifstream file(instance_path);
-        if (!file.good()) {
-            std::cerr << "\033[31m" << "ERROR, unable to open file \"" << instance_path << "\"" << "\033[0m" << std::endl;
-            assert(false);
-            return;
-        }
+        if (!file.good())
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+
         if (format == "" || format == "tsplib") {
             read_tsplib(file);
         } else if (format == "soplib") {
             read_soplib(file);
         } else {
-            std::cerr << "\033[31m" << "ERROR, unknown instance format \"" << format << "\"" << "\033[0m" << std::endl;
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
         }
         file.close();
     }
 
+    /** Destructor. */
     virtual ~Instance() { }
 
+    /** Get the number of vertices */
     inline VertexId number_of_vertices() const { return locations_.size(); }
+    /** Get the distance between vertex 'j1' and vertex 'j2'. */
     inline Distance distance(VertexId j1, VertexId j2) const { return distances_[j1][j2]; }
+    /** Get the predecessors of vertex 'j'. */
     inline const std::vector<VertexId>& predecessors(VertexId j) const { return locations_[j].predecessors; }
+    /** Get the maximum distance between two vertices. */
     inline Distance maximum_distance() const { return distance_max_; }
 
+    /** Check a certificate file 'certificate_path'. */
     std::pair<bool, Distance> check(std::string certificate_path)
     {
         std::ifstream file(certificate_path);
-        if (!file.good()) {
-            std::cerr << "\033[31m" << "ERROR, unable to open file \"" << certificate_path << "\"" << "\033[0m" << std::endl;
-            assert(false);
-            return {false, 0};
-        }
+        if (!file.good())
+            throw std::runtime_error(
+                    "Unable to open file \"" + certificate_path + "\".");
 
         VertexId n = number_of_vertices();
         VertexId j_prec = 0;
@@ -142,8 +149,19 @@ public:
         return {feasible, total_distance};
     }
 
+    /** Check if vertex index 'j' is within the correct range. */
+    inline void check_vertex_index(VertexId j)
+    {
+        if (j < 0 || j >= number_of_vertices())
+            throw std::out_of_range(
+                    "Invalid vertex index: \"" + std::to_string(j) + "\"."
+                    + " Vertex indices should belong to [0, "
+                    + std::to_string(number_of_vertices() - 1) + "].");
+    }
+
 private:
 
+    /** Read a file in 'tsplib' format. */
     void read_tsplib(std::ifstream& file)
     {
         std::string tmp;
@@ -199,6 +217,7 @@ private:
         }
     }
 
+    /** Read a file in 'soplib' format. */
     void read_soplib(std::ifstream& file)
     {
         std::string tmp;

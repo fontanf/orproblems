@@ -28,16 +28,17 @@ Risk lcm(Risk a, Risk b)
 }
 
 Instance::Instance(
-        std::string filepath,
+        std::string instance_path,
         std::string)
 {
-    std::ifstream f(filepath);
+    std::ifstream f(instance_path);
     if (!f.good())
-        std::cerr << "\033[31m" << "ERROR, unable to open file \"" << filepath << "\"" << "\033[0m" << std::endl;
+        throw std::runtime_error(
+                "Unable to open file \"" + instance_path + "\".");
 
     // Read json file.
     ondemand::parser parser;
-    auto json = padded_string::load(filepath);
+    auto json = padded_string::load(instance_path);
     ondemand::document doc = parser.iterate(json); // position a pointer at the beginning of the JSON data
 
     std::cout << "Read instance..." << std::endl;
