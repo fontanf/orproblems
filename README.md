@@ -83,7 +83,13 @@ The data also include CSV files listing the instances for each problem and their
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/quadraticassignment.hpp)
 
 [Cutting Stock Problem](orproblems/cuttingstock.hpp)
-* Literature: TODO
+* Literature:
+  * "A Linear Programming Approach to the Cutting-Stock Problem" (Gilmore et Gomory, 1961) [DOI](https://doi.org/10.1287/opre.9.6.849)
+  * "A branch-and-cut-and-price algorithm for one-dimensional stock cutting and two-dimensional two-stage cutting" (Belov et Scheithauer, 2006) [DOI](https://doi.org/10.1016/j.ejor.2004.08.036)
+  * "Bin packing and related problems: General arc-flow formulation with graph compression" (Brandão et Pedroso, 2016) [DOI](https://doi.org/10.1016/j.cor.2015.11.009)
+  * "Bin packing and cutting stock problems: Mathematical models and exact algorithms" (Delorme et al., 2016) [DOI](https://doi.org/10.1016/j.ejor.2016.04.030)
+  * "Enhanced Pseudo-polynomial Formulations for Bin Packing and Cutting Stock Problems" (Delorme et Iori, 2019) [DOI](https://doi.org/10.1287/ijoc.2018.0880)
+  * "A New Branch-and-Price-and-Cut Algorithm for One-Dimensional Bin-Packing Problems" (Wei et al., 2019) [DOI](https://doi.org/10.1287/ijoc.2018.0867)
 * Data: [cuttingstock.7z](https://github.com/fontanf/orproblems/releases/download/data/cuttingstock.7z)
 * Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/cuttingstock.hpp)
 
@@ -154,9 +160,20 @@ The data also include CSV files listing the instances for each problem and their
 
 ## Routing
 
+### Single vehicle
+
 [Travelling Salesman Problem](orproblems/travellingsalesman.hpp)
 * Three field classification: `1 | sᵢⱼ | Cₘₐₓ`
-* Literature: TODO
+* Literature:
+  * "An effective implementation of the Lin–Kernighan traveling salesman heuristic" (Helsgaun, 2000) [DOI](https://doi.org/10.1016/S0377-2217(99)00284-2)
+  * "Chained Lin-Kernighan for Large Traveling Salesman Problems" (Applegate et al., 2003) [DOI](https://doi.org/10.1287/ijoc.15.1.82.15157)
+  * "Data structures and ejection chains for solving large-scale traveling salesman problems" (Gamboa et al., 2005) [DOI](https://doi.org/10.1016/j.ejor.2004.04.023)
+  * "Implementation analysis of efficient heuristic algorithms for the traveling salesman problem" (Gamboa et al., 2006) [DOI](https://doi.org/10.1016/j.cor.2005.06.014)
+  * "General k-opt submoves for the Lin–Kernighan TSP heuristic" (Helsgaun, 2009) [DOI](https://doi.org/10.1007/s12532-009-0004-6)
+  * "Traveling salesman problem heuristics: Leading methods, implementations and latest advances" (Rego et al., 2011) [DOI](https://doi.org/10.1016/j.ejor.2010.09.010)
+  * "A k-level data structure for large-scale traveling salesman problems" (Osterman et Rego, 2016) [DOI](https://doi.org/10.1007/s10479-016-2159-7)
+  * "POPMUSIC for the travelling salesman problem" (Taillard etHelsgaun, 2019) [DOI](https://doi.org/10.1016/j.ejor.2018.06.039)
+  * "A linearithmic heuristic for the travelling salesman problem" (Taillard, 2021) [DOI](https://doi.org/10.1016/j.ejor.2021.05.034)
 * Data: [travellingsalesman.7z](https://github.com/fontanf/orproblems/releases/download/data/travellingsalesman.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/travellingsalesman.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/travellingsalesman.hpp)
 
@@ -191,14 +208,26 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [thieforienteering.7z](https://github.com/fontanf/orproblems/releases/download/data/thieforienteering.7z)
 * Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/thieforienteering.hpp)
 
+### Multiple vehicles
+
 [Capacitated Vehicle Routing Problem](orproblems/capacitatedvehiclerouting.hpp)
-* Literature: TODO
+* Literature:
+  * "Slack Induction by String Removals for Vehicle Routing Problems" (Christiaens et Vanden Berghe, 2020) [DOI](https://doi.org/10.1287/trsc.2019.0914)
+  * "A hybrid adaptive iterated local search with diversification control to the capacitated vehicle routing problem" (Máximo et Nascimento, 2021) [DOI](https://doi.org/10.1016/j.ejor.2021.02.024)
+  * "A Fast and Scalable Heuristic for the Solution of Large-Scale Capacitated Vehicle Routing Problems" (Accorsi et Vigo, 2021) [DOI](https://doi.org/10.1287/trsc.2021.1059)
+  * "A POPMUSIC matheuristic for the capacitated vehicle routing problem" (Queiroga et al., 2021) [DOI](https://doi.org/10.1016/j.cor.2021.105475)
 * Data: [capacitatedvehiclerouting.7z](https://github.com/fontanf/orproblems/releases/download/data/capacitatedvehiclerouting.7z)
 * Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/capacitatedvehiclerouting.hpp)
 
 [Vehicle Routing Problem with Time Windows](orproblems/vehicleroutingwithtimewindows.hpp)
 * Time windows / Capacity constraint / Maximum number of vehicles
-* Literature: TODO
+* Literature:
+  * "A general heuristic for vehicle routing problems" (Pisinger et Ropke, 2007) [DOI](https://doi.org/10.1016/j.cor.2005.09.012)
+  * "Arc-Guided Evolutionary Algorithm for the Vehicle Routing Problem With Time Windows" (Repoussis et al., 2009) [DOI](https://doi.org/10.1109/TEVC.2008.2011740)
+  * "A penalty-based edge assembly memetic algorithm for the vehicle routing problem with time windows" (Nagata et al., 2010) [DOI](https://doi.org/10.1016/j.cor.2009.06.022)
+  * "A spatiotemporal partitioning approach for large-scale vehicle routing problems with time windows" (Qi et al., 2012) [DOI](https://doi.org/10.1016/j.tre.2011.07.001)
+  * "A hybrid genetic algorithm with adaptive diversity management for a large class of vehicle routing problems with time-windows" (Vidal et al., 2013) [DOI](https://doi.org/10.1016/j.cor.2012.07.018)
+  * "Slack Induction by String Removals for Vehicle Routing Problems" (Christiaens et Vanden Berghe, 2020) [DOI](https://doi.org/10.1287/trsc.2019.0914)
 * Data: [vehicleroutingwithtimewindows.7z](https://github.com/fontanf/orproblems/releases/download/data/vehicleroutingwithtimewindows.7z)
 * Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/vehicleroutingwithtimewindows.hpp)
 
