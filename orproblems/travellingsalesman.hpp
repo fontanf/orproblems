@@ -12,14 +12,6 @@
  * Objective:
  * - minimize the total length of the tour
  *
- * Tree search 1:
- * - forward branching
- * - guide: current length + distance to the closest next child
- *
- * Tree search 2:
- * - insertion branching
- * - guide: current length
- *
  */
 
 #include "optimizationtools/indexed_set.hpp"
@@ -126,7 +118,7 @@ public:
             && (duplicates == 0);
 
         std::cout << "---" << std::endl;
-        std::cout << "Vertices number:        " << vertices.size() << " / " << n  << std::endl;
+        std::cout << "Number of vertices:     " << vertices.size() << " / " << n  << std::endl;
         std::cout << "Duplicates:             " << duplicates << std::endl;
         std::cout << "Feasible:               " << feasible << std::endl;
         std::cout << "Total distance:         " << total_distance << std::endl;

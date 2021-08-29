@@ -16,9 +16,6 @@
  * Objective:
  * - Minimize the sum of arrival times (except for the return at location 0)
  *
- * Tree search:
- * - forward branching
- *
  */
 
 namespace orproblems

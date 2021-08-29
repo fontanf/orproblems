@@ -141,11 +141,11 @@ public:
             && (number_of_precedence_violations == 0);
 
         std::cout << "---" << std::endl;
-        std::cout << "Vertices number:              " << vertices.size() << " / " << n  << std::endl;
-        std::cout << "Duplicates:                   " << duplicates << std::endl;
-        std::cout << "Precedence violation number:  " << number_of_precedence_violations << std::endl;
-        std::cout << "Feasible:                     " << feasible << std::endl;
-        std::cout << "Total distance:               " << total_distance << std::endl;
+        std::cout << "Number of Vertices:               " << vertices.size() << " / " << n  << std::endl;
+        std::cout << "Duplicates:                       " << duplicates << std::endl;
+        std::cout << "Number of precedence violations:  " << number_of_precedence_violations << std::endl;
+        std::cout << "Feasible:                         " << feasible << std::endl;
+        std::cout << "Total distance:                   " << total_distance << std::endl;
         return {feasible, total_distance};
     }
 

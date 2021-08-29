@@ -26,10 +26,6 @@
  * Objective:
  * - maximize the profit of collected items
  *
- * Tree search
- * - forward branching on the next item
- * - guide: time^exponent_time * weight^exponent_weight / profit^exponent_profit
- * - no bound
  */
 
 namespace orproblems

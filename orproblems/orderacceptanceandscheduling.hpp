@@ -27,9 +27,6 @@
  * Objective:
  * - maximize the profit of the scheduled jobs minus their weighted tardiness
  *
- * Tree search
- * - forward branching
- * - guide: time / profit
  */
 
 namespace orproblems

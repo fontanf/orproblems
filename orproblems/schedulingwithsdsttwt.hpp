@@ -20,9 +20,6 @@
  * Objective:
  * - Minimize the total weighted tardiness of the schedule
  *
- * Tree search:
- * - forward branching
- *
  */
 
 namespace orproblems

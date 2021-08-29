@@ -172,7 +172,7 @@ The data also include CSV files listing the instances for each problem and their
   * "General k-opt submoves for the Lin–Kernighan TSP heuristic" (Helsgaun, 2009) [DOI](https://doi.org/10.1007/s12532-009-0004-6)
   * "Traveling salesman problem heuristics: Leading methods, implementations and latest advances" (Rego et al., 2011) [DOI](https://doi.org/10.1016/j.ejor.2010.09.010)
   * "A k-level data structure for large-scale traveling salesman problems" (Osterman et Rego, 2016) [DOI](https://doi.org/10.1007/s10479-016-2159-7)
-  * "POPMUSIC for the travelling salesman problem" (Taillard etHelsgaun, 2019) [DOI](https://doi.org/10.1016/j.ejor.2018.06.039)
+  * "POPMUSIC for the travelling salesman problem" (Taillard e tHelsgaun, 2019) [DOI](https://doi.org/10.1016/j.ejor.2018.06.039)
   * "A linearithmic heuristic for the travelling salesman problem" (Taillard, 2021) [DOI](https://doi.org/10.1016/j.ejor.2021.05.034)
 * Data: [travellingsalesman.7z](https://github.com/fontanf/orproblems/releases/download/data/travellingsalesman.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/travellingsalesman.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/travellingsalesman.hpp)
