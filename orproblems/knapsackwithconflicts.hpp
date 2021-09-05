@@ -208,7 +208,7 @@ private:
 
 };
 
-std::ostream& operator<<(
+static inline std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
     os << "capacity " << instance.capacity() << std::endl;

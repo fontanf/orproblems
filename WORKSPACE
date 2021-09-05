@@ -13,8 +13,8 @@ boost_deps()
 git_repository(
     name = "optimizationtools",
     remote = "https://github.com/fontanf/optimizationtools.git",
-    commit = "1d164f9fea4f9f775a350da3a72e52e5f259e14a",
-    shallow_since = "1621096312 +0200",
+    commit = "c2df60575bed9af3cfb8652bc3c859f98b52b58c",
+    shallow_since = "1630764843 +0200",
 )
 
 http_archive(

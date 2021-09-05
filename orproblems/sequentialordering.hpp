@@ -246,7 +246,7 @@ private:
 
 };
 
-std::ostream& operator<<(
+static inline std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
     os << "number of vertices: " << instance.number_of_vertices() << std::endl;

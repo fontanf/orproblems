@@ -179,7 +179,7 @@ private:
 
 };
 
-std::ostream& operator<<(
+static inline std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
     os << "number of jobs: " << instance.number_of_jobs() << std::endl;

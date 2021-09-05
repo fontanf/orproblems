@@ -228,7 +228,7 @@ private:
 
 };
 
-std::ostream& operator<<(
+static inline std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
     os << "cycle time " << instance.cycle_time() << std::endl;

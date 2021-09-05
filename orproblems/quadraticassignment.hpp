@@ -142,7 +142,7 @@ private:
 
 };
 
-std::ostream& operator<<(
+static inline std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
     FacilityId n = instance.number_of_facilities();

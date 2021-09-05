@@ -371,7 +371,7 @@ private:
 
 };
 
-std::ostream& operator<<(
+static inline std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
     os << "number of locations: " << instance.number_of_locations() << std::endl;

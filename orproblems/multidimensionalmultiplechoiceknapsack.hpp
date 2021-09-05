@@ -224,7 +224,7 @@ private:
 
 };
 
-std::ostream& operator<<(
+static inline std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
     os << "number of items " << instance.number_of_items() << std::endl;
