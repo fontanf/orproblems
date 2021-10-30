@@ -10,8 +10,10 @@
  * Input:
  * - m vehicles of capacity Q
  * - 1 depot
- * - n - 1 customer with a demand qⱼ, a service time sⱼ and a time window [rⱼ,
- *   dⱼ] (j = 2..n)
+ * - n - 1 customers; for each customer j = 1..n
+ *   - a demand qⱼ
+ *   - a service time sⱼ
+ *   - a time window [rⱼ, dⱼ]
  * - A n×n symmetric matrix d specifying the times to travel between each pair
  *   of locations
  * Problem:

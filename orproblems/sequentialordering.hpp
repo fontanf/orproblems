@@ -8,17 +8,17 @@
  * (Asymmetric Travelling Salesman Problem with Precedence Constraints)
  *
  * Input:
- * - n cities and an n×n matrix containing the distances between each pair of
- *   cities (not necessarily symmetric)
- * - a directed acyclic graph such that each vertex represents a city and an
- *   arc from vertex j1 to vertex j2 indicates that city j1 must be visited
- *   before city j2
+ * - n locations and an n×n matrix containing the distances between each pair of
+ *   locations (not necessarily symmetric)
+ * - a directed acyclic graph such that each vertex corresponds to a location
  * Problem:
- * - find a route from city 1 such that:
- *   - each city is visited exactly once
+ * - find a route from location 1 such that:
+ *   - each location is visited exactly once
  *   - precedence constraints are satisfied
+ *   - if there exists an arc from vertex j1 to vertex j2 in G, then location
+ *     j1 is visited before location j2
  * Objective:
- * - minimize the total length of the tour
+ * - Minimize the total length of the route
  *
  */
 

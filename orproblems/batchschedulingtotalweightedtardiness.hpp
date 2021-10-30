@@ -6,7 +6,7 @@
  * Single machine batch scheduling problem, Total weighted tardiness.
  *
  * Input:
- * - n jobs with (j = 1..n)
+ * - n jobs; for each job j = 1..n
  *   - a processing time pⱼ
  *   - a size sⱼ
  *   - a release date rⱼ
@@ -15,7 +15,7 @@
  * - a batch capacity Q
  * Problem:
  * - partition the jobs into batches and sequence the batches such that:
- *   - each job must be in exactly one of the batches)
+ *   - each job must be in exactly one of the batches
  *   - the processing time of a batch is equal to the longest processing time
  *     among all jobs it contains
  *   - the total size of the jobs in a batch does not exceed its capacity

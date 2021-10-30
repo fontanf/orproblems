@@ -10,7 +10,10 @@
  * Input:
  * - n cities and an n×n symmetric matrix d containing the distances between
  *   each pair of cities
- * - m items with profit pᵢ, weight wᵢ (i = 1..m) and location nᵢ
+ * - m items; for each item i = 1..m
+ *   - a profit pᵢ
+ *   - a weight wᵢ
+ *   - a location nᵢ
  * - A time limit T
  * - A capacity c
  * - A maximum speed vmax and a minimum speed vmin such that the time to travel

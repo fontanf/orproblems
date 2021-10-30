@@ -6,8 +6,11 @@
  *
  * Input:
  * - m machines
- * - o families with setup time sₖ (k = 1..o)
- * - n jobs with processing time pⱼ, weight wⱼ and a family fⱼ (j = 1..n)
+ * - o families; for each family k = 1..o, a setup time sₖ
+ * - n jobs; for each job j = 1..n
+ *   - a processing time pⱼ
+ *   - a weight wⱼ
+ *   - a family fⱼ
  * Problem:
  * - find a schedule for each machine such that:
  *   - each job is scheduled exactly once

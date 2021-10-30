@@ -5,7 +5,7 @@
  *
  * Input:
  * - a capacity c
- * - n items with weight wⱼ and demand qⱼ (j = 1..n)
+ * - n items; for each item j = 1..n, a weight wⱼ and a demand qⱼ
  * Problem:
  * - pack all items such that the total weight of the items in a bin does not
  *   exceed the capacity.

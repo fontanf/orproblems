@@ -4,8 +4,8 @@
  * Multiple Knapsack Problem.
  *
  * Input:
- * - m containers (knapsacks) with capacity cᵢ (i = 1..m)
- * - n items with profit pⱼ and weight wⱼ (j = 1..n)
+ * - m containers (knapsacks); for each knapsack i = 1..m,  a capacity cᵢ
+ * - n items; for each item j = 1..n, a profit pⱼ and a weight wⱼ
  * Problem:
  * - select m disjoint subsets of items (one per knapsack) such that the total
  *   weight of the items in a knapsack does not exceed its capacity

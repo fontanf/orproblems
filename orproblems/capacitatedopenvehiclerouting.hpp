@@ -9,7 +9,7 @@
  * - m vehicles of capacity Q
  * - A maximum route length L
  * - 1 depot
- * - n - 1 customer with demand qⱼ (j = 2..n)
+ * - n - 1 customers; for each customer j = 2..n, a demand qⱼ
  * - A n×n symmetric matrix d specifying the distances to travel between each
  *   pair of locations
  * Problem:

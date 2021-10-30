@@ -5,13 +5,13 @@
  *
  * Input:
  * - a capacity c
- * - n items with weight wⱼ (j = 1..n)
+ * - n items; for each item j = 1..n, a weight wⱼ
  * - a graph G such that each node corresponds to an item
  * Problem:
  * - Pack all items into bins such that:
  *   - the total weight of the items of a bin does not exceed the capacity c
- *   - if there exists an edge between j₁ to j₂ in G, then j₁ and j₂ must not
- *     be in the same bin
+ *   - if there exists an edge between vertex j₁ and vertex j₂ in G, then item
+ *     j₁ and item j₂ must not be in the same bin
  * Objective:
  * - Minimize the number of bin used.
  *

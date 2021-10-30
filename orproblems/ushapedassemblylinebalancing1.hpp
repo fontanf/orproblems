@@ -7,7 +7,7 @@
  * U-shaped Assembly Line Balancing Problem of Type 1.
  *
  * Input:
- * - n jobs with processing time pⱼ (j = 1..n)
+ * - n jobs; for each job j = 1..n,  a processing time pⱼ
  * - a cycle time c (station capacity)
  * - a directed acyclic graph G such that each node corresponds to a job
  * Problem:

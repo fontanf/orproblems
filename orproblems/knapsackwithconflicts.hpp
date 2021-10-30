@@ -5,14 +5,14 @@
  *
  * Input:
  * - a knapsack with capacity C
- * - n items with weight wⱼ and profit pⱼ (j = 1..n)
+ * - n items; for each item j = 1..n, a weight wⱼ and a profit pⱼ
  * - a graph G such that each node corresponds to an item
  * Problem:
  * - Select a subset of items such that:
  *   - the total weight of the selected items does not exceed the knapsack
  *     capacity
- *   - if there exists an edge between j₁ to j₂ in G, then j₁ and j₂ must not
- *     be both selected
+ *   - if there exists an edge between vertex j₁ and vertex j₂ in G, then item
+ *     j₁ and item j₂ must not be both selected
  * Objective:
  * - Maximize the total profit of the selected items
  *

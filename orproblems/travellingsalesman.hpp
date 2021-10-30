@@ -4,11 +4,12 @@
  * Travelling Salesman Problem.
  *
  * Input:
- * - n cities and an n×n symmetric matrix containing the distances between each
- *   pair of cities
+ * - n locations
+ * - an n×n symmetric matrix containing the distances between each pair of
+ *   locations
  * Problem:
- * - find a tour from city 1 to city 1 such that
- *   - each other city is visited exactly once
+ * - find a tour from location 1 to location 1 such that
+ *   - each other location is visited exactly once
  * Objective:
  * - minimize the total length of the tour
  *

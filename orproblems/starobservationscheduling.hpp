@@ -5,7 +5,7 @@
  *
  * Input:
  * - m nights
- * - n targets with profit wⱼ
+ * - n targets; for each target j = 1..n, a profit wⱼ
  * - a list of possible observations. An observation is associated to a night i
  *   and a target j and has a time-window [rᵢⱼ, dᵢⱼ] and a duration pᵢⱼ such
  *   that 2 pⱼᵢ ≥ dⱼᵢ - rⱼᵢ

@@ -9,7 +9,7 @@
  * weighted Tardiness.
  *
  * Input:
- * - n jobs with (j = 1..n)
+ * - n jobs; for each job j = 1..n
  *   - a due date dⱼ
  *   - a processing time pⱼ
  *   - a weight wⱼ

@@ -9,7 +9,7 @@
  * sequence-dependent setup times.
  *
  * Input:
- * - n jobs with
+ * - n jobs; for each job j = 1..n
  *   - a release date rⱼ
  *   - a due date dⱼ
  *   - a deadline đⱼ
