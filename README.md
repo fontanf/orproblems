@@ -288,6 +288,14 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [orderacceptanceandscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/orderacceptanceandscheduling.7z)
 * Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/orderacceptanceandscheduling.hpp)
 
+[Single machine batch scheduling problem, Total completion time](orproblems/batchschedulingtotalcompletiontime.hpp)
+* Three field classification: `1 | batch, sⱼ | ∑Cⱼ`
+* Literature:
+  * "Minimizing total flow time on a batch processing machine using a hybrid max–min ant system" (Rafiee Parsa et al., 2016) [DOI](https://doi.org/10.1016/j.cie.2016.06.008)
+  * "A hybrid neural network approach to minimize total completion time on a single batch processing machine" (Rafiee Parsa et al., 2021) [DOI](https://doi.org/10.1111/itor.12665)
+  * "Column generation for minimizing total completion time in a parallel-batching environment" (Alfieri et al., 2021) [DOI](https://doi.org/10.1007/s10951-021-00703-9)
+* Data: [batchschedulingtotalcompletiontime.7z](https://github.com/fontanf/orproblems/releases/download/data/batchschedulingtotalcompletiontime.7z)
+
 [Single machine batch scheduling problem, Total weighted tardiness](orproblems/batchschedulingtotalweightedtardiness.hpp)
 * Three field classification: `1 | batch, rⱼ, sⱼ, compt | ∑wⱼTⱼ`
 * Literature:

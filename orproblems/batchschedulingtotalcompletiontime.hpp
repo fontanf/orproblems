@@ -2,16 +2,17 @@
 
 #include "optimizationtools/indexed_set.hpp"
 
+#include <stdexcept>
+#include <fstream>
+#include <iostream>
+
 /**
- * Single machine batch scheduling problem, Total weighted tardiness.
+ * Single machine batch scheduling problem, Total completion time.
  *
  * Input:
  * - n jobs; for each job j = 1..n
  *   - a processing time pⱼ
  *   - a size sⱼ
- *   - a release date rⱼ
- *   - a due date dⱼ
- *   - a weight wⱼ
  * - a batch capacity Q
  * Problem:
  * - partition the jobs into batches and sequence the batches such that:
@@ -19,23 +20,20 @@
  *   - the processing time of a batch is equal to the longest processing time
  *     among all jobs it contains
  *   - the total size of the jobs in a batch does not exceed its capacity
- *   - each job starts after its release date (each jobs start at the start
- *     date of its batch)
  * Objective:
- * - minimize the total weighted tardiness of the schedule
+ * - minimize the total completion time of the schedule
  *
  */
 
 namespace orproblems
 {
 
-namespace batchschedulingtotalweightedtardiness
+namespace batchschedulingtotalcompletiontime
 {
 
 typedef int64_t JobId;
 typedef int64_t JobPos;
 typedef int64_t Time;
-typedef int64_t Weight;
 typedef int64_t Size;
 typedef int64_t Area;
 
@@ -43,10 +41,7 @@ struct Job
 {
     JobId id;
     Time processing_time;
-    Time release_date;
-    Time due_date;
     Size size;
-    Weight weight;
 };
 
 class Instance
@@ -55,15 +50,12 @@ class Instance
 public:
 
     Instance() { }
-    void add_job(Time p, Time r, Time d, Size s, Weight w)
+    void add_job(Time p, Size s)
     {
         Job job;
         job.id = jobs_.size();
         job.processing_time = p;
-        job.release_date = r;
-        job.due_date = d;
         job.size = s;
-        job.weight = w;
         jobs_.push_back(job);
     }
     void set_capacity(Size q) { capacity_ = q; }
@@ -74,8 +66,8 @@ public:
         if (!file.good())
             throw std::runtime_error(
                     "Unable to open file \"" + instance_path + "\".");
-        if (format == "" || format == "queiroga2020") {
-            read_queiroga2020(file);
+        if (format == "" || format == "alfieri2021") {
+            read_alfieri2021(file);
         } else {
             throw std::invalid_argument(
                     "Unknown instance format \"" + format + "\".");
@@ -102,7 +94,7 @@ public:
         JobPos number_of_batches = 0;
         JobPos duplicates = 0;
         JobPos number_of_overloaded_batches = 0;
-        Time total_weighted_tardiness = 0;
+        Time total_completion_time = 0;
         Time current_batch_start = 0;
         Time current_batch_end = 0;
 
@@ -126,14 +118,9 @@ public:
             }
             current_batch_start = current_batch_end;
             for (JobId j: batch_jobs)
-                if (current_batch_start < job(j).release_date)
-                    current_batch_start = job(j).release_date;
-            for (JobId j: batch_jobs)
                 if (current_batch_end < current_batch_start + job(j).processing_time)
                     current_batch_end = current_batch_start + job(j).processing_time;
-            for (JobId j: batch_jobs)
-                if (current_batch_end > job(j).due_date)
-                    total_weighted_tardiness += job(j).weight * (current_batch_end - job(j).due_date);
+            total_completion_time += current_batch_end * batch_jobs.size();
             std::cout << "; Size: " << size << " / " << capacity() << std::endl;
             if (size > capacity()) {
                 number_of_overloaded_batches++;
@@ -152,25 +139,24 @@ public:
         std::cout << "Number of overloaded batches:  " << number_of_overloaded_batches << std::endl;
         std::cout << "Feasible:                      " << feasible << std::endl;
         std::cout << "Number of batches:             " << number_of_batches << std::endl;
-        std::cout << "Total weighted tardiness:      " << total_weighted_tardiness << std::endl;
-        return {feasible, total_weighted_tardiness};
+        std::cout << "Total completion time:         " << total_completion_time << std::endl;
+        return {feasible, total_completion_time};
     }
 
 private:
 
-    void read_queiroga2020(std::ifstream& file)
+    void read_alfieri2021(std::ifstream& file)
     {
         JobId n = -1;
         Size c = -1;
         file >> n >> c;
         set_capacity(c);
 
-        Time p, r, d;
+        Time p;
         Size s;
-        Weight w;
         for (JobId j = 0; j < n; ++j) {
-            file >> p >> d >> s >> w >> r;
-            add_job(p, r, d, s, w);
+            file >> p >> s;
+            add_job(p, s);
         }
     }
 
@@ -187,10 +173,7 @@ static inline std::ostream& operator<<(
     for (JobId j = 0; j < instance.number_of_jobs(); ++j)
         os << "job: " << j
             << "; processing time: " << instance.job(j).processing_time
-            << "; release date: " << instance.job(j).release_date
-            << "; due date: " << instance.job(j).due_date
             << "; size: " << instance.job(j).size
-            << "; weight: " << instance.job(j).weight
             << std::endl;
     return os;
 }
