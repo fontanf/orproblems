@@ -3,7 +3,9 @@
 #include "orproblems/quadraticassignment.hpp"
 #include "orproblems/cuttingstock.hpp"
 #include "orproblems/multipleknapsack.hpp"
+#include "orproblems/quadraticmultipleknapsack.hpp"
 #include "orproblems/binpackingwithconflicts.hpp"
+
 #include "orproblems/travellingsalesman.hpp"
 #include "orproblems/sequentialordering.hpp"
 #include "orproblems/travellingrepairman.hpp"
@@ -11,8 +13,10 @@
 #include "orproblems/capacitatedvehiclerouting.hpp"
 #include "orproblems/vehicleroutingwithtimewindows.hpp"
 #include "orproblems/capacitatedopenvehiclerouting.hpp"
+
 #include "orproblems/schedulingwithsdsttwt.hpp"
 #include "orproblems/orderacceptanceandscheduling.hpp"
+#include "orproblems/batchschedulingtotalcompletiontime.hpp"
 #include "orproblems/batchschedulingtotalweightedtardiness.hpp"
 #include "orproblems/parallelschedulingwithfamilysetuptimestwct.hpp"
 #include "orproblems/starobservationscheduling.hpp"
@@ -86,9 +90,15 @@ int main(int argc, char *argv[])
 
     } else if (problem == "multipleknapsack") {
         multipleknapsack::Instance instance(instance_path, format);
-        //if (vm.count("print-instance"))
-        //    std::cout << instance << std::endl; TODO
-        //instance.check(certificate_path); TODO
+        if (vm.count("print-instance"))
+            std::cout << instance << std::endl;
+        instance.check(certificate_path);
+
+    } else if (problem == "quadraticmultipleknapsack") {
+        quadraticmultipleknapsack::Instance instance(instance_path, format);
+        if (vm.count("print-instance"))
+            std::cout << instance << std::endl;
+        instance.check(certificate_path);
 
     } else if (problem == "binpackingwithconflicts") {
         binpackingwithconflicts::Instance instance(instance_path, format);
@@ -146,6 +156,12 @@ int main(int argc, char *argv[])
 
     } else if (problem == "orderacceptanceandscheduling") {
         orderacceptanceandscheduling::Instance instance(instance_path, format);
+        if (vm.count("print-instance"))
+            std::cout << instance << std::endl;
+        instance.check(certificate_path);
+
+    } else if (problem == "batchschedulingtotalcompletiontime") {
+        batchschedulingtotalcompletiontime::Instance instance(instance_path, format);
         if (vm.count("print-instance"))
             std::cout << instance << std::endl;
         instance.check(certificate_path);

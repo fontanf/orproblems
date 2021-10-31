@@ -120,7 +120,6 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [multipleknapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/multipleknapsack.7z)
 * Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/multipleknapsack.hpp)
 
-<!---
 [Quadratic Multiple Knapsack Problem](orproblems/quadraticmultipleknapsack.hpp)
 
 <details><summary>Literature</summary>
@@ -146,7 +145,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [quadraticmultipleknapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/quadraticmultipleknapsack.7z)
---->
 
 [Bin Packing Problem with Conflicts](orproblems/binpackingwithconflicts.hpp)
 * Literature:

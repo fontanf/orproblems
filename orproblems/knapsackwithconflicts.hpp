@@ -92,7 +92,7 @@ public:
     inline const Item& item(ItemId j) const { return items_[j]; }
     inline Weight capacity() const { return capacity_; }
 
-    std::pair<bool, Profit> check(std::string certificate_path)
+    std::pair<bool, Profit> check(std::string certificate_path) const
     {
         std::ifstream file(certificate_path);
         if (!file.good())
@@ -102,11 +102,17 @@ public:
         ItemId n = number_of_items();
         Weight weight = 0;
         Profit profit = 0;
-        ItemId j = 0;
+        ItemId j = -1;
         optimizationtools::IndexedSet items(n);
         ItemPos duplicates = 0;
         ItemPos number_of_conflict_violations = 0;
         while (file >> j) {
+            weight += item(j).weight;
+            profit += item(j).profit;
+            std::cout << "Job: " << j
+                << "; Weight: " << weight
+                << "; Profit: " << profit
+                << std::endl;
             if (items.contains(j)) {
                 duplicates++;
                 std::cout << "Job " << j << " already scheduled." << std::endl;
@@ -118,24 +124,18 @@ public:
                 }
             }
             items.add(j);
-            weight += item(j).weight;
-            profit += item(j).profit;
-            std::cout << "Job: " << j
-                << "; Weight: " << weight
-                << "; Profit: " << profit
-                << std::endl;
         }
         bool feasible
             = (duplicates == 0)
             && (weight <= capacity())
             && (number_of_conflict_violations == 0);
         std::cout << "---" << std::endl;
-        std::cout << "Item number:                " << items.size() << " / " << n  << std::endl;
-        std::cout << "Duplicates:                 " << duplicates << std::endl;
-        std::cout << "Conflict violation number:  " << number_of_conflict_violations << std::endl;
-        std::cout << "Weight:                     " << weight << " / " << capacity() << std::endl;
-        std::cout << "Feasible:                   " << feasible << std::endl;
-        std::cout << "Profit:                     " << profit << std::endl;
+        std::cout << "Number of Items:                " << items.size() << " / " << n << std::endl;
+        std::cout << "Duplicates:                     " << duplicates << std::endl;
+        std::cout << "Number of conflict violations:  " << number_of_conflict_violations << std::endl;
+        std::cout << "Weight:                         " << weight << " / " << capacity() << std::endl;
+        std::cout << "Feasible:                       " << feasible << std::endl;
+        std::cout << "Profit:                         " << profit << std::endl;
         return {feasible, profit};
     }
 

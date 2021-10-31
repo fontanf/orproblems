@@ -49,6 +49,16 @@ cc_library(
 )
 
 cc_library(
+        name = "quadraticmultipleknapsack",
+        hdrs = ["quadraticmultipleknapsack.hpp"],
+        deps = [
+                "@optimizationtools//optimizationtools:indexed_collections",
+                "@optimizationtools//optimizationtools:utils",
+        ],
+        visibility = ["//visibility:public"],
+)
+
+cc_library(
         name = "binpackingwithconflicts",
         hdrs = ["binpackingwithconflicts.hpp"],
         deps = [
@@ -142,6 +152,16 @@ cc_library(
 cc_library(
         name = "orderacceptanceandscheduling",
         hdrs = ["orderacceptanceandscheduling.hpp"],
+        deps = [
+                "@optimizationtools//optimizationtools:indexed_collections",
+                "@optimizationtools//optimizationtools:utils",
+        ],
+        visibility = ["//visibility:public"],
+)
+
+cc_library(
+        name = "batchschedulingtotalcompletiontime",
+        hdrs = ["batchschedulingtotalcompletiontime.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools:indexed_collections",
                 "@optimizationtools//optimizationtools:utils",
@@ -250,7 +270,9 @@ cc_binary(
                 ":quadraticassignment",
                 ":cuttingstock",
                 ":multipleknapsack",
+                ":quadraticmultipleknapsack",
                 ":binpackingwithconflicts",
+
                 ":travellingsalesman",
                 ":sequentialordering",
                 ":travellingrepairman",
@@ -258,8 +280,10 @@ cc_binary(
                 ":capacitatedvehiclerouting",
                 ":vehicleroutingwithtimewindows",
                 ":capacitatedopenvehiclerouting",
+
                 ":schedulingwithsdsttwt",
                 ":orderacceptanceandscheduling",
+                ":batchschedulingtotalcompletiontime",
                 ":batchschedulingtotalweightedtardiness",
                 ":parallelschedulingwithfamilysetuptimestwct",
                 ":starobservationscheduling",
