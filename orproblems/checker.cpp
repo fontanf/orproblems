@@ -84,9 +84,9 @@ int main(int argc, char *argv[])
 
     } else if (problem == "cuttingstock") {
         cuttingstock::Instance instance(instance_path, format);
-        //if (vm.count("print-instance"))
-        //    std::cout << instance << std::endl; TODO
-        //instance.check(certificate_path); TODO
+        if (vm.count("print-instance"))
+            std::cout << instance << std::endl;
+        instance.check(certificate_path);
 
     } else if (problem == "multipleknapsack") {
         multipleknapsack::Instance instance(instance_path, format);

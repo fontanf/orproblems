@@ -26,6 +26,7 @@ namespace cuttingstock
 {
 
 typedef int64_t ItemTypeId;
+typedef int64_t ItemPos;
 typedef int64_t Weight;
 typedef int64_t Demand;
 typedef int64_t BinId;
@@ -76,6 +77,56 @@ public:
     Demand maximum_demand() const { return demand_max_; }
     Demand total_demand() const { return demand_sum_; }
 
+    std::pair<bool, BinId> check(std::string certificate_path)
+    {
+        std::ifstream file(certificate_path);
+        if (!file.good())
+            throw std::runtime_error(
+                    "Unable to open file \"" + certificate_path + "\".");
+
+        std::vector<Demand> demands(number_of_item_types(), 0);
+        ItemPos number_of_unsatisfied_demands = 0;
+        BinId number_of_overweighted_bins = 0;
+        BinId number_of_bins = 0;
+        BinId bin_number_of_copies = -1;
+        ItemPos bin_number_of_items = -1;
+        while (file >> bin_number_of_copies >> bin_number_of_items) {
+            ItemTypeId j = -1;
+            Weight bin_weight = 0;
+            number_of_bins++;
+            std::cout << "Bin: " << number_of_bins - 1 << "; Jobs";
+            for (ItemPos j_pos = 0; j_pos < bin_number_of_items; ++j_pos) {
+                file >> j;
+                demands[j] += bin_number_of_copies;
+                std::cout << " " << j;
+                bin_weight += weight(j);
+            }
+            std::cout << "; Weight: " << bin_weight << " / " << capacity() << std::endl;
+            if (bin_weight > capacity()) {
+                number_of_overweighted_bins++;
+                std::cout << "Bin " << number_of_bins - 1 << " is overloaded." << std::endl;
+            }
+        }
+        for (ItemTypeId j = 0; j < number_of_item_types(); ++j) {
+            if (demands[j] != demand(j)) {
+                number_of_unsatisfied_demands++;
+                std::cout << "Item type " << j
+                    << "; Demand: " << demands[j] << " / " << demand(j)
+                    << "." << std::endl;
+            }
+        }
+        bool feasible
+            = (number_of_unsatisfied_demands == 0)
+            && (number_of_overweighted_bins);
+
+        std::cout << "---" << std::endl;
+        std::cout << "Number of unsatisfied demands:  " << number_of_unsatisfied_demands  << std::endl;
+        std::cout << "Number of overweighted bins:    " << number_of_overweighted_bins << std::endl;
+        std::cout << "Feasible:                       " << feasible << std::endl;
+        std::cout << "Number of bins:                 " << number_of_bins << std::endl;
+        return {feasible, number_of_bins};
+    }
+
 private:
 
     void read_bpplib_bpp(std::ifstream& file)
@@ -111,6 +162,20 @@ private:
     Demand demand_sum_ = 0;
 
 };
+
+static inline std::ostream& operator<<(
+        std::ostream &os, const Instance& instance)
+{
+    os << "number of item types " << instance.number_of_item_types() << std::endl;
+    os << "capacity " << instance.capacity() << std::endl;
+    for (ItemTypeId j = 0; j < instance.number_of_item_types(); ++j) {
+        os << "item " << j
+            << " weight " << instance.weight(j)
+            << " demand " << instance.demand(j)
+            << std::endl;
+    }
+    return os;
+}
 
 }
 

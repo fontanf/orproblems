@@ -90,7 +90,7 @@ public:
     inline Time cycle_time() const { return cycle_time_; }
     inline Time processing_time_sum() const { return processing_time_sum_; }
 
-    std::pair<bool, Time> check(std::string certificate_path)
+    std::pair<bool, StationId> check(std::string certificate_path)
     {
         std::ifstream file(certificate_path);
         if (!file.good())
@@ -135,6 +135,7 @@ public:
                 std::cout << "Station " << number_of_stations - 1 << " is overloaded." << std::endl;
             }
         }
+
         bool feasible
             = (jobs.size() == n)
             && (duplicates == 0)
@@ -142,12 +143,12 @@ public:
             && (number_of_overloaded_stations == 0);
 
         std::cout << "---" << std::endl;
-        std::cout << "Job number:                   " << jobs.size() << " / " << n  << std::endl;
-        std::cout << "Duplicates:                   " << duplicates << std::endl;
-        std::cout << "Precedence violation number:  " << number_of_precedence_violations << std::endl;
-        std::cout << "Overloaded station number:    " << number_of_overloaded_stations << std::endl;
-        std::cout << "Feasible:                     " << feasible << std::endl;
-        std::cout << "Station number:               " << number_of_stations << std::endl;
+        std::cout << "Number of jobs:                   " << jobs.size() << " / " << n  << std::endl;
+        std::cout << "Duplicates:                       " << duplicates << std::endl;
+        std::cout << "Number of precedence violations:  " << number_of_precedence_violations << std::endl;
+        std::cout << "Number of overloaded stations:    " << number_of_overloaded_stations << std::endl;
+        std::cout << "Feasible:                         " << feasible << std::endl;
+        std::cout << "Number of stations:               " << number_of_stations << std::endl;
         return {feasible, number_of_stations};
     }
 
