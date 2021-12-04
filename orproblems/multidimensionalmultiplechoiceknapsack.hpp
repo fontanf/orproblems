@@ -83,8 +83,17 @@ public:
     inline const std::vector<ItemId>& items(GroupId group_id) const { return groups_[group_id]; }
     inline Weight capacity(ResourceId r) const { return capacities_[r]; }
 
-    std::pair<bool, Profit> check(std::string certificate_path)
+    std::pair<bool, Profit> check(
+            std::string certificate_path,
+            int verbose = 1) const
     {
+        // Initial display.
+        if (verbose >= 1) {
+            std::cout
+                << "Checker" << std::endl
+                << "-------" << std::endl;
+        }
+
         std::ifstream file(certificate_path);
         if (!file.good())
             throw std::runtime_error(
@@ -98,31 +107,37 @@ public:
         while (file >> j) {
             if (groups.contains(item(j).group_id)) {
                 duplicates++;
-                std::cout << "GroupId " << item(j).group_id << " already in the knapsack." << std::endl;
+                if (verbose == 2)
+                    std::cout << "GroupId " << item(j).group_id << " already in the knapsack." << std::endl;
             }
             groups.add(item(j).group_id);
             for (ResourceId r = 0; r < number_of_resources(); ++r)
                 weights[r] += item(j).weights[r];
             profit += item(j).profit;
-            std::cout << "Item: " << j
-                << "; Group: " << item(j).group_id
-                << "; Profit: " << item(j).profit
-                << std::endl;
+            if (verbose == 2)
+                std::cout << "Item: " << j
+                    << "; Group: " << item(j).group_id
+                    << "; Profit: " << item(j).profit
+                    << std::endl;
         }
         Weight overweight = 0;
         for (ResourceId r = 0; r < number_of_resources(); ++r)
             if (weights[r] > capacity(r))
                 overweight += (weights[r] - capacity(r));
+
         bool feasible
             = (duplicates == 0)
             && (groups.size() == number_of_groups())
             && (overweight == 0);
-        std::cout << "---" << std::endl;
-        std::cout << "Groups:                     " << groups.size() << " / " << number_of_groups() << std::endl;
-        std::cout << "Duplicates:                 " << duplicates << std::endl;
-        std::cout << "Overweight:                 " << overweight << std::endl;
-        std::cout << "Feasible:                   " << feasible << std::endl;
-        std::cout << "Profit:                     " << profit << std::endl;
+        if (verbose == 2)
+            std::cout << "---" << std::endl;
+        if (verbose >= 1) {
+            std::cout << "Groups:                     " << groups.size() << " / " << number_of_groups() << std::endl;
+            std::cout << "Duplicates:                 " << duplicates << std::endl;
+            std::cout << "Overweight:                 " << overweight << std::endl;
+            std::cout << "Feasible:                   " << feasible << std::endl;
+            std::cout << "Profit:                     " << profit << std::endl;
+        }
         return {feasible, profit};
     }
 

@@ -89,8 +89,17 @@ public:
     inline const Job& job(JobId j) const { return jobs_[j]; }
     inline Size capacity() const { return capacity_; }
 
-    std::pair<bool, Time> check(std::string certificate_path)
+    std::pair<bool, Time> check(
+            std::string certificate_path,
+            int verbose = 1) const
     {
+        // Initial display.
+        if (verbose >= 1) {
+            std::cout
+                << "Checker" << std::endl
+                << "-------" << std::endl;
+        }
+
         std::ifstream file(certificate_path);
         if (!file.good())
             throw std::runtime_error(
@@ -110,16 +119,19 @@ public:
             JobId j = -1;
             Size size = 0;
             number_of_batches++;
-            std::cout << "batch: " << number_of_batches - 1 << "; Jobs";
+            if (verbose == 2)
+                std::cout << "batch: " << number_of_batches - 1 << "; Jobs";
             std::vector<JobId> batch_jobs;
             for (JobPos j_pos = 0; j_pos < s; ++j_pos) {
                 file >> j;
                 // Check duplicates.
                 if (jobs.contains(j)) {
                     duplicates++;
-                    std::cout << std::endl << "Job " << j << " has already benn scheduled." << std::endl;
+                    if (verbose == 2)
+                        std::cout << std::endl << "Job " << j << " has already benn scheduled." << std::endl;
                 }
-                std::cout << " " << j;
+                if (verbose == 2)
+                    std::cout << " " << j;
                 jobs.add(j);
                 batch_jobs.push_back(j);
                 size += job(j).size;
@@ -134,25 +146,30 @@ public:
             for (JobId j: batch_jobs)
                 if (current_batch_end > job(j).due_date)
                     total_weighted_tardiness += job(j).weight * (current_batch_end - job(j).due_date);
-            std::cout << "; Size: " << size << " / " << capacity() << std::endl;
+            if (verbose == 2)
+                std::cout << "; Size: " << size << " / " << capacity() << std::endl;
             if (size > capacity()) {
                 number_of_overloaded_batches++;
-                std::cout << "Batch " << number_of_batches - 1 << " is overloaded." << std::endl;
+                if (verbose == 2)
+                    std::cout << "Batch " << number_of_batches - 1 << " is overloaded." << std::endl;
             }
             current_batch_start = current_batch_end;
         }
+
         bool feasible
             = (jobs.size() == n)
             && (duplicates == 0)
             && (number_of_overloaded_batches == 0);
-
-        std::cout << "---" << std::endl;
-        std::cout << "Number of jobs:                " << jobs.size() << " / " << n  << std::endl;
-        std::cout << "Duplicates:                    " << duplicates << std::endl;
-        std::cout << "Number of overloaded batches:  " << number_of_overloaded_batches << std::endl;
-        std::cout << "Feasible:                      " << feasible << std::endl;
-        std::cout << "Number of batches:             " << number_of_batches << std::endl;
-        std::cout << "Total weighted tardiness:      " << total_weighted_tardiness << std::endl;
+        if (verbose == 2)
+            std::cout << "---" << std::endl;
+        if (verbose >= 1) {
+            std::cout << "Number of jobs:                " << jobs.size() << " / " << n  << std::endl;
+            std::cout << "Duplicates:                    " << duplicates << std::endl;
+            std::cout << "Number of overloaded batches:  " << number_of_overloaded_batches << std::endl;
+            std::cout << "Feasible:                      " << feasible << std::endl;
+            std::cout << "Number of batches:             " << number_of_batches << std::endl;
+            std::cout << "Total weighted tardiness:      " << total_weighted_tardiness << std::endl;
+        }
         return {feasible, total_weighted_tardiness};
     }
 

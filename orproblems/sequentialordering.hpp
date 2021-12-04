@@ -98,8 +98,17 @@ public:
     inline Distance maximum_distance() const { return distance_max_; }
 
     /** Check a certificate file 'certificate_path'. */
-    std::pair<bool, Distance> check(std::string certificate_path)
+    std::pair<bool, Distance> check(
+            std::string certificate_path,
+            int verbose = 1) const
     {
+        // Initial display.
+        if (verbose >= 1) {
+            std::cout
+                << "Checker" << std::endl
+                << "-------" << std::endl;
+        }
+
         std::ifstream file(certificate_path);
         if (!file.good())
             throw std::runtime_error(
@@ -116,36 +125,42 @@ public:
         while (file >> j) {
             if (vertices.contains(j)) {
                 duplicates++;
-                std::cout << "Vertex " << j << " has already been visited." << std::endl;
+                if (verbose == 2)
+                    std::cout << "Vertex " << j << " has already been visited." << std::endl;
             }
             // Check predecessors.
             for (VertexId j_pred: predecessors(j)) {
                 if (!vertices.contains(j_pred)) {
                     number_of_precedence_violations++;
-                    std::cout << std::endl << "Vertex " << j << " depends on vertex "
-                        << j_pred << " which has not been visited yet."
-                        << std::endl;
+                    if (verbose == 2)
+                        std::cout << std::endl << "Vertex " << j << " depends on vertex "
+                            << j_pred << " which has not been visited yet."
+                            << std::endl;
                 }
             }
             vertices.add(j);
             total_distance += distance(j_prec, j);
-            std::cout << "Job: " << j
-                << "; Distance: " << distance(j_prec, j)
-                << "; Total distance: " << total_distance
-                << std::endl;
+            if (verbose == 2)
+                std::cout << "Job: " << j
+                    << "; Distance: " << distance(j_prec, j)
+                    << "; Total distance: " << total_distance
+                    << std::endl;
             j_prec = j;
         }
+
         bool feasible
             = (vertices.size() == n)
             && (duplicates == 0)
             && (number_of_precedence_violations == 0);
-
-        std::cout << "---" << std::endl;
-        std::cout << "Number of Vertices:               " << vertices.size() << " / " << n  << std::endl;
-        std::cout << "Duplicates:                       " << duplicates << std::endl;
-        std::cout << "Number of precedence violations:  " << number_of_precedence_violations << std::endl;
-        std::cout << "Feasible:                         " << feasible << std::endl;
-        std::cout << "Total distance:                   " << total_distance << std::endl;
+        if (verbose == 2)
+            std::cout << "---" << std::endl;
+        if (verbose >= 1) {
+            std::cout << "Number of Vertices:               " << vertices.size() << " / " << n  << std::endl;
+            std::cout << "Duplicates:                       " << duplicates << std::endl;
+            std::cout << "Number of precedence violations:  " << number_of_precedence_violations << std::endl;
+            std::cout << "Feasible:                         " << feasible << std::endl;
+            std::cout << "Total distance:                   " << total_distance << std::endl;
+        }
         return {feasible, total_distance};
     }
 

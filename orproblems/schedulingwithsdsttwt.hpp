@@ -92,8 +92,17 @@ public:
     inline const Job& job(JobId j) const { return jobs_[j]; }
     inline Time setup_time(JobId j1, JobId j2) const { return setup_times_[j1][j2]; }
 
-    std::pair<bool, Time> check(std::string certificate_path)
+    std::pair<bool, Time> check(
+            std::string certificate_path,
+            int verbose = 1) const
     {
+        // Initial display.
+        if (verbose >= 1) {
+            std::cout
+                << "Checker" << std::endl
+                << "-------" << std::endl;
+        }
+
         std::ifstream file(certificate_path);
         if (!file.good())
             throw std::runtime_error(
@@ -109,7 +118,8 @@ public:
         while (file >> j) {
             if (jobs.contains(j)) {
                 duplicates++;
-                std::cout << "Job " << j << " is already scheduled." << std::endl;
+                if (verbose == 2)
+                    std::cout << "Job " << j << " is already scheduled." << std::endl;
             }
             jobs.add(j);
             current_time += setup_time(j_prec, j);
@@ -118,25 +128,29 @@ public:
                 total_weighted_tardiness
                     += job(j).weight
                     * (current_time - job(j).due_date);
-            std::cout << "Job: " << j
-                << "; Due date: " << job(j).due_date
-                << "; Weight: " << job(j).weight
-                << "; Setup time: " << setup_time(j_prec, j)
-                << "; Processing time: " << job(j).processing_time
-                << "; Time: " << current_time
-                << "; Total weighted tardiness: " << total_weighted_tardiness
-                << std::endl;
+            if (verbose == 2)
+                std::cout << "Job: " << j
+                    << "; Due date: " << job(j).due_date
+                    << "; Weight: " << job(j).weight
+                    << "; Setup time: " << setup_time(j_prec, j)
+                    << "; Processing time: " << job(j).processing_time
+                    << "; Time: " << current_time
+                    << "; Total weighted tardiness: " << total_weighted_tardiness
+                    << std::endl;
             j_prec = j;
         }
+
         bool feasible
             = (jobs.size() == n)
             && (duplicates == 0);
-
-        std::cout << "---" << std::endl;
-        std::cout << "Job number:                " << jobs.size() << " / " << n  << std::endl;
-        std::cout << "Duplicates:                " << duplicates << std::endl;
-        std::cout << "Feasible:                  " << feasible << std::endl;
-        std::cout << "Total weighted tardiness:  " << total_weighted_tardiness << std::endl;
+        if (verbose == 2)
+            std::cout << "---" << std::endl;
+        if (verbose >= 1) {
+            std::cout << "Job number:                " << jobs.size() << " / " << n  << std::endl;
+            std::cout << "Duplicates:                " << duplicates << std::endl;
+            std::cout << "Feasible:                  " << feasible << std::endl;
+            std::cout << "Total weighted tardiness:  " << total_weighted_tardiness << std::endl;
+        }
         return {feasible, total_weighted_tardiness};
     }
 

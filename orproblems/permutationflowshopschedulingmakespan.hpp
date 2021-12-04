@@ -69,8 +69,17 @@ public:
     inline MachineId number_of_machines() const { return processing_times_[0].size(); }
     inline Time processing_time(JobId j, MachineId i) const { return processing_times_[j][i]; }
 
-    std::pair<bool, Time> check(std::string certificate_path)
+    std::pair<bool, Time> check(
+            std::string certificate_path,
+            int verbose = 1) const
     {
+        // Initial display.
+        if (verbose >= 1) {
+            std::cout
+                << "Checker" << std::endl
+                << "-------" << std::endl;
+        }
+
         std::ifstream file(certificate_path);
         if (!file.good())
             throw std::runtime_error(
@@ -85,7 +94,8 @@ public:
         while (file >> j) {
             if (jobs.contains(j)) {
                 duplicates++;
-                std::cout << "Job " << j << " already scheduled." << std::endl;
+                if (verbose == 2)
+                    std::cout << "Job " << j << " already scheduled." << std::endl;
             }
             jobs.add(j);
             times[0] = times[0] + processing_time(j, 0);
@@ -96,19 +106,23 @@ public:
                     times[i] = times[i] + processing_time(j, i);
                 }
             }
-            std::cout << "Job: " << j
-                << "; Time: " << times[m - 1]
-                << std::endl;
+            if (verbose == 2)
+                std::cout << "Job: " << j
+                    << "; Time: " << times[m - 1]
+                    << std::endl;
         }
+
         bool feasible
             = (jobs.size() == n)
             && (duplicates == 0);
-
-        std::cout << "---" << std::endl;
-        std::cout << "Job number:  " << jobs.size() << " / " << n << std::endl;
-        std::cout << "Duplicates:  " << duplicates << std::endl;
-        std::cout << "Feasible:    " << feasible << std::endl;
-        std::cout << "Makespan:    " << times[m - 1] << std::endl;
+        if (verbose == 2)
+            std::cout << "---" << std::endl;
+        if (verbose >= 1) {
+            std::cout << "Job number:  " << jobs.size() << " / " << n << std::endl;
+            std::cout << "Duplicates:  " << duplicates << std::endl;
+            std::cout << "Feasible:    " << feasible << std::endl;
+            std::cout << "Makespan:    " << times[m - 1] << std::endl;
+        }
         return {feasible, times[m - 1]};
     }
 

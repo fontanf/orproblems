@@ -64,8 +64,17 @@ public:
     inline Cost flow(FacilityId facility_id_1, FacilityId facility_id_2) const { return flows_[facility_id_1][facility_id_2]; }
     inline Cost distance(LocationId location_id_1, LocationId location_id_2) const { return distances_[location_id_1][location_id_2]; }
 
-    std::pair<bool, Cost> check(std::string certificate_path)
+    std::pair<bool, Cost> check(
+            std::string certificate_path,
+            int verbose = 1) const
     {
+        // Initial display.
+        if (verbose >= 1) {
+            std::cout
+                << "Checker" << std::endl
+                << "-------" << std::endl;
+        }
+
         std::ifstream file(certificate_path);
         if (!file.good())
             throw std::runtime_error(
@@ -79,19 +88,22 @@ public:
         FacilityId facility_id = 0;
         while (file >> location_id) {
             if (location_id < 0 || location_id >= number_of_facilities()) {
-                std::cout << "Invalid location: " << location_id << "." << std::endl;
+                if (verbose == 2)
+                    std::cout << "Invalid location: " << location_id << "." << std::endl;
                 continue;
             }
             if (location_set.contains(location_id)) {
                 duplicates++;
-                std::cout << "Location " << location_id << " already assigned." << std::endl;
+                if (verbose == 2)
+                    std::cout << "Location " << location_id << " already assigned." << std::endl;
             }
             location_set.add(location_id);
             locations[facility_id] = location_id;
             facility_id++;
-            std::cout << "Facility: " << facility_id
-                << "; Location: " << location_id
-                << std::endl;
+            if (verbose == 2)
+                std::cout << "Facility: " << facility_id
+                    << "; Location: " << location_id
+                    << std::endl;
         }
         Cost cost = 0;
         for (FacilityId facility_id_1 = 0; facility_id_1 < n; ++facility_id_1)
@@ -102,14 +114,18 @@ public:
                         * distance(
                                 locations[facility_id_1],
                                 locations[facility_id_2]);
+
         bool feasible
             = (duplicates == 0)
             && (location_set.size() == n);
-        std::cout << "---" << std::endl;
-        std::cout << "Facilities:                 " << location_set.size() << " / " << n  << std::endl;
-        std::cout << "Duplicates:                 " << duplicates << std::endl;
-        std::cout << "Feasible:                   " << feasible << std::endl;
-        std::cout << "Cost:                       " << cost << std::endl;
+        if (verbose == 2)
+            std::cout << "---" << std::endl;
+        if (verbose >= 1) {
+            std::cout << "Facilities:                 " << location_set.size() << " / " << n  << std::endl;
+            std::cout << "Duplicates:                 " << duplicates << std::endl;
+            std::cout << "Feasible:                   " << feasible << std::endl;
+            std::cout << "Cost:                       " << cost << std::endl;
+        }
         return {feasible, cost};
     }
 

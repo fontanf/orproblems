@@ -86,8 +86,17 @@ public:
     inline Distance distance(VertexId j1, VertexId j2) const { return distances_[j1][j2]; }
     inline Distance maximum_distance() const { return distance_max_; }
 
-    std::pair<bool, Distance> check(std::string certificate_path)
+    std::pair<bool, Distance> check(
+            std::string certificate_path,
+            int verbose = 1) const
     {
+        // Initial display.
+        if (verbose >= 1) {
+            std::cout
+                << "Checker" << std::endl
+                << "-------" << std::endl;
+        }
+
         std::ifstream file(certificate_path);
         if (!file.good())
             throw std::runtime_error(
@@ -103,26 +112,31 @@ public:
         while (file >> j) {
             if (vertices.contains(j)) {
                 duplicates++;
-                std::cout << "Vertex " << j << " has already been visited." << std::endl;
+                if (verbose == 2)
+                    std::cout << "Vertex " << j << " has already been visited." << std::endl;
             }
             vertices.add(j);
             total_distance += distance(j_prec, j);
-            std::cout << "Vertex: " << j
-                << "; Distance: " << distance(j_prec, j)
-                << "; Total distance: " << total_distance
-                << std::endl;
+            if (verbose == 2)
+                std::cout << "Vertex: " << j
+                    << "; Distance: " << distance(j_prec, j)
+                    << "; Total distance: " << total_distance
+                    << std::endl;
             j_prec = j;
         }
         total_distance += distance(j_prec, 0);
+
         bool feasible
             = (vertices.size() == n)
             && (duplicates == 0);
-
-        std::cout << "---" << std::endl;
-        std::cout << "Number of vertices:     " << vertices.size() << " / " << n  << std::endl;
-        std::cout << "Duplicates:             " << duplicates << std::endl;
-        std::cout << "Feasible:               " << feasible << std::endl;
-        std::cout << "Total distance:         " << total_distance << std::endl;
+        if (verbose == 2)
+            std::cout << "---" << std::endl;
+        if (verbose >= 1) {
+            std::cout << "Number of vertices:     " << vertices.size() << " / " << n  << std::endl;
+            std::cout << "Duplicates:             " << duplicates << std::endl;
+            std::cout << "Feasible:               " << feasible << std::endl;
+            std::cout << "Total distance:         " << total_distance << std::endl;
+        }
         return {feasible, total_distance};
     }
 

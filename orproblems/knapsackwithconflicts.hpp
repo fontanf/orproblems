@@ -92,8 +92,17 @@ public:
     inline const Item& item(ItemId j) const { return items_[j]; }
     inline Weight capacity() const { return capacity_; }
 
-    std::pair<bool, Profit> check(std::string certificate_path) const
+    std::pair<bool, Profit> check(
+            std::string certificate_path,
+            int verbose = 1) const
     {
+        // Initial display.
+        if (verbose >= 1) {
+            std::cout
+                << "Checker" << std::endl
+                << "-------" << std::endl;
+        }
+
         std::ifstream file(certificate_path);
         if (!file.good())
             throw std::runtime_error(
@@ -109,33 +118,40 @@ public:
         while (file >> j) {
             weight += item(j).weight;
             profit += item(j).profit;
-            std::cout << "Job: " << j
-                << "; Weight: " << weight
-                << "; Profit: " << profit
-                << std::endl;
+            if (verbose == 2)
+                std::cout << "Job: " << j
+                    << "; Weight: " << weight
+                    << "; Profit: " << profit
+                    << std::endl;
             if (items.contains(j)) {
                 duplicates++;
-                std::cout << "Job " << j << " already scheduled." << std::endl;
+                if (verbose == 2)
+                    std::cout << "Job " << j << " already scheduled." << std::endl;
             }
             for (ItemId j_con: item(j).neighbors) {
                 if (items.contains(j_con)) {
                     number_of_conflict_violations++;
-                    std::cout << "Job " << j << " is in conflict with job " << j_con << "." << std::endl;
+                    if (verbose == 2)
+                        std::cout << "Job " << j << " is in conflict with job " << j_con << "." << std::endl;
                 }
             }
             items.add(j);
         }
+
         bool feasible
             = (duplicates == 0)
             && (weight <= capacity())
             && (number_of_conflict_violations == 0);
-        std::cout << "---" << std::endl;
-        std::cout << "Number of Items:                " << items.size() << " / " << n << std::endl;
-        std::cout << "Duplicates:                     " << duplicates << std::endl;
-        std::cout << "Number of conflict violations:  " << number_of_conflict_violations << std::endl;
-        std::cout << "Weight:                         " << weight << " / " << capacity() << std::endl;
-        std::cout << "Feasible:                       " << feasible << std::endl;
-        std::cout << "Profit:                         " << profit << std::endl;
+        if (verbose == 2)
+            std::cout << "---" << std::endl;
+        if (verbose >= 1) {
+            std::cout << "Number of Items:                " << items.size() << " / " << n << std::endl;
+            std::cout << "Duplicates:                     " << duplicates << std::endl;
+            std::cout << "Number of conflict violations:  " << number_of_conflict_violations << std::endl;
+            std::cout << "Weight:                         " << weight << " / " << capacity() << std::endl;
+            std::cout << "Feasible:                       " << feasible << std::endl;
+            std::cout << "Profit:                         " << profit << std::endl;
+        }
         return {feasible, profit};
     }
 

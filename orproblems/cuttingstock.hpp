@@ -77,8 +77,17 @@ public:
     Demand maximum_demand() const { return demand_max_; }
     Demand total_demand() const { return demand_sum_; }
 
-    std::pair<bool, BinId> check(std::string certificate_path)
+    std::pair<bool, BinId> check(
+            std::string certificate_path,
+            int verbose = 1) const
     {
+        // Initial display.
+        if (verbose >= 1) {
+            std::cout
+                << "Checker" << std::endl
+                << "-------" << std::endl;
+        }
+
         std::ifstream file(certificate_path);
         if (!file.good())
             throw std::runtime_error(
@@ -94,36 +103,44 @@ public:
             ItemTypeId j = -1;
             Weight bin_weight = 0;
             number_of_bins++;
-            std::cout << "Bin: " << number_of_bins - 1 << "; Jobs";
+            if (verbose == 2)
+                std::cout << "Bin: " << number_of_bins - 1 << "; Jobs";
             for (ItemPos j_pos = 0; j_pos < bin_number_of_items; ++j_pos) {
                 file >> j;
                 demands[j] += bin_number_of_copies;
-                std::cout << " " << j;
+                if (verbose == 2)
+                    std::cout << " " << j;
                 bin_weight += weight(j);
             }
-            std::cout << "; Weight: " << bin_weight << " / " << capacity() << std::endl;
+            if (verbose == 2)
+                std::cout << "; Weight: " << bin_weight << " / " << capacity() << std::endl;
             if (bin_weight > capacity()) {
                 number_of_overweighted_bins++;
-                std::cout << "Bin " << number_of_bins - 1 << " is overloaded." << std::endl;
+                if (verbose == 2)
+                    std::cout << "Bin " << number_of_bins - 1 << " is overloaded." << std::endl;
             }
         }
         for (ItemTypeId j = 0; j < number_of_item_types(); ++j) {
             if (demands[j] != demand(j)) {
                 number_of_unsatisfied_demands++;
-                std::cout << "Item type " << j
-                    << "; Demand: " << demands[j] << " / " << demand(j)
-                    << "." << std::endl;
+                if (verbose == 2)
+                    std::cout << "Item type " << j
+                        << "; Demand: " << demands[j] << " / " << demand(j)
+                        << "." << std::endl;
             }
         }
+
         bool feasible
             = (number_of_unsatisfied_demands == 0)
             && (number_of_overweighted_bins);
-
-        std::cout << "---" << std::endl;
-        std::cout << "Number of unsatisfied demands:  " << number_of_unsatisfied_demands  << std::endl;
-        std::cout << "Number of overweighted bins:    " << number_of_overweighted_bins << std::endl;
-        std::cout << "Feasible:                       " << feasible << std::endl;
-        std::cout << "Number of bins:                 " << number_of_bins << std::endl;
+        if (verbose == 2)
+            std::cout << "---" << std::endl;
+        if (verbose >= 1) {
+            std::cout << "Number of unsatisfied demands:  " << number_of_unsatisfied_demands  << std::endl;
+            std::cout << "Number of overweighted bins:    " << number_of_overweighted_bins << std::endl;
+            std::cout << "Feasible:                       " << feasible << std::endl;
+            std::cout << "Number of bins:                 " << number_of_bins << std::endl;
+        }
         return {feasible, number_of_bins};
     }
 

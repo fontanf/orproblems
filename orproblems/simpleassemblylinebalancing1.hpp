@@ -90,8 +90,17 @@ public:
     inline Time cycle_time() const { return cycle_time_; }
     inline Time processing_time_sum() const { return processing_time_sum_; }
 
-    std::pair<bool, StationId> check(std::string certificate_path)
+    std::pair<bool, StationId> check(
+            std::string certificate_path,
+            int verbose = 1) const
     {
+        // Initial display.
+        if (verbose >= 1) {
+            std::cout
+                << "Checker" << std::endl
+                << "-------" << std::endl;
+        }
+
         std::ifstream file(certificate_path);
         if (!file.good())
             throw std::runtime_error(
@@ -108,31 +117,37 @@ public:
             JobId j = -1;
             Time t = 0;
             number_of_stations++;
-            std::cout << "Station: " << number_of_stations - 1 << "; Jobs";
+            if (verbose == 2)
+                std::cout << "Station: " << number_of_stations - 1 << "; Jobs";
             for (JobPos j_pos = 0; j_pos < s; ++j_pos) {
                 file >> j;
                 // Check duplicates.
                 if (jobs.contains(j)) {
                     duplicates++;
-                    std::cout << std::endl << "Job " << j << " already scheduled." << std::endl;
+                    if (verbose == 2)
+                        std::cout << std::endl << "Job " << j << " already scheduled." << std::endl;
                 }
                 // Check predecessors.
                 for (JobId j_pred: job(j).predecessors) {
                     if (!jobs.contains(j_pred)) {
                         number_of_precedence_violations++;
-                        std::cout << std::endl << "Job " << j << " depends on job "
-                            << j_pred << " which has not been scheduled yet."
-                            << std::endl;
+                        if (verbose == 2)
+                            std::cout << std::endl << "Job " << j << " depends on job "
+                                << j_pred << " which has not been scheduled yet."
+                                << std::endl;
                     }
                 }
-                std::cout << " " << j;
+                if (verbose == 2)
+                    std::cout << " " << j;
                 jobs.add(j);
                 t += job(j).processing_time;
             }
-            std::cout << "; Cycle time: " << t << " / " << cycle_time() << std::endl;
+            if (verbose == 2)
+                std::cout << "; Cycle time: " << t << " / " << cycle_time() << std::endl;
             if (t > cycle_time()) {
                 number_of_overloaded_stations++;
-                std::cout << "Station " << number_of_stations - 1 << " is overloaded." << std::endl;
+                if (verbose == 2)
+                    std::cout << "Station " << number_of_stations - 1 << " is overloaded." << std::endl;
             }
         }
 
@@ -141,14 +156,16 @@ public:
             && (duplicates == 0)
             && (number_of_precedence_violations == 0)
             && (number_of_overloaded_stations == 0);
-
-        std::cout << "---" << std::endl;
-        std::cout << "Number of jobs:                   " << jobs.size() << " / " << n  << std::endl;
-        std::cout << "Duplicates:                       " << duplicates << std::endl;
-        std::cout << "Number of precedence violations:  " << number_of_precedence_violations << std::endl;
-        std::cout << "Number of overloaded stations:    " << number_of_overloaded_stations << std::endl;
-        std::cout << "Feasible:                         " << feasible << std::endl;
-        std::cout << "Number of stations:               " << number_of_stations << std::endl;
+        if (verbose == 2)
+            std::cout << "---" << std::endl;
+        if (verbose >= 1) {
+            std::cout << "Number of jobs:                   " << jobs.size() << " / " << n  << std::endl;
+            std::cout << "Duplicates:                       " << duplicates << std::endl;
+            std::cout << "Number of precedence violations:  " << number_of_precedence_violations << std::endl;
+            std::cout << "Number of overloaded stations:    " << number_of_overloaded_stations << std::endl;
+            std::cout << "Feasible:                         " << feasible << std::endl;
+            std::cout << "Number of stations:               " << number_of_stations << std::endl;
+        }
         return {feasible, number_of_stations};
     }
 

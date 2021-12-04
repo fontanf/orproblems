@@ -71,8 +71,17 @@ public:
     inline LocationId number_of_locations() const { return travel_times_.size(); }
     inline Time travel_time(LocationId j1, LocationId j2) const { return travel_times_[j1][j2]; }
 
-    std::pair<bool, Time> check(std::string certificate_path)
+    std::pair<bool, Time> check(
+            std::string certificate_path,
+            int verbose = 1) const
     {
+        // Initial display.
+        if (verbose >= 1) {
+            std::cout
+                << "Checker" << std::endl
+                << "-------" << std::endl;
+        }
+
         std::ifstream file(certificate_path);
         if (!file.good())
             throw std::runtime_error(
@@ -88,25 +97,30 @@ public:
         while (file >> j) {
             if (locations.contains(j)) {
                 duplicates++;
-                std::cout << "Location " << j << " is already scheduled." << std::endl;
+                if (verbose == 2)
+                    std::cout << "Location " << j << " is already scheduled." << std::endl;
             }
             locations.add(j);
             current_time += travel_time(j_prec, j);
             total_completion_time += current_time;
-            std::cout << "Location: " << j
-                << "; Time: " << current_time
-                << "; Total completion time: " << total_completion_time
-                << std::endl;
+            if (verbose == 2)
+                std::cout << "Location: " << j
+                    << "; Time: " << current_time
+                    << "; Total completion time: " << total_completion_time
+                    << std::endl;
         }
+
         bool feasible
             = (locations.size() == n)
             && (duplicates == 0);
-
-        std::cout << "---" << std::endl;
-        std::cout << "Location number:           " << locations.size() << " / " << n  << std::endl;
-        std::cout << "Duplicates:                " << duplicates << std::endl;
-        std::cout << "Feasible:                  " << feasible << std::endl;
-        std::cout << "Total completion time:     " << total_completion_time << std::endl;
+        if (verbose == 2)
+            std::cout << "---" << std::endl;
+        if (verbose >= 1) {
+            std::cout << "Location number:           " << locations.size() << " / " << n  << std::endl;
+            std::cout << "Duplicates:                " << duplicates << std::endl;
+            std::cout << "Feasible:                  " << feasible << std::endl;
+            std::cout << "Total completion time:     " << total_completion_time << std::endl;
+        }
         return {feasible, total_completion_time};
     }
 

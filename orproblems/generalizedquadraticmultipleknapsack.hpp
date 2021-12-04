@@ -116,8 +116,17 @@ public:
     Profit pair_profit(ItemId j1, ItemId j2) const { return profits_[std::min(j1, j2)][std::max(j1, j2)]; }
     Weight capacity(KnapsackId i) const { return capacities_[i]; }
 
-    std::pair<bool, Profit> check(std::string certificate_path) const
+    std::pair<bool, Profit> check(
+            std::string certificate_path,
+            int verbose = 1) const
     {
+        // Initial display.
+        if (verbose >= 1) {
+            std::cout
+                << "Checker" << std::endl
+                << "-------" << std::endl;
+        }
+
         std::ifstream file(certificate_path);
         if (!file.good())
             throw std::runtime_error(
@@ -142,21 +151,24 @@ public:
                 for (ItemId j2: current_knapsack_items)
                     total_profit += pair_profit(j, j2);
                 current_knapsack_items.push_back(j);
-                std::cout << "Job: " << j
-                    << "; Weight: " << total_weight
-                    << "; Profit: " << total_profit
-                    << std::endl;
+                if (verbose == 2)
+                    std::cout << "Job: " << j
+                        << "; Weight: " << total_weight
+                        << "; Profit: " << total_profit
+                        << std::endl;
                 knapsack_classes.add(item(j).class_id);
                 if (items.contains(j)) {
                     duplicates++;
-                    std::cout << "Job " << j << " already scheduled." << std::endl;
+                    if (verbose == 2)
+                        std::cout << "Job " << j << " already scheduled." << std::endl;
                 }
                 items.add(j);
             }
             if (total_weight > capacity(i)) {
-                std::cout << "Knapsack " << i
-                    << " has overweight: " << total_weight << "/" << capacity(i)
-                    << std::endl;
+                if (verbose == 2)
+                    std::cout << "Knapsack " << i
+                        << " has overweight: " << total_weight << "/" << capacity(i)
+                        << std::endl;
                 overweight += (capacity(i) - total_weight);
             }
             for (ClassId k: knapsack_classes)
@@ -165,10 +177,11 @@ public:
         ClassId number_of_class_maximum_number_of_knapsacks_violations = 0;
         for (ClassId k = 0; k < number_of_classes(); ++k) {
             if (class_number_of_knapsacks[k] > item_class(k).maximum_number_of_knapsacks) {
-                std::cout << "Class " << k
-                    << " number of knapsacks " << class_number_of_knapsacks[k]
-                    << " / " << item_class(k).maximum_number_of_knapsacks
-                    << std::endl;
+                if (verbose == 2)
+                    std::cout << "Class " << k
+                        << " number of knapsacks " << class_number_of_knapsacks[k]
+                        << " / " << item_class(k).maximum_number_of_knapsacks
+                        << std::endl;
                 number_of_class_maximum_number_of_knapsacks_violations++;
             }
         }
@@ -176,13 +189,16 @@ public:
             = (duplicates == 0)
             && (overweight == 0)
             && (number_of_class_maximum_number_of_knapsacks_violations == 0);
-        std::cout << "---" << std::endl;
-        std::cout << "Number of items:                          " << items.size() << " / " << number_of_items() << std::endl;
-        std::cout << "Duplicates:                               " << duplicates << std::endl;
-        std::cout << "Overweight:                               " << overweight << std::endl;
-        std::cout << "Number of max # of knapsacks violations:  " << number_of_class_maximum_number_of_knapsacks_violations << std::endl;
-        std::cout << "Feasible:                                 " << feasible << std::endl;
-        std::cout << "Profit:                                   " << total_profit << std::endl;
+        if (verbose == 2)
+            std::cout << "---" << std::endl;
+        if (verbose >= 1) {
+            std::cout << "Number of items:                          " << items.size() << " / " << number_of_items() << std::endl;
+            std::cout << "Duplicates:                               " << duplicates << std::endl;
+            std::cout << "Overweight:                               " << overweight << std::endl;
+            std::cout << "Number of max # of knapsacks violations:  " << number_of_class_maximum_number_of_knapsacks_violations << std::endl;
+            std::cout << "Feasible:                                 " << feasible << std::endl;
+            std::cout << "Profit:                                   " << total_profit << std::endl;
+        }
         return {feasible, total_profit};
     }
 

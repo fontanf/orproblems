@@ -133,8 +133,17 @@ public:
     inline const Location& location(LocationId j) const { return locations_[j]; }
     inline Weight capacity() const { return capacity_; }
 
-    std::pair<bool, Time> check(std::string certificate_path)
+    std::pair<bool, Time> check(
+            std::string certificate_path,
+            int verbose = 1) const
     {
+        // Initial display.
+        if (verbose >= 1) {
+            std::cout
+                << "Checker" << std::endl
+                << "-------" << std::endl;
+        }
+
         std::ifstream file(certificate_path);
         if (!file.good())
             throw std::runtime_error(
@@ -151,17 +160,19 @@ public:
             //i--;
             if (items.contains(i)) {
                 duplicates++;
-                std::cout << "Item " << i << " already selected." << std::endl;
+                if (verbose == 2)
+                    std::cout << "Item " << i << " already selected." << std::endl;
             }
             thieforienteering::LocationId j_next = item(i).location;
             t += duration(j, j_next, w);
             p += item(i).profit;
             w += item(i).weight;
-            std::cout << "Item: " << i
-                << "; Location: " << j_next
-                << "; Duration: " << t << " / " << time_limit()
-                << "; Weight: " << w << " / " << capacity()
-                << "; Profit: " << p << std::endl;
+            if (verbose == 2)
+                std::cout << "Item: " << i
+                    << "; Location: " << j_next
+                    << "; Duration: " << t << " / " << time_limit()
+                    << "; Weight: " << w << " / " << capacity()
+                    << "; Profit: " << p << std::endl;
             j = j_next;
         }
         t += duration(j, number_of_locations() - 1, w);
@@ -169,12 +180,14 @@ public:
         bool feasible = (duplicates == 0)
             && (t <= time_limit())
             && (w <= capacity());
-
-        std::cout << "---" << std::endl;
-        std::cout << "Duration:  " << t << " / " << time_limit() << std::endl;
-        std::cout << "Weight:    " << w << " / " << capacity() << std::endl;
-        std::cout << "Feasible:  " << feasible << std::endl;
-        std::cout << "Profit:    " << p << std::endl;
+        if (verbose == 2)
+            std::cout << "---" << std::endl;
+        if (verbose >= 1) {
+            std::cout << "Duration:  " << t << " / " << time_limit() << std::endl;
+            std::cout << "Weight:    " << w << " / " << capacity() << std::endl;
+            std::cout << "Feasible:  " << feasible << std::endl;
+            std::cout << "Profit:    " << p << std::endl;
+        }
         return {feasible, p};
     }
 
