@@ -59,6 +59,16 @@ cc_library(
 )
 
 cc_library(
+        name = "generalizedquadraticmultipleknapsack",
+        hdrs = ["generalizedquadraticmultipleknapsack.hpp"],
+        deps = [
+                "@optimizationtools//optimizationtools:indexed_collections",
+                "@optimizationtools//optimizationtools:utils",
+        ],
+        visibility = ["//visibility:public"],
+)
+
+cc_library(
         name = "binpackingwithconflicts",
         hdrs = ["binpackingwithconflicts.hpp"],
         deps = [
@@ -271,6 +281,7 @@ cc_binary(
                 ":cuttingstock",
                 ":multipleknapsack",
                 ":quadraticmultipleknapsack",
+                ":generalizedquadraticmultipleknapsack",
                 ":binpackingwithconflicts",
 
                 ":travellingsalesman",

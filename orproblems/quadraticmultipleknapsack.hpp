@@ -76,7 +76,6 @@ public:
     Profit profit(ItemId j) const { return profits_[j][j]; }
     Profit profit(ItemId j1, ItemId j2) const { return profits_[std::min(j1, j2)][std::max(j1, j2)]; }
     Weight capacity(KnapsackId i) const { return capacities_[i]; }
-    Profit total_profit() const { return profit_sum_; }
 
     std::pair<bool, Profit> check(std::string certificate_path) const
     {
@@ -171,7 +170,6 @@ private:
     std::vector<Weight> weights_;
     std::vector<std::vector<Profit>> profits_;
     std::vector<Weight> capacities_;
-    Profit profit_sum_ = 0;
 
 };
 

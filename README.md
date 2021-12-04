@@ -146,6 +146,19 @@ The data also include CSV files listing the instances for each problem and their
 
 * Data: [quadraticmultipleknapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/quadraticmultipleknapsack.7z)
 
+<!--
+[Generalized Quadratic Multiple Knapsack Problem](orproblems/generalizedquadraticmultipleknapsack.hpp)
+
+* Literature:
+  * "Generalized quadratic multiple knapsack problem and two solution approaches" (Saraç et Sipahioglu, 2014) [DOI](https://doi.org/10.1016/j.cor.2013.08.018)
+  * "Memetic Search for the Generalized Quadratic Multiple Knapsack Problem" (Chen et Hao, 2016) [DOI](https://doi.org/10.1109/TEVC.2016.2546340)
+  * "A multi-start iterated local search algorithm for the generalized quadratic multiple knapsack problem" (Avci et Topaloglu, 2017) [DOI](https://doi.org/10.1016/j.cor.2017.02.004)
+  * "A matheuristic for the 0–1 generalized quadratic multiple knapsack problem" (Adouani et al., 2019) [DOI](https://doi.org/10.1007/s11590-019-01503-z)
+  * "A hybrid evolutionary search for the generalized quadratic multiple knapsack problem" (Zhou et al., 2022) [DOI](https://doi.org/10.1016/j.ejor.2021.04.001)
+
+* Data: [generalizedquadraticmultipleknapsack.7z](https://github.com/fontanf/generalizedorproblems/releases/download/data/quadraticmultipleknapsack.7z)
+-->
+
 [Bin Packing Problem with Conflicts](orproblems/binpackingwithconflicts.hpp)
 * Literature:
   * "Algorithms for the Bin Packing Problem with Conflicts" (Muritiba et al., 2010) [DOI](https://doi.org/10.1287/ijoc.1090.0355)
@@ -210,10 +223,13 @@ The data also include CSV files listing the instances for each problem and their
 
 [Capacitated Vehicle Routing Problem](orproblems/capacitatedvehiclerouting.hpp)
 * Literature:
+  * "New benchmark instances for the Capacitated Vehicle Routing Problem" (Uchoa et al., 2017) [DOI](https://doi.org/10.1016/j.ejor.2016.08.012)
+  * "Heuristics for vehicle routing problems: Sequence or set optimization?" (Toffolo et al., 2019) [DOI](https://doi.org/10.1016/j.cor.2018.12.023)
   * "Slack Induction by String Removals for Vehicle Routing Problems" (Christiaens et Vanden Berghe, 2020) [DOI](https://doi.org/10.1287/trsc.2019.0914)
   * "A hybrid adaptive iterated local search with diversification control to the capacitated vehicle routing problem" (Máximo et Nascimento, 2021) [DOI](https://doi.org/10.1016/j.ejor.2021.02.024)
   * "A Fast and Scalable Heuristic for the Solution of Large-Scale Capacitated Vehicle Routing Problems" (Accorsi et Vigo, 2021) [DOI](https://doi.org/10.1287/trsc.2021.1059)
   * "A POPMUSIC matheuristic for the capacitated vehicle routing problem" (Queiroga et al., 2021) [DOI](https://doi.org/10.1016/j.cor.2021.105475)
+  * "Hybrid genetic search for the CVRP: Open-source implementation and SWAP\* neighborhood" (Vidal, 2021) [DOI](https://doi.org/10.1016/j.cor.2021.105643)
 * Data: [capacitatedvehiclerouting.7z](https://github.com/fontanf/orproblems/releases/download/data/capacitatedvehiclerouting.7z)
 * Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/capacitatedvehiclerouting.hpp)
 
@@ -328,12 +344,13 @@ The data also include CSV files listing the instances for each problem and their
 * Three field classification: `Fm | prmu | Cₘₐₓ`
 * Literature:
   * "An Effective Hybrid Heuristic for Flow Shop Scheduling" (Zheng et Wang, 2003) [DOI](https://doi.org/10.1007/s001700300005)
+  * "Two new robust genetic algorithms for the flowshop scheduling problem" (Ruiz et al., 2006) [DOI](https://doi.org/10.1016/j.omega.2004.12.006)
   * "A simple and effective iterated greedy algorithm for the permutation flowshop scheduling problem" (Ruiz et Stützle, 2007) [DOI](https://doi.org/10.1016/j.ejor.2005.12.009)
   * "Cooperative metaheuristics for the permutation flowshop scheduling problem" (Vallada et Ruiz, 2009) [DOI](https://doi.org/10.1016/j.ejor.2007.11.049)
   * "A Variable Block Insertion Heuristic for Solving Permutation Flow Shop Scheduling Problem with Makespan Criterion" (Kizilay et al., 2019) [DOI](https://doi.org/10.3390/a12050100)
   * "A best-of-breed iterated greedy for the permutation flowshop scheduling problem with makespan objective" (Fernandez-Viagas, Framinan, 2019) [DOI](https://doi.org/10.1016/j.cor.2019.104767)
   * "A memetic algorithm with novel semi-constructive evolution operators for permutation flowshop scheduling problem" (Kurdi, 2020) [DOI](https://doi.org/10.1016/j.asoc.2020.106458)
-  * "Iterative beam search algorithms for the permutation flowshop" (Libralesso et al., 2020)
+  * "Iterative beam search algorithms for the permutation flowshop" (Libralesso et al., 2021) [DOI](https://doi.org/10.1016/j.ejor.2021.10.015)
 * Data: [permutationflowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/permutationflowshopscheduling.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/permutationflowshopschedulingmakespan.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/permutationflowshopschedulingmakespan.hpp)
 
@@ -345,7 +362,7 @@ The data also include CSV files listing the instances for each problem and their
   * "A new set of high-performing heuristics to minimise flowtime in permutation flowshops" (Fernandez-Viagas et Framinan, 2015) [DOI](https://doi.org/10.1016/j.cor.2014.08.004)
   * "A beam-search-based constructive heuristic for the PFSP to minimise total flowtime" (Fernandez-Viagas et Framinan, 2017) [DOI](https://doi.org/10.1016/j.cor.2016.12.020)
   * "Minimizing flowtime in a flowshop scheduling problem with a biased random-key genetic algorithm" (Andrade et al., 2019) [DOI](https://doi.org/10.1016/j.eswa.2019.03.007)
-  * "Iterative beam search algorithms for the permutation flowshop" (Libralesso et al., 2020)
+  * "Iterative beam search algorithms for the permutation flowshop" (Libralesso et al., 2021) [DOI](https://doi.org/10.1016/j.ejor.2021.10.015)
 * Data: [permutationflowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/permutationflowshopscheduling.7z)
 * Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/permutationflowshopschedulingtct.hpp)
 

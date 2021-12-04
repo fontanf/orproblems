@@ -4,6 +4,7 @@
 #include "orproblems/cuttingstock.hpp"
 #include "orproblems/multipleknapsack.hpp"
 #include "orproblems/quadraticmultipleknapsack.hpp"
+#include "orproblems/generalizedquadraticmultipleknapsack.hpp"
 #include "orproblems/binpackingwithconflicts.hpp"
 
 #include "orproblems/travellingsalesman.hpp"
@@ -96,6 +97,12 @@ int main(int argc, char *argv[])
 
     } else if (problem == "quadraticmultipleknapsack") {
         quadraticmultipleknapsack::Instance instance(instance_path, format);
+        if (vm.count("print-instance"))
+            std::cout << instance << std::endl;
+        instance.check(certificate_path);
+
+    } else if (problem == "generalizedquadraticmultipleknapsack") {
+        generalizedquadraticmultipleknapsack::Instance instance(instance_path, format);
         if (vm.count("print-instance"))
             std::cout << instance << std::endl;
         instance.check(certificate_path);
