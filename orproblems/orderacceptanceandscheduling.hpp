@@ -163,13 +163,13 @@ public:
         if (verbose == 2)
             std::cout << "---" << std::endl;
         if (verbose >= 1) {
-            std::cout << "Job number:                 " << jobs.size() << " / " << n  << std::endl;
-            std::cout << "Duplicates:                 " << duplicates << std::endl;
-            std::cout << "Deadline violation number:  " << duplicates << std::endl;
-            std::cout << "Feasible:                   " << feasible << std::endl;
-            std::cout << "Profit:                     " << profit << std::endl;
-            std::cout << "Total weighted tardiness:   " << total_weighted_tardiness << std::endl;
-            std::cout << "Objective:                  " << profit - total_weighted_tardiness << std::endl;
+            std::cout << "Number of jobs:                 " << jobs.size() << " / " << n  << std::endl;
+            std::cout << "Number of duplicates:           " << duplicates << std::endl;
+            std::cout << "Number of deadline violations:  " << number_of_deadline_violations << std::endl;
+            std::cout << "Feasible:                       " << feasible << std::endl;
+            std::cout << "Profit:                         " << profit << std::endl;
+            std::cout << "Total weighted tardiness:       " << total_weighted_tardiness << std::endl;
+            std::cout << "Objective:                      " << profit - total_weighted_tardiness << std::endl;
         }
         return {feasible, profit - total_weighted_tardiness};
     }

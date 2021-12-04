@@ -146,8 +146,8 @@ public:
         if (verbose == 2)
             std::cout << "---" << std::endl;
         if (verbose >= 1) {
-            std::cout << "Job number:                " << jobs.size() << " / " << n  << std::endl;
-            std::cout << "Duplicates:                " << duplicates << std::endl;
+            std::cout << "Number of jobs:            " << jobs.size() << " / " << n  << std::endl;
+            std::cout << "Number of duplicates:      " << duplicates << std::endl;
             std::cout << "Feasible:                  " << feasible << std::endl;
             std::cout << "Total weighted tardiness:  " << total_weighted_tardiness << std::endl;
         }
