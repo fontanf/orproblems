@@ -4,6 +4,9 @@
 
 #include "pugixml.hpp"
 
+#include <iostream>
+#include <fstream>
+
 /**
  * Vehicle Routing Problem with Time Windows.
  *

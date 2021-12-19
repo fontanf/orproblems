@@ -3,6 +3,9 @@
 #include "optimizationtools/utils.hpp"
 #include "optimizationtools/indexed_set.hpp"
 
+#include <iostream>
+#include <fstream>
+
 /**
  * Sequential Ordering Problem.
  * (Asymmetric Travelling Salesman Problem with Precedence Constraints)

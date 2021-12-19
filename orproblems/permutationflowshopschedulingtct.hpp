@@ -3,6 +3,9 @@
 #include "optimizationtools/utils.hpp"
 #include "optimizationtools/indexed_set.hpp"
 
+#include <iostream>
+#include <fstream>
+
 /**
  * Permutation flow shop scheduling problem, Total completion time.
  *

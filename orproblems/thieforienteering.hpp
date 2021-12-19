@@ -4,6 +4,9 @@
 #include "optimizationtools/indexed_set.hpp"
 #include "optimizationtools/sorted_on_demand_array.hpp"
 
+#include <iostream>
+#include <fstream>
+
 /**
  * Thief orienterring problem.
  *

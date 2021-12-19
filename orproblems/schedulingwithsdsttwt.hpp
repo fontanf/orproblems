@@ -4,9 +4,12 @@
 #include "optimizationtools/sorted_on_demand_array.hpp"
 #include "optimizationtools/indexed_set.hpp"
 
+#include <iostream>
+#include <fstream>
+
 /**
  * Single machine scheduling problem with sequence-dependent setup times, Total
- * weighted Tardiness.
+ * weighted tardiness.
  *
  * Input:
  * - n jobs; for each job j = 1..n

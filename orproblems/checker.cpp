@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
         ("certificate,c", po::value<std::string>(&certificate_path), "set certificate path")
         ("format,f", po::value<std::string>(&format), "set input file format (default: orlibrary)")
         ("print-instance", "")
-        ("verbose,v", po::value<int>(&verbose)->required(), "set verbose level")
+        ("verbose,v", po::value<int>(&verbose), "set verbose level")
         ;
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);

@@ -1,8 +1,10 @@
 #pragma once
 
 #include "optimizationtools/utils.hpp"
-#include "optimizationtools/sorted_on_demand_array.hpp"
 #include "optimizationtools/indexed_set.hpp"
+
+#include <iostream>
+#include <fstream>
 
 /**
  * Travelling Repairman Problem.
