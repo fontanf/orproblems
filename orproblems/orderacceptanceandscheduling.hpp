@@ -4,6 +4,9 @@
 #include "optimizationtools/sorted_on_demand_array.hpp"
 #include "optimizationtools/indexed_set.hpp"
 
+#include <iostream>
+#include <fstream>
+
 /**
  * Single machine order acceptance and scheduling problem with
  * sequence-dependent setup times.
@@ -129,8 +132,8 @@ public:
         JobPos duplicates = 0;
         JobPos number_of_deadline_violations = 0;
         Time current_time = 0;
-        Profit profit = 0;
-        Weight total_weighted_tardiness = 0;
+        Profit profit = 0.0;
+        Weight total_weighted_tardiness = 0.0;
         while (file >> j) {
             if (jobs.contains(j)) {
                 duplicates++;
@@ -142,7 +145,7 @@ public:
                 + setup_time(j_prec, j) + job(j).processing_time;
             profit += job(j).profit;
             if (current_time > job(j).due_date)
-                total_weighted_tardiness += (current_time - job(j).due_date);
+                total_weighted_tardiness += job(j).weight * (current_time - job(j).due_date);
             if (current_time > job(j).deadline) {
                 number_of_deadline_violations++;
                 if (verbose == 2)
@@ -151,19 +154,27 @@ public:
             }
             if (verbose == 2)
                 std::cout << "Job: " << j
+                    //<< "; rj: " << job(j).release_date
+                    //<< "; st: " << setup_time(j_prec, j)
+                    //<< "; pj: " << job(j).processing_time
                     << "; Time: " << current_time
+                    //<< "; dj: " << job(j).due_date
+                    //<< "; dj: " << job(j).deadline
                     << "; Profit: " << profit
                     << "; Total weighted tardiness: " << total_weighted_tardiness
                     << std::endl;
+            j_prec = j;
         }
 
         bool feasible
             = (duplicates == 0)
-            && (number_of_deadline_violations == 0);
+            && (number_of_deadline_violations == 0)
+            && (!jobs.contains(0))
+            && (!jobs.contains(n - 1));
         if (verbose == 2)
             std::cout << "---" << std::endl;
         if (verbose >= 1) {
-            std::cout << "Number of jobs:                 " << jobs.size() << " / " << n  << std::endl;
+            std::cout << "Number of jobs:                 " << jobs.size() << " / " << n - 2 << std::endl;
             std::cout << "Number of duplicates:           " << duplicates << std::endl;
             std::cout << "Number of deadline violations:  " << number_of_deadline_violations << std::endl;
             std::cout << "Feasible:                       " << feasible << std::endl;
