@@ -3,6 +3,9 @@
 #include "optimizationtools/utils.hpp"
 #include "optimizationtools/indexed_set.hpp"
 
+#include <iostream>
+#include <fstream>
+
 /**
  * Permutation flow shop scheduling problem, Total tardiness.
  *
@@ -153,10 +156,10 @@ private:
         for (JobId j = 0; j < n; ++j)
             jobs_[j].processing_times.resize(m);
 
-        for (MachineId i = 0; i < m; i++) {
+        for (JobId j = 0; j < n; j++) {
             Time p = -1;
             MachineId i_tmp = -1;
-            for (JobId j = 0; j < n; j++) {
+            for (MachineId i = 0; i < m; i++) {
                 file >> i_tmp >> p;
                 set_processing_time(j, i, p);
             }
