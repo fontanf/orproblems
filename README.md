@@ -508,10 +508,15 @@ The data also include CSV files listing the instances for each problem and their
 <p>
 
 * Literature:
+  * "Heuristics for Flowshop Scheduling Problems Minimizing Mean Tardiness" (Kim, 1993) [DOI](https://doi.org/10.1057/jors.1993.3)
   * "Minimising total tardiness in the m-machine flowshop problem: A review and evaluation of heuristics and metaheuristics"  (Vallada et al., 2008) [DOI](https://doi.org/10.1016/j.cor.2006.08.016)
+  * "Total tardiness minimization in permutation flow shops: a simple approach based on a variable greedy algorithm" (Framinan et Leisten, 2008) [DOI](https://doi.org/10.1080/00207540701418960)
   * "Cooperative metaheuristics for the permutation flowshop scheduling problem" (Vallada et Ruiz, 2009) [DOI](https://doi.org/10.1016/j.ejor.2007.11.049)
   * "Genetic algorithms with path relinking for the minimum tardiness permutation flowshop problem" (Vallada et Ruiz, 2010) [DOI](https://doi.org/10.1016/j.omega.2009.04.002)
+  * "An evolutionary algorithm for the permutation flowshop scheduling problem with total tardiness criterion" (Cura, 2015) [DOI](https://doi.org/10.1504/IJOR.2015.068287)
   * "NEH-based heuristics for the permutation flowshop scheduling problem to minimise total tardiness" (Fernandez-Viagas et Framinan, 2015) [DOI](https://doi.org/10.1016/j.cor.2015.02.002)
+  * "Trajectory Scheduling Methods for minimizing total tardiness in a flowshop" (Li et al., 2015) [DOI](https://doi.org/10.1016/j.orp.2014.12.001)
+  * "A hybrid iterated greedy algorithm for total tardiness minimization in permutation flowshops" (Karabulut, 2016) [DOI](https://doi.org/10.1016/j.cie.2016.06.012)
   * "Matheuristic algorithms for minimizing total tardiness in the m-machine flow-shop scheduling problem" (Ta et al., 2015) [DOI](https://doi.org/10.1007/s10845-015-1046-4)
   * "Iterated-greedy-based algorithms with beam search initialization for the permutation flowshop to minimise total tardiness" (Fernandez-Viagas et al., 2018) [DOI](https://doi.org/10.1016/j.eswa.2017.10.050)
 
