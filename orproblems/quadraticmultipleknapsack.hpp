@@ -98,7 +98,7 @@ public:
         ItemId n = -1;  // Number of items in knapsack i.
         ItemId j = -1;
         optimizationtools::IndexedSet items(n);
-        ItemPos duplicates = 0;
+        ItemPos number_of_duplicates = 0;
         for (KnapsackId i = 0; i < number_of_knapsacks(); ++i) {
             Weight total_weight = 0;
             file >> n;
@@ -115,7 +115,7 @@ public:
                         << "; Profit: " << total_profit
                         << std::endl;
                 if (items.contains(j)) {
-                    duplicates++;
+                    number_of_duplicates++;
                     if (verbose == 2)
                         std::cout << "Job " << j << " already scheduled." << std::endl;
                 }
@@ -130,13 +130,13 @@ public:
             }
         }
         bool feasible
-            = (duplicates == 0)
+            = (number_of_duplicates == 0)
             && (overweight == 0);
         if (verbose == 2)
             std::cout << "---" << std::endl;
         if (verbose >= 1) {
             std::cout << "Number of items:            " << items.size() << " / " << number_of_items() << std::endl;
-            std::cout << "Duplicates:                 " << duplicates << std::endl;
+            std::cout << "Number of duplicates:       " << number_of_duplicates << std::endl;
             std::cout << "Overweight:                 " << overweight << std::endl;
             std::cout << "Feasible:                   " << feasible << std::endl;
             std::cout << "Profit:                     " << total_profit << std::endl;

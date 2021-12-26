@@ -1,5 +1,10 @@
 #pragma once
 
+#include "optimizationtools/indexed_set.hpp"
+
+#include <iostream>
+#include <fstream>
+
 /**
  * Multidimmensional Multiple-choice Knapsack Problem.
  *
@@ -18,8 +23,6 @@
  * - Maximize the total profit of the selected items
  *
  */
-
-#include "optimizationtools/indexed_set.hpp"
 
 namespace orproblems
 {
@@ -109,11 +112,11 @@ public:
         optimizationtools::IndexedSet groups(number_of_groups());
         std::vector<Weight> weights(number_of_resources(), 0);
         Profit profit = 0;
-        GroupId duplicates = 0;
+        GroupId number_of_duplicates = 0;
         ItemId j = 0;
         while (file >> j) {
             if (groups.contains(item(j).group_id)) {
-                duplicates++;
+                number_of_duplicates++;
                 if (verbose == 2)
                     std::cout << "GroupId " << item(j).group_id << " already in the knapsack." << std::endl;
             }
@@ -133,14 +136,14 @@ public:
                 overweight += (weights[r] - capacity(r));
 
         bool feasible
-            = (duplicates == 0)
+            = (number_of_duplicates == 0)
             && (groups.size() == number_of_groups())
             && (overweight == 0);
         if (verbose == 2)
             std::cout << "---" << std::endl;
         if (verbose >= 1) {
-            std::cout << "Groups:                     " << groups.size() << " / " << number_of_groups() << std::endl;
-            std::cout << "Duplicates:                 " << duplicates << std::endl;
+            std::cout << "Number of groups:           " << groups.size() << " / " << number_of_groups() << std::endl;
+            std::cout << "Number of duplicates:       " << number_of_duplicates << std::endl;
             std::cout << "Overweight:                 " << overweight << std::endl;
             std::cout << "Feasible:                   " << feasible << std::endl;
             std::cout << "Profit:                     " << profit << std::endl;

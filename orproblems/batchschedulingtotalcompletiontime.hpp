@@ -101,7 +101,7 @@ public:
         JobPos s = -1;
         optimizationtools::IndexedSet jobs(n);
         JobPos number_of_batches = 0;
-        JobPos duplicates = 0;
+        JobPos number_of_duplicates = 0;
         JobPos number_of_overloaded_batches = 0;
         Time total_completion_time = 0;
         Time current_batch_start = 0;
@@ -118,7 +118,7 @@ public:
                 file >> j;
                 // Check duplicates.
                 if (jobs.contains(j)) {
-                    duplicates++;
+                    number_of_duplicates++;
                     if (verbose == 2)
                         std::cout << std::endl << "Job " << j << " has already benn scheduled." << std::endl;
                 }
@@ -145,13 +145,13 @@ public:
 
         bool feasible
             = (jobs.size() == n)
-            && (duplicates == 0)
+            && (number_of_duplicates == 0)
             && (number_of_overloaded_batches == 0);
         if (verbose == 2)
             std::cout << "---" << std::endl;
         if (verbose >= 1) {
             std::cout << "Number of jobs:                " << jobs.size() << " / " << n  << std::endl;
-            std::cout << "Duplicates:                    " << duplicates << std::endl;
+            std::cout << "Number of duplicates:          " << number_of_duplicates << std::endl;
             std::cout << "Number of overloaded batches:  " << number_of_overloaded_batches << std::endl;
             std::cout << "Feasible:                      " << feasible << std::endl;
             std::cout << "Number of batches:             " << number_of_batches << std::endl;

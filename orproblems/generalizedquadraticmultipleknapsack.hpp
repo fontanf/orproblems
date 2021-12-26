@@ -139,7 +139,7 @@ public:
         optimizationtools::IndexedSet items(n);
         optimizationtools::IndexedSet knapsack_classes(number_of_classes());
         std::vector<KnapsackId> class_number_of_knapsacks(number_of_classes(), 0);
-        ItemPos duplicates = 0;
+        ItemPos number_of_duplicates = 0;
         for (KnapsackId i = 0; i < number_of_knapsacks(); ++i) {
             Weight total_weight = 0;
             file >> n;
@@ -158,7 +158,7 @@ public:
                         << std::endl;
                 knapsack_classes.add(item(j).class_id);
                 if (items.contains(j)) {
-                    duplicates++;
+                    number_of_duplicates++;
                     if (verbose == 2)
                         std::cout << "Job " << j << " already scheduled." << std::endl;
                 }
@@ -186,14 +186,14 @@ public:
             }
         }
         bool feasible
-            = (duplicates == 0)
+            = (number_of_duplicates == 0)
             && (overweight == 0)
             && (number_of_class_maximum_number_of_knapsacks_violations == 0);
         if (verbose == 2)
             std::cout << "---" << std::endl;
         if (verbose >= 1) {
             std::cout << "Number of items:                          " << items.size() << " / " << number_of_items() << std::endl;
-            std::cout << "Duplicates:                               " << duplicates << std::endl;
+            std::cout << "Number of duplicates:                     " << number_of_duplicates << std::endl;
             std::cout << "Overweight:                               " << overweight << std::endl;
             std::cout << "Number of max # of knapsacks violations:  " << number_of_class_maximum_number_of_knapsacks_violations << std::endl;
             std::cout << "Feasible:                                 " << feasible << std::endl;

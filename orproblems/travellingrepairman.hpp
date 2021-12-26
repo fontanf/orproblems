@@ -93,12 +93,12 @@ public:
         LocationId j = -1;
         LocationId j_prec = 0;
         optimizationtools::IndexedSet locations(n);
-        LocationPos duplicates = 0;
+        LocationPos number_of_duplicates = 0;
         Time current_time = 0;
         Time total_completion_time = 0;
         while (file >> j) {
             if (locations.contains(j)) {
-                duplicates++;
+                number_of_duplicates++;
                 if (verbose == 2)
                     std::cout << "Location " << j << " is already scheduled." << std::endl;
             }
@@ -114,12 +114,12 @@ public:
 
         bool feasible
             = (locations.size() == n)
-            && (duplicates == 0);
+            && (number_of_duplicates == 0);
         if (verbose == 2)
             std::cout << "---" << std::endl;
         if (verbose >= 1) {
-            std::cout << "Location number:           " << locations.size() << " / " << n  << std::endl;
-            std::cout << "Duplicates:                " << duplicates << std::endl;
+            std::cout << "Number of locations:       " << locations.size() << " / " << n  << std::endl;
+            std::cout << "Number of duplicates:      " << number_of_duplicates << std::endl;
             std::cout << "Feasible:                  " << feasible << std::endl;
             std::cout << "Total completion time:     " << total_completion_time << std::endl;
         }

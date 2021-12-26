@@ -87,7 +87,7 @@ public:
         LocationId location_id = -1;
         optimizationtools::IndexedSet location_set(n);
         std::vector<LocationId> locations(n, -1);
-        LocationId duplicates = 0;
+        LocationId number_of_duplicates = 0;
         FacilityId facility_id = 0;
         while (file >> location_id) {
             if (location_id < 0 || location_id >= number_of_facilities()) {
@@ -96,7 +96,7 @@ public:
                 continue;
             }
             if (location_set.contains(location_id)) {
-                duplicates++;
+                number_of_duplicates++;
                 if (verbose == 2)
                     std::cout << "Location " << location_id << " already assigned." << std::endl;
             }
@@ -119,13 +119,13 @@ public:
                                 locations[facility_id_2]);
 
         bool feasible
-            = (duplicates == 0)
+            = (number_of_duplicates == 0)
             && (location_set.size() == n);
         if (verbose == 2)
             std::cout << "---" << std::endl;
         if (verbose >= 1) {
-            std::cout << "Facilities:                 " << location_set.size() << " / " << n  << std::endl;
-            std::cout << "Duplicates:                 " << duplicates << std::endl;
+            std::cout << "Number of facilities:       " << location_set.size() << " / " << n  << std::endl;
+            std::cout << "Number of duplicates:       " << number_of_duplicates << std::endl;
             std::cout << "Feasible:                   " << feasible << std::endl;
             std::cout << "Cost:                       " << cost << std::endl;
         }

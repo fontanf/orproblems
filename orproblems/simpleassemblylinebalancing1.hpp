@@ -112,7 +112,7 @@ public:
         JobId n = number_of_jobs();
         JobPos s = -1;
         optimizationtools::IndexedSet jobs(n);
-        JobPos duplicates = 0;
+        JobPos number_of_duplicates = 0;
         JobPos number_of_precedence_violations = 0;
         StationId number_of_overloaded_stations = 0;
         StationId number_of_stations = 0;
@@ -126,7 +126,7 @@ public:
                 file >> j;
                 // Check duplicates.
                 if (jobs.contains(j)) {
-                    duplicates++;
+                    number_of_duplicates++;
                     if (verbose == 2)
                         std::cout << std::endl << "Job " << j << " already scheduled." << std::endl;
                 }
@@ -156,14 +156,14 @@ public:
 
         bool feasible
             = (jobs.size() == n)
-            && (duplicates == 0)
+            && (number_of_duplicates == 0)
             && (number_of_precedence_violations == 0)
             && (number_of_overloaded_stations == 0);
         if (verbose == 2)
             std::cout << "---" << std::endl;
         if (verbose >= 1) {
             std::cout << "Number of jobs:                   " << jobs.size() << " / " << n  << std::endl;
-            std::cout << "Duplicates:                       " << duplicates << std::endl;
+            std::cout << "Number of duplicates:             " << number_of_duplicates << std::endl;
             std::cout << "Number of precedence violations:  " << number_of_precedence_violations << std::endl;
             std::cout << "Number of overloaded stations:    " << number_of_overloaded_stations << std::endl;
             std::cout << "Feasible:                         " << feasible << std::endl;

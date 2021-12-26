@@ -113,7 +113,7 @@ public:
         Profit profit = 0;
         ItemId j = -1;
         optimizationtools::IndexedSet items(n);
-        ItemPos duplicates = 0;
+        ItemPos number_of_duplicates = 0;
         ItemPos number_of_conflict_violations = 0;
         while (file >> j) {
             weight += item(j).weight;
@@ -124,7 +124,7 @@ public:
                     << "; Profit: " << profit
                     << std::endl;
             if (items.contains(j)) {
-                duplicates++;
+                number_of_duplicates++;
                 if (verbose == 2)
                     std::cout << "Job " << j << " already scheduled." << std::endl;
             }
@@ -139,14 +139,14 @@ public:
         }
 
         bool feasible
-            = (duplicates == 0)
+            = (number_of_duplicates == 0)
             && (weight <= capacity())
             && (number_of_conflict_violations == 0);
         if (verbose == 2)
             std::cout << "---" << std::endl;
         if (verbose >= 1) {
             std::cout << "Number of Items:                " << items.size() << " / " << n << std::endl;
-            std::cout << "Duplicates:                     " << duplicates << std::endl;
+            std::cout << "Number of duplicates:           " << number_of_duplicates << std::endl;
             std::cout << "Number of conflict violations:  " << number_of_conflict_violations << std::endl;
             std::cout << "Weight:                         " << weight << " / " << capacity() << std::endl;
             std::cout << "Feasible:                       " << feasible << std::endl;

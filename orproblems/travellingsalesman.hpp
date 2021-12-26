@@ -107,11 +107,11 @@ public:
         VertexId j = -1;
         optimizationtools::IndexedSet vertices(n);
         vertices.add(0);
-        VertexPos duplicates = 0;
+        VertexPos number_of_duplicates = 0;
         Distance total_distance = 0;
         while (file >> j) {
             if (vertices.contains(j)) {
-                duplicates++;
+                number_of_duplicates++;
                 if (verbose == 2)
                     std::cout << "Vertex " << j << " has already been visited." << std::endl;
             }
@@ -128,12 +128,12 @@ public:
 
         bool feasible
             = (vertices.size() == n)
-            && (duplicates == 0);
+            && (number_of_duplicates == 0);
         if (verbose == 2)
             std::cout << "---" << std::endl;
         if (verbose >= 1) {
             std::cout << "Number of vertices:     " << vertices.size() << " / " << n  << std::endl;
-            std::cout << "Duplicates:             " << duplicates << std::endl;
+            std::cout << "Number of duplicates:   " << number_of_duplicates << std::endl;
             std::cout << "Feasible:               " << feasible << std::endl;
             std::cout << "Total distance:         " << total_distance << std::endl;
         }
