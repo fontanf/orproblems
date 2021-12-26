@@ -1,14 +1,21 @@
 #pragma once
 
 /**
- * Multidimmensional Multiple-Choice Knapsack Problem.
+ * Multidimmensional Multiple-choice Knapsack Problem.
  *
  * Input:
- * - TODO
+ * - m resources with capacity cᵢ
+ * - o groups
+ * - n items; for each item j = 1..n:
+ *   - a group gⱼ
+ *   - a profit pⱼ
+ *   - for each resource i = 1..m, a weight wⱼᵢ
  * Problem:
- * - TODO
+ * - Select one item from each group such that:
+ *   - for each resource, the total weight of the selected items does not
+ *     exceed the capacity of the resource
  * Objective:
- * - TODO
+ * - Maximize the total profit of the selected items
  *
  */
 
