@@ -47,3 +47,17 @@ cc_library(
     sha256 = "4d4e4a9d64b55839ec6c80f0ba54261139543b7ffcf84bceede681ccb95fe94b",
 )
 
+http_archive(
+    name = "interval-tree",
+    build_file_content = """
+cc_library(
+        name = "interval-tree",
+        hdrs = glob(["interval-tree-1.2/*.hpp"]),
+        visibility = ["//visibility:public"],
+        strip_include_prefix = "interval-tree-1.2/"
+)
+""",
+    urls = ["https://github.com/5cript/interval-tree/archive/refs/tags/1.2.zip"],
+    sha256 = "d72f917ae7d8f2540c4603bc9bf5386904ca3e40f09da0efcdb3671835b7326f"
+)
+

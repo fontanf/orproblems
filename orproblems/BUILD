@@ -240,6 +240,17 @@ cc_library(
 )
 
 cc_library(
+        name = "nowaitjobshopschedulingmakespan",
+        hdrs = ["nowaitjobshopschedulingmakespan.hpp"],
+        deps = [
+                "@optimizationtools//optimizationtools:indexed_collections",
+                "@optimizationtools//optimizationtools:utils",
+                "@interval-tree//:interval-tree",
+        ],
+        visibility = ["//visibility:public"],
+)
+
+cc_library(
         name = "simpleassemblylinebalancing1",
         hdrs = ["simpleassemblylinebalancing1.hpp"],
         deps = [
@@ -301,10 +312,13 @@ cc_binary(
                 ":permutationflowshopschedulingmakespan",
                 ":permutationflowshopschedulingtct",
                 ":permutationflowshopschedulingtt",
+                ":nowaitjobshopschedulingmakespan",
                 ":simpleassemblylinebalancing1",
                 ":ushapedassemblylinebalancing1",
                 ":roadef2020",
                 "@boost//:program_options",
         ],
+        copts = ["-std=c++14"],
+        linkopts = ["-std=c++14"],
 )
 

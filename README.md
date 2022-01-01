@@ -526,6 +526,45 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [permutationflowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/permutationflowshopscheduling.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/permutationflowshopschedulingtt.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/permutationflowshopschedulingtt.hpp)
 
+### Job shop scheduling
+
+[No-wait job shop scheduling problem, Makespan](orproblems/nowaitjobshopschedulingmakespan.hpp)
+* Three field classification: `Jm | no-wait | Cₘₐₓ`
+
+<details><summary>Literature</summary>
+<p>
+
+* Literature:
+  * "Job-shop scheduling with blocking and no-wait constraints" (Mascis et Pacciarelli, 2002) [DOI](https://doi.org/10.1016/S0377-2217(01)00338-1)
+  * "Approximative procedures for no-wait job shop scheduling" (Schuster et Framinan, 2003) [DOI](https://doi.org/10.1016/S0167-6377(03)00005-1)
+  * "Minimizing Makespan in No-Wait Job Shops" (Bansal et al., 2005) [DOI](https://doi.org/10.1287/moor.1050.0155)
+  * "No-Wait Job Shop Scheduling, a Constraint Propagation Approach" (Lennartz, 2006)
+  * "An enhanced timetabling procedure for the no-wait job shop problem: a complete local search approach" (Framinan et Schuster) [DOI](https://doi.org/10.1016/j.cor.2004.09.009)
+  * "No-wait Job Shop Scheduling: Tabu Search and Complexity of Subproblems" (Schuster, 2006) [DOI](https://doi.org/10.1007/s00186-005-0056-y)
+  * "MIP-based approaches for complex planning problems" (van den Broek, 2009)
+  * "A hybrid genetic algorithm for no-wait job shop scheduling problems" (Pan et Huang, 2009) [DOI](https://doi.org/10.1016/j.eswa.2008.07.005)
+  * "A fast hybrid tabu search algorithm for the no-wait job shop problem" (Bożejko et Makuchowski, 2009) [DOI](https://doi.org/10.1016/j.cie.2008.09.023)
+  * "Complete local search with limited memory algorithm for no-wait job shops to minimize makespan" (Zhu et al., 2009) [DOI](https://doi.org/10.1016/j.ejor.2008.09.015)
+  * "Solving the no-wait job shop problem: an ILP and CP approach" (Vermeulen et al., 2011)
+  * "A Cross Entropy-Genetic Algorithm for m-Machines No-Wait Job-ShopScheduling Problem" (Santosa et al., 2011) [DOI](http://dx.doi.org/10.4236/jilsa.2011.33018)
+  * "Solving the no-wait job-shop problem by using genetic algorithm with automatic adjustment" (Bożejko et Makuchowski, 2011) [DOI](https://doi.org/10.1007/s00170-011-3297-3)
+  * "An Effective Meta-Heuristic for No-Wait Job Shops to Minimize Makespan" (Zhu et Li, 2011) [DOI](https://doi.org/10.1109/TASE.2011.2163305)
+  * "Optimal job insertion in the no-wait job shop" (Bürgy et Gröflin, 2013) [DOI](https://doi.org/10.1007/s10878-012-9466-y)
+  * "Algorithm based on K-neighborhood search for no-wait job shop scheduling problems" (Wang et Yin, 2015) [DOI](https://doi.org/10.1109/CCDC.2015.7162672)
+  * "Branch-and-bound and PSO algorithms for no-wait job shop scheduling" (AitZai et al., 2016) [DOI](https://doi.org/10.1007/s10845-014-0906-7)
+  * "A memory-based complete local search method with variable neighborhood structures for no-wait job shops" (Li et al., 2016) [DOI](https://doi.org/10.1007/s00170-013-4866-4)
+  * "A hybrid artificial bee colony algorithm for the job-shop scheduling problem with no-wait constraint" (Sundar et al., 2017) [DOI](https://doi.org/10.1007/s00500-015-1852-9)
+  * "An Evolutionary Algorithm Based Hyper-heuristic for the Job-Shop Scheduling Problem with No-Wait Constraint" (Chaurasia et al., 2018) [DOI](https://doi.org/10.1007/978-981-13-0761-4_25)
+  * "A combination of two simple decoding strategies for the no-wait job shop scheduling problem" (Valenzuela et al., 2019) [DOI](https://doi.org/10.1145/3321707.3321870)
+  * "Solving no-wait job-shop scheduling problems using a multi-start simulated annealing with bi-directional shift timetabling algorithm" (Ying et Lin, 2020) [DOI](https://doi.org/10.1016/j.cie.2020.106615)
+  * "A new exact algorithm for no-wait job shop problem to minimize makespan" (Ozolins, 2020) [DOI](https://doi.org/10.1007/s12351-018-0414-1)
+
+</p>
+</details>
+
+* Data: [jobshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/jobshopscheduling.7z)
+* Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/nowaitjobshopschedulingmakespan.hpp)
+
 ### Assembly Line Balancing
 
 [Simple Assembly Line Balancing Problem of Type 1 (SALBP-1)](orproblems/simpleassemblylinebalancing1.hpp)
