@@ -13,21 +13,21 @@ The data also include CSV files listing the instances for each problem and their
 <details><summary>Literature</summary>
 <p>
 
-* Literature:
-  * "Heuristic and exact algorithms for the disjunctively constrained knapsack problem" (Yamada et al., 2002)
-  * "A reactive local search-based algorithm for the disjunctively constrained knapsack problem" ()Hifi et Michrafy, 2006) [DOI](https://doi.org/10.1057/palgrave.jors.2602046)
-  * "Reduction strategies and exact algorithms for the disjunctively constrained knapsack problem" (Hifi et Michrafy, 2007) [DOI](https://doi.org/10.1016/j.cor.2005.10.004)
-  * "Local branching-based algorithms for the disjunctively constrained knapsack problem" (Akeb et al., 2011) [DOI](https://doi.org/10.1016/j.cie.2011.01.019)
-  * "An algorithm for the disjunctively constrained knapsack problem" (Hifi et Otmani, 2012) [DOI](https://doi.org/10.1504/IJOR.2012.044026)
-  * "Bin Packing with Conflicts: A Generic Branch-and-Price Algorithm" (Sadykov et Vanderbeck, 2012) [DOI](https://doi.org/10.1287/ijoc.1120.0499)
-  * "An iterative rounding search-based algorithm for the disjunctively constrained knapsack problem" (Hifi, 2014) [DOI](https://doi.org/10.1080/0305215X.2013.819096)
-  * "Design and evaluation of a parallel neighbor algorithm for the disjunctively constrained knapsack problem" (Quan et Wu, 2016) [DOI](https://doi.org/10.1002/cpe.3848)
-  * "Cooperative parallel adaptive neighbourhood search for the disjunctively constrained knapsack problem" (Quan et Wu, 2017) [DOI](https://doi.org/10.1080/0305215X.2016.1257854)
-  * "Probabilistic Tabu search with multiple neighborhoods for the Disjunctively Constrained Knapsack Problem" (Salem et al., 2017) [DOI](https://doi.org/10.1051/ro/2016049)
-  * "A Branch-and-Bound Algorithm for the Knapsack Problem with Conflict Graph" (Bettinelli et al., 2017) [DOI](https://doi.org/10.1287/ijoc.2016.0742)
-  * "Optimization algorithms for the disjunctively constrained knapsack problem" (Salem et al., 2018) [DOI](https://doi.org/10.1007/s00500-016-2465-7)
-  * "A new combinatorial branch-and-bound algorithm for the Knapsack Problem with Conflicts" (Coniglio et al., 2020) [DOI](https://doi.org/10.1016/j.ejor.2020.07.023)
-  * "A threshold search based memetic algorithm for the disjunctively constrained knapsack problem" (Wei et Hao, 2021) [DOI](https://doi.org/10.1016/j.cor.2021.105447)
+* Luiz TA, Santos HG, Uchoa E (2021) Cover by Disjoint Cliques Cuts for the Knapsack Problem with Conflicting Items. Operations Research Letters. https://doi.org/10.1016/j.orl.2021.10.001
+* Wei Z, Hao J-K (2021) A threshold search based memetic algorithm for the disjunctively constrained knapsack problem. Computers & Operations Research 105447. https://doi.org/10.1016/j.cor.2021.105447
+* Coniglio S, Furini F, Segundo PS (2020) A new combinatorial branch-and-bound algorithm for the Knapsack Problem with Conflicts. European Journal of Operational Research. https://doi.org/10.1016/j.ejor.2020.07.023
+* Ben Salem M, Taktak R, Mahjoub AR, Ben-Abdallah H (2018) Optimization algorithms for the disjunctively constrained knapsack problem. Soft Comput 22:2025–2043. https://doi.org/10.1007/s00500-016-2465-7
+* Quan Z, Wu L (2017a) Cooperative parallel adaptive neighbourhood search for the disjunctively constrained knapsack problem. Engineering Optimization 49:1541–1557. https://doi.org/10.1080/0305215X.2016.1257854
+* Salem MB, Hanafi S, Taktak R, Abdallah HB (2017) Probabilistic Tabu search with multiple neighborhoods for the Disjunctively Constrained Knapsack Problem. RAIRO-Oper Res 51:627–637. https://doi.org/10.1051/ro/2016049
+* Bettinelli A, Cacchiani V, Malaguti E (2017) A Branch-and-Bound Algorithm for the Knapsack Problem with Conflict Graph. INFORMS Journal on Computing 29:457–473. https://doi.org/10.1287/ijoc.2016.0742
+* Quan Z, Wu L (2017b) Design and evaluation of a parallel neighbor algorithm for the disjunctively constrained knapsack problem. Concurrency and Computation: Practice and Experience 29:e3848. https://doi.org/10.1002/cpe.3848
+* Hifi M (2014) An iterative rounding search-based algorithm for the disjunctively constrained knapsack problem. Engineering Optimization 46:1109–1122. https://doi.org/10.1080/0305215X.2013.819096
+* Sadykov R, Vanderbeck F (2012) Bin Packing with Conflicts: A Generic Branch-and-Price Algorithm. INFORMS Journal on Computing 25:244–255. https://doi.org/10.1287/ijoc.1120.0499
+* Hifi M, Otmani N (2012) An algorithm for the disjunctively constrained knapsack problem. International Journal of Operational Research 13:22–43. https://doi.org/10.1504/IJOR.2012.044026
+* Akeb H, Hifi M, Ould Ahmed Mounir ME (2011) Local branching-based algorithms for the disjunctively constrained knapsack problem. Computers & Industrial Engineering 60:811–820. https://doi.org/10.1016/j.cie.2011.01.019
+* Hifi M, Michrafy M (2007) Reduction strategies and exact algorithms for the disjunctively constrained knapsack problem. Computers & Operations Research 34:2657–2673. https://doi.org/10.1016/j.cor.2005.10.004
+* Hifi M, Michrafy M (2006) A reactive local search-based algorithm for the disjunctively constrained knapsack problem. Journal of the Operational Research Society 57:718–726. https://doi.org/10.1057/palgrave.jors.2602046
+* Yamada T, Kataoka S, Watanabe K (2002) Heuristic and exact algorithms for the disjunctively constrained knapsack problem. Information Processing Society of Japan Journal 43:
 
 </p>
 </details>
@@ -40,19 +40,19 @@ The data also include CSV files listing the instances for each problem and their
 <details><summary>Literature</summary>
 <p>
 
-* Literature:
-  * "Heuristic algorithms for the multiple-choice multidimensional knapsack problem" (Hifi et al., 2004) [DOI](https://doi.org/10.1057/palgrave.jors.2601796)
-  * "A Reactive Local Search-Based Algorithm for the Multiple-Choice Multi-Dimensional Knapsack Problem" (Hifi et al., 2005) [DOI](https://doi.org/10.1007/s10589-005-3057-0)
-  * "A column generation method for the multiple-choice multi-dimensional knapsack problem" (Cherfi et Hifi, 2010) [DOI](https://doi.org/10.1007/s10589-008-9184-7)
-  * "Development of core to solve the multidimensional multiple-choice knapsack problem" (Ghasemia et Razzaz, 2011) [DOI](https://doi.org/10.1016/j.cie.2010.12.001)
-  * "Iterative semi-continuous relaxation heuristics for the multiple-choice multidimensional knapsack problem" (Crévits et al., 2012) [DOI](https://doi.org/10.1016/j.cor.2010.12.016)
-  * "A hybrid heuristic for the multiple choice multidimensional knapsack problem" (Mansi et al., 2012) [DOI](https://doi.org/10.1080/0305215X.2012.717072)
-  * "A fast and scalable multidimensional multiple-choice knapsack heuristic" (Shojaei et al., 2013) [DOI](https://doi.org/10.1145/2541012.2541014)
-  * "A “reduce and solve” approach for the multiple-choice multidimensional knapsack problem" (Chen et Hao, 2014) [DOI](https://doi.org/10.1016/j.ejor.2014.05.025)
-  * "Lagrangian heuristic-based neighbourhood search for the multiple-choice multi-dimensional knapsack problem" (Hifi et al., 2015) [DOI](https://doi.org/10.1080/0305215X.2014.982631)
-  * "A set partitioning reformulation for the multiple-choice multidimensional knapsack problem" (Voß et Lalla-Ruiz, 2015) [DOI](https://doi.org/10.1080/0305215X.2015.1062094)
-  * "A Core-Based Exact Algorithm for the Multidimensional Multiple Choice Knapsack Problem" (Mansini et Zanotti, 2020) [DOI](https://doi.org/10.1287/ijoc.2019.0909) 
-  * "A two-phase kernel search variant for the multidimensional multiple-choice knapsack problem" (Lamanna et al., 2021) [DOI](https://doi.org/10.1016/j.ejor.2021.05.007)
+* Lamanna L, Mansini R, Zanotti R (2021) A Two-phase Kernel Search variant for the Multidimensional Multiple-choice Knapsack Problem. European Journal of Operational Research. https://doi.org/10.1016/j.ejor.2021.05.007
+* Mansini R, Zanotti R (2020) A Core-Based Exact Algorithm for the Multidimensional Multiple Choice Knapsack Problem. INFORMS Journal on Computing. https://doi.org/10.1287/ijoc.2019.0909
+* Gao C, Lu G, Yao X, Li J (2017) An iterative pseudo-gap enumeration approach for the Multidimensional Multiple-choice Knapsack Problem. European Journal of Operational Research 260:1–11. https://doi.org/10.1016/j.ejor.2016.11.042
+* Voß S, Lalla-Ruiz E (2016) A set partitioning reformulation for the multiple-choice multidimensional knapsack problem. Engineering Optimization 48:831–850. https://doi.org/10.1080/0305215X.2015.1062094
+* Hifi M, Wu L (2015) Lagrangian heuristic-based neighbourhood search for the multiple-choice multi-dimensional knapsack problem. Engineering Optimization 47:1619–1636. https://doi.org/10.1080/0305215X.2014.982631
+* Chen Y, Hao J-K (2014) A “reduce and solve” approach for the multiple-choice multidimensional knapsack problem. European Journal of Operational Research 239:313–322. https://doi.org/10.1016/j.ejor.2014.05.025
+* Shojaei H, Basten T, Geilen M, Davoodi A (2013) A fast and scalable multidimensional multiple-choice knapsack heuristic. ACM Trans Des Autom Electron Syst 18:51:1-51:32. https://doi.org/10.1145/2541012.2541014
+* Mansi R, Alves C, Carvalho JMV de, Hanafi S (2013) A hybrid heuristic for the multiple choice multidimensional knapsack problem. Engineering Optimization 45:983–1004. https://doi.org/10.1080/0305215X.2012.717072
+* Crévits I, Hanafi S, Mansi R, Wilbaut C (2012) Iterative semi-continuous relaxation heuristics for the multiple-choice multidimensional knapsack problem. Computers & Operations Research 39:32–41. https://doi.org/10.1016/j.cor.2010.12.016
+* Ghasemi T, Razzazi M (2011) Development of core to solve the multidimensional multiple-choice knapsack problem. Computers & Industrial Engineering 60:349–360. https://doi.org/10.1016/j.cie.2010.12.001
+* Cherfi N, Hifi M (2010) A column generation method for the multiple-choice multi-dimensional knapsack problem. Comput Optim Appl 46:51–73. https://doi.org/10.1007/s10589-008-9184-7
+* Hifi M, Michrafy M, Sbihi A (2006) A Reactive Local Search-Based Algorithm for the Multiple-Choice Multi-Dimensional Knapsack Problem. Comput Optim Applic 33:271–285. https://doi.org/10.1007/s10589-005-3057-0
+* Hifi M, Michrafy M, Sbihi A (2004) Heuristic algorithms for the multiple-choice multidimensional knapsack problem. Journal of the Operational Research Society 55:1323–1332. https://doi.org/10.1057/palgrave.jors.2601796
 
 </p>
 </details>
@@ -65,16 +65,116 @@ The data also include CSV files listing the instances for each problem and their
 <details><summary>Literature</summary>
 <p>
 
-* Literature:
-  * "Iterated local search for the quadratic assignment problem" (Stützle, 2006) [DOI](https://doi.org/10.1016/j.ejor.2005.01.066)
-  * "A survey for the quadratic assignment problem" (Loiola et al., 2007) [DOI](https://doi.org/10.1016/j.ejor.2005.09.032)
-  * "A branch-and-cut algorithm for quadratic assignment problems based on linearizations" (Erdoğan et Tansel, 2007) [DOI](https://doi.org/10.1016/j.cor.2005.05.027)
-  * "Extensive experiments with hybrid genetic algorithms for the solution of the quadratic assignment problem" (Drezner, 2008) [DOI](https://doi.org/10.1016/j.cor.2006.05.004)
-  * "A cooperative parallel tabu search algorithm for the quadratic assignment problem" (James et al., 2009) [DOI](https://doi.org/10.1016/j.ejor.2007.06.061)
-  * "Multistart Tabu Search and Diversification Strategies for the Quadratic Assignment Problem" (James et al., 2009) [DOI](https://doi.org/10.1109/TSMCA.2009.2014556)
-  * "An ejection chain algorithm for the quadratic assignment problem" (Rego et al., 2009) [DOI](https://doi.org/10.1002/net.20360)
-  * "Breakout local search for the quadratic assignment problem" (Benlic et Hao, 2013) [DOI](https://doi.org/10.1016/j.amc.2012.10.106)
-  * "Memetic search for the quadratic assignment problem" (Benlic et Hao, 2015) [DOI](https://doi.org/10.1016/j.eswa.2014.08.011)
+* Mallach S (2020) Inductive linearization for binary quadratic programs with linear constraints. 4OR-Q J Oper Res. https://doi.org/10.1007/s10288-020-00460-z
+* Dokeroglu T, Sevinc E, Cosar A (2019) Artificial bee colony optimization for the quadratic assignment problem. Applied Soft Computing 76:595–606. https://doi.org/10.1016/j.asoc.2019.01.001
+* Abdel-Basset M, Manogaran G, El-Shahat D, Mirjalili S (2018a) Integrating the whale algorithm with Tabu search for quadratic assignment problem: A new approach for locating hospital departments. Applied Soft Computing 73:530–546. https://doi.org/10.1016/j.asoc.2018.08.047
+* Abdel-Basset M, Manogaran G, Rashad H, Zaied ANH (2018b) A comprehensive review of quadratic assignment problem: variants, hybrids and applications. J Ambient Intell Human Comput. https://doi.org/10.1007/s12652-018-0917-x
+* Bravo Ferreira JFS, Khoo Y, Singer A (2018) Semidefinite programming approach for the quadratic assignment problem with a sparse graph. Comput Optim Appl 69:677–712. https://doi.org/10.1007/s10589-017-9968-8
+* Ahmed ZH (2018) A hybrid algorithm combining lexisearch and genetic algorithms for the quadratic assignment problem. Cogent Engineering 5:1423743. https://doi.org/10.1080/23311916.2018.1423743
+* Gonçalves AD, Pessoa AA, Bentes C, et al (2017) A Graphics Processing Unit Algorithm to Solve the Quadratic Assignment Problem Using Level-2 Reformulation-Linearization Technique. INFORMS Journal on Computing 29:676–687. https://doi.org/10.1287/ijoc.2017.0754
+* Ahyaningsih F (2017) A combined strategy for solving quadratic assignment problem. AIP Conference Proceedings 1867:020006. https://doi.org/10.1063/1.4994409
+* Mzili I, Riffi ME, Benzekri F (2017) Penguins Search Optimization Algorithm to Solve Quadratic Assignment Problem. In: Proceedings of the 2nd international Conference on Big Data, Cloud and Applications. Association for Computing Machinery, New York, NY, USA, pp 1–6, https://doi.org/10.1145/3090354.3090375
+* Shylo PV (2017) Solving the Quadratic Assignment Problem by the Repeated Iterated Tabu Search Method. Cybern Syst Anal 53:308–311. https://doi.org/10.1007/s10559-017-9930-x
+* Ismail MM, Hezam IM, El-Sharkawy E (2017) Enhanced Cuckoo Search Algorithm with SPV Rule for Quadratic Assignment Problem. International Journal of Computer Applications 158:39–42
+* Aksan Y, Dokeroglu T, Cosar A (2017) A stagnation-aware cooperative parallel breakout local search algorithm for the quadratic assignment problem. Computers & Industrial Engineering 103:105–115. https://doi.org/10.1016/j.cie.2016.11.023
+* Chmiel W, Kadłuczka P, Kwiecień J, Filipowicz B (2017) A comparison of nature inspired algorithms for the quadratic assignment problem. Bulletin of the Polish Academy of Sciences Technical Sciences Vol. 65: https://doi.org/10.1515/bpasts-2017-0056
+* Ahmed ZH (2016) Experimental analysis of crossover and mutation operators on the quadratic assignment problem. Ann Oper Res 247:833–851. https://doi.org/10.1007/s10479-015-1848-y
+* Dokeroglu T, Cosar A (2016) A novel multistart hyper-heuristic algorithm on the grid for the quadratic assignment problem. Engineering Applications of Artificial Intelligence 52:10–25. https://doi.org/10.1016/j.engappai.2016.02.004
+* Hafiz F, Abdennour A (2016) Particle Swarm Algorithm variants for the Quadratic Assignment Problems - A probabilistic learning approach. Expert Systems with Applications 44:413–431. https://doi.org/10.1016/j.eswa.2015.09.032
+* Chmiel W, Szwed P (2016) Bees Algorithm for the Quadratic Assignment Problem on CUDA Platform. In: Gruca A, Brachman A, Kozielski S, Czachórski T (eds) Man–Machine Interactions 4. Springer International Publishing, Cham, pp 615–625, https://doi.org/10.1007/978-3-319-23437-3_53
+* Munera D, Diaz D, Abreu S (2016a) Solving the Quadratic Assignment Problem with Cooperative Parallel Extremal Optimization. In: Chicano F, Hu B, García-Sánchez P (eds) Evolutionary Computation in Combinatorial Optimization. Springer International Publishing, Cham, pp 251–266, https://doi.org/10.1007/978-3-319-30698-8_17
+* Munera D, Diaz D, Abreu S (2016b) Hybridization as Cooperative Parallelism for the Quadratic Assignment Problem. In: Blesa MJ, Blum C, Cangelosi A, et al. (eds) Hybrid Metaheuristics. Springer International Publishing, Cham, pp 47–61, https://doi.org/10.1007/978-3-319-39636-1_4
+* Sghir I, Hao J-K, Jaafar IB, Ghédira K (2015) A multi-agent based optimization method applied to the quadratic assignment problem. Expert Systems with Applications 42:9252–9262. https://doi.org/10.1016/j.eswa.2015.07.070
+* Acan A, Ünveren A (2015) A great deluge and tabu search hybrid with two-stage memory support for quadratic assignment problem. Applied Soft Computing 36:185–203. https://doi.org/10.1016/j.asoc.2015.06.061
+* Xia Y, Gharibi W (2015) On improving convex quadratic programming relaxation for the quadratic assignment problem. J Comb Optim 30:647–667. https://doi.org/10.1007/s10878-013-9655-3
+* de Klerk E, Sotirov R, Truetsch U (2015) A New Semidefinite Programming Relaxation for the Quadratic Assignment Problem and Its Computational Perspectives. INFORMS Journal on Computing 27:378–391. https://doi.org/10.1287/ijoc.2014.0634
+* Benlic U, Hao J-K (2015) Memetic search for the quadratic assignment problem. Expert Systems with Applications 42:584–595. https://doi.org/10.1016/j.eswa.2014.08.011
+* Zhang H, Beltran-Royo C, Ma L (2013) Solving the quadratic assignment problem by means of general purpose mixed integer linear programming solvers. Ann Oper Res 207:261–278. https://doi.org/10.1007/s10479-012-1079-4
+* Benlic U, Hao J-K (2013) Breakout local search for the quadratic assignment problem. Applied Mathematics and Computation 219:4800–4815. https://doi.org/10.1016/j.amc.2012.10.106
+* Fischetti M, Monaci M, Salvagnin D (2012) Three Ideas for the Quadratic Assignment Problem. Operations Research 60:954–964. https://doi.org/10.1287/opre.1120.1073
+* Nyberg A, Westerlund T (2012) A new exact discrete linear reformulation of the quadratic assignment problem. European Journal of Operational Research 220:314–319. https://doi.org/10.1016/j.ejor.2012.02.010
+* Hahn PM, Zhu Y-R, Guignard M, et al (2012) A Level-3 Reformulation-Linearization Technique-Based Bound for the Quadratic Assignment Problem. INFORMS Journal on Computing 24:202–209. https://doi.org/10.1287/ijoc.1110.0450
+* Zhang H, Beltran-Royo C, Constantino M (2010) Effective formulation reductions for the quadratic assignment problem. Computers & Operations Research 37:2007–2016. https://doi.org/10.1016/j.cor.2010.02.001
+* Rego C, James T, Glover F (2010) An ejection chain algorithm for the quadratic assignment problem. Networks 56:188–206. https://doi.org/10.1002/net.20360
+* James T, Rego C, Glover F (2009a) A cooperative parallel tabu search algorithm for the quadratic assignment problem. European Journal of Operational Research 195:810–826. https://doi.org/10.1016/j.ejor.2007.06.061
+* James T, Rego Cé, Glover F (2009b) Multistart Tabu Search and Diversification Strategies for the Quadratic Assignment Problem. IEEE Transactions on Systems, Man, and Cybernetics - Part A: Systems and Humans 39:579–596. https://doi.org/10.1109/TSMCA.2009.2014556
+* Loukil L, Mehdi M, Melab N, et al (2009) A parallel hybrid genetic algorithm-simulated annealing for solving Q3AP on computational grid. In: 2009 IEEE International Symposium on Parallel Distributed Processing. pp 1–8, https://doi.org/10.1109/IPDPS.2009.5161126
+* Drezner Z (2008) Extensive experiments with hybrid genetic algorithms for the solution of the quadratic assignment problem. Computers & Operations Research 35:717–736. https://doi.org/10.1016/j.cor.2006.05.004
+* Xia Y (2008) Gilmore-Lawler bound of quadratic assignment problem. Front Math China 3:109–118. https://doi.org/10.1007/s11464-008-0010-4
+* Tsutsui S (2008) Parallel Ant Colony Optimization for the Quadratic Assignment Problems with Symmetric Multi Processing. In: Dorigo M, Birattari M, Blum C, et al. (eds) Ant Colony Optimization and Swarm Intelligence. Springer, Berlin, Heidelberg, pp 363–370, https://doi.org/10.1007/978-3-540-87527-7_38
+* Adams WP, Guignard M, Hahn PM, Hightower WL (2007) A level-2 reformulation–linearization technique bound for the quadratic assignment problem. European Journal of Operational Research 180:983–996. https://doi.org/10.1016/j.ejor.2006.03.051
+* Erdoğan G, Tansel B (2007) A branch-and-cut algorithm for quadratic assignment problems based on linearizations. Computers & Operations Research 34:1085–1106. https://doi.org/10.1016/j.cor.2005.05.027
+* Rendl F, Sotirov R (2007) Bounds for the quadratic assignment problem using the bundle method. Math Program 109:505–524. https://doi.org/10.1007/s10107-006-0038-8
+* Loiola EM, de Abreu NMM, Boaventura-Netto PO, et al (2007) A survey for the quadratic assignment problem. European Journal of Operational Research 176:657–690. https://doi.org/10.1016/j.ejor.2005.09.032
+* Liu H, Abraham A, Zhang J (2007) A Particle Swarm Approach to Quadratic Assignment Problems. In: Saad A, Dahal K, Sarfraz M, Roy R (eds) Soft Computing in Industrial Applications. Springer, Berlin, Heidelberg, pp 213–222, https://doi.org/10.1007/978-3-540-70706-6_20
+* Stützle T (2006) Iterated local search for the quadratic assignment problem. European Journal of Operational Research 174:1519–1539. https://doi.org/10.1016/j.ejor.2005.01.066
+* Tseng L-Y, Liang S-C (2006) A Hybrid Metaheuristic for the Quadratic Assignment Problem. Comput Optim Applic 34:85–113. https://doi.org/10.1007/s10589-005-3069-9
+* Ji P, Wu Y, Liu H (2006) A solution method for the quadratic assignment problem (QAP). In: The Sixth International Symposium on Operations Research and Its Applications (ISORA’06), Xinjiang, China, August. pp 8–12
+* Drezner Z, Hahn PM, Taillard ÉD (2005) Recent Advances for the Quadratic Assignment Problem with Special Emphasis on Instances that are Difficult for Meta-Heuristic Methods. Ann Oper Res 139:65–94. https://doi.org/10.1007/s10479-005-3444-z
+* Drezner Z (2005a) Compounded genetic algorithms for the quadratic assignment problem. Operations Research Letters 33:475–480. https://doi.org/10.1016/j.orl.2004.11.001
+* Drezner Z (2005b) The extended concentric tabu for the quadratic assignment problem. European Journal of Operational Research 160:416–422. https://doi.org/10.1016/S0377-2217(03)00438-7
+* Misevicius A (2005) A Tabu Search Algorithm for the Quadratic Assignment Problem. Comput Optim Applic 30:95–111. https://doi.org/10.1007/s10589-005-4562-x
+* Fedjki CA, Duffuaa SO (2004) An extreme point algorithm for a local minimum solution to the quadratic assignment problem. European Journal of Operational Research 156:566–578. https://doi.org/10.1016/S0377-2217(03)00132-2
+* Misevicius A (2004) An improved hybrid genetic algorithm: new results for the quadratic assignment problem. Knowledge-Based Systems 17:65–73. https://doi.org/10.1016/j.knosys.2004.03.001
+* Misevičius A (2004) An improved hybrid optimization algorithm for the quadratic assignment problem. Mathematical Modelling and Analysis 9:149–168. https://doi.org/10.1080/13926292.2004.9637249
+* Oliveira CAS, Pardalos PM, Resende MGC (2004) GRASP with Path-Relinking for the Quadratic Assignment Problem. In: Ribeiro CC, Martins SL (eds) Experimental and Efficient Algorithms. Springer, Berlin, Heidelberg, pp 356–368, https://doi.org/10.1007/978-3-540-24838-5_27
+* Drezner Z (2003) A New Genetic Algorithm for the Quadratic Assignment Problem. INFORMS Journal on Computing
+* Anstreicher KM (2003) Recent advances in the solution of quadratic assignment problems. Math Program, Ser B 97:27–42. https://doi.org/10.1007/s10107-003-0437-z
+* Mills P, Tsang E, Ford J (2003) Applying an Extended Guided Local Search to the Quadratic Assignment Problem. Annals of Operations Research 118:121–135. https://doi.org/10.1023/A:1021857607524
+* Misevičius A (2003) A Modified Simulated Annealing Algorithm for the Quadratic Assignment Problem. Informatica 14:497–514
+* Angel E, Zissimopoulos V (2002) On the Hardness of the Quadratic Assignment Problem with Metaheuristics. Journal of Heuristics 8:399–414. https://doi.org/10.1023/A:1015454612213
+* Hasegawa M, Ikeguchi T, Aihara K, Itoh K (2002) A novel chaotic search for quadratic assignment problems. European Journal of Operational Research 139:543–556. https://doi.org/10.1016/S0377-2217(01)00189-8
+* Gutin G, Yeo A (2002) Polynomial approximation algorithms for the TSP and the QAP with a factorial domination number. Discrete Applied Mathematics 119:107–116. https://doi.org/10.1016/S0166-218X(01)00267-0
+* Ramakrishnan KG, Resende MGC, Ramachandran B, Pekny JF (2002) Tight QAP bounds via linear programming. In: Combinatorial and Global Optimization. WORLD SCIENTIFIC, pp 297–303, https://doi.org/10.1142/9789812778215_0019
+* Smith JM, Li W-J (2001) Quadratic Assignment Problems and M/G/C/C/ State Dependent Network Flows. Journal of Combinatorial Optimization 5:421–443. https://doi.org/10.1023/A:1011624708694
+* Jünger M, Kaibel V (2001) Box-inequalities for quadratic assignment polytopes. Math Program 91:175–197. https://doi.org/10.1007/s101070100251
+* Angel E, Zissimopoulos V (2001) On the landscape ruggedness of the quadratic assignment problem. Theoretical Computer Science 263:159–172. https://doi.org/10.1016/S0304-3975(00)00239-5
+* Anstreicher KM, Brixius NW (2001) A new bound for the quadratic assignment problem based on convex quadratic programming. Math Program 89:341–357. https://doi.org/10.1007/PL00011402
+* Talbi E-G, Roux O, Fonlupt C, Robillard D (2001) Parallel Ant Colonies for the quadratic assignment problem. Future Generation Computer Systems 17:441–449. https://doi.org/10.1016/S0167-739X(99)00124-7
+* Nishiyama T, Tsuchiya K, Tsujita K (2001) A Markov Chain Monte Carlo Algorithm for the Quadratic Assignment Problem Based on Replicator Equations. In: Dorffner G, Bischof H, Hornik K (eds) Artificial Neural Networks — ICANN 2001. Springer, Berlin, Heidelberg, pp 148–155, https://doi.org/10.1007/3-540-44668-0_21
+* Merz P, Freisleben B (2000) Fitness landscape analysis and memetic algorithms for the quadratic assignment problem. IEEE Transactions on Evolutionary Computation 4:337–352. https://doi.org/10.1109/4235.887234
+* Ahuja RK, Orlin JB, Tiwari A (2000) A greedy genetic algorithm for the quadratic assignment problem. Computers & Operations Research 27:917–934. https://doi.org/10.1016/S0305-0548(99)00067-2
+* De&ıbreve;neko VG, Woeginger GJ (2000) A study of exponential neighborhoods for the Travelling Salesman Problem and for the Quadratic Assignment Problem. Math Program 87:519–542. https://doi.org/10.1007/s101070050010
+* Misevičius A (2000) An Intensive Search Algorithm for the Quadratic Assignment Problem. Informatica 11:145–162. https://doi.org/10.3233/INF-2000-11204
+* Wolkowicz H (2000) Semidefinite Programming Approaches to the Quadratic Assignment Problem. In: Pardalos PM, Pitsoulis LS (eds) Nonlinear Assignment Problems: Algorithms and Applications. Springer US, Boston, MA, pp 143–174, https://doi.org/10.1007/978-1-4757-3155-2_7
+* Karisch SE, Çela E, Clausen J, Espersen T (1999) A Dual Framework for Lower Bounds of the Quadratic Assignment Problem Based on Linearization. Computing 63:351–403. https://doi.org/10.1007/s006070050040
+* Maniezzo V (1999) Exact and Approximate Nondeterministic Tree-Search Procedures for the Quadratic Assignment Problem. INFORMS Journal on Computing 11:358–369. https://doi.org/10.1287/ijoc.11.4.358
+* Maniezzo V, Colorni A (1999) The ant system applied to the quadratic assignment problem. IEEE Transactions on Knowledge and Data Engineering 11:769–778. https://doi.org/10.1109/69.806935
+* Gambardella LM, Taillard ÉD, Dorigo M (1999) Ant colonies for the quadratic assignment problem. Journal of the Operational Research Society 50:167–176. https://doi.org/10.1057/palgrave.jors.2600676
+* Hahn P, Grant T (1998) Lower Bounds for the Quadratic Assignment Problem Based upon a Dual Formulation. Operations Research 46:912–922. https://doi.org/10.1287/opre.46.6.912
+* Hahn P, Grant T, Hall N (1998) A branch-and-bound algorithm for the quadratic assignment problem based on the Hungarian method. European Journal of Operational Research 108:629–640. https://doi.org/10.1016/S0377-2217(97)00063-5
+* Brüngger A, Marzetta A, Clausen J, Perregaard M (1998) Solving Large-Scale QAP Problems in Parallel with the Search Library ZRAM. Journal of Parallel and Distributed Computing 50:157–169. https://doi.org/10.1006/jpdc.1998.1434
+* Zhao Q, Karisch SE, Rendl F, Wolkowicz H (1998) Semidefinite Programming Relaxations for the Quadratic Assignment Problem. Journal of Combinatorial Optimization 2:71–109. https://doi.org/10.1023/A:1009795911987
+* Burkard RE, Karisch SE, Rendl F (1997) QAPLIB – A Quadratic Assignment Problem Library. Journal of Global Optimization 10:391–403. https://doi.org/10.1023/A:1008293323270
+* Cung V-D, Mautor T, Michelon P, Tavares A (1997) A scatter search based approach for the quadratic assignment problem. In: Proceedings of 1997 IEEE International Conference on Evolutionary Computation (ICEC ’97). pp 165–169, https://doi.org/10.1109/ICEC.1997.592289
+* Pardalos PM, Ramakrishnan KG, Resende MGC, Li Y (1997) Implementation of a Variance Reduction-Based Lower Bound in a Branch-and-Bound Algorithm for the Quadratic Assignment Problem. SIAM J Optim 7:280–294. https://doi.org/10.1137/S1052623494273393
+* Ramakrishnan KG, Resende MGC, Pardalos PM (1996) A Branch and Bound Algorithm for the Quadratic Assignment Problem using a Lower Bound Based on Linear Programming. In: Floudas CA, Pardalos PM (eds) State of the Art in Global Optimization: Computational Methods and Applications. Springer US, Boston, MA, pp 57–73, https://doi.org/10.1007/978-1-4613-3437-8_5
+* Bousoño-Calzón C, Manning MRW (1995) The Hopfield neural network applied to the Quadratic Assignment Problem. Neural Comput & Applic 3:64–72. https://doi.org/10.1007/BF01421958
+* Nissen V, Paul H (1995) A modification of threshold accepting and its application to the quadratic assignment problem. OR Spektrum 17:205–210. https://doi.org/10.1007/BF01719267
+* Drezner Z (1995) Lower bounds based on linear programming for the quadratic assignment problem. Comput Optim Applic 4:159–165. https://doi.org/10.1007/BF01302894
+* Mans B, Mautor T, Roucairol C (1995) A parallel depth first search branch and bound algorithm for the quadratic assignment problem. European Journal of Operational Research 81:617–628. https://doi.org/10.1016/0377-2217(93)E0334-T
+* Milis IZ, Magirou VF (1995) A Lagrangian relaxation algorithm for sparse quadratic assignment problems. Operations Research Letters 17:69–76. https://doi.org/10.1016/0167-6377(94)00061-A
+* Maniezzo V, Dorigo M, Colorni A (1995) Algodesk: An experimental comparison of eight evolutionary heuristics applied to the Quadratic Assignment Problem. European Journal of Operational Research 81:188–204. https://doi.org/10.1016/0377-2217(93)E0128-K
+* White DJ (1995) Some concave-convex representations of the quadratic assignment problem. European Journal of Operational Research 80:418–424. https://doi.org/10.1016/0377-2217(93)E0215-J
+* Li Y, Pardalos PM, Ramakrishnan KG, Resende MGC (1994) Lower bounds for the quadratic assignment problem. Ann Oper Res 50:387–410. https://doi.org/10.1007/BF02085649
+* Bos J (1993) Zoning in Forest Management: a Quadratic Assignment Problem Solved by Simulated Annealing. Journal of Environmental Management 37:127–145. https://doi.org/10.1006/jema.1993.1010
+* Hadley SW, Rendl F, Wolkowicz H (1992) A New Lower Bound Via Projection for the Quadratic Assignment Problem. Mathematics of OR 17:727–739. https://doi.org/10.1287/moor.17.3.727
+* Rendl F, Wolkowicz H (1992) Applications of parametric programming and eigenvalue maximization to the quadratic assignment problem. Mathematical Programming 53:63–78. https://doi.org/10.1007/BF01585694
+* Taillard E (1991) Robust taboo search for the quadratic assignment problem. Parallel Computing 17:443–455. https://doi.org/10.1016/S0167-8191(05)80147-4
+* Skorin-Kapov J (1990) Tabu Search Applied to the Quadratic Assignment Problem. ORSA Journal on Computing 2:33–45. https://doi.org/10.1287/ijoc.2.1.33
+* Hadley SW, Rendl F, Wolkowicz H (1990) Bounds for the Quadratic Assignment Problems Using Continuous Optimization Techniques. In: IPCO. pp 237–248
+* Wilhelm MR, Ward TL (1987) Solving Quadratic Assignment Problems by ‘Simulated Annealing.’ IIE Transactions 19:107–119. https://doi.org/10.1080/07408178708975376
+* Finke G, Burkard RE, Rendl F (1987) Quadratic Assignment Problems. In: Martello S, Laporte G, Minoux M, Ribeiro C (eds) North-Holland Mathematics Studies. North-Holland, pp 61–82, https://doi.org/10.1016/S0304-0208(08)73232-8
+* Kaku BK, Thompson GL (1986) An exact algorithm for the general quadratic assignment problem. European Journal of Operational Research 23:382–390. https://doi.org/10.1016/0377-2217(86)90303-6
+* Burkard RE, Bönniger T (1983) A heuristic for quadratic Boolean programs with applications to quadratic assignment problems. European Journal of Operational Research 13:374–386. https://doi.org/10.1016/0377-2217(83)90097-8
+* Bazaraa MS, Kirca O (1983) A branch-and-bound-based heuristic for solving the quadratic assignment problem. Naval Research Logistics Quarterly 30:287–304. https://doi.org/10.1002/nav.3800300210
+* Frieze AM, Yadegar J (1983) On the quadratic assignment problem. Discrete applied mathematics 5:89–98
+* Bazaraa MS, Sherali HD (1982) On the Use of Exact and Heuristic Cutting Plane Methods for the Quadratic Assignment Problem. J Oper Res Soc 33:991–1003. https://doi.org/10.1057/jors.1982.210
+* Bazaraa MS, Elshafei AN (1979) An exact branch-and-bound procedure for the quadratic-assignment problem. Naval Research Logistics Quarterly 26:109–121. https://doi.org/10.1002/nav.3800260111
+* Kaufman L, Broeckx F (1978) An algorithm for the quadratic assignment problem using Bender’s decomposition. European Journal of Operational Research 2:207–211. https://doi.org/10.1016/0377-2217(78)90095-4
+* Elshafei AN (1977) Hospital Layout as a Quadratic Assignment Problem. J Oper Res Soc 28:167–179. https://doi.org/10.1057/jors.1977.29
+* Lawler EL (1963) The Quadratic Assignment Problem. Management Science 9:586–599. https://doi.org/10.1287/mnsc.9.4.586
+* Gilmore PC (1962) Optimal and Suboptimal Algorithms for the Quadratic Assignment Problem. Journal of the Society for Industrial and Applied Mathematics 10:305–313. https://doi.org/10.1137/0110022
 
 </p>
 </details>
@@ -87,13 +187,14 @@ The data also include CSV files listing the instances for each problem and their
 <details><summary>Literature</summary>
 <p>
 
-* Literature:
-  * "A Linear Programming Approach to the Cutting-Stock Problem" (Gilmore et Gomory, 1961) [DOI](https://doi.org/10.1287/opre.9.6.849)
-  * "A branch-and-cut-and-price algorithm for one-dimensional stock cutting and two-dimensional two-stage cutting" (Belov et Scheithauer, 2006) [DOI](https://doi.org/10.1016/j.ejor.2004.08.036)
-  * "Bin packing and related problems: General arc-flow formulation with graph compression" (Brandão et Pedroso, 2016) [DOI](https://doi.org/10.1016/j.cor.2015.11.009)
-  * "Bin packing and cutting stock problems: Mathematical models and exact algorithms" (Delorme et al., 2016) [DOI](https://doi.org/10.1016/j.ejor.2016.04.030)
-  * "Enhanced Pseudo-polynomial Formulations for Bin Packing and Cutting Stock Problems" (Delorme et Iori, 2019) [DOI](https://doi.org/10.1287/ijoc.2018.0880)
-  * "A New Branch-and-Price-and-Cut Algorithm for One-Dimensional Bin-Packing Problems" (Wei et al., 2019) [DOI](https://doi.org/10.1287/ijoc.2018.0867)
+* Coniglio S, D’Andreagiovanni F, Furini F (2019) A lexicographic pricer for the fractional bin packing problem. Operations Research Letters 47:622–628. https://doi.org/10.1016/j.orl.2019.10.011
+* Wei L, Luo Z, Baldacci R, Lim A (2019) A New Branch-and-Price-and-Cut Algorithm for One-Dimensional Bin-Packing Problems. INFORMS Journal on Computing. https://doi.org/10.1287/ijoc.2018.0867
+* Delorme M, Iori M (2019) Enhanced Pseudo-polynomial Formulations for Bin Packing and Cutting Stock Problems. INFORMS Journal on Computing. https://doi.org/10.1287/ijoc.2018.0880
+* Delorme M, Iori M, Martello S (2016) Bin packing and cutting stock problems: Mathematical models and exact algorithms. European Journal of Operational Research 255:1–20. https://doi.org/10.1016/j.ejor.2016.04.030
+* Brandão F, Pedroso JP (2016) Bin packing and related problems: General arc-flow formulation with graph compression. Computers & Operations Research 69:56–67. https://doi.org/10.1016/j.cor.2015.11.009
+* Baldi MM, Crainic TG, Perboli G, Tadei R (2014) Branch-and-price and beam search algorithms for the Variable Cost and Size Bin Packing Problem with optional items. Ann Oper Res 222:125–141. https://doi.org/10.1007/s10479-012-1283-2
+* Belov G, Scheithauer G (2006) A branch-and-cut-and-price algorithm for one-dimensional stock cutting and two-dimensional two-stage cutting. European Journal of Operational Research 171:85–106. https://doi.org/10.1016/j.ejor.2004.08.036
+* Gilmore PC, Gomory RE (1961) A Linear Programming Approach to the Cutting-Stock Problem. Operations Research 9:849–859. https://doi.org/10.1287/opre.9.6.849
 
 </p>
 </details>
@@ -106,21 +207,22 @@ The data also include CSV files listing the instances for each problem and their
 <details><summary>Literature</summary>
 <p>
 
-* Literature:
-  * "An Algorithm for the Solution of 0-1 Loading Problems" (Ingargiola et Korsh, 1975) [DOI](https://doi.org/10.1287/opre.23.6.1110)
-  * "An algorithm for 0-1 multiple-knapsack problems" (Hung et Fisk, 1978) [DOI](https://doi.org/10.1002/nav.3800250316)
-  * "Solution of the zero-one multiple knapsack problem" (Martello et Toth, 1980) [DOI](https://doi.org/10.1016/0377-2217(80)90112-5)
-  * "A Bound and Bound algorithm for the zero-one multiple knapsack problem" (Martello et Toth, 1981) [DOI](https://doi.org/10.1016/0166-218X(81)90005-6)
-  * "Heuristic algorithms for the multiple knapsack problem" (Martello et Toth, 1981) [DOI](https://doi.org/10.1007/BF02243544)
-  * "An exact algorithm for large multiple knapsack problems" (Pisinger, 1999) [DOI](https://doi.org/10.1016/S0377-2217(98)00120-9)
-  * "Bin Completion Algorithms for Multicontainer Packing, Knapsack, and Covering Problems" (Fukunaga et Korf, 2007) [DOI](https://doi.org/10.1613/jair.2106)
-  * "A new grouping genetic algorithm for the Multiple Knapsack Problem" (Fukunaga, 2008) [DOI](https://doi.org/10.1109/CEC.2008.4631094)
-  * "Combining multiple representations in a genetic algorithm for the multiple knapsack problem" (Fukunaga et Tazoe, 2009) [DOI](https://doi.org/10.1109/CEC.2009.4983244)
-  * "A branch-and-bound algorithm for hard multiple knapsack problems" (Fukunaga, 2011) [DOI](https://doi.org/10.1007/s10479-009-0660-y)
-  * "A procedure-based heuristic for 0-1 Multiple Knapsack Problems" (Lalami et al., 2012) [DOI](https://doi.org/10.1504/IJMOR.2012.046684)
-  * "Improved Swap Heuristic for the Multiple Knapsack Problem" (Laalaoui, 2013) [DOI](https://doi.org/10.1007/978-3-642-38679-4_55)
-  * "A binary multiple knapsack model for single machine scheduling with machine unavailability" (Laalaouia et M’Hallah, 2016) [DOI](https://doi.org/10.1016/j.cor.2016.02.005)
-  * "Mathematical models and decomposition methods for the multiple knapsack problem" (Dell’Amico et al., 2019) [DOI](https://doi.org/10.1016/j.ejor.2018.10.043)
+* Dell’Amico M, Delorme M, Iori M, Martello S (2019) Mathematical models and decomposition methods for the multiple knapsack problem. European Journal of Operational Research 274:886–899. https://doi.org/10.1016/j.ejor.2018.10.043
+* Laalaoui Y, M’Hallah R (2016) A binary multiple knapsack model for single machine scheduling with machine unavailability. Computers & Operations Research 72:71–82. https://doi.org/10.1016/j.cor.2016.02.005
+* Laalaoui Y (2013) Improved Swap Heuristic for the Multiple Knapsack Problem. In: Rojas I, Joya G, Gabestany J (eds) Advances in Computational Intelligence. Springer, Berlin, Heidelberg, pp 547–555, https://doi.org/10.1007/978-3-642-38679-4_55
+* Lalami ME, Elkihel M, El Baz D, Boyer V (2012) A procedure-based heuristic for 0-1 Multiple Knapsack Problems. International Journal of Mathematics in Operational Research 4:214–224. https://doi.org/10.1504/IJMOR.2012.046684
+* Fukunaga AS (2011) A branch-and-bound algorithm for hard multiple knapsack problems. Ann Oper Res 184:97–119. https://doi.org/10.1007/s10479-009-0660-y
+* Fukunaga AS, Tazoe S (2009) Combining multiple representations in a genetic algorithm for the multiple knapsack problem. In: 2009 IEEE Congress on Evolutionary Computation. pp 2423–2430, https://doi.org/10.1109/CEC.2009.4983244
+* Fukunaga AS (2008) A new grouping genetic algorithm for the Multiple Knapsack Problem. In: 2008 IEEE Congress on Evolutionary Computation (IEEE World Congress on Computational Intelligence). pp 2225–2232, https://doi.org/10.1109/CEC.2008.4631094
+* Fukunaga AS, Korf RE (2007) Bin Completion Algorithms for Multicontainer Packing, Knapsack, and Covering Problems. Journal of Artificial Intelligence Research 28:393–429. https://doi.org/10.1613/jair.2106
+* Kellerer H, Pferschy U, Pisinger D (2004) Knapsack Problems. Springer Berlin Heidelberg, Berlin, Heidelberg
+* Pisinger D (1999) An exact algorithm for large multiple knapsack problems. European Journal of Operational Research 114:528–541. https://doi.org/10.1016/S0377-2217(98)00120-9
+* Martello S, Toth P (1990) Knapsack problems: algorithms and computer implementations. John Wiley & Sons, Inc.
+* Martello S, Toth P (1981a) A Bound and Bound algorithm for the zero-one multiple knapsack problem. Discrete Applied Mathematics 3:275–288. https://doi.org/10.1016/0166-218X(81)90005-6
+* Martello S, Toth P (1981b) Heuristische Algorithmen zur Packung von mehreren Rucksäcken. Computing 27:93–112. https://doi.org/10.1007/BF02243544
+* Martello S, Toth P (1980) Solution of the zero-one multiple knapsack problem. European Journal of Operational Research 4:276–283. https://doi.org/10.1016/0377-2217(80)90112-5
+* Hung MS, Fisk JC (1978) An algorithm for 0-1 multiple-knapsack problems. Naval Research Logistics Quarterly 25:571–579. https://doi.org/10.1002/nav.3800250316
+* Ingargiola G, Korsh JF (1975) An Algorithm for the Solution of 0-1 Loading Problems. Operations Research 23:1110–1119. https://doi.org/10.1287/opre.23.6.1110
 
 </p>
 </details>
@@ -133,21 +235,20 @@ The data also include CSV files listing the instances for each problem and their
 <details><summary>Literature</summary>
 <p>
 
-* Literature:
-  * "The quadratic multiple knapsack problem and three heuristic approaches to it" (Hiley et Julstrom, 2006) [DOI](https://doi.org/10.1145/1143997.1144096)
-  * "A Genetic Algorithm for the Quadratic Multiple Knapsack Problem" (Sara et Sipahioglu, 2007) [DOI](https://doi.org/10.1007/978-3-540-75555-5_47)
-  * "A New Grouping Genetic Algorithm for the Quadratic Multiple Knapsack Problem" (Singh et Baghel, 2007) [DOI](https://doi.org/10.1007/978-3-540-71615-0_19)
-  * "A Swarm Intelligence Approach to the Quadratic Multiple Knapsack Problem" (Sundar et Singh, 2010) [DOI](https://doi.org/10.1007/978-3-642-17537-4_76)
-  * "Strategic oscillation for the quadratic multiple knapsack problem" (García-Martínez et al., 2013) [DOI](https://doi.org/10.1007/s10589-013-9623-y)
-  * "Tabu-enhanced iterated greedy algorithm: A case study in the quadratic multiple knapsack problem" (García-Martínez et al., 2014) [DOI](https://doi.org/10.1016/j.ejor.2013.07.035)
-  * "Iterated responsive threshold search for the quadratic multiple knapsack problem" (Chen et Hao, 2015) [DOI](https://doi.org/10.1007/s10479-014-1720-5)
-  * "An evolutionary path relinking approach for the quadratic multiple knapsack problem" (Chen et al., 2016) [DOI](https://doi.org/10.1016/j.knosys.2015.10.004)
-  * "Hybridization of tabu search with feasible and infeasible local searches for the quadratic multiple knapsack problem" (Qin et al., 2016) [DOI](https://doi.org/10.1016/j.cor.2015.08.002)
-  * "An ejection chain approach for the quadratic multiple knapsack problem" (Peng et al., 2016) [DOI](https://doi.org/10.1016/j.ejor.2016.02.043)
-  * "An Exact Algorithm for the Quadratic Multiknapsack Problem with an Application to Event Seating" (Bergman, 2019) [DOI](https://doi.org/10.1287/ijoc.2018.0840)
-  * "Branch and solve strategies-based algorithm for the quadratic multiple knapsack problem" (Aïder et al., 2020) [DOI](https://doi.org/10.1080/01605682.2020.1843982)
-  * "A branch-and-bound algorithm for the quadratic multiple knapsack problem" (Fleszar, 2021) [DOI](https://doi.org/10.1016/j.ejor.2021.06.018)
-  * "Polynomial-size formulations and relaxations for the quadratic multiple knapsack problem" (Galli et al., 2021) [DOI](https://doi.org/10.1016/j.ejor.2020.10.047)
+* Fleszar K (2021) A Branch-and-Bound Algorithm for the Quadratic Multiple Knapsack Problem. European Journal of Operational Research. https://doi.org/10.1016/j.ejor.2021.06.018
+* Galli L, Martello S, Rey C, Toth P (2021) Polynomial-size formulations and relaxations for the quadratic multiple knapsack problem. European Journal of Operational Research 291:871–882. https://doi.org/10.1016/j.ejor.2020.10.047
+* Aïder M, Gacem O, Hifi M (2020) Branch and solve strategies-based algorithm for the quadratic multiple knapsack problem. Journal of the Operational Research Society 0:1–18. https://doi.org/10.1080/01605682.2020.1843982
+* Bergman D (2019) An Exact Algorithm for the Quadratic Multiknapsack Problem with an Application to Event Seating. INFORMS Journal on Computing 31:477–492. https://doi.org/10.1287/ijoc.2018.0840
+* Peng B, Liu M, Lü Z, et al (2016) An ejection chain approach for the quadratic multiple knapsack problem. European Journal of Operational Research 253:328–336. https://doi.org/10.1016/j.ejor.2016.02.043
+* Qin J, Xu X, Wu Q, Cheng TCE (2016) Hybridization of tabu search with feasible and infeasible local searches for the quadratic multiple knapsack problem. Computers & Operations Research 66:199–214. https://doi.org/10.1016/j.cor.2015.08.002
+* Chen Y, Hao J-K, Glover F (2016) An evolutionary path relinking approach for the quadratic multiple knapsack problem. Knowledge-Based Systems 92:23–34. https://doi.org/10.1016/j.knosys.2015.10.004
+* Chen Y, Hao J-K (2015) Iterated responsive threshold search for the quadratic multiple knapsack problem. Ann Oper Res 226:101–131. https://doi.org/10.1007/s10479-014-1720-5
+* García-Martínez C, Glover F, Rodriguez FJ, et al (2014a) Strategic oscillation for the quadratic multiple knapsack problem. Comput Optim Appl 58:161–185. https://doi.org/10.1007/s10589-013-9623-y
+* García-Martínez C, Rodriguez FJ, Lozano M (2014b) Tabu-enhanced iterated greedy algorithm: A case study in the quadratic multiple knapsack problem. European Journal of Operational Research 232:454–463. https://doi.org/10.1016/j.ejor.2013.07.035
+* Sundar S, Singh A (2010) A Swarm Intelligence Approach to the Quadratic Multiple Knapsack Problem. In: Wong KW, Mendis BSU, Bouzerdoum A (eds) Neural Information Processing. Theory and Algorithms. Springer, Berlin, Heidelberg, pp 626–633, https://doi.org/10.1007/978-3-642-17537-4_76
+* Saraç T, Sipahioglu A (2007) A Genetic Algorithm for the Quadratic Multiple Knapsack Problem. In: Mele F, Ramella G, Santillo S, Ventriglia F (eds) Advances in Brain, Vision, and Artificial Intelligence. Springer, Berlin, Heidelberg, pp 490–498, https://doi.org/10.1007/978-3-540-75555-5_47
+* Singh A, Baghel AS (2007) A New Grouping Genetic Algorithm for the Quadratic Multiple Knapsack Problem. In: Cotta C, van Hemert J (eds) Evolutionary Computation in Combinatorial Optimization. Springer, Berlin, Heidelberg, pp 210–218, https://doi.org/10.1007/978-3-540-71615-0_19
+* Hiley A, Julstrom BA (2006) The quadratic multiple knapsack problem and three heuristic approaches to it. In: Proceedings of the 8th annual conference on Genetic and evolutionary computation. Association for Computing Machinery, New York, NY, USA, pp 547–552, https://doi.org/10.1145/1143997.1144096
 
 </p>
 </details>
@@ -160,12 +261,11 @@ The data also include CSV files listing the instances for each problem and their
 <details><summary>Literature</summary>
 <p>
 
-* Literature:
-  * "Generalized quadratic multiple knapsack problem and two solution approaches" (Saraç et Sipahioglu, 2014) [DOI](https://doi.org/10.1016/j.cor.2013.08.018)
-  * "Memetic Search for the Generalized Quadratic Multiple Knapsack Problem" (Chen et Hao, 2016) [DOI](https://doi.org/10.1109/TEVC.2016.2546340)
-  * "A multi-start iterated local search algorithm for the generalized quadratic multiple knapsack problem" (Avci et Topaloglu, 2017) [DOI](https://doi.org/10.1016/j.cor.2017.02.004)
-  * "A matheuristic for the 0–1 generalized quadratic multiple knapsack problem" (Adouani et al., 2019) [DOI](https://doi.org/10.1007/s11590-019-01503-z)
-  * "A hybrid evolutionary search for the generalized quadratic multiple knapsack problem" (Zhou et al., 2022) [DOI](https://doi.org/10.1016/j.ejor.2021.04.001)
+* Zhou Q, Hao J-K, Wu Q (2021) A hybrid evolutionary search for the generalized quadratic multiple knapsack problem. European Journal of Operational Research. https://doi.org/10.1016/j.ejor.2021.04.001
+* Adouani Y, Jarboui B, Masmoudi M (2019) A matheuristic for the 0–1 generalized quadratic multiple knapsack problem. Optim Lett. https://doi.org/10.1007/s11590-019-01503-z
+* Avci M, Topaloglu S (2017) A multi-start iterated local search algorithm for the generalized quadratic multiple knapsack problem. Computers & Operations Research 83:54–65. https://doi.org/10.1016/j.cor.2017.02.004
+* Chen Y, Hao J-K (2016) Memetic Search for the Generalized Quadratic Multiple Knapsack Problem. IEEE Transactions on Evolutionary Computation 20:908–923. https://doi.org/10.1109/TEVC.2016.2546340
+* Saraç T, Sipahioglu A (2014) Generalized quadratic multiple knapsack problem and two solution approaches. Computers & Operations Research 43:78–89. https://doi.org/10.1016/j.cor.2013.08.018
 
 </p>
 </details>
@@ -179,12 +279,11 @@ The data also include CSV files listing the instances for each problem and their
 <details><summary>Literature</summary>
 <p>
 
-* Literature:
-  * "Algorithms for the Bin Packing Problem with Conflicts" (Muritiba et al., 2010) [DOI](https://doi.org/10.1287/ijoc.1090.0355)
-  * "A Branch-and-Price Algorithm for the Bin Packing Problem with Conflicts" (Elhedhli et al., 2010) [DOI](https://doi.org/10.1287/ijoc.1100.0406)
-  * "Bin Packing with Conflicts: A Generic Branch-and-Price Algorithm" (Sadykov et Vanderbeck, 2012) [DOI](https://doi.org/10.1287/ijoc.1120.0499)
-  * "Bin packing and related problems: General arc-flow formulation with graph compression" (Brandão et Pedroso, 2016) [DOI](https://doi.org/10.1016/j.cor.2015.11.009)
-  * "A New Branch-and-Price-and-Cut Algorithm for One-Dimensional Bin-Packing Problems" (Wei et al., 2019) [DOI](https://doi.org/10.1287/ijoc.2018.0867)
+* Wei L, Luo Z, Baldacci R, Lim A (2019) A New Branch-and-Price-and-Cut Algorithm for One-Dimensional Bin-Packing Problems. INFORMS Journal on Computing. https://doi.org/10.1287/ijoc.2018.0867
+* Brandão F, Pedroso JP (2016) Bin packing and related problems: General arc-flow formulation with graph compression. Computers & Operations Research 69:56–67. https://doi.org/10.1016/j.cor.2015.11.009
+* Sadykov R, Vanderbeck F (2012) Bin Packing with Conflicts: A Generic Branch-and-Price Algorithm. INFORMS Journal on Computing 25:244–255. https://doi.org/10.1287/ijoc.1120.0499
+* Elhedhli S, Li L, Gzara M, Naoum-Sawaya J (2010) A Branch-and-Price Algorithm for the Bin Packing Problem with Conflicts. INFORMS Journal on Computing 23:404–415. https://doi.org/10.1287/ijoc.1100.0406
+* Muritiba AEF, Iori M, Malaguti E, Toth P (2010) Algorithms for the Bin Packing Problem with Conflicts. INFORMS J on Computing 22:401–415. https://doi.org/10.1287/ijoc.1090.0355
 
 </p>
 </details>
