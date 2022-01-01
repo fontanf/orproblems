@@ -202,16 +202,23 @@ The data also include CSV files listing the instances for each problem and their
 <details><summary>Literature</summary>
 <p>
 
-* Literature:
-  * "An effective implementation of the Lin–Kernighan traveling salesman heuristic" (Helsgaun, 2000) [DOI](https://doi.org/10.1016/S0377-2217(99)00284-2)
-  * "Chained Lin-Kernighan for Large Traveling Salesman Problems" (Applegate et al., 2003) [DOI](https://doi.org/10.1287/ijoc.15.1.82.15157)
-  * "Data structures and ejection chains for solving large-scale traveling salesman problems" (Gamboa et al., 2005) [DOI](https://doi.org/10.1016/j.ejor.2004.04.023)
-  * "Implementation analysis of efficient heuristic algorithms for the traveling salesman problem" (Gamboa et al., 2006) [DOI](https://doi.org/10.1016/j.cor.2005.06.014)
-  * "General k-opt submoves for the Lin–Kernighan TSP heuristic" (Helsgaun, 2009) [DOI](https://doi.org/10.1007/s12532-009-0004-6)
-  * "Traveling salesman problem heuristics: Leading methods, implementations and latest advances" (Rego et al., 2011) [DOI](https://doi.org/10.1016/j.ejor.2010.09.010)
-  * "A k-level data structure for large-scale traveling salesman problems" (Osterman et Rego, 2016) [DOI](https://doi.org/10.1007/s10479-016-2159-7)
-  * "POPMUSIC for the travelling salesman problem" (Taillard e tHelsgaun, 2019) [DOI](https://doi.org/10.1016/j.ejor.2018.06.039)
-  * "A linearithmic heuristic for the travelling salesman problem" (Taillard, 2021) [DOI](https://doi.org/10.1016/j.ejor.2021.05.034)
+* Taillard ÉD (2021) A linearithmic Heuristic for the Travelling Salesman Problem. European Journal of Operational Research. https://doi.org/10.1016/j.ejor.2021.05.034
+* Taillard ÉD, Helsgaun K (2019) POPMUSIC for the travelling salesman problem. European Journal of Operational Research 272:420–429. https://doi.org/10.1016/j.ejor.2018.06.039
+* Osterman C, Rego C (2016) A k-level data structure for large-scale traveling salesman problems. Ann Oper Res 244:583–601. https://doi.org/10.1007/s10479-016-2159-7
+* Applegate DL, Bixby RE, Chvátal V, Cook WJ (2011) The Traveling Salesman Problem: A Computational Study. Princeton University Press
+* Rego C, Gamboa D, Glover F, Osterman C (2011) Traveling salesman problem heuristics: Leading methods, implementations and latest advances. European Journal of Operational Research 211:427–441. https://doi.org/10.1016/j.ejor.2010.09.010
+* Helsgaun K (2009) General k-opt submoves for the Lin–Kernighan TSP heuristic. Math Prog Comp 1:119–163. https://doi.org/10.1007/s12532-009-0004-6
+* Merz P, Huhse J (2008) An Iterated Local Search Approach for Finding Provably Good Solutions for Very Large TSP Instances. In: Rudolph G, Jansen T, Beume N, et al. (eds) Parallel Problem Solving from Nature – PPSN X. Springer, Berlin, Heidelberg, pp 929–939, https://doi.org/10.1007/978-3-540-87700-4_92
+* Gamboa D, Rego C, Glover F (2006) Implementation analysis of efficient heuristic algorithms for the traveling salesman problem. Computers & Operations Research 33:1154–1172. https://doi.org/10.1016/j.cor.2005.06.014
+* Gamboa D, Rego C, Glover F (2005) Data structures and ejection chains for solving large-scale traveling salesman problems. European Journal of Operational Research 160:154–171. https://doi.org/10.1016/j.ejor.2004.04.023
+* Applegate D, Cook W, Rohe A (2003) Chained Lin-Kernighan for Large Traveling Salesman Problems. INFORMS Journal on Computing 15:82–92. https://doi.org/10.1287/ijoc.15.1.82.15157
+* Helsgaun K (2000) An effective implementation of the Lin–Kernighan traveling salesman heuristic. European Journal of Operational Research 126:106–130. https://doi.org/10.1016/S0377-2217(99)00284-2
+* Voudouris C, Tsang E (1999) Guided local search and its application to the traveling salesman problem. European Journal of Operational Research 113:469–499. https://doi.org/10.1016/S0377-2217(98)00099-X
+* Potvin J-Y (1996) Genetic algorithms for the traveling salesman problem. Ann Oper Res 63:337–370. https://doi.org/10.1007/BF02125403
+* Gendreau M, Hertz A, Laporte G (1992) New Insertion and Postoptimization Procedures for the Traveling Salesman Problem. Operations Research 40:1086–1094. https://doi.org/10.1287/opre.40.6.1086
+* Bentley JJ (1992) Fast Algorithms for Geometric Traveling Salesman Problems. ORSA Journal on Computing 4:387–411. https://doi.org/10.1287/ijoc.4.4.387
+* Laporte G (1992) The traveling salesman problem: An overview of exact and approximate algorithms. European Journal of Operational Research 59:231–247. https://doi.org/10.1016/0377-2217(92)90138-Y
+* Bentley JL (1990) Experiments on traveling salesman heuristics. In: Proceedings of the first annual ACM-SIAM symposium on Discrete algorithms. Society for Industrial and Applied Mathematics, USA, pp 91–99
 
 </p>
 </details>
@@ -225,12 +232,26 @@ The data also include CSV files listing the instances for each problem and their
 <details><summary>Literature</summary>
 <p>
 
-* Literature:
-  * "A hybrid particle swarm optimization approach for the sequential ordering problem" (Anghinolfi et al., 2011) [DOI](https://doi.org/10.1016/j.cor.2010.10.014)
-  * "A bee colony optimization with automated parameter tuning for sequential ordering problem" (Wun et al., 2014) [DOI](https://doi.org/10.1109/WICT.2014.7077286)
-  * "An improved Ant Colony System for the Sequential Ordering Problem" (Skinderowicz, 2017) [DOI](https://doi.org/10.1016/j.cor.2017.04.012)
-  * "An extension of the Lin-Kernighan-Helsgaun TSP solver for constrained traveling salesman and vehicle routing problems" (Helsgaun, 2017)
-  * "Tree search algorithms for the Sequential Ordering Problem" (Libralesso et al., 2019)
+* Jamal J, Shobaki G, Papapanagiotou V, et al (2017) Solving the sequential ordering problem using branch and bound. In: 2017 IEEE Symposium Series on Computational Intelligence (SSCI). pp 1–9, https://doi.org/10.1109/SSCI.2017.8280805
+* Skinderowicz R (2017) An improved Ant Colony System for the Sequential Ordering Problem. Computers & Operations Research 86:1–17. https://doi.org/10.1016/j.cor.2017.04.012
+* Papapanagiotou V, Jamal J, Montemanni R, et al (2015) A comparison of two exact algorithms for the sequential ordering problem. In: 2015 IEEE Conference on Systems, Process and Control (ICSPC). pp 73–78, https://doi.org/10.1109/SPC.2015.7473562
+* Shobaki G, Jamal J (2015) An exact algorithm for the sequential ordering problem and its application to switching energy minimization in compilers. Comput Optim Appl 61:343–372. https://doi.org/10.1007/s10589-015-9725-9
+* Skinderowicz R (2015) Population-Based Ant Colony Optimization for Sequential Ordering Problem. In: Núñez M, Nguyen NT, Camacho D, Trawiński B (eds) Computational Collective Intelligence. Springer International Publishing, Cham, pp 99–109, https://doi.org/10.1007/978-3-319-24306-1_10
+* Wun MH, Wong L-P, Khader AT, Tan T-P (2014) A bee colony optimization with automated parameter tuning for sequential ordering problem. In: 2014 4th World Congress on Information and Communication Technologies (WICT 2014). pp 314–319, https://doi.org/10.1109/WICT.2014.7077286
+* Ezzat A, Abdelbar AM, Wunsch DC (2014) A bare-bones ant colony optimization algorithm that performs competitively on the sequential ordering problem. Memetic Comp 6:19–29. https://doi.org/10.1007/s12293-013-0129-z
+* Sung J, Jeong B (2014) An Adaptive Evolutionary Algorithm for Traveling Salesman Problem with Precedence Constraints. The Scientific World Journal 2014:e313767. https://doi.org/10.1155/2014/313767
+* Gambardella LM, Montemanni R, Weyland D (2012a) Coupling ant colony systems with strong local searches. European Journal of Operational Research 220:831–843. https://doi.org/10.1016/j.ejor.2012.02.038
+* Gambardella LM, Montemanni R, Weyland D (2012b) An Enhanced Ant Colony System for the Sequential Ordering Problem. In: Klatte D, Lüthi H-J, Schmedders K (eds) Operations Research Proceedings 2011. Springer, Berlin, Heidelberg, pp 355–360, https://doi.org/10.1007/978-3-642-29210-1_57
+* Anghinolfi D, Montemanni R, Paolucci M, Maria Gambardella L (2011) A hybrid particle swarm optimization approach for the sequential ordering problem. Computers & Operations Research 38:1076–1085. https://doi.org/10.1016/j.cor.2010.10.014
+* Montemanni R, Smith DH, Gambardella LM (2008) A heuristic manipulation technique for the sequential ordering problem. Computers & Operations Research 35:3931–3944. https://doi.org/10.1016/j.cor.2007.05.003
+* Guerriero F, Mancini M (2003) A cooperative parallel rollout algorithm for the sequential ordering problem. Parallel Computing 29:663–677. https://doi.org/10.1016/S0167-8191(03)00048-6
+* Seo D-I, Moon B-R (2003) A Hybrid Genetic Algorithm Based on Complete Graph Representation for the Sequential Ordering Problem. In: Cantú-Paz E, Foster JA, Deb K, et al. (eds) Genetic and Evolutionary Computation — GECCO 2003. Springer, Berlin, Heidelberg, pp 669–680, https://doi.org/10.1007/3-540-45105-6_82
+* Moon C, Kim J, Choi G, Seo Y (2002) An efficient genetic algorithm for the traveling salesman problem with precedence constraints. Eur J Oper Res. https://doi.org/10.1016/S0377-2217(01)00227-2
+* Ascheuer N, Jünger M, Reinelt G (2000) A Branch & Cut Algorithm for the Asymmetric Traveling Salesman Problem with Precedence Constraints. Computational Optimization and Applications 17:61–84. https://doi.org/10.1023/A:1008779125567
+* Gambardella LM, Dorigo M (2000) An Ant Colony System Hybridized with a New Local Search for the Sequential Ordering Problem. INFORMS Journal on Computing 12:237–255. https://doi.org/10.1287/ijoc.12.3.237.12636
+* Escudero LF, Guignard M, Malik K (1994) A Lagrangian relax-and-cut approach for the sequential ordering problem with precedence relationships. Ann Oper Res 50:219–237. https://doi.org/10.1007/BF02085641
+* Ascheuer N, Escudero LF, Grötschel M, Stoer M (1993) A Cutting Plane Approach to the Sequential Ordering Problem (with Applications to Job Scheduling in Manufacturing). SIAM J Optim 3:25–42. https://doi.org/10.1137/0803002
+* Escudero LF (1988) An inexact algorithm for the sequential ordering problem. European Journal of Operational Research 37:236–249. https://doi.org/10.1016/0377-2217(88)90333-5
 
 </p>
 </details>
@@ -244,9 +265,17 @@ The data also include CSV files listing the instances for each problem and their
 <details><summary>Literature</summary>
 <p>
 
-* Literature
-  * "Efficient GRASP+VND and GRASP+VNS metaheuristics for the traveling repairman problem" (Salehipour et al., 2011) [DOI](https://doi.org/10.1007/s10288-011-0153-0)
-  * "A simple and effective metaheuristic for the Minimum Latency Problem" (Silva et al., 2012) [DOI](https://doi.org/10.1016/j.ejor.2012.03.044)
+* Santana Í, Plastino A, Rosseti I (2022) Improving a state-of-the-art heuristic for the minimum latency problem with data mining. International Transactions in Operational Research 29:959–986. https://doi.org/10.1111/itor.12774
+* Ramadhan F, Imran A (2019) A Two-Phase Metaheuristic Method for Solving Travelling Repairman Problem. In: 2019 International Conference on Sustainable Engineering and Creative Computing (ICSECC). pp 155–159, https://doi.org/10.1109/ICSECC.2019.8907032
+* Bulhões T, Sadykov R, Uchoa E (2018) A branch-and-price algorithm for the Minimum Latency Problem. Computers & Operations Research 93:66–78. https://doi.org/10.1016/j.cor.2018.01.016
+* Manerba D, Mansini R, Riera-Ledesma J (2017) The Traveling Purchaser Problem and its variants. European Journal of Operational Research 259:1–18. https://doi.org/10.1016/j.ejor.2016.12.017
+* Roberti R, Mingozzi A (2013) Dynamic ng-Path Relaxation for the Delivery Man Problem. Transportation Science 48:413–424. https://doi.org/10.1287/trsc.2013.0474
+* Angel-Bello F, Alvarez A, García I (2013) Two improved formulations for the minimum latency problem. Applied Mathematical Modelling 37:2257–2266. https://doi.org/10.1016/j.apm.2012.05.026
+* Silva MM, Subramanian A, Vidal T, Ochi LS (2012) A simple and effective metaheuristic for the Minimum Latency Problem. European Journal of Operational Research 221:513–520. https://doi.org/10.1016/j.ejor.2012.03.044
+* Salehipour A, Sörensen K, Goos P, Bräysy O (2011) Efficient GRASP+VND and GRASP+VNS metaheuristics for the traveling repairman problem. 4OR-Q J Oper Res 9:189–209. https://doi.org/10.1007/s10288-011-0153-0
+* Ngueveu SU, Prins C, Wolfler Calvo R (2010) An effective memetic algorithm for the cumulative capacitated vehicle routing problem. Computers & Operations Research 37:1877–1885. https://doi.org/10.1016/j.cor.2009.06.014
+* Blum A, Chalasani P, Coppersmith D, et al (1994) The minimum latency problem. In: Proceedings of the twenty-sixth annual ACM symposium on Theory of Computing. Association for Computing Machinery, New York, NY, USA, pp 163–171, https://doi.org/10.1145/195058.195125
+* Fischetti M, Laporte G, Martello S (1993) The Delivery Man Problem and Cumulative Matroids. Operations Research 41:1055–1064. https://doi.org/10.1287/opre.41.6.1055
 
 </p>
 </details>
@@ -264,9 +293,9 @@ The data also include CSV files listing the instances for each problem and their
 <details><summary>Literature</summary>
 <p>
 
-* Literature:
-  * "The Thief Orienteering Problem: Formulation and Heuristic Approaches" (Santos et Chagas, 2018) [DOI](https://doi.org/10.1109/CEC.2018.8477853)
-  * "Ants can orienteer a thief in their robbery" (Chagas et Wagner, 2020) [DOI](https://doi.org/10.1016/j.orl.2020.08.011)
+* Chagas JBC, Wagner M (2021) Efficiently solving the thief orienteering problem with a max–min ant colony optimization approach. Optim Lett. https://doi.org/10.1007/s11590-021-01824-y
+* Chagas JBC, Wagner M (2020) Ants can orienteer a thief in their robbery. Operations Research Letters. https://doi.org/10.1016/j.orl.2020.08.011
+* Santos AG, Chagas JBC (2018) The Thief Orienteering Problem: Formulation and Heuristic Approaches. In: 2018 IEEE Congress on Evolutionary Computation (CEC). pp 1–9, https://doi.org/10.1109/CEC.2018.8477853
 
 </p>
 </details>
@@ -281,14 +310,20 @@ The data also include CSV files listing the instances for each problem and their
 <details><summary>Literature</summary>
 <p>
 
-* Literature:
-  * "New benchmark instances for the Capacitated Vehicle Routing Problem" (Uchoa et al., 2017) [DOI](https://doi.org/10.1016/j.ejor.2016.08.012)
-  * "Heuristics for vehicle routing problems: Sequence or set optimization?" (Toffolo et al., 2019) [DOI](https://doi.org/10.1016/j.cor.2018.12.023)
-  * "Slack Induction by String Removals for Vehicle Routing Problems" (Christiaens et Vanden Berghe, 2020) [DOI](https://doi.org/10.1287/trsc.2019.0914)
-  * "A hybrid adaptive iterated local search with diversification control to the capacitated vehicle routing problem" (Máximo et Nascimento, 2021) [DOI](https://doi.org/10.1016/j.ejor.2021.02.024)
-  * "A Fast and Scalable Heuristic for the Solution of Large-Scale Capacitated Vehicle Routing Problems" (Accorsi et Vigo, 2021) [DOI](https://doi.org/10.1287/trsc.2021.1059)
-  * "A POPMUSIC matheuristic for the capacitated vehicle routing problem" (Queiroga et al., 2021) [DOI](https://doi.org/10.1016/j.cor.2021.105475)
-  * "Hybrid genetic search for the CVRP: Open-source implementation and SWAP\* neighborhood" (Vidal, 2021) [DOI](https://doi.org/10.1016/j.cor.2021.105643)
+* Vidal T (2021) Hybrid genetic search for the CVRP: Open-source implementation and SWAP\* neighborhood. Computers & Operations Research 105643. https://doi.org/10.1016/j.cor.2021.105643
+* Queiroga E, Sadykov R, Uchoa E (2021) A POPMUSIC matheuristic for the capacitated vehicle routing problem. Computers & Operations Research 105475. https://doi.org/10.1016/j.cor.2021.105475
+* Accorsi L, Vigo D (2021) A Fast and Scalable Heuristic for the Solution of Large-Scale Capacitated Vehicle Routing Problems. Transportation Science. https://doi.org/10.1287/trsc.2021.1059
+* Máximo VR, Nascimento MCV (2021) A hybrid adaptive Iterated Local Search with diversification control to the Capacitated Vehicle Routing Problem. European Journal of Operational Research. https://doi.org/10.1016/j.ejor.2021.02.024
+* Christiaens J, Vanden Berghe G (2020) Slack Induction by String Removals for Vehicle Routing Problems. Transportation Science 54:417–433. https://doi.org/10.1287/trsc.2019.0914
+* Toffolo TAM, Vidal T, Wauters T (2019) Heuristics for vehicle routing problems: Sequence or set optimization? Computers & Operations Research 105:118–131. https://doi.org/10.1016/j.cor.2018.12.023
+* Uchoa E, Pecin D, Pessoa A, et al (2017) New benchmark instances for the Capacitated Vehicle Routing Problem. European Journal of Operational Research 257:845–858. https://doi.org/10.1016/j.ejor.2016.08.012
+* Vidal T, Crainic TG, Gendreau M, Prins C (2014) A unified solution framework for multi-attribute vehicle routing problems. European Journal of Operational Research 234:658–673. https://doi.org/10.1016/j.ejor.2013.09.045
+* Subramanian A, Uchoa E, Ochi LS (2013) A hybrid algorithm for a class of vehicle routing problems. Computers & Operations Research 40:2519–2531. https://doi.org/10.1016/j.cor.2013.01.013
+* Prins C (2009) A GRASP × Evolutionary Local Search Hybrid for the Vehicle Routing Problem. In: Pereira FB, Tavares J (eds) Bio-inspired Algorithms for the Vehicle Routing Problem. Springer, Berlin, Heidelberg, pp 35–53, https://doi.org/10.1007/978-3-540-85152-3_2
+* Prins C (2004) A simple and effective evolutionary algorithm for the vehicle routing problem. Computers & Operations Research 31:1985–2002. https://doi.org/10.1016/S0305-0548(03)00158-8
+* Beasley J (1983) Route first—Cluster second methods for vehicle routing. Omega 11:403–408. https://doi.org/10.1016/0305-0483(83)90033-6
+* Clarke G, Wright JW (1964) Scheduling of Vehicles from a Central Depot to a Number of Delivery Points. Operations Research 12:568–581. https://doi.org/10.1287/opre.12.4.568
+* Dantzig GB, Ramser JH (1959) The Truck Dispatching Problem. Management Science 6:80–91. https://doi.org/10.1287/mnsc.6.1.80
 
 </p>
 </details>
@@ -302,13 +337,14 @@ The data also include CSV files listing the instances for each problem and their
 <details><summary>Literature</summary>
 <p>
 
-* Literature:
-  * "A general heuristic for vehicle routing problems" (Pisinger et Ropke, 2007) [DOI](https://doi.org/10.1016/j.cor.2005.09.012)
-  * "Arc-Guided Evolutionary Algorithm for the Vehicle Routing Problem With Time Windows" (Repoussis et al., 2009) [DOI](https://doi.org/10.1109/TEVC.2008.2011740)
-  * "A penalty-based edge assembly memetic algorithm for the vehicle routing problem with time windows" (Nagata et al., 2010) [DOI](https://doi.org/10.1016/j.cor.2009.06.022)
-  * "A spatiotemporal partitioning approach for large-scale vehicle routing problems with time windows" (Qi et al., 2012) [DOI](https://doi.org/10.1016/j.tre.2011.07.001)
-  * "A hybrid genetic algorithm with adaptive diversity management for a large class of vehicle routing problems with time-windows" (Vidal et al., 2013) [DOI](https://doi.org/10.1016/j.cor.2012.07.018)
-  * "Slack Induction by String Removals for Vehicle Routing Problems" (Christiaens et Vanden Berghe, 2020) [DOI](https://doi.org/10.1287/trsc.2019.0914)
+* Christiaens J, Vanden Berghe G (2020) Slack Induction by String Removals for Vehicle Routing Problems. Transportation Science 54:417–433. https://doi.org/10.1287/trsc.2019.0914
+* Vidal T, Crainic TG, Gendreau M, Prins C (2015) Time-window relaxations in vehicle routing heuristics. J Heuristics 21:329–358. https://doi.org/10.1007/s10732-014-9273-y
+* Vidal T, Crainic TG, Gendreau M, Prins C (2013) A hybrid genetic algorithm with adaptive diversity management for a large class of vehicle routing problems with time-windows. Computers & Operations Research 40:475–489. https://doi.org/10.1016/j.cor.2012.07.018
+* Qi M, Lin W-H, Li N, Miao L (2012) A spatiotemporal partitioning approach for large-scale vehicle routing problems with time windows. Transportation Research Part E: Logistics and Transportation Review 48:248–257. https://doi.org/10.1016/j.tre.2011.07.001
+* Nagata Y, Bräysy O, Dullaert W (2010) A penalty-based edge assembly memetic algorithm for the vehicle routing problem with time windows. Computers & Operations Research 37:724–737. https://doi.org/10.1016/j.cor.2009.06.022
+* Repoussis PP, Tarantilis CD, Ioannou G (2009) Arc-Guided Evolutionary Algorithm for the Vehicle Routing Problem With Time Windows. IEEE Transactions on Evolutionary Computation 13:624–647. https://doi.org/10.1109/TEVC.2008.2011740
+* Pisinger D, Ropke S (2007) A general heuristic for vehicle routing problems. Computers & Operations Research 34:2403–2435. https://doi.org/10.1016/j.cor.2005.09.012
+* Gehring H, Homberger J (1999) A parallel hybrid evolutionary metaheuristic for the vehicle routing problem with time windows. In: Proceedings of EUROGEN99. Citeseer, pp 57–64
 
 </p>
 </details>
@@ -322,8 +358,15 @@ The data also include CSV files listing the instances for each problem and their
 <details><summary>Literature</summary>
 <p>
 
-* Literature:
-  * "A hybrid evolution strategy for the open vehicle routing problem" (Repoussis et al., 2010) [DOI](https://doi.org/10.1016/j.cor.2008.11.003)
+* Vidal T, Crainic TG, Gendreau M, Prins C (2014) A unified solution framework for multi-attribute vehicle routing problems. European Journal of Operational Research 234:658–673. https://doi.org/10.1016/j.ejor.2013.09.045
+* Marinakis Y, Marinaki M (2014) A Bumble Bees Mating Optimization algorithm for the Open Vehicle Routing Problem. Swarm and Evolutionary Computation 15:80–94. https://doi.org/10.1016/j.swevo.2013.12.003
+* Subramanian A, Uchoa E, Ochi LS (2013) A hybrid algorithm for a class of vehicle routing problems. Computers & Operations Research 40:2519–2531. https://doi.org/10.1016/j.cor.2013.01.013
+* Norouzi N, Tavakkoli-Moghaddam R, Ghazanfari M, et al (2012) A New Multi-objective Competitive Open Vehicle Routing Problem Solved by Particle Swarm Optimization. Netw Spat Econ 12:609–633. https://doi.org/10.1007/s11067-011-9169-4
+* Zachariadis EE, Kiranoudis CT (2010) An open vehicle routing problem metaheuristic for examining wide solution neighborhoods. Computers & Operations Research 37:712–723. https://doi.org/10.1016/j.cor.2009.06.021
+* Repoussis PP, Tarantilis CD, Bräysy O, Ioannou G (2010) A hybrid evolution strategy for the open vehicle routing problem. Computers & Operations Research 37:443–455. https://doi.org/10.1016/j.cor.2008.11.003
+* Fleszar K, Osman IH, Hindi KS (2009) A variable neighbourhood search algorithm for the open vehicle routing problem. European Journal of Operational Research 195:803–809. https://doi.org/10.1016/j.ejor.2007.06.064
+* Pisinger D, Ropke S (2007) A general heuristic for vehicle routing problems. Computers & Operations Research 34:2403–2435. https://doi.org/10.1016/j.cor.2005.09.012
+* Sariklis D, Powell S (2000) A heuristic method for the open vehicle routing problem. Journal of the Operational Research Society 51:564–573. https://doi.org/10.1057/palgrave.jors.2600924
 
 </p>
 </details>
