@@ -104,11 +104,11 @@ public:
         std::vector<Time> times(m, 0);
         JobId j = 0;
         optimizationtools::IndexedSet jobs(n);
-        JobPos duplicates = 0;
+        JobPos number_of_duplicates = 0;
         Time total_tardiness = 0;
         while (file >> j) {
             if (jobs.contains(j)) {
-                duplicates++;
+                number_of_duplicates++;
                 if (verbose == 2)
                     std::cout << "Job " << j << " already scheduled." << std::endl;
             }
@@ -133,12 +133,12 @@ public:
 
         bool feasible
             = (jobs.size() == n)
-            && (duplicates == 0);
+            && (number_of_duplicates == 0);
         if (verbose == 2)
             std::cout << "---" << std::endl;
         if (verbose >= 1) {
             std::cout << "Number of jobs:         " << jobs.size() << " / " << n  << std::endl;
-            std::cout << "Number of duplicates:   " << duplicates << std::endl;
+            std::cout << "Number of duplicates:   " << number_of_duplicates << std::endl;
             std::cout << "Feasible:               " << feasible << std::endl;
             std::cout << "Total tardiness:        " << total_tardiness << std::endl;
         }
