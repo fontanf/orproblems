@@ -331,6 +331,7 @@ The data also include CSV files listing the instances for each problem and their
 <details><summary>Literature</summary>
 <p>
 
+* Libralesso L, Bouhassoun A-M, Cambazard H, Jost V (2020) Tree Search for the Sequential Ordering Problem. In: ECAI 2020 - 24th European Conference on Artificial Intelligence, 29 August-8 September 2020, Santiago de Compostela, Spain, August 29 - September 8, 2020 - Including 10th Conference on Prestigious Applications of Artificial Intelligence (PAIS 2020). pp 459–465, https://doi.org/10.3233/FAIA200126
 * Jamal J, Shobaki G, Papapanagiotou V, et al (2017) Solving the sequential ordering problem using branch and bound. In: 2017 IEEE Symposium Series on Computational Intelligence (SSCI). pp 1–9, https://doi.org/10.1109/SSCI.2017.8280805
 * Skinderowicz R (2017) An improved Ant Colony System for the Sequential Ordering Problem. Computers & Operations Research 86:1–17. https://doi.org/10.1016/j.cor.2017.04.012
 * Papapanagiotou V, Jamal J, Montemanni R, et al (2015) A comparison of two exact algorithms for the sequential ordering problem. In: 2015 IEEE Conference on Systems, Process and Control (ICSPC). pp 73–78, https://doi.org/10.1109/SPC.2015.7473562
@@ -368,11 +369,17 @@ The data also include CSV files listing the instances for each problem and their
 * Ramadhan F, Imran A (2019) A Two-Phase Metaheuristic Method for Solving Travelling Repairman Problem. In: 2019 International Conference on Sustainable Engineering and Creative Computing (ICSECC). pp 155–159, https://doi.org/10.1109/ICSECC.2019.8907032
 * Bulhões T, Sadykov R, Uchoa E (2018) A branch-and-price algorithm for the Minimum Latency Problem. Computers & Operations Research 93:66–78. https://doi.org/10.1016/j.cor.2018.01.016
 * Manerba D, Mansini R, Riera-Ledesma J (2017) The Traveling Purchaser Problem and its variants. European Journal of Operational Research 259:1–18. https://doi.org/10.1016/j.ejor.2016.12.017
+* Ha BB, Duc NN (2013) A meta-heuristic algorithm combining between Tabu and Variable Neighborhood Search for the Minimum Latency Problem. In: The 2013 RIVF International Conference on Computing Communication Technologies - Research, Innovation, and Vision for Future (RIVF). pp 192–197, https://doi.org/10.1109/RIVF.2013.6719892
 * Roberti R, Mingozzi A (2013) Dynamic ng-Path Relaxation for the Delivery Man Problem. Transportation Science 48:413–424. https://doi.org/10.1287/trsc.2013.0474
+* Mladenović N, Urošević D, Hanafi S (2013) Variable neighborhood search for the travelling deliveryman problem. 4OR-Q J Oper Res 11:57–73. https://doi.org/10.1007/s10288-012-0212-1
 * Angel-Bello F, Alvarez A, García I (2013) Two improved formulations for the minimum latency problem. Applied Mathematical Modelling 37:2257–2266. https://doi.org/10.1016/j.apm.2012.05.026
+* Ban HB, Nguyen K, Ngo MC, Nguyen DN (2013) An efficient exact algorithm for Minimum Latency Problem. J PI 10:1–8
 * Silva MM, Subramanian A, Vidal T, Ochi LS (2012) A simple and effective metaheuristic for the Minimum Latency Problem. European Journal of Operational Research 221:513–520. https://doi.org/10.1016/j.ejor.2012.03.044
 * Salehipour A, Sörensen K, Goos P, Bräysy O (2011) Efficient GRASP+VND and GRASP+VNS metaheuristics for the traveling repairman problem. 4OR-Q J Oper Res 9:189–209. https://doi.org/10.1007/s10288-011-0153-0
 * Ngueveu SU, Prins C, Wolfler Calvo R (2010) An effective memetic algorithm for the cumulative capacitated vehicle routing problem. Computers & Operations Research 37:1877–1885. https://doi.org/10.1016/j.cor.2009.06.014
+* Bang BH, Nghia ND (2010) Improved genetic algorithm for minimum latency problem. In: Proceedings of the 2010 Symposium on Information and Communication Technology. Association for Computing Machinery, New York, NY, USA, pp 9–15, https://doi.org/10.1145/1852611.1852614
+* Chaudhuri K, Godfrey B, Rao S, Talwar K (2003) Paths, trees, and minimum latency tours. In: 44th Annual IEEE Symposium on Foundations of Computer Science, 2003. Proceedings. pp 36–45, https://doi.org/10.1109/SFCS.2003.1238179
+* Goemans M, Kleinberg J (1998) An improved approximation ratio for the minimum latency problem. Mathematical Programming 82:111–124. https://doi.org/10.1007/BF01585867
 * Blum A, Chalasani P, Coppersmith D, et al (1994) The minimum latency problem. In: Proceedings of the twenty-sixth annual ACM symposium on Theory of Computing. Association for Computing Machinery, New York, NY, USA, pp 163–171, https://doi.org/10.1145/195058.195125
 * Fischetti M, Laporte G, Martello S (1993) The Delivery Man Problem and Cumulative Matroids. Operations Research 41:1055–1064. https://doi.org/10.1287/opre.41.6.1055
 
