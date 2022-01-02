@@ -109,6 +109,17 @@ cc_library(
 )
 
 cc_library(
+        name = "timedependentorienteering",
+        hdrs = ["timedependentorienteering.hpp"],
+        deps = [
+                "@optimizationtools//optimizationtools:indexed_collections",
+                "@optimizationtools//optimizationtools:utils",
+                "@boost//:filesystem",
+        ],
+        visibility = ["//visibility:public"],
+)
+
+cc_library(
         name = "thieforienteering",
         hdrs = ["thieforienteering.hpp"],
         deps = [
@@ -298,6 +309,7 @@ cc_binary(
                 ":travellingsalesman",
                 ":sequentialordering",
                 ":travellingrepairman",
+                ":timedependentorienteering",
                 ":thieforienteering",
                 ":capacitatedvehiclerouting",
                 ":vehicleroutingwithtimewindows",

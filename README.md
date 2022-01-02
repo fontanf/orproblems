@@ -388,6 +388,24 @@ The data also include CSV files listing the instances for each problem and their
 
 * Data: [travellingrepairman.7z](https://github.com/fontanf/orproblems/releases/download/data/travellingrepairman.7z)
 
+[Time-dependent orienteering problem](orproblems/timedependentorienteering.hpp)
+
+<details><summary>Literature</summary>
+<p>
+
+* Ostrowski K (2017) Evolutionary Algorithm for the Time-Dependent Orienteering Problem. In: Saeed K, Homenda W, Chaki R (eds) Computer Information Systems and Industrial Management. Springer International Publishing, Cham, pp 50–62, https://doi.org/10.1007/978-3-319-59105-6_5
+* Verbeeck C, Sörensen K, Aghezzaf E-H, Vansteenwegen P (2014) A fast solution method for the time-dependent orienteering problem. European Journal of Operational Research 236:419–432. https://doi.org/10.1016/j.ejor.2013.11.038
+* Gunawan A, Yuan Z, Lau HC (2014) A mathematical model and metaheuristics for time dependent orienteering problem. In: PATAT 2014: Proceedings of the 10th International Conference of the Practice and Theory of Automated Timetabling, 26-29 August 2014. PATAT
+* Abbaspour RA, Samadzadegan F (2011) Time-dependent personal tour planning and scheduling in metropolises. Expert Systems with Applications 38:12439–12452. https://doi.org/10.1016/j.eswa.2011.04.025
+* Li J, Wu Q, Li X, Zhu D (2010) Study on the Time-Dependent Orienteering Problem. In: 2010 International Conference on E-Product E-Service and E-Entertainment. pp 1–4, https://doi.org/10.1109/ICEEE.2010.5660232
+* Fomin FV, Lingas A (2002) Approximation algorithms for time-dependent orienteering. Information Processing Letters 83:57–62. https://doi.org/10.1016/S0020-0190(01)00313-1
+
+</p>
+</details>
+
+* Data: [timedependentorienteering.7z](https://github.com/fontanf/orproblems/releases/download/data/timedependentorienteering.7z)
+* Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/timedependentorienteering.hpp)
+
 [Thief Orienteering Problem](orproblems/thieforienteering.hpp)
 * Description:
   * Determine a subset of items to collect
