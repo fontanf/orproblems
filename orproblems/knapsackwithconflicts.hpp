@@ -37,8 +37,8 @@ typedef double Profit;
 struct Item
 {
     ItemId id;
-    Weight weight;
-    Profit profit;
+    Weight weight = 0;
+    Profit profit = 0;
     std::vector<ItemId> neighbors;
 };
 
@@ -53,10 +53,16 @@ public:
         Item item;
         item.id = items_.size();
         item.weight = w;
+        total_weight_ += w;
         item.profit = p;
         items_.push_back(item);
     }
-    void set_weight(ItemId j, Weight w) { items_[j].weight = w; }
+    void set_weight(ItemId j, Weight w)
+    {
+        total_weight_ -= items_[j].weight;
+        items_[j].weight = w;
+        total_weight_ += items_[j].weight;
+    }
     void set_profit(ItemId j, Profit p) { items_[j].profit = p; }
     void add_conflict(ItemId j1, ItemId j2)
     {
@@ -66,6 +72,7 @@ public:
         assert(j2 < number_of_items());
         items_[j1].neighbors.push_back(j2);
         items_[j2].neighbors.push_back(j1);
+        number_of_conflicts_++;
     }
     void set_capacity(Weight capacity) { capacity_ = capacity; }
 
@@ -91,6 +98,8 @@ public:
     inline ItemId number_of_items() const { return items_.size(); }
     inline const Item& item(ItemId j) const { return items_[j]; }
     inline Weight capacity() const { return capacity_; }
+    inline Weight total_weight() const { return total_weight_; }
+    inline ItemPos number_of_conflicts() const { return number_of_conflicts_; }
 
     std::pair<bool, Profit> check(
             std::string certificate_path,
@@ -221,6 +230,8 @@ private:
 
     std::vector<Item> items_;
     Weight capacity_ = 0;
+    ItemPos number_of_conflicts_ = 0;
+    Weight total_weight_ = 0;
 
 };
 
