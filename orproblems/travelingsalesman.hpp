@@ -1,7 +1,7 @@
 #pragma once
 
 /**
- * Travelling Salesman Problem.
+ * Traveling Salesman Problem.
  *
  * Input:
  * - n locations
@@ -24,7 +24,7 @@
 namespace orproblems
 {
 
-namespace travellingsalesman
+namespace travelingsalesman
 {
 
 typedef int64_t VertexId;

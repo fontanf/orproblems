@@ -8,7 +8,7 @@
 
 /**
  * Sequential Ordering Problem.
- * (Asymmetric Travelling Salesman Problem with Precedence Constraints)
+ * (Asymmetric Traveling Salesman Problem with Precedence Constraints)
  *
  * Input:
  * - n locations and an n×n matrix containing the distances between each pair of

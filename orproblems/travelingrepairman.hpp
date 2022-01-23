@@ -7,7 +7,7 @@
 #include <fstream>
 
 /**
- * Travelling Repairman Problem.
+ * Traveling Repairman Problem.
  *
  * Input:
  * - n locations
@@ -23,7 +23,7 @@
 namespace orproblems
 {
 
-namespace travellingrepairman
+namespace travelingrepairman
 {
 
 typedef int64_t LocationId;

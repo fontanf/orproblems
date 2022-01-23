@@ -7,9 +7,9 @@
 #include "orproblems/generalizedquadraticmultipleknapsack.hpp"
 #include "orproblems/binpackingwithconflicts.hpp"
 
-#include "orproblems/travellingsalesman.hpp"
+#include "orproblems/travelingsalesman.hpp"
 #include "orproblems/sequentialordering.hpp"
-#include "orproblems/travellingrepairman.hpp"
+#include "orproblems/travelingrepairman.hpp"
 #include "orproblems/thieforienteering.hpp"
 #include "orproblems/capacitatedvehiclerouting.hpp"
 #include "orproblems/vehicleroutingwithtimewindows.hpp"
@@ -116,8 +116,8 @@ int main(int argc, char *argv[])
         //    std::cout << instance << std::endl; TODO
         //instance.check(certificate_path, verbose); TODO
 
-    } else if (problem == "travellingsalesman") {
-        travellingsalesman::Instance instance(instance_path, format);
+    } else if (problem == "travelingsalesman") {
+        travelingsalesman::Instance instance(instance_path, format);
         if (vm.count("print-instance"))
             std::cout << instance << std::endl;
         instance.check(certificate_path, verbose);
@@ -128,8 +128,8 @@ int main(int argc, char *argv[])
             std::cout << instance << std::endl;
         instance.check(certificate_path, verbose);
 
-    } else if (problem == "travellingrepairman") {
-        travellingrepairman::Instance instance(instance_path, format);
+    } else if (problem == "travelingrepairman") {
+        travelingrepairman::Instance instance(instance_path, format);
         if (vm.count("print-instance"))
             std::cout << instance << std::endl;
         instance.check(certificate_path, verbose);

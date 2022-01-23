@@ -79,8 +79,8 @@ cc_library(
 )
 
 cc_library(
-        name = "travellingsalesman",
-        hdrs = ["travellingsalesman.hpp"],
+        name = "travelingsalesman",
+        hdrs = ["travelingsalesman.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools:indexed_collections",
                 "@optimizationtools//optimizationtools:utils",
@@ -99,8 +99,8 @@ cc_library(
 )
 
 cc_library(
-        name = "travellingrepairman",
-        hdrs = ["travellingrepairman.hpp"],
+        name = "travelingrepairman",
+        hdrs = ["travelingrepairman.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools:indexed_collections",
                 "@optimizationtools//optimizationtools:utils",
@@ -306,9 +306,9 @@ cc_binary(
                 ":generalizedquadraticmultipleknapsack",
                 ":binpackingwithconflicts",
 
-                ":travellingsalesman",
+                ":travelingsalesman",
                 ":sequentialordering",
-                ":travellingrepairman",
+                ":travelingrepairman",
                 ":timedependentorienteering",
                 ":thieforienteering",
                 ":capacitatedvehiclerouting",

@@ -295,7 +295,7 @@ The data also include CSV files listing the instances for each problem and their
 
 ### Single vehicle
 
-[Travelling Salesman Problem](orproblems/travellingsalesman.hpp)
+[Traveling Salesman Problem](orproblems/travelingsalesman.hpp)
 * Three field classification: `1 | sᵢⱼ | Cₘₐₓ`
 
 <details><summary>Literature</summary>
@@ -322,8 +322,8 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [travellingsalesman.7z](https://github.com/fontanf/orproblems/releases/download/data/travellingsalesman.7z)
-* Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/travellingsalesman.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/travellingsalesman.hpp)
+* Data: [travelingsalesman.7z](https://github.com/fontanf/orproblems/releases/download/data/travelingsalesman.7z)
+* Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/travelingsalesman.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/travelingsalesman.hpp)
 
 [Sequential Ordering Problem](orproblems/sequentialordering.hpp)
 * Three field classification: `1 | sᵢⱼ, prec | Cₘₐₓ`
@@ -359,7 +359,7 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [sequentialordering.7z](https://github.com/fontanf/orproblems/releases/download/data/sequentialordering.7z)
 * Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/sequentialordering.hpp)
 
-[Travelling Repairman Problem / Minimum Latency Problem](orproblems/travellingrepairman.hpp)
+[Traveling Repairman Problem / Minimum Latency Problem](orproblems/travelingrepairman.hpp)
 * Three field classification: `1 | sᵢⱼ | ∑Cⱼ`
 
 <details><summary>Literature</summary>
@@ -386,7 +386,7 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [travellingrepairman.7z](https://github.com/fontanf/orproblems/releases/download/data/travellingrepairman.7z)
+* Data: [travelingrepairman.7z](https://github.com/fontanf/orproblems/releases/download/data/travelingrepairman.7z)
 
 [Time-dependent orienteering problem](orproblems/timedependentorienteering.hpp)
 
@@ -532,7 +532,7 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [travellingsalesman.7z](https://github.com/fontanf/orproblems/releases/download/data/schedulingwithsdsttwt.7z)
+* Data: [travelingsalesman.7z](https://github.com/fontanf/orproblems/releases/download/data/schedulingwithsdsttwt.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/schedulingwithsdsttwt.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/schedulingwithsdsttwt.hpp)
 
 [Single machine order acceptance and scheduling problem with time windows and sequence-dependent setup times, Total weighted tardiness](orproblems/orderacceptanceandscheduling.hpp)
