@@ -261,6 +261,16 @@ cc_library(
 )
 
 cc_library(
+        name = "distributedpfsstct",
+        hdrs = ["distributedpfsstct.hpp"],
+        deps = [
+                "@optimizationtools//optimizationtools:indexed_collections",
+                "@optimizationtools//optimizationtools:utils",
+        ],
+        visibility = ["//visibility:public"],
+)
+
+cc_library(
         name = "nowaitjobshopschedulingmakespan",
         hdrs = ["nowaitjobshopschedulingmakespan.hpp"],
         deps = [
@@ -335,6 +345,7 @@ cc_binary(
                 ":permutationflowshopschedulingtct",
                 ":permutationflowshopschedulingtt",
                 ":distributedpfssmakespan",
+                ":distributedpfsstct",
                 ":nowaitjobshopschedulingmakespan",
                 ":simpleassemblylinebalancing1",
                 ":ushapedassemblylinebalancing1",

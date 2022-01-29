@@ -25,6 +25,7 @@
 #include "orproblems/permutationflowshopschedulingtct.hpp"
 #include "orproblems/permutationflowshopschedulingtt.hpp"
 #include "orproblems/distributedpfssmakespan.hpp"
+#include "orproblems/distributedpfsstct.hpp"
 #include "orproblems/nowaitjobshopschedulingmakespan.hpp"
 #include "orproblems/simpleassemblylinebalancing1.hpp"
 #include "orproblems/ushapedassemblylinebalancing1.hpp"
@@ -215,6 +216,12 @@ int main(int argc, char *argv[])
 
     } else if (problem == "distributedpfssmakespan") {
         distributedpfssmakespan::Instance instance(instance_path, format);
+        if (vm.count("print-instance"))
+            std::cout << instance << std::endl;
+        instance.check(certificate_path, verbose);
+
+    } else if (problem == "distributedpfsstct") {
+        distributedpfsstct::Instance instance(instance_path, format);
         if (vm.count("print-instance"))
             std::cout << instance << std::endl;
         instance.check(certificate_path, verbose);

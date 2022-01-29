@@ -717,6 +717,20 @@ The data also include CSV files listing the instances for each problem and their
 
 * Data: [permutationflowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/permutationflowshopscheduling.7z)
 
+[Distributed permutation flow shop scheduling problem, Total completion time](orproblems/distributedpfsstct.hpp)
+* Three field classification: `DFm | prmu | ∑Cⱼ`
+
+<details><summary>Literature</summary>
+<p>
+
+* Pan Q-K, Gao L, Wang L, et al (2019) Effective heuristics and metaheuristics to minimize total flowtime for the distributed permutation flowshop problem. Expert Systems with Applications 124:309–324. https://doi.org/10.1016/j.eswa.2019.01.062
+* Fernandez-Viagas V, Perez-Gonzalez P, Framinan JM (2018) The distributed permutation flow shop to minimise the total flowtime. Computers & Industrial Engineering 118:464–477. https://doi.org/10.1016/j.cie.2018.03.014
+
+</p>
+</details>
+
+* Data: [permutationflowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/permutationflowshopscheduling.7z)
+
 
 ### Job shop scheduling
 
