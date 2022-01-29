@@ -696,6 +696,28 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [permutationflowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/permutationflowshopscheduling.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/permutationflowshopschedulingtt.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/permutationflowshopschedulingtt.hpp)
 
+[Distributed permutation flow shop scheduling problem, Makespan](orproblems/distributedpfssmakespan.hpp)
+* Three field classification: `DFm | prmu | Cₘₐₓ`
+
+<details><summary>Literature</summary>
+<p>
+
+* Ruiz R, Pan Q-K, Naderi B (2019) Iterated Greedy methods for the distributed permutation flowshop scheduling problem. Omega 83:213–222. https://doi.org/10.1016/j.omega.2018.03.004
+* Fernandez-Viagas V, Framinan JM (2015) A bounded-search iterated greedy algorithm for the distributed permutation flowshop scheduling problem. International Journal of Production Research 53:1111–1123. https://doi.org/10.1080/00207543.2014.948578
+* Naderi B, Ruiz R (2014) A scatter search algorithm for the distributed permutation flowshop scheduling problem. European Journal of Operational Research 239:323–334. https://doi.org/10.1016/j.ejor.2014.05.024
+* Xu Y, Wang L, Wang S, Liu M (2014) An effective hybrid immune algorithm for solving the distributed permutation flow-shop scheduling problem. Engineering Optimization 46:1269–1283. https://doi.org/10.1080/0305215X.2013.827673
+* Wang S, Wang L, Liu M, Xu Y (2013) An effective estimation of distribution algorithm for solving the distributed permutation flow-shop scheduling problem. International Journal of Production Economics 145:387–396. https://doi.org/10.1016/j.ijpe.2013.05.004
+* Lin S-W, Ying K-C, Huang C-Y (2013) Minimising makespan in distributed permutation flowshops using a modified iterated greedy algorithm. International Journal of Production Research 51:5029–5038. https://doi.org/10.1080/00207543.2013.790571
+* Gao J, Chen R, Deng W (2013) An efficient tabu search algorithm for the distributed permutation flowshop scheduling problem. International Journal of Production Research 51:641–651. https://doi.org/10.1080/00207543.2011.644819
+* Gao J, Chen R (2011) A hybrid genetic algorithm for the distributed permutation flowshop scheduling problem. International Journal of Computational Intelligence Systems 4:497–508. https://doi.org/10.1080/18756891.2011.9727808
+* Naderi B, Ruiz R (2010) The distributed permutation flowshop scheduling problem. Computers & Operations Research 37:754–768. https://doi.org/10.1016/j.cor.2009.06.019
+
+</p>
+</details>
+
+* Data: [permutationflowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/permutationflowshopscheduling.7z)
+
+
 ### Job shop scheduling
 
 [No-wait job shop scheduling problem, Makespan](orproblems/nowaitjobshopschedulingmakespan.hpp)
