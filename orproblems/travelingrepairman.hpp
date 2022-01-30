@@ -93,6 +93,7 @@ public:
         LocationId j = -1;
         LocationId j_prec = 0;
         optimizationtools::IndexedSet locations(n);
+        locations.add(0);
         LocationPos number_of_duplicates = 0;
         Time current_time = 0;
         Time total_completion_time = 0;
@@ -110,6 +111,7 @@ public:
                     << "; Time: " << current_time
                     << "; Total completion time: " << total_completion_time
                     << std::endl;
+            j_prec = j;
         }
 
         bool feasible
@@ -138,14 +140,16 @@ private:
             >> n
             >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp
             ;
-        locations_.resize(n);
-        for (LocationId j = 0; j < n; ++j)
+        locations_ = std::vector<Location>(n + 1);
+        travel_times_ = std::vector<std::vector<Time>>(
+                n + 1, std::vector<Time>(n, -1));
+        for (LocationId j = 0; j < n + 1; ++j)
             file >> tmp >> locations_[j].x >> locations_[j].y;
-        for (LocationId j1 = 0; j1 < n; ++j1) {
-            for (LocationId j2 = 0; j2 < n; ++j2) {
+        for (LocationId j1 = 0; j1 < n + 1; ++j1) {
+            for (LocationId j2 = 0; j2 < n + 1; ++j2) {
                 Time dx = locations_[j1].x - locations_[j2].x;
                 Time dy = locations_[j1].y - locations_[j2].y;
-                Time dxy = std::round(std::sqrt(dx * dx + dy * dy));
+                Time dxy = std::floor(std::sqrt(dx * dx + dy * dy));
                 set_travel_time(j1, j2, dxy);
             }
         }
