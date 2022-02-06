@@ -359,6 +359,19 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [sequentialordering.7z](https://github.com/fontanf/orproblems/releases/download/data/sequentialordering.7z)
 * Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/sequentialordering.hpp)
 
+[Traveling salesman problem with release dates](orproblems/travelingsalesmanwithreleasedates.hpp)
+* Release dates for the arrival of goods to the depot, the solution may require multiple trips.
+
+<details><summary>Literature</summary>
+<p>
+
+* Archetti C, Feillet D, Mor A, Speranza MG (2018) An iterated local search for the Traveling Salesman Problem with release dates and completion time minimization. Computers & Operations Research 98:24–37. https://doi.org/10.1016/j.cor.2018.05.001
+
+</p>
+</details>
+
+* Data: [travelingsalesmanwithreleasedates.7z](https://github.com/fontanf/orproblems/releases/download/data/travelingsalesmanwithreleasedates.7z)
+
 [Traveling Repairman Problem / Minimum Latency Problem](orproblems/travelingrepairman.hpp)
 * Three field classification: `1 | sᵢⱼ | ∑Cⱼ`
 
@@ -532,7 +545,7 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [travelingsalesman.7z](https://github.com/fontanf/orproblems/releases/download/data/schedulingwithsdsttwt.7z)
+* Data: [schedulingwithsdsttwt.7z](https://github.com/fontanf/orproblems/releases/download/data/schedulingwithsdsttwt.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/schedulingwithsdsttwt.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/schedulingwithsdsttwt.hpp)
 
 [Single machine order acceptance and scheduling problem with time windows and sequence-dependent setup times, Total weighted tardiness](orproblems/orderacceptanceandscheduling.hpp)
@@ -646,7 +659,7 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [permutationflowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/permutationflowshopscheduling.7z)
+* Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/permutationflowshopschedulingmakespan.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/permutationflowshopschedulingmakespan.hpp)
 
 [Permutation flow shop scheduling problem, Total completion time](orproblems/permutationflowshopschedulingtct.hpp)
@@ -668,7 +681,7 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [permutationflowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/permutationflowshopscheduling.7z)
+* Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/permutationflowshopschedulingtct.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/permutationflowshopschedulingtct.hpp)
 
 [Permutation flow shop scheduling problem, Total tardiness](orproblems/permutationflowshopschedulingtt.hpp)
@@ -693,7 +706,7 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [permutationflowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/permutationflowshopscheduling.7z)
+* Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/permutationflowshopschedulingtt.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/permutationflowshopschedulingtt.hpp)
 
 [Distributed permutation flow shop scheduling problem, Makespan](orproblems/distributedpfssmakespan.hpp)
@@ -715,7 +728,7 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [permutationflowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/permutationflowshopscheduling.7z)
+* Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
 
 [Distributed permutation flow shop scheduling problem, Total completion time](orproblems/distributedpfsstct.hpp)
 * Three field classification: `DFm | prmu | ∑Cⱼ`
@@ -729,7 +742,7 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [permutationflowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/permutationflowshopscheduling.7z)
+* Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
 
 
 ### Job shop scheduling

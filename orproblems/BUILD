@@ -99,6 +99,16 @@ cc_library(
 )
 
 cc_library(
+        name = "travelingsalesmanwithreleasedates",
+        hdrs = ["travelingsalesmanwithreleasedates.hpp"],
+        deps = [
+                "@optimizationtools//optimizationtools:indexed_collections",
+                "@optimizationtools//optimizationtools:utils",
+        ],
+        visibility = ["//visibility:public"],
+)
+
+cc_library(
         name = "travelingrepairman",
         hdrs = ["travelingrepairman.hpp"],
         deps = [
@@ -328,6 +338,7 @@ cc_binary(
 
                 ":travelingsalesman",
                 ":sequentialordering",
+                ":travelingsalesmanwithreleasedates",
                 ":travelingrepairman",
                 ":timedependentorienteering",
                 ":thieforienteering",
@@ -350,6 +361,7 @@ cc_binary(
                 ":simpleassemblylinebalancing1",
                 ":ushapedassemblylinebalancing1",
                 ":roadef2020",
+
                 "@boost//:program_options",
         ],
         copts = ["-std=c++14"],

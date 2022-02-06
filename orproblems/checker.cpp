@@ -9,6 +9,7 @@
 
 #include "orproblems/travelingsalesman.hpp"
 #include "orproblems/sequentialordering.hpp"
+#include "orproblems/travelingsalesmanwithreleasedates.hpp"
 #include "orproblems/travelingrepairman.hpp"
 #include "orproblems/thieforienteering.hpp"
 #include "orproblems/capacitatedvehiclerouting.hpp"
@@ -132,6 +133,12 @@ int main(int argc, char *argv[])
 
     } else if (problem == "travelingrepairman") {
         travelingrepairman::Instance instance(instance_path, format);
+        if (vm.count("print-instance"))
+            std::cout << instance << std::endl;
+        instance.check(certificate_path, verbose);
+
+    } else if (problem == "travelingsalesmanwithreleasedates") {
+        travelingsalesmanwithreleasedates::Instance instance(instance_path, format);
         if (vm.count("print-instance"))
             std::cout << instance << std::endl;
         instance.check(certificate_path, verbose);
