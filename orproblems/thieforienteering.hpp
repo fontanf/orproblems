@@ -1,8 +1,8 @@
 #pragma once
 
-#include "optimizationtools/utils.hpp"
-#include "optimizationtools/indexed_set.hpp"
-#include "optimizationtools/sorted_on_demand_array.hpp"
+#include "optimizationtools/utils/utils.hpp"
+#include "optimizationtools/containers/indexed_set.hpp"
+#include "optimizationtools/containers/sorted_on_demand_array.hpp"
 
 #include <iostream>
 #include <fstream>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "optimizationtools/utils.hpp"
+#include "optimizationtools/utils/utils.hpp"
 
 /**
  * Capacitated Open Vehicle Routing Problem.

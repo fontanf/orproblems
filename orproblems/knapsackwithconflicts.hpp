@@ -18,7 +18,7 @@
  *
  */
 
-#include "optimizationtools/indexed_set.hpp"
+#include "optimizationtools/containers/indexed_set.hpp"
 
 #include <fstream>
 #include <iostream>

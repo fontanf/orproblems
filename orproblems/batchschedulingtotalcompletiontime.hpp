@@ -1,6 +1,6 @@
 #pragma once
 
-#include "optimizationtools/indexed_set.hpp"
+#include "optimizationtools/containers/indexed_set.hpp"
 
 #include <stdexcept>
 #include <fstream>
