@@ -105,9 +105,10 @@ public:
     Instance(std::string instance_path, std::string format = "")
     {
         std::ifstream file(instance_path);
-        if (!file.good())
+        if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + instance_path + "\".");
+        }
         if (format == "" || format == "santos2018") {
             read_santos2018(file);
         } else {
@@ -148,9 +149,10 @@ public:
         }
 
         std::ifstream file(certificate_path);
-        if (!file.good())
+        if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
+        }
 
         Time t = 0;
         Profit p = 0;

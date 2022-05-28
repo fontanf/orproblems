@@ -32,9 +32,10 @@ Instance::Instance(
         std::string)
 {
     std::ifstream f(instance_path);
-    if (!f.good())
+    if (!f.good()) {
         throw std::runtime_error(
                 "Unable to open file \"" + instance_path + "\".");
+    }
 
     // Read json file.
     ondemand::parser parser;

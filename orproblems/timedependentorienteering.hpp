@@ -66,9 +66,10 @@ public:
     Instance(std::string instance_path, std::string format = "")
     {
         std::ifstream file(instance_path);
-        if (!file.good())
+        if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + instance_path + "\".");
+        }
         if (format == "" || format == "verbeeck2014") {
             read_verbeeck2014(file, instance_path);
         } else {
@@ -136,9 +137,10 @@ public:
         }
 
         std::ifstream file(certificate_path);
-        if (!file.good())
+        if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
+        }
 
         LocationId n = number_of_locations();
         LocationId j = -1;

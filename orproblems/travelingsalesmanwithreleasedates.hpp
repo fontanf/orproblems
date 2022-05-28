@@ -69,9 +69,10 @@ public:
     Instance(std::string instance_path, std::string format = "")
     {
         std::ifstream file(instance_path);
-        if (!file.good())
+        if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + instance_path + "\".");
+        }
         if (format == "" || format == "default" || format == "archetti2018") {
             read_archetti2018(file);
         } else if (format == "archetti2018_atsplib") {
@@ -104,9 +105,10 @@ public:
         }
 
         std::ifstream file(certificate_path);
-        if (!file.good())
+        if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
+        }
 
         LocationId n = number_of_locations();
         optimizationtools::IndexedSet locations(n);

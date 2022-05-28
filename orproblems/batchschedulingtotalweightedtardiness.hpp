@@ -74,9 +74,10 @@ public:
     Instance(std::string instance_path, std::string format = "")
     {
         std::ifstream file(instance_path);
-        if (!file.good())
+        if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + instance_path + "\".");
+        }
         if (format == "" || format == "queiroga2020") {
             read_queiroga2020(file);
         } else {
@@ -104,9 +105,10 @@ public:
         }
 
         std::ifstream file(certificate_path);
-        if (!file.good())
+        if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
+        }
 
         JobId n = number_of_jobs();
         JobPos s = -1;

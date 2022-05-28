@@ -79,9 +79,10 @@ public:
     Instance(std::string instance_path, std::string format = "")
     {
         std::ifstream file(instance_path);
-        if (!file.good())
+        if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + instance_path + "\".");
+        }
         if (format == "" || format == "default" || format == "hifi2006") {
             read_hifi2006(file);
         } else if (format == "bettinelli2017") {
@@ -113,9 +114,10 @@ public:
         }
 
         std::ifstream file(certificate_path);
-        if (!file.good())
+        if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
+        }
 
         ItemId n = number_of_items();
         Weight weight = 0;

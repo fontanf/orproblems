@@ -56,9 +56,10 @@ public:
     Instance(std::string instance_path, std::string format = "")
     {
         std::ifstream file(instance_path);
-        if (!file.good())
+        if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + instance_path + "\".");
+        }
 
         if (format == "" || format == "default" || format == "naderi2010") {
             read_naderi2010(file);
@@ -88,20 +89,22 @@ public:
         }
 
         std::ifstream file(certificate_path);
-        if (!file.good())
+        if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
+        }
 
         MachineId m = number_of_machines();
         JobId n = number_of_jobs();
-        std::vector<Time> times(m, 0);
         optimizationtools::IndexedSet jobs(n);
         JobPos number_of_duplicates = 0;
         JobPos factory_number_of_jobs = -1;
         Time total_completion_time = 0;
         while (file >> factory_number_of_jobs) {
+            std::vector<Time> times(m, 0);
             JobId j = -1;
-            while (file >> j) {
+            for (JobPos pos = 0; pos < factory_number_of_jobs; ++pos) {
+                file >> j;
                 if (jobs.contains(j)) {
                     number_of_duplicates++;
                     if (verbose == 2)
