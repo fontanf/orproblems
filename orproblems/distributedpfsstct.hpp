@@ -172,10 +172,10 @@ private:
 static inline std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
-    os << "number of machines " << instance.number_of_machines() << std::endl;
-    os << "number of jobs " << instance.number_of_jobs() << std::endl;
+    os << "Number of machines: " << instance.number_of_machines() << std::endl;
+    os << "Number of jobs: " << instance.number_of_jobs() << std::endl;
     for (JobId j = 0; j < instance.number_of_jobs(); ++j) {
-        os << "job " << j << ":";
+        os << "Job " << j << ":";
         for (MachineId i = 0; i < instance.number_of_machines(); ++i)
             os << " " << instance.processing_time(j, i);
         os << std::endl;

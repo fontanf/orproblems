@@ -1,5 +1,3 @@
-#pragma once
-
 /**
  * Traveling salesman problem with release dates.
  *
@@ -16,11 +14,14 @@
  *
  */
 
+#pragma once
+
 #include "optimizationtools/containers/indexed_set.hpp"
 #include "optimizationtools/utils/utils.hpp"
 
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 
 namespace orproblems
 {
@@ -93,66 +94,123 @@ public:
     inline Time travel_time(LocationId j1, LocationId j2) const { return travel_times_[j1][j2]; }
     inline Time maximum_travel_time() const { return maximum_travel_time_; }
 
+    std::ostream& print(
+            std::ostream& os,
+            int verbose = 1) const
+    {
+        if (verbose > 0) {
+            os << "Number of locations:  " << number_of_locations() << std::endl;
+        }
+        if (verbose > 1) {
+            os << std::endl
+                << std::setw(12) << "Location"
+                << std::setw(12) << "Rel. date"
+                << "    Travel times"
+                << std::endl
+                << std::setw(12) << "--------"
+                << std::setw(12) << "---------"
+                << "    ------------"
+                << std::endl;
+            for (LocationId j1 = 0; j1 < number_of_locations(); ++j1) {
+                os << std::setw(12) << j1
+                    << std::setw(12) << release_date(j1)
+                    << "   ";
+                for (LocationId j2 = 0; j2 < number_of_locations(); ++j2)
+                    os << " " << travel_time(j1, j2);
+                os << std::endl;
+            }
+        }
+        return os;
+    }
+
     std::pair<bool, Time> check(
             std::string certificate_path,
+            std::ostream& os,
             int verbose = 1) const
     {
         // Initial display.
-        if (verbose >= 1) {
-            std::cout
-                << "Checker" << std::endl
-                << "-------" << std::endl;
-        }
-
         std::ifstream file(certificate_path);
         if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
+        if (verbose >= 2) {
+            os << std::endl << std::right
+                << std::setw(12) << "Location"
+                << std::setw(12) << "Rel. date"
+                << std::setw(12) << "Travel time"
+                << std::setw(12) << "Trip start"
+                << std::setw(12) << "Trip dur."
+                << std::endl
+                << std::setw(12) << "--------"
+                << std::setw(12) << "---------"
+                << std::setw(12) << "-----------"
+                << std::setw(12) << "----------"
+                << std::setw(12) << "---------"
+                << std::endl;
+        }
+
         LocationId n = number_of_locations();
         optimizationtools::IndexedSet locations(n);
-        locations.add(0);
         LocationPos number_of_duplicates = 0;
         Time current_time = 0;
         LocationPos n_cur = -1;
+        LocationPos number_of_trips = 0;
         while (file >> n_cur) {
             LocationId j_prec = 0;
             LocationId j = -1;
-            Time trip_time = 0;
+            Time trip_duration = 0;
             Time trip_start = current_time;
             for (LocationPos j_pos = 0; j_pos < n_cur; ++j_pos) {
                 file >> j;
                 if (locations.contains(j)) {
                     number_of_duplicates++;
-                    if (verbose == 2)
-                        std::cout << "Location " << j << " has already been visited." << std::endl;
+                    if (verbose >= 2)
+                        os << "Location " << j << " has already been visited." << std::endl;
                 }
                 locations.add(j);
-                trip_time += travel_time(j_prec, j);
-                if (trip_start + trip_time < release_date(j))
-                    trip_start = release_date(j) - trip_time;
-                if (verbose == 2)
-                    std::cout << "Location: " << j
-                        << "; Time: " << travel_time(j_prec, j)
-                        << "; Current time: " << current_time
+                trip_duration += travel_time(j_prec, j);
+                if (trip_start < release_date(j))
+                    trip_start = release_date(j);
+                if (verbose >= 2) {
+                    os
+                        << std::setw(12) << j
+                        << std::setw(12) << release_date(j)
+                        << std::setw(12) << travel_time(j_prec, j)
+                        << std::setw(12) << trip_start
+                        << std::setw(12) << trip_duration
                         << std::endl;
+                }
                 j_prec = j;
             }
-            trip_time += travel_time(j_prec, 0);
-            current_time = trip_start + trip_time;
+            trip_duration += travel_time(j_prec, 0);
+            current_time = trip_start + trip_duration;
+            number_of_trips++;
+            if (verbose >= 2) {
+                os
+                    << std::setw(12) << 0
+                    << std::setw(12) << 0
+                    << std::setw(12) << travel_time(j_prec, 0)
+                    << std::setw(12) << trip_start
+                    << std::setw(12) << trip_duration
+                    << std::endl;
+                os << "Trip end: " << current_time << std::endl;
+            }
         }
 
         bool feasible
-            = (locations.size() == n)
+            = (locations.size() == n - 1)
+            && (!locations.contains(0))
             && (number_of_duplicates == 0);
-        if (verbose == 2)
-            std::cout << "---" << std::endl;
+        if (verbose >= 2)
+            os << std::endl;
         if (verbose >= 1) {
-            std::cout << "Number of locations:    " << locations.size() << " / " << n  << std::endl;
-            std::cout << "Number of duplicates:   " << number_of_duplicates << std::endl;
-            std::cout << "Feasible:               " << feasible << std::endl;
-            std::cout << "Makespan:               " << current_time << std::endl;
+            os << "Number of locations:    " << locations.size() << " / " << n - 1  << std::endl;
+            os << "Number of trips:        " << number_of_trips << std::endl;
+            os << "Number of duplicates:   " << number_of_duplicates << std::endl;
+            os << "Feasible:               " << feasible << std::endl;
+            os << "Makespan:               " << current_time << std::endl;
         }
         return {feasible, current_time};
     }
@@ -172,6 +230,7 @@ private:
             >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp;
         locations_ = std::vector<Location>(n);
         travel_times_ = std::vector<std::vector<Time>>(n, std::vector<Time>(n, -1));
+        std::vector<std::vector<Time>> travel_times_tmp(n, std::vector<Time>(n, -1));
         for (LocationId j = 0; j < n; ++j) {
             double x = -1;
             double y = -1;
@@ -181,13 +240,34 @@ private:
             set_release_date(j, r);
         }
         for (LocationId j1 = 0; j1 < n; ++j1) {
-            for (LocationId j2 = j1 + 1; j2 < n; ++j2) {
+            for (LocationId j2 = 0; j2 < n; ++j2) {
                 double xd = x(j2) - x(j1);
                 double yd = y(j2) - y(j1);
                 Time d = std::round(std::sqrt(xd * xd + yd * yd));
-                set_travel_time(j1, j2, d);
+                travel_times_tmp[j1][j2] = d;
+                travel_times_tmp[j2][j1] = d;
             }
         }
+        // Run Floyd-Warshall algorithm to ensure triangular inequality.
+        // This is what the authors said they did.
+        for (LocationId j1 = 0; j1 < n; ++j1) {
+            for (LocationId j2 = 0; j2 < n; ++j2) {
+                for (LocationId j3 = 0; j3 < n; ++j3) {
+                    Time d = travel_times_tmp[j2][j1] + travel_times_tmp[j1][j3];
+                    if (travel_times_tmp[j2][j3] > d) {
+                        //std::cout << j2
+                        //    << " " << j3
+                        //    << " " << travel_times_tmp[j2][j3]
+                        //    << " -> " << d
+                        //    << std::endl;
+                        travel_times_tmp[j2][j3] = d;
+                    }
+                }
+            }
+        }
+        for (LocationId j1 = 0; j1 < n; ++j1)
+            for (LocationId j2 = j1 + 1; j2 < n; ++j2)
+                set_travel_time(j1, j2, travel_times_tmp[j1][j2]);
     }
 
     void read_archetti2018_atsplib(std::ifstream& file)
@@ -360,19 +440,6 @@ private:
     Time maximum_travel_time_ = 0;
 
 };
-
-static inline std::ostream& operator<<(
-        std::ostream &os, const Instance& instance)
-{
-    os << "number of locations " << instance.number_of_locations() << std::endl;
-    for (LocationId j1 = 0; j1 < instance.number_of_locations(); ++j1) {
-        os << "vertex " << j1 << ":";
-        for (LocationId j2 = 0; j2 < instance.number_of_locations(); ++j2)
-            os << " " << instance.travel_time(j1, j2);
-        os << std::endl;
-    }
-    return os;
-}
 
 }
 

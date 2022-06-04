@@ -185,12 +185,12 @@ private:
 static inline std::ostream& operator<<(
         std::ostream &os, const Instance& instance)
 {
-    os << "number of item types " << instance.number_of_item_types() << std::endl;
-    os << "capacity " << instance.capacity() << std::endl;
+    os << "Number of item types: " << instance.number_of_item_types() << std::endl;
+    os << "Capacity: " << instance.capacity() << std::endl;
     for (ItemTypeId j = 0; j < instance.number_of_item_types(); ++j) {
-        os << "item " << j
-            << " weight " << instance.weight(j)
-            << " demand " << instance.demand(j)
+        os << "Item " << j
+            << ": weight " << instance.weight(j)
+            << "; demand" << instance.demand(j)
             << std::endl;
     }
     return os;

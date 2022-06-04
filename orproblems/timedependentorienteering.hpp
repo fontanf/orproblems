@@ -1,14 +1,3 @@
-#pragma once
-
-#include "optimizationtools/containers/indexed_set.hpp"
-#include "optimizationtools/utils/utils.hpp"
-
-#include <iostream>
-#include <fstream>
-
-#include <boost/filesystem.hpp>
-#include <boost/regex.hpp>
-
 /**
  * Time-dependent orienteering problem.
  *
@@ -25,6 +14,18 @@
  * - Maximize the total profit of the visited locations
  *
  */
+
+#pragma once
+
+#include "optimizationtools/containers/indexed_set.hpp"
+#include "optimizationtools/utils/utils.hpp"
+
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+
+#include <boost/filesystem.hpp>
+#include <boost/regex.hpp>
 
 namespace orproblems
 {
@@ -125,21 +126,53 @@ public:
         return -1;
     }
 
-    std::pair<bool, Time> check(
-            std::string certificate_path,
+    std::ostream& print(
+            std::ostream& os,
             int verbose = 1) const
     {
-        // Initial display.
         if (verbose >= 1) {
-            std::cout
-                << "Checker" << std::endl
-                << "-------" << std::endl;
+            os << "Number of locations:  " << number_of_locations() << std::endl;
         }
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Location"
+                << std::setw(12) << "Profit"
+                << std::endl
+                << std::setw(12) << "--------"
+                << std::setw(12) << "------"
+                << std::endl;
+            for (LocationId j1 = 0; j1 < number_of_locations(); ++j1) {
+                os << std::setw(12) << j1
+                    << std::setw(12) << location(j1).profit
+                    << std::endl;
+            }
+        }
+        return os;
+    }
 
+    std::pair<bool, Profit> check(
+            std::string certificate_path,
+            std::ostream& os,
+            int verbose = 1) const
+    {
         std::ifstream file(certificate_path);
         if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
+        }
+
+        if (verbose >= 2) {
+            os << std::endl << std::right
+                << std::setw(12) << "Location"
+                << std::setw(12) << "Profit"
+                << std::setw(12) << "Total time"
+                << std::setw(12) << "Tot. profit"
+                << std::endl
+                << std::setw(12) << "--------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "----------"
+                << std::setw(12) << "-----------"
+                << std::endl;
         }
 
         LocationId n = number_of_locations();
@@ -154,33 +187,44 @@ public:
         while (file >> j) {
             if (locations.contains(j)) {
                 number_of_duplicates++;
-                if (verbose == 2)
-                    std::cout << "Location " << j << " is already scheduled." << std::endl;
+                if (verbose >= 2)
+                    os << "Location " << j << " is already scheduled." << std::endl;
             }
             locations.add(j);
             current_time = arrival_time(j_prec, j, current_time);
             profit += location(j).profit;
-            if (verbose == 2)
-                std::cout << "Location: " << j
-                    << "; Time: " << current_time
-                    << "; Profit: " << profit << " (" << location(j).profit << ")"
+            if (verbose >= 2) {
+                os
+                    << std::setw(12) << j
+                    << std::setw(12) << location(j).profit
+                    << std::setw(12) << current_time
+                    << std::setw(12) << profit
                     << std::endl;
+            }
             j_prec = j;
         }
         current_time = arrival_time(j_prec, n - 1, current_time);
         profit += location(n - 1).profit;
+        if (verbose >= 2) {
+            os
+                << std::setw(12) << n - 1
+                << std::setw(12) << location(n - 1).profit
+                << std::setw(12) << current_time
+                << std::setw(12) << profit
+                << std::endl;
+        }
 
         bool feasible
             = (current_time <= maximum_duration())
             && (number_of_duplicates == 0);
-        if (verbose == 2)
-            std::cout << "---" << std::endl;
+        if (verbose >= 2)
+            os << std::endl;
         if (verbose >= 1) {
-            std::cout << "Number of locations:       " << locations.size() << " / " << n  << std::endl;
-            std::cout << "Number of duplicates:      " << number_of_duplicates << std::endl;
-            std::cout << "Duraction:                 " << current_time << " / " << maximum_duration() << std::endl;
-            std::cout << "Feasible:                  " << feasible << std::endl;
-            std::cout << "Profit:                    " << profit << std::endl;
+            os << "Number of locations:       " << locations.size() << " / " << n  << std::endl;
+            os << "Number of duplicates:      " << number_of_duplicates << std::endl;
+            os << "Duraction:                 " << current_time << " / " << maximum_duration() << std::endl;
+            os << "Feasible:                  " << feasible << std::endl;
+            os << "Profit:                    " << profit << std::endl;
         }
         return {feasible, profit};
     }
@@ -251,18 +295,6 @@ private:
     Time maximum_duration_ = 0;
 
 };
-
-static inline std::ostream& operator<<(
-        std::ostream &os, const Instance& instance)
-{
-    os << "number of locations: " << instance.number_of_locations() << std::endl;
-    for (LocationId j = 0; j < instance.number_of_locations(); ++j) {
-        os << "location " << j
-            << " profit " << instance.location(j).profit;
-        os << std::endl;
-    }
-    return os;
-}
 
 }
 

@@ -6,7 +6,9 @@ These are the problems used as examples for [fontanf/localsearchsolver](https://
 
 The data also include CSV files listing the instances for each problem and their best known bounds which can be used with the benchmark scripts from [fontanf/optimizationtools](https://github.com/fontanf/optimizationtools).
 
+
 ## Packing
+
 
 [Knapsack Problem with Conflicts / Disjunctively Constrained Knapsack Problem](orproblems/knapsackwithconflicts.hpp)
 
@@ -35,6 +37,7 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [knapsackwithconflicts.7z](https://github.com/fontanf/orproblems/releases/download/data/knapsackwithconflicts.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/knapsackwithconflicts.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/knapsackwithconflicts.hpp)
 
+
 [Multidimensional Multiple-choice Knapsack Problem](orproblems/multidimensionalmultiplechoiceknapsack.hpp)
 
 <details><summary>Literature</summary>
@@ -59,6 +62,7 @@ The data also include CSV files listing the instances for each problem and their
 
 * Data: [multidimensionalmultiplechoiceknapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/multidimensionalmultiplechoiceknapsack.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/multidimensionalmultiplechoiceknapsack.hpp)
+
 
 [Quadratic Assignment Problem](orproblems/quadraticassignment.hpp)
 
@@ -182,6 +186,7 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [quadraticassignment.7z](https://github.com/fontanf/orproblems/releases/download/data/quadraticassignment.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/quadraticassignment.hpp)
 
+
 [Cutting Stock Problem](orproblems/cuttingstock.hpp)
 
 <details><summary>Literature</summary>
@@ -201,6 +206,7 @@ The data also include CSV files listing the instances for each problem and their
 
 * Data: [cuttingstock.7z](https://github.com/fontanf/orproblems/releases/download/data/cuttingstock.7z)
 * Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/cuttingstock.hpp)
+
 
 [Multiple Knapsack Problem](orproblems/multipleknapsack.hpp)
 
@@ -230,6 +236,7 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [multipleknapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/multipleknapsack.7z)
 * Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/multipleknapsack.hpp)
 
+
 [Quadratic Multiple Knapsack Problem](orproblems/quadraticmultipleknapsack.hpp)
 
 <details><summary>Literature</summary>
@@ -255,6 +262,7 @@ The data also include CSV files listing the instances for each problem and their
 
 * Data: [quadraticmultipleknapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/quadraticmultipleknapsack.7z)
 
+
 <!--
 [Generalized Quadratic Multiple Knapsack Problem](orproblems/generalizedquadraticmultipleknapsack.hpp)
 
@@ -274,6 +282,7 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [generalizedquadraticmultipleknapsack.7z](https://github.com/fontanf/generalizedorproblems/releases/download/data/quadraticmultipleknapsack.7z)
 -->
 
+
 [Bin Packing Problem with Conflicts](orproblems/binpackingwithconflicts.hpp)
 
 <details><summary>Literature</summary>
@@ -291,9 +300,12 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [binpackingwithconflicts.7z](https://github.com/fontanf/orproblems/releases/download/data/binpackingwithconflicts.7z)
 * Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/binpackingwithconflicts.hpp)
 
+
 ## Routing
 
+
 ### Single vehicle
+
 
 [Traveling Salesman Problem](orproblems/travelingsalesman.hpp)
 * Three field classification: `1 | sᵢⱼ | Cₘₐₓ`
@@ -324,6 +336,7 @@ The data also include CSV files listing the instances for each problem and their
 
 * Data: [travelingsalesman.7z](https://github.com/fontanf/orproblems/releases/download/data/travelingsalesman.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/travelingsalesman.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/travelingsalesman.hpp)
+
 
 [Sequential Ordering Problem](orproblems/sequentialordering.hpp)
 * Three field classification: `1 | sᵢⱼ, prec | Cₘₐₓ`
@@ -359,6 +372,7 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [sequentialordering.7z](https://github.com/fontanf/orproblems/releases/download/data/sequentialordering.7z)
 * Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/sequentialordering.hpp)
 
+
 [Traveling salesman problem with release dates](orproblems/travelingsalesmanwithreleasedates.hpp)
 * Release dates for the arrival of goods to the depot, the solution may require multiple trips.
 
@@ -371,6 +385,7 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [travelingsalesmanwithreleasedates.7z](https://github.com/fontanf/orproblems/releases/download/data/travelingsalesmanwithreleasedates.7z)
+
 
 [Traveling Repairman Problem / Minimum Latency Problem](orproblems/travelingrepairman.hpp)
 * Three field classification: `1 | sᵢⱼ | ∑Cⱼ`
@@ -401,6 +416,7 @@ The data also include CSV files listing the instances for each problem and their
 
 * Data: [travelingrepairman.7z](https://github.com/fontanf/orproblems/releases/download/data/travelingrepairman.7z)
 
+
 [Time-dependent orienteering problem](orproblems/timedependentorienteering.hpp)
 
 <details><summary>Literature</summary>
@@ -418,6 +434,24 @@ The data also include CSV files listing the instances for each problem and their
 
 * Data: [timedependentorienteering.7z](https://github.com/fontanf/orproblems/releases/download/data/timedependentorienteering.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/timedependentorienteering.hpp)
+
+
+[Orienteering problem with hotel selection](orproblems/orienteeringwithhotelselection.hpp)
+
+<details><summary>Literature</summary>
+<p>
+
+* Sohrabi S, Ziarati K, Keshtkaran M (2021) ACS-OPHS: Ant Colony System for the Orienteering Problem with Hotel Selection. EURO Journal on Transportation and Logistics 100036. https://doi.org/10.1016/j.ejtl.2021.100036
+* Sohrabi S, Ziarati K, Keshtkaran M (2020) A Greedy Randomized Adaptive Search Procedure for the Orienteering Problem with Hotel Selection. European Journal of Operational Research 283:426–440. https://doi.org/10.1016/j.ejor.2019.11.010
+* Toledo A, Riff MC (2015) HOPHS: A hyperheuristic that solves orienteering problem with hotel selection. In: 2015 Fifth International Conference on Digital Information Processing and Communications (ICDIPC). pp 148–152, https://doi.org/10.1109/ICDIPC.2015.7323021
+* Divsalar A, Vansteenwegen P, Sörensen K, Cattrysse D (2014) A memetic algorithm for the orienteering problem with hotel selection. European Journal of Operational Research 237:29–49. https://doi.org/10.1016/j.ejor.2014.01.001
+* Divsalar A, Vansteenwegen P, Cattrysse D (2013) A variable neighborhood search method for the orienteering problem with hotel selection. International Journal of Production Economics 145:150–160. https://doi.org/10.1016/j.ijpe.2013.01.010
+
+</p>
+</details>
+
+* Data: [orienteeringwithhotelselection.7z](https://github.com/fontanf/orproblems/releases/download/data/orienteeringwithhotelselection.7z)
+
 
 [Thief Orienteering Problem](orproblems/thieforienteering.hpp)
 * Description:
@@ -440,7 +474,9 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [thieforienteering.7z](https://github.com/fontanf/orproblems/releases/download/data/thieforienteering.7z)
 * Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/thieforienteering.hpp)
 
+
 ### Multiple vehicles
+
 
 [Capacitated Vehicle Routing Problem](orproblems/capacitatedvehiclerouting.hpp)
 
@@ -468,6 +504,7 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [capacitatedvehiclerouting.7z](https://github.com/fontanf/orproblems/releases/download/data/capacitatedvehiclerouting.7z)
 * Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/capacitatedvehiclerouting.hpp)
 
+
 [Vehicle Routing Problem with Time Windows](orproblems/vehicleroutingwithtimewindows.hpp)
 * Time windows / Capacity constraint / Maximum number of vehicles
 
@@ -488,6 +525,7 @@ The data also include CSV files listing the instances for each problem and their
 
 * Data: [vehicleroutingwithtimewindows.7z](https://github.com/fontanf/orproblems/releases/download/data/vehicleroutingwithtimewindows.7z)
 * Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/vehicleroutingwithtimewindows.hpp)
+
 
 [Capacitated Open Vehicle Routing Problem](orproblems/capacitatedopenvehiclerouting.hpp)
 * No need to return to the depot / Capacity constraint / Maximum route length / Maximum number of vehicles
@@ -511,9 +549,12 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [capacitatedopenvehiclerouting.7z](https://github.com/fontanf/orproblems/releases/download/data/capacitatedopenvehiclerouting.7z)
 * Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/capacitatedopenvehiclerouting.hpp)
 
+
 ## Scheduling
 
+
 ### Single machine scheduling
+
 
 [Single machine scheduling problem with sequence-dependent setup times, Total weighted tardiness](orproblems/schedulingwithsdsttwt.hpp)
 * Three field classification: `1 | sᵢⱼ | ∑wⱼTⱼ`
@@ -548,6 +589,7 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [schedulingwithsdsttwt.7z](https://github.com/fontanf/orproblems/releases/download/data/schedulingwithsdsttwt.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/schedulingwithsdsttwt.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/schedulingwithsdsttwt.hpp)
 
+
 [Single machine order acceptance and scheduling problem with time windows and sequence-dependent setup times, Total weighted tardiness](orproblems/orderacceptanceandscheduling.hpp)
 * Three field classification: `1 | rⱼ, sᵢⱼ, reject, đⱼ | ∑wⱼTⱼ - ∑vⱼ`
 
@@ -568,6 +610,7 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [orderacceptanceandscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/orderacceptanceandscheduling.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/orderacceptanceandscheduling.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/orderacceptanceandscheduling.hpp)
 
+
 [Single machine batch scheduling problem, Total completion time](orproblems/batchschedulingtotalcompletiontime.hpp)
 * Three field classification: `1 | batch, sⱼ | ∑Cⱼ`
 
@@ -582,6 +625,7 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [batchschedulingtotalcompletiontime.7z](https://github.com/fontanf/orproblems/releases/download/data/batchschedulingtotalcompletiontime.7z)
+
 
 [Single machine batch scheduling problem, Total weighted tardiness](orproblems/batchschedulingtotalweightedtardiness.hpp)
 * Three field classification: `1 | batch, rⱼ, sⱼ, compt | ∑wⱼTⱼ`
@@ -600,7 +644,9 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [batchschedulingtotalweightedtardiness.7z](https://github.com/fontanf/orproblems/releases/download/data/batchschedulingtotalweightedtardiness.7z)
 * Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/batchschedulingtotalweightedtardiness.hpp)
 
+
 ### (Unrelated) parallel machine scheduling
+
 
 [Identical parallel machine scheduling problem with family setup times, Total weighted completion time](orproblems/parallelschedulingwithfamilysetuptimestwct.hpp)
 * Three field classification: `P | sᵢ | ∑wⱼCⱼ`
@@ -618,6 +664,7 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [parallelschedulingwithfamilysetuptimestwct.7z](https://github.com/fontanf/orproblems/releases/download/data/parallelschedulingwithfamilysetuptimestwct.7z)
 * Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/parallelschedulingwithfamilysetuptimestwct.hpp)
 
+
 [Star Observation Scheduling Problem](orproblems/starobservationscheduling.hpp)
 * Three field classification: `R | rⱼᵢ, 2 pⱼᵢ ≥ dⱼᵢ - rⱼᵢ | ∑wⱼUⱼ`
 
@@ -632,7 +679,9 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [starobservationscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/starobservationscheduling.7z)
 * Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/starobservationscheduling.hpp)
 
+
 ### Flow shop scheduling
+
 
 [Permutation flow shop scheduling problem, Makespan](orproblems/permutationflowshopschedulingmakespan.hpp)
 * Three field classification: `Fm | prmu | Cₘₐₓ`
@@ -662,6 +711,7 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/permutationflowshopschedulingmakespan.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/permutationflowshopschedulingmakespan.hpp)
 
+
 [Permutation flow shop scheduling problem, Total completion time](orproblems/permutationflowshopschedulingtct.hpp)
 * Three field classification: `Fm | prmu | ∑Cⱼ`
 
@@ -683,6 +733,7 @@ The data also include CSV files listing the instances for each problem and their
 
 * Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/permutationflowshopschedulingtct.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/permutationflowshopschedulingtct.hpp)
+
 
 [Permutation flow shop scheduling problem, Total tardiness](orproblems/permutationflowshopschedulingtt.hpp)
 * Three field classification: `Fm | prmu | ∑Tⱼ`
@@ -709,6 +760,7 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
 * Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/permutationflowshopschedulingtt.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/permutationflowshopschedulingtt.hpp)
 
+
 [Distributed permutation flow shop scheduling problem, Makespan](orproblems/distributedpfssmakespan.hpp)
 * Three field classification: `DFm | prmu | Cₘₐₓ`
 
@@ -730,6 +782,7 @@ The data also include CSV files listing the instances for each problem and their
 
 * Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
 
+
 [Distributed permutation flow shop scheduling problem, Total completion time](orproblems/distributedpfsstct.hpp)
 * Three field classification: `DFm | prmu | ∑Cⱼ`
 
@@ -746,6 +799,7 @@ The data also include CSV files listing the instances for each problem and their
 
 
 ### Job shop scheduling
+
 
 [No-wait job shop scheduling problem, Makespan](orproblems/nowaitjobshopschedulingmakespan.hpp)
 * Three field classification: `Jm | no-wait | Cₘₐₓ`
@@ -783,7 +837,9 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [jobshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/jobshopscheduling.7z)
 * Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/nowaitjobshopschedulingmakespan.hpp)
 
+
 ### Assembly Line Balancing
+
 
 [Simple Assembly Line Balancing Problem of Type 1 (SALBP-1)](orproblems/simpleassemblylinebalancing1.hpp)
 * Bin Packing Problem with precedence constraints of the form `bin(j1) <= bin(j2) `
@@ -804,6 +860,7 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [simpleassemblylinebalancing1.7z](https://github.com/fontanf/orproblems/releases/download/data/simpleassemblylinebalancing1.7z)
 * Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/simpleassemblylinebalancing1.hpp)
 
+
 [U-shaped Assembly Line Balancing Problem of Type 1 (UALBP-1)](orproblems/ushapedassemblylinebalancing1.hpp)
 
 <details><summary>Literature</summary>
@@ -823,7 +880,9 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [simpleassemblylinebalancing1.7z](https://github.com/fontanf/orproblems/releases/download/data/simpleassemblylinebalancing1.7z)
 * Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/ushapedassemblylinebalancing1.hpp)
 
+
 ### Resource constrained scheduling
+
 
 [ROADEF/EURO Challenge 2020: Maintenance Planning Problem](orproblems/roadef2020.hpp)
 * Website: https://www.roadef.org/challenge/2020/en/

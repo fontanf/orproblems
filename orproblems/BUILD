@@ -130,6 +130,16 @@ cc_library(
 )
 
 cc_library(
+        name = "orienteeringwithhotelselection",
+        hdrs = ["orienteeringwithhotelselection.hpp"],
+        deps = [
+                "@optimizationtools//optimizationtools/containers:containers",
+                "@optimizationtools//optimizationtools/utils:utils",
+        ],
+        visibility = ["//visibility:public"],
+)
+
+cc_library(
         name = "thieforienteering",
         hdrs = ["thieforienteering.hpp"],
         deps = [
@@ -341,6 +351,7 @@ cc_binary(
                 ":travelingsalesmanwithreleasedates",
                 ":travelingrepairman",
                 ":timedependentorienteering",
+                ":orienteeringwithhotelselection",
                 ":thieforienteering",
                 ":capacitatedvehiclerouting",
                 ":vehicleroutingwithtimewindows",
@@ -357,14 +368,14 @@ cc_binary(
                 ":permutationflowshopschedulingtt",
                 ":distributedpfssmakespan",
                 ":distributedpfsstct",
-                ":nowaitjobshopschedulingmakespan",
+                #":nowaitjobshopschedulingmakespan",
                 ":simpleassemblylinebalancing1",
                 ":ushapedassemblylinebalancing1",
                 ":roadef2020",
 
                 "@boost//:program_options",
         ],
-        copts = ["-std=c++14"],
-        linkopts = ["-std=c++14"],
+        copts = ["-std=c++11"],
+        linkopts = ["-std=c++11"],
 )
 
