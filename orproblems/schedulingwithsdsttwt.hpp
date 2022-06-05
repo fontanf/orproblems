@@ -1,12 +1,3 @@
-#pragma once
-
-#include "optimizationtools/utils/utils.hpp"
-#include "optimizationtools/containers/sorted_on_demand_array.hpp"
-#include "optimizationtools/containers/indexed_set.hpp"
-
-#include <iostream>
-#include <fstream>
-
 /**
  * Single machine scheduling problem with sequence-dependent setup times, Total
  * weighted tardiness.
@@ -24,6 +15,16 @@
  * - Minimize the total weighted tardiness of the schedule
  *
  */
+
+#pragma once
+
+#include "optimizationtools/utils/utils.hpp"
+#include "optimizationtools/containers/sorted_on_demand_array.hpp"
+#include "optimizationtools/containers/indexed_set.hpp"
+
+#include <iostream>
+#include <fstream>
+#include <iomanip>
 
 namespace orproblems
 {
@@ -96,21 +97,72 @@ public:
     inline const Job& job(JobId j) const { return jobs_[j]; }
     inline Time setup_time(JobId j1, JobId j2) const { return setup_times_[j1][j2]; }
 
-    std::pair<bool, Time> check(
-            std::string certificate_path,
+    std::ostream& print(
+            std::ostream& os,
             int verbose = 1) const
     {
-        // Initial display.
         if (verbose >= 1) {
-            std::cout
-                << "Checker" << std::endl
-                << "-------" << std::endl;
+            os << "Number of jobs:  " << number_of_jobs() << std::endl;
         }
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Job"
+                << std::setw(12) << "Proc. time"
+                << std::setw(12) << "Due date"
+                << std::setw(12) << "Weight"
+                << std::endl
+                << std::setw(12) << "---"
+                << std::setw(12) << "----------"
+                << std::setw(12) << "--------"
+                << std::setw(12) << "------"
+                << std::endl;
+            for (JobId j = 0; j < number_of_jobs(); ++j) {
+                os << std::setw(12) << j
+                    << std::setw(12) << job(j).processing_time
+                    << std::setw(12) << job(j).due_date
+                    << std::setw(12) << job(j).weight
+                    << std::endl;
+            }
+            os << std::endl
+                << "Setup times:" << std::endl;
+            for (JobId j1 = 0; j1 <= number_of_jobs(); ++j1) {
+                for (JobId j2 = 0; j2 < number_of_jobs(); ++j2)
+                    os << " " << setup_time(j1, j2);
+                os << std::endl;
+            }
+        }
+        return os;
+    }
 
+    std::pair<bool, Time> check(
+            std::string certificate_path,
+            std::ostream& os,
+            int verbose = 1) const
+    {
         std::ifstream file(certificate_path);
         if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
+        }
+
+        if (verbose >= 2) {
+            os << std::endl << std::right
+                << std::setw(12) << "Job"
+                << std::setw(12) << "Proc. time"
+                << std::setw(12) << "Due date"
+                << std::setw(12) << "Weight"
+                << std::setw(12) << "Setup time"
+                << std::setw(12) << "Time"
+                << std::setw(12) << "TWT"
+                << std::endl
+                << std::setw(12) << "---"
+                << std::setw(12) << "----------"
+                << std::setw(12) << "--------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "----------"
+                << std::setw(12) << "----"
+                << std::setw(12) << "---"
+                << std::endl;
         }
 
         JobId n = number_of_jobs();
@@ -123,7 +175,7 @@ public:
         while (file >> j) {
             if (jobs.contains(j)) {
                 duplicates++;
-                if (verbose == 2)
+                if (verbose >= 2)
                     std::cout << "Job " << j << " is already scheduled." << std::endl;
             }
             jobs.add(j);
@@ -133,23 +185,25 @@ public:
                 total_weighted_tardiness
                     += job(j).weight
                     * (current_time - job(j).due_date);
-            if (verbose == 2)
-                std::cout << "Job: " << j
-                    << "; Due date: " << job(j).due_date
-                    << "; Weight: " << job(j).weight
-                    << "; Setup time: " << setup_time(j_prec, j)
-                    << "; Processing time: " << job(j).processing_time
-                    << "; Time: " << current_time
-                    << "; Total weighted tardiness: " << total_weighted_tardiness
+            if (verbose >= 2) {
+                os
+                    << std::setw(12) << j
+                    << std::setw(12) << job(j).processing_time
+                    << std::setw(12) << job(j).due_date
+                    << std::setw(12) << job(j).weight
+                    << std::setw(12) << setup_time(j_prec, j)
+                    << std::setw(12) << current_time
+                    << std::setw(12) << total_weighted_tardiness
                     << std::endl;
+            }
             j_prec = j;
         }
 
         bool feasible
             = (jobs.size() == n)
             && (duplicates == 0);
-        if (verbose == 2)
-            std::cout << "---" << std::endl;
+        if (verbose >= 2)
+            std::cout << std::endl;
         if (verbose >= 1) {
             std::cout << "Number of jobs:            " << jobs.size() << " / " << n  << std::endl;
             std::cout << "Number of duplicates:      " << duplicates << std::endl;
@@ -225,25 +279,6 @@ private:
     JobPos number_of_zero_weight_jobs_ = 0;
 
 };
-
-static inline std::ostream& operator<<(
-        std::ostream &os, const Instance& instance)
-{
-    os << "number of jobs: " << instance.number_of_jobs() << std::endl;
-    for (JobId j = 0; j < instance.number_of_jobs(); ++j)
-        os << "job: " << j
-            << "; processing time: " << instance.job(j).processing_time
-            << "; due date: " << instance.job(j).due_date
-            << "; weight: " << instance.job(j).weight
-            << std::endl;
-    for (JobId j1 = 0; j1 <= instance.number_of_jobs(); ++j1) {
-        os << "job " << j1 << ":";
-        for (JobId j2 = 0; j2 < instance.number_of_jobs(); ++j2)
-            os << " " << instance.setup_time(j1, j2);
-        os << std::endl;
-    }
-    return os;
-}
 
 }
 

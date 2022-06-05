@@ -1,11 +1,3 @@
-#pragma once
-
-#include "optimizationtools/utils/utils.hpp"
-#include "optimizationtools/containers/indexed_set.hpp"
-
-#include <iostream>
-#include <fstream>
-
 /**
  * Distributed permutation flow shop scheduling problem, Total completion time.
  *
@@ -24,6 +16,15 @@
  * - Minimize the total completion time of the jobs
  *
  */
+
+#pragma once
+
+#include "optimizationtools/utils/utils.hpp"
+#include "optimizationtools/containers/indexed_set.hpp"
+
+#include <iostream>
+#include <fstream>
+#include <iomanip>
 
 namespace orproblems
 {
@@ -77,21 +78,55 @@ public:
     inline MachineId number_of_machines() const { return processing_times_[0].size(); }
     inline Time processing_time(JobId j, MachineId i) const { return processing_times_[j][i]; }
 
-    std::pair<bool, Time> check(
-            std::string certificate_path,
+    std::ostream& print(
+            std::ostream& os,
             int verbose = 1) const
     {
-        // Initial display.
         if (verbose >= 1) {
-            std::cout
-                << "Checker" << std::endl
-                << "-------" << std::endl;
+            os << "Number of factories:  " << number_of_factories() << std::endl;
+            os << "Number of machines:   " << number_of_machines() << std::endl;
+            os << "Number of jobs:       " << number_of_jobs() << std::endl;
         }
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Job"
+                << "    Processing times"
+                << std::endl
+                << std::setw(12) << "---"
+                << "    ----------------"
+                << std::endl;
+            for (JobId j = 0; j < number_of_jobs(); ++j) {
+                os << std::setw(12) << j
+                    << "   ";
+                for (MachineId i = 0; i < number_of_machines(); ++i)
+                    os << " " << processing_time(j, i);
+                os << std::endl;
+            }
+        }
+        return os;
+    }
 
+    std::pair<bool, Time> check(
+            std::string certificate_path,
+            std::ostream& os,
+            int verbose = 1) const
+    {
         std::ifstream file(certificate_path);
         if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
+        }
+
+        if (verbose >= 2) {
+            os << std::endl << std::right
+                << std::setw(12) << "Job"
+                << std::setw(12) << "Time"
+                << std::setw(12) << "TCT"
+                << std::endl
+                << std::setw(12) << "---"
+                << std::setw(12) << "----"
+                << std::setw(12) << "---"
+                << std::endl;
         }
 
         MachineId m = number_of_machines();
@@ -107,8 +142,8 @@ public:
                 file >> j;
                 if (jobs.contains(j)) {
                     number_of_duplicates++;
-                    if (verbose == 2)
-                        std::cout << "Job " << j << " already scheduled." << std::endl;
+                    if (verbose >= 2)
+                        os << "Job " << j << " already scheduled." << std::endl;
                 }
                 jobs.add(j);
                 times[0] = times[0] + processing_time(j, 0);
@@ -120,10 +155,13 @@ public:
                     }
                 }
                 total_completion_time += times[m - 1];
-                if (verbose == 2)
-                    std::cout << "Job: " << j
-                        << "; Time: " << times[m - 1]
+                if (verbose >= 2) {
+                    os
+                        << std::setw(12) << j
+                        << std::setw(12) << times[m - 1]
+                        << std::setw(12) << total_completion_time
                         << std::endl;
+                }
             }
         }
 
@@ -131,12 +169,12 @@ public:
             = (jobs.size() == n)
             && (number_of_duplicates == 0);
         if (verbose == 2)
-            std::cout << "---" << std::endl;
+            os << std::endl;
         if (verbose >= 1) {
-            std::cout << "Number of jobs:         " << jobs.size() << " / " << n  << std::endl;
-            std::cout << "Number of duplicates:   " << number_of_duplicates << std::endl;
-            std::cout << "Feasible:               " << feasible << std::endl;
-            std::cout << "Total completion time:  " << total_completion_time << std::endl;
+            os << "Number of jobs:         " << jobs.size() << " / " << n  << std::endl;
+            os << "Number of duplicates:   " << number_of_duplicates << std::endl;
+            os << "Feasible:               " << feasible << std::endl;
+            os << "Total completion time:  " << total_completion_time << std::endl;
         }
         return {feasible, total_completion_time};
     }
@@ -168,20 +206,6 @@ private:
     Time job_total_processing_time_max = 0;
 
 };
-
-static inline std::ostream& operator<<(
-        std::ostream &os, const Instance& instance)
-{
-    os << "Number of machines: " << instance.number_of_machines() << std::endl;
-    os << "Number of jobs: " << instance.number_of_jobs() << std::endl;
-    for (JobId j = 0; j < instance.number_of_jobs(); ++j) {
-        os << "Job " << j << ":";
-        for (MachineId i = 0; i < instance.number_of_machines(); ++i)
-            os << " " << instance.processing_time(j, i);
-        os << std::endl;
-    }
-    return os;
-}
 
 }
 

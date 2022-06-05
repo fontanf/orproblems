@@ -199,9 +199,7 @@ int main(int argc, char *argv[])
 
     } else if (problem == "schedulingwithsdsttwt") {
         schedulingwithsdsttwt::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "orderacceptanceandscheduling") {
         orderacceptanceandscheduling::Instance instance(instance_path, format);
@@ -251,15 +249,11 @@ int main(int argc, char *argv[])
 
     } else if (problem == "distributedpfssmakespan") {
         distributedpfssmakespan::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "distributedpfsstct") {
         distributedpfsstct::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        check(instance, certificate_path, print_instance, print_checker);
 
     //} else if (problem == "nowaitjobshopschedulingmakespan") {
     //    nowaitjobshopschedulingmakespan::Instance instance(instance_path, format);
