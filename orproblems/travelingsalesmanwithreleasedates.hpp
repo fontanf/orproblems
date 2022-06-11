@@ -98,10 +98,10 @@ public:
             std::ostream& os,
             int verbose = 1) const
     {
-        if (verbose > 0) {
+        if (verbose >= 1) {
             os << "Number of locations:  " << number_of_locations() << std::endl;
         }
-        if (verbose > 1) {
+        if (verbose >= 2) {
             os << std::endl
                 << std::setw(12) << "Location"
                 << std::setw(12) << "Rel. date"

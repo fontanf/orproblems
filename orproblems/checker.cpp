@@ -157,9 +157,7 @@ int main(int argc, char *argv[])
 
     } else if (problem == "travelingrepairman") {
         travelingrepairman::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "travelingsalesmanwithreleasedates") {
         travelingsalesmanwithreleasedates::Instance instance(instance_path, format);
@@ -187,9 +185,7 @@ int main(int argc, char *argv[])
 
     } else if (problem == "vehicleroutingwithtimewindows") {
         vehicleroutingwithtimewindows::Instance instance(instance_path, format);
-        //if (vm.count("print-instance"))
-        //    std::cout << instance << std::endl; TODO
-        //instance.check(certificate_path, print_checker); TODO
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "capacitatedopenvehiclerouting") {
         capacitatedopenvehiclerouting::Instance instance(instance_path, format);
@@ -231,9 +227,7 @@ int main(int argc, char *argv[])
 
     } else if (problem == "permutationflowshopschedulingmakespan") {
         permutationflowshopschedulingmakespan::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "permutationflowshopschedulingtct") {
         permutationflowshopschedulingtct::Instance instance(instance_path, format);

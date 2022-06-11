@@ -165,7 +165,7 @@ public:
         bool feasible
             = (jobs.size() == n)
             && (number_of_duplicates == 0);
-        if (verbose == 2)
+        if (verbose >= 2)
             os << std::endl;
         if (verbose >= 1) {
             os << "Number of jobs:        " << jobs.size() << " / " << n  << std::endl;

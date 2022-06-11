@@ -163,7 +163,6 @@ cc_library(
         name = "vehicleroutingwithtimewindows",
         hdrs = ["vehicleroutingwithtimewindows.hpp"],
         deps = [
-                "@pugixml//:pugixml",
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
         ],
