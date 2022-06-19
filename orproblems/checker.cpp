@@ -179,9 +179,7 @@ int main(int argc, char *argv[])
 
     } else if (problem == "capacitatedvehiclerouting") {
         capacitatedvehiclerouting::Instance instance(instance_path, format);
-        //if (vm.count("print-instance"))
-        //    std::cout << instance << std::endl; TODO
-        //instance.check(certificate_path, print_checker); TODO
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "vehicleroutingwithtimewindows") {
         vehicleroutingwithtimewindows::Instance instance(instance_path, format);

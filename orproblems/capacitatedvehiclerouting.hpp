@@ -1,7 +1,3 @@
-#pragma once
-
-#include "optimizationtools/utils/utils.hpp"
-
 /**
  * Capacitated Vehicle Routing Problem.
  *
@@ -20,6 +16,14 @@
  *
  */
 
+#pragma once
+
+#include "optimizationtools/utils/utils.hpp"
+#include "optimizationtools/containers/indexed_set.hpp"
+
+#include <iostream>
+#include <fstream>
+#include <iomanip>
 
 namespace orproblems
 {
@@ -28,6 +32,7 @@ namespace capacitatedvehiclerouting
 {
 
 typedef int64_t LocationId;
+typedef int64_t LocationPos;
 typedef int64_t RouteId;
 typedef int64_t Demand;
 typedef int64_t Distance;
@@ -37,7 +42,7 @@ struct Location
 {
     double x;
     double y;
-    Demand demand;
+    Demand demand = 0;
 };
 
 class Instance
@@ -48,7 +53,14 @@ public:
     Instance(LocationId n):
         locations_(n),
         distances_(n, std::vector<Distance>(n, -1)) { }
-    void set_demand(LocationId j, Demand q) { locations_[j].demand = q; }
+    void set_demand(LocationId j, Demand q)
+    {
+        if (j != 0)
+            total_demand_ -= locations_[j].demand;
+        locations_[j].demand = q;
+        if (j != 0)
+            total_demand_ += locations_[j].demand;
+    }
     void set_xy(LocationId j, double x, double y)
     {
         locations_[j].x = x;
@@ -70,7 +82,7 @@ public:
         }
 
         if (format == "" || format == "vrplib") {
-            read_vrplib(file);
+            read_cvrplib(file);
         } else {
             throw std::invalid_argument(
                     "Unknown instance format \"" + format + "\".");
@@ -81,17 +93,163 @@ public:
     virtual ~Instance() { }
 
     LocationId number_of_locations() const { return locations_.size(); }
-    RouteId number_of_routes() const { return number_of_routes_; }
     Demand capacity() const { return locations_[0].demand; }
+    Demand total_demand() const { return total_demand_; }
     Demand demand(LocationId j) const { return locations_[j].demand; }
     Distance x(LocationId j) const { return locations_[j].x; }
     Distance y(LocationId j) const { return locations_[j].y; }
     Distance distance(LocationId j1, LocationId j2) const { return distances_[j1][j2]; }
     Distance maximum_distance() const { return distance_max_; }
 
+    std::ostream& print(
+            std::ostream& os,
+            int verbose = 1) const
+    {
+        if (verbose >= 1) {
+            os << "Number of locations:  " << number_of_locations() << std::endl;
+            os << "Capacity:             " << capacity() << std::endl;
+            os << "Total demand:         " << total_demand() << std::endl;
+        }
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Location"
+                << std::setw(12) << "Demand"
+                << std::setw(12) << "Serv. time"
+                << std::setw(12) << "Rel. date"
+                << std::setw(12) << "Deadline"
+                << std::endl
+                << std::setw(12) << "--------"
+                << std::setw(12) << "----------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "---------"
+                << std::setw(12) << "--------"
+                << std::endl;
+            for (LocationId j1 = 0; j1 < number_of_locations(); ++j1) {
+                os << std::setw(12) << j1
+                    << std::setw(12) << demand(j1)
+                    << std::endl;
+            }
+            os << std::endl
+                << std::setw(12) << "Location"
+                << "    Travel times"
+                << std::endl
+                << std::setw(12) << "---------"
+                << "    ------------"
+                << std::endl;
+            for (LocationId j1 = 0; j1 < number_of_locations(); ++j1) {
+                os << std::setw(12) << j1
+                    << "   ";
+                for (LocationId j2 = 0; j2 < number_of_locations(); ++j2)
+                    os << " " << distance(j1, j2);
+                os << std::endl;
+            }
+        }
+        return os;
+    }
+
+    std::pair<bool, Distance> check(
+            std::string certificate_path,
+            std::ostream& os,
+            int verbose = 1) const
+    {
+        std::ifstream file(certificate_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + certificate_path + "\".");
+        }
+
+        if (verbose >= 2) {
+            os << std::endl << std::right
+                << std::setw(10) << "Location"
+                << std::setw(12) << "Demand"
+                << std::setw(12) << "Distance"
+                << std::setw(12) << "Route dem."
+                << std::setw(12) << "Tot. dist."
+                << std::setw(12) << "Route dist."
+                << std::endl
+                << std::setw(10) << "--------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "--------"
+                << std::setw(12) << "----------"
+                << std::setw(12) << "----------"
+                << std::setw(12) << "-----------"
+                << std::endl;
+        }
+
+        LocationId n = number_of_locations();
+        optimizationtools::IndexedSet visited_locations(n);
+        LocationPos number_of_duplicates = 0;
+        LocationPos route_number_of_locations = -1;
+        RouteId number_of_routes = 0;
+        RouteId number_of_overloaded_vehicles = 0;
+        Distance total_distance = 0;
+        while (file >> route_number_of_locations) {
+            if (route_number_of_locations == 0)
+                continue;
+            Distance route_distance = 0;
+            Demand route_demand = 0;
+            LocationId j_prev = 0;
+            LocationId j = -1;
+            for (LocationPos pos = 0; pos < route_number_of_locations; ++pos) {
+                file >> j;
+                if (visited_locations.contains(j)) {
+                    number_of_duplicates++;
+                    if (verbose >= 2)
+                        os << "Location " << j << " has already been visited." << std::endl;
+                }
+                visited_locations.add(j);
+                route_demand += demand(j);
+                route_distance += distance(j_prev, j);
+                total_distance += distance(j_prev, j);
+                if (verbose >= 2) {
+                    os
+                        << std::setw(10) << j
+                        << std::setw(12) << demand(j)
+                        << std::setw(12) << distance(j_prev, j)
+                        << std::setw(12) << route_demand
+                        << std::setw(12) << route_distance
+                        << std::setw(12) << total_distance
+                        << std::endl;
+                }
+                j_prev = j;
+            }
+            if (j_prev != 0) {
+                route_distance += distance(j_prev, 0);
+                total_distance += distance(j_prev, 0);
+            }
+            if (verbose >= 2) {
+                os << "Route " << number_of_routes
+                    << "; demand: " << route_demand
+                    << "; travel time: " << route_distance
+                    << "; total travel time: " << total_distance
+                    << "." << std::endl;
+            }
+            number_of_routes++;
+            if (route_demand > capacity())
+                number_of_overloaded_vehicles++;
+        }
+
+        bool feasible
+            = (visited_locations.size() == n - 1)
+            && (!visited_locations.contains(0))
+            && (number_of_duplicates == 0)
+            && (number_of_overloaded_vehicles == 0);
+        if (verbose == 2)
+            os << std::endl;
+        if (verbose >= 1) {
+            os << "Number of visited locations:    " << visited_locations.size() << " / " << n - 1 << std::endl;
+            os << "Number of duplicates:           " << number_of_duplicates << std::endl;
+            os << "Number of routes:               " << number_of_routes << std::endl;
+            os << "Number of overloaded vehicles:  " << number_of_overloaded_vehicles << std::endl;
+            os << "Feasible:                       " << feasible << std::endl;
+            os << "Total distance:                 " << total_distance << std::endl;
+        }
+        return {feasible, total_distance};
+    }
+
 private:
 
-    void read_vrplib(std::ifstream& file)
+    void read_cvrplib(std::ifstream& file)
     {
         std::string tmp;
         std::vector<std::string> line;
@@ -156,7 +314,7 @@ private:
 
     std::vector<Location> locations_;
     std::vector<std::vector<Distance>> distances_;
-    RouteId number_of_routes_ = -1;
+    Demand total_demand_ = 0;
     Distance distance_max_ = 0;
 
 };
