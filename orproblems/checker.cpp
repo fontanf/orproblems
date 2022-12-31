@@ -97,9 +97,7 @@ int main(int argc, char *argv[])
 
     if (problem == "knapsackwithconflicts") {
         knapsackwithconflicts::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "multidimensionalmultiplechoiceknapsack") {
         multidimensionalmultiplechoiceknapsack::Instance instance(instance_path, format);

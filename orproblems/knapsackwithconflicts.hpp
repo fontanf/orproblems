@@ -1,5 +1,3 @@
-#pragma once
-
 /**
  * Knapsack Problem with Conflicts.
  *
@@ -18,10 +16,13 @@
  *
  */
 
+#pragma once
+
 #include "optimizationtools/containers/indexed_set.hpp"
 
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 
 namespace orproblems
 {
@@ -102,17 +103,66 @@ public:
     inline Weight total_weight() const { return total_weight_; }
     inline ItemPos number_of_conflicts() const { return number_of_conflicts_; }
 
-    std::pair<bool, Profit> check(
-            std::string certificate_path,
+    std::ostream& print(
+            std::ostream& os,
             int verbose = 1) const
     {
-        // Initial display.
         if (verbose >= 1) {
-            std::cout
-                << "Checker" << std::endl
-                << "-------" << std::endl;
+            os << "Number of items:         " << number_of_items() << std::endl;
+            os << "Capacity:                " << capacity() << std::endl;
+            os << "Number of conflicts:     " << number_of_conflicts() << std::endl;
+            os << "Average weight:          " << (double)total_weight() / number_of_items() << std::endl;
+            os << "Average # of conflicts:  " << (double)number_of_conflicts() / number_of_items() << std::endl;
         }
+        // Print items.
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Item"
+                << std::setw(12) << "Profit"
+                << std::setw(12) << "Weight"
+                << std::setw(12) << "Efficiency"
+                << std::setw(12) << "# conflicts"
+                << std::endl
+                << std::setw(12) << "----"
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "----------"
+                << std::setw(12) << "-----------"
+                << std::endl;
+            for (ItemId j = 0; j < number_of_items(); ++j) {
+                os << std::setw(12) << j
+                    << std::setw(12) << item(j).profit
+                    << std::setw(12) << item(j).weight
+                    << std::setw(12) << (double)item(j).profit / item(j).weight
+                    << std::setw(12) << item(j).neighbors.size()
+                    << std::endl;
+            }
+        }
+        // Print conflicts.
+        if (verbose >= 3) {
+            os << std::endl
+                << std::setw(12) << "Item 1"
+                << std::setw(12) << "Item 2"
+                << std::endl
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::endl;
+            for (ItemId j = 0; j < number_of_items(); ++j) {
+                for (ItemId j_neighbor: item(j).neighbors) {
+                    os << std::setw(12) << j
+                        << std::setw(12) << j_neighbor
+                        << std::endl;
+                }
+            }
+        }
+        return os;
+    }
 
+    std::pair<bool, Profit> check(
+            std::string certificate_path,
+            std::ostream& os,
+            int verbose = 1) const
+    {
         std::ifstream file(certificate_path);
         if (!file.good()) {
             throw std::runtime_error(
@@ -130,20 +180,20 @@ public:
             weight += item(j).weight;
             profit += item(j).profit;
             if (verbose == 2)
-                std::cout << "Job: " << j
+                os << "Job: " << j
                     << "; Weight: " << weight
                     << "; Profit: " << profit
                     << std::endl;
             if (items.contains(j)) {
                 number_of_duplicates++;
                 if (verbose == 2)
-                    std::cout << "Job " << j << " already scheduled." << std::endl;
+                    os << "Job " << j << " already scheduled." << std::endl;
             }
             for (ItemId j_con: item(j).neighbors) {
                 if (items.contains(j_con)) {
                     number_of_conflict_violations++;
                     if (verbose == 2)
-                        std::cout << "Job " << j << " is in conflict with job " << j_con << "." << std::endl;
+                        os << "Job " << j << " is in conflict with job " << j_con << "." << std::endl;
                 }
             }
             items.add(j);
@@ -154,14 +204,14 @@ public:
             && (weight <= capacity())
             && (number_of_conflict_violations == 0);
         if (verbose == 2)
-            std::cout << "---" << std::endl;
+            os << "---" << std::endl;
         if (verbose >= 1) {
-            std::cout << "Number of Items:                " << items.size() << " / " << n << std::endl;
-            std::cout << "Number of duplicates:           " << number_of_duplicates << std::endl;
-            std::cout << "Number of conflict violations:  " << number_of_conflict_violations << std::endl;
-            std::cout << "Weight:                         " << weight << " / " << capacity() << std::endl;
-            std::cout << "Feasible:                       " << feasible << std::endl;
-            std::cout << "Profit:                         " << profit << std::endl;
+            os << "Number of Items:                " << items.size() << " / " << n << std::endl;
+            os << "Number of duplicates:           " << number_of_duplicates << std::endl;
+            os << "Number of conflict violations:  " << number_of_conflict_violations << std::endl;
+            os << "Weight:                         " << weight << " / " << capacity() << std::endl;
+            os << "Feasible:                       " << feasible << std::endl;
+            os << "Profit:                         " << profit << std::endl;
         }
         return {feasible, profit};
     }
@@ -236,23 +286,6 @@ private:
     Weight total_weight_ = 0;
 
 };
-
-static inline std::ostream& operator<<(
-        std::ostream &os, const Instance& instance)
-{
-    os << "capacity " << instance.capacity() << std::endl;
-    os << "number of items " << instance.number_of_items() << std::endl;
-    for (ItemId j = 0; j < instance.number_of_items(); ++j) {
-        os << "item " << j
-            << " w " << instance.item(j).weight
-            << " p " << instance.item(j).profit
-            << " neighbors";
-        for (ItemId j2: instance.item(j).neighbors)
-            os << " " << j2;
-        os << std::endl;
-    }
-    return os;
-}
 
 }
 
