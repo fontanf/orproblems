@@ -1,7 +1,3 @@
-#pragma once
-
-#include "optimizationtools/utils/utils.hpp"
-
 /**
  * Capacitated Open Vehicle Routing Problem.
  *
@@ -24,6 +20,9 @@
  *
  */
 
+#pragma once
+
+#include "optimizationtools/utils/utils.hpp"
 
 namespace orproblems
 {

@@ -1,10 +1,3 @@
-#pragma once
-
-#include "optimizationtools/containers/indexed_set.hpp"
-
-#include <iostream>
-#include <fstream>
-
 /**
  * Multidimmensional Multiple-choice Knapsack Problem.
  *
@@ -23,6 +16,13 @@
  * - Maximize the total profit of the selected items
  *
  */
+
+#pragma once
+
+#include "optimizationtools/containers/indexed_set.hpp"
+
+#include <iostream>
+#include <fstream>
 
 namespace orproblems
 {

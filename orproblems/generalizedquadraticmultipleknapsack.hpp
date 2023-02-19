@@ -1,5 +1,3 @@
-#pragma once
-
 /**
  * Generalized Quadratic Multiple Knapsack Problem.
  *
@@ -25,6 +23,8 @@
  *   of the pairs of items it contains.
  *
  */
+
+#pragma once
 
 #include "optimizationtools/containers/indexed_set.hpp"
 

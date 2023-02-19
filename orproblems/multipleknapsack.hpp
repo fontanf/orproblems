@@ -1,5 +1,3 @@
-#pragma once
-
 /**
  * Multiple Knapsack Problem.
  *
@@ -13,6 +11,8 @@
  * - Maximize the overall profit of the selected items
  *
  */
+
+#pragma once
 
 #include "optimizationtools/containers/indexed_set.hpp"
 

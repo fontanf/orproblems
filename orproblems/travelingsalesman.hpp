@@ -1,5 +1,3 @@
-#pragma once
-
 /**
  * Traveling Salesman Problem.
  *
@@ -14,6 +12,8 @@
  * - minimize the total length of the tour
  *
  */
+
+#pragma once
 
 #include "optimizationtools/containers/indexed_set.hpp"
 #include "optimizationtools/utils/utils.hpp"

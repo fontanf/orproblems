@@ -1,11 +1,3 @@
-#pragma once
-
-#include "optimizationtools/utils/utils.hpp"
-#include "optimizationtools/containers/indexed_set.hpp"
-
-#include <iostream>
-#include <fstream>
-
 /**
  * Permutation flow shop scheduling problem, Total completion time.
  *
@@ -23,6 +15,14 @@
  * - Minimize the total completion time of the jobs
  *
  */
+
+#pragma once
+
+#include "optimizationtools/utils/utils.hpp"
+#include "optimizationtools/containers/indexed_set.hpp"
+
+#include <iostream>
+#include <fstream>
 
 namespace orproblems
 {

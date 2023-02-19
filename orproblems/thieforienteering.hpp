@@ -1,12 +1,3 @@
-#pragma once
-
-#include "optimizationtools/utils/utils.hpp"
-#include "optimizationtools/containers/indexed_set.hpp"
-#include "optimizationtools/containers/sorted_on_demand_array.hpp"
-
-#include <iostream>
-#include <fstream>
-
 /**
  * Thief orienterring problem.
  *
@@ -33,6 +24,15 @@
  * - maximize the profit of collected items
  *
  */
+
+#pragma once
+
+#include "optimizationtools/utils/utils.hpp"
+#include "optimizationtools/containers/indexed_set.hpp"
+#include "optimizationtools/containers/sorted_on_demand_array.hpp"
+
+#include <iostream>
+#include <fstream>
 
 namespace orproblems
 {

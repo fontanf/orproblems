@@ -1,11 +1,3 @@
-#pragma once
-
-#include "optimizationtools/utils/utils.hpp"
-#include "optimizationtools/containers/indexed_set.hpp"
-
-#include <iostream>
-#include <fstream>
-
 /**
  * Simple Assembly Line Balancing Problem of Type 1.
  *
@@ -24,6 +16,14 @@
  * - Minimize the number of stations
  *
  */
+
+#pragma once
+
+#include "optimizationtools/utils/utils.hpp"
+#include "optimizationtools/containers/indexed_set.hpp"
+
+#include <iostream>
+#include <fstream>
 
 namespace orproblems
 {

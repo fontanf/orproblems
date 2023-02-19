@@ -1,5 +1,3 @@
-#pragma once
-
 /**
  * ROADEF/EURO Challenge 2020: Maintenance Planning Problem.
  *
@@ -11,6 +9,8 @@
  * - TODO
  *
  */
+
+#pragma once
 
 #include "optimizationtools/containers/indexed_set.hpp"
 

@@ -1,11 +1,3 @@
-#pragma once
-
-#include "optimizationtools/utils/utils.hpp"
-#include "optimizationtools/containers/indexed_set.hpp"
-
-#include <iostream>
-#include <fstream>
-
 /**
  * Sequential Ordering Problem.
  * (Asymmetric Traveling Salesman Problem with Precedence Constraints)
@@ -24,6 +16,14 @@
  * - Minimize the total length of the route
  *
  */
+
+#pragma once
+
+#include "optimizationtools/utils/utils.hpp"
+#include "optimizationtools/containers/indexed_set.hpp"
+
+#include <iostream>
+#include <fstream>
 
 namespace orproblems
 {

@@ -1,10 +1,3 @@
-#pragma once
-
-#include "optimizationtools/containers/indexed_set.hpp"
-
-#include <iostream>
-#include <fstream>
-
 /**
  * Quadratic Assignment Problem.
  *
@@ -16,6 +9,13 @@
  * - TODO
  *
  */
+
+#pragma once
+
+#include "optimizationtools/containers/indexed_set.hpp"
+
+#include <iostream>
+#include <fstream>
 
 namespace orproblems
 {

@@ -1,11 +1,3 @@
-#pragma once
-
-#include "optimizationtools/containers/indexed_set.hpp"
-
-#include <stdexcept>
-#include <fstream>
-#include <iostream>
-
 /**
  * Single machine batch scheduling problem, Total completion time.
  *
@@ -24,6 +16,14 @@
  * - minimize the total completion time of the schedule
  *
  */
+
+#pragma once
+
+#include "optimizationtools/containers/indexed_set.hpp"
+
+#include <stdexcept>
+#include <fstream>
+#include <iostream>
 
 namespace orproblems
 {

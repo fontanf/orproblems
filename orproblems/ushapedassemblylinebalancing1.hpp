@@ -1,8 +1,3 @@
-#pragma once
-
-#include "optimizationtools/utils/utils.hpp"
-#include "optimizationtools/containers/indexed_set.hpp"
-
 /**
  * U-shaped Assembly Line Balancing Problem of Type 1.
  *
@@ -21,6 +16,11 @@
  * - Minimize the number of stations
  *
  */
+
+#pragma once
+
+#include "optimizationtools/utils/utils.hpp"
+#include "optimizationtools/containers/indexed_set.hpp"
 
 namespace orproblems
 {

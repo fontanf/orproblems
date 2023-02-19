@@ -1,12 +1,3 @@
-#pragma once
-
-#include "optimizationtools/utils/utils.hpp"
-#include "optimizationtools/containers/sorted_on_demand_array.hpp"
-#include "optimizationtools/containers/indexed_set.hpp"
-
-#include <iostream>
-#include <fstream>
-
 /**
  * Single machine order acceptance and scheduling problem with
  * sequence-dependent setup times.
@@ -31,6 +22,15 @@
  * - maximize the profit of the scheduled jobs minus their weighted tardiness
  *
  */
+
+#pragma once
+
+#include "optimizationtools/utils/utils.hpp"
+#include "optimizationtools/containers/sorted_on_demand_array.hpp"
+#include "optimizationtools/containers/indexed_set.hpp"
+
+#include <iostream>
+#include <fstream>
 
 namespace orproblems
 {

@@ -1,12 +1,3 @@
-#pragma once
-
-#include "optimizationtools/utils/utils.hpp"
-#include "optimizationtools/containers/indexed_set.hpp"
-#include "interval_tree.hpp"
-
-#include <iostream>
-#include <fstream>
-
 /**
  * No-wait job shop scheduling problem, Makespan.
  *
@@ -19,6 +10,15 @@
  * - Minimize the makespan of the schedule
  *
  */
+
+#pragma once
+
+#include "optimizationtools/utils/utils.hpp"
+#include "optimizationtools/containers/indexed_set.hpp"
+#include "interval_tree.hpp"
+
+#include <iostream>
+#include <fstream>
 
 namespace orproblems
 {

@@ -1,5 +1,3 @@
-#pragma once
-
 /**
  * Bin Packing Problem with Conflicts.
  *
@@ -16,6 +14,8 @@
  * - Minimize the number of bin used.
  *
  */
+
+#pragma once
 
 #include "optimizationtools/containers/indexed_set.hpp"
 #include "optimizationtools/utils/utils.hpp"

@@ -1,5 +1,3 @@
-#pragma once
-
 /**
  * Star Observation Scheduling Problem.
  *
@@ -19,6 +17,8 @@
  * - maximize the overall profit of the selected observations
  *
  */
+
+#pragma once
 
 #include "optimizationtools/containers/indexed_set.hpp"
 

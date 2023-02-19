@@ -1,5 +1,3 @@
-#pragma once
-
 /**
  * Identical parallel machine scheduling problem with family setup times, Total
  * weighted completion time.
@@ -21,6 +19,8 @@
  * - minimize the total weighted completion time of the schedule.
  *
  */
+
+#pragma once
 
 #include "optimizationtools/containers/indexed_set.hpp"
 

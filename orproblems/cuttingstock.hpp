@@ -1,5 +1,3 @@
-#pragma once
-
 /**
  * Cutting Stock Problem.
  *
@@ -13,6 +11,8 @@
  * - minimize the number of bin used.
  *
  */
+
+#pragma once
 
 #include "optimizationtools/containers/indexed_set.hpp"
 
