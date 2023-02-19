@@ -23,6 +23,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 
 namespace orproblems
 {
@@ -61,6 +62,7 @@ public:
         groups_[group_id].push_back(item);
         if (largest_group_size_ < (ItemId)groups_[group_id].size())
             largest_group_size_ = groups_[group_id].size();
+        number_of_items_++;
     }
     void set_weight(GroupId group_id, ItemId j, ResourceId r, Weight weight)
     {
@@ -90,23 +92,104 @@ public:
     virtual ~Instance() { }
 
     inline GroupId number_of_groups() const { return groups_.size(); }
+    inline GroupId number_of_items() const { return number_of_items_; }
     inline ItemId number_of_items(GroupId group_id) const { return groups_[group_id].size(); }
     inline ItemId largest_group_size() const { return largest_group_size_; }
     inline ResourceId number_of_resources() const { return capacities_.size(); }
     inline const Item& item(GroupId group_id, ItemId j) const { return groups_[group_id][j]; }
     inline Weight capacity(ResourceId r) const { return capacities_[r]; }
 
-    std::pair<bool, Profit> check(
-            std::string certificate_path,
+    std::ostream& print(
+            std::ostream& os,
             int verbose = 1) const
     {
-        // Initial display.
         if (verbose >= 1) {
-            std::cout
-                << "Checker" << std::endl
-                << "-------" << std::endl;
+            os << "Number of groups:        " << number_of_groups() << std::endl;
+            os << "Number of items:         " << number_of_items() << std::endl;
+            os << "Number of resources:     " << number_of_resources() << std::endl;
         }
-
+        // Print resources.
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Resource"
+                << std::setw(12) << "Capacity"
+                << std::endl
+                << std::setw(12) << "--------"
+                << std::setw(12) << "--------"
+                << std::endl;
+            for (ResourceId resource_id = 0; resource_id < number_of_resources(); ++resource_id) {
+                os << std::setw(12) << resource_id
+                    << std::setw(12) << capacity(resource_id)
+                    << std::endl;
+            }
+        }
+        // Print groups.
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Group"
+                << std::setw(12) << "# items"
+                << std::endl
+                << std::setw(12) << "-----"
+                << std::setw(12) << "-------"
+                << std::endl;
+            for (GroupId group_id = 0; group_id < number_of_groups(); ++group_id) {
+                os << std::setw(12) << group_id
+                    << std::setw(12) << number_of_items(group_id)
+                    << std::endl;
+            }
+        }
+        // Print items.
+        if (verbose >= 3) {
+            os << std::endl
+                << std::setw(12) << "Group"
+                << std::setw(12) << "Item"
+                << std::setw(12) << "Profit"
+                << std::endl
+                << std::setw(12) << "-----"
+                << std::setw(12) << "----"
+                << std::setw(12) << "------"
+                << std::endl;
+            for (GroupId group_id = 0; group_id < number_of_groups(); ++group_id) {
+                for (ItemId j = 0; j < number_of_items(group_id); ++j) {
+                    os << std::setw(12) << group_id
+                        << std::setw(12) << j
+                        << std::setw(12) << item(group_id, j).profit
+                        << std::endl;
+                }
+            }
+        }
+        // Print weights.
+        if (verbose >= 4) {
+            os << std::endl
+                << std::setw(12) << "Group"
+                << std::setw(12) << "Item"
+                << std::setw(12) << "Resource"
+                << std::setw(12) << "Weight"
+                << std::endl
+                << std::setw(12) << "-----"
+                << std::setw(12) << "----"
+                << std::setw(12) << "--------"
+                << std::setw(12) << "------"
+                << std::endl;
+            for (GroupId group_id = 0; group_id < number_of_groups(); ++group_id) {
+                for (ItemId j = 0; j < number_of_items(group_id); ++j) {
+                    for (ResourceId resource_id = 0; resource_id < number_of_resources(); ++resource_id) {
+                        os << std::setw(12) << group_id
+                            << std::setw(12) << j
+                            << std::setw(12) << resource_id
+                            << std::setw(12) << item(group_id, j).weights[resource_id]
+                            << std::endl;
+                    }
+                }
+            }
+        }
+        return os;
+    }
+    std::pair<bool, Profit> check(
+            std::string certificate_path,
+            std::ostream& os,
+            int verbose = 1) const
+    {
         std::ifstream file(certificate_path);
         if (!file.good()) {
             throw std::runtime_error(
@@ -122,7 +205,7 @@ public:
                 weights[r] += item(group_id, j).weights[r];
             profit += item(group_id, j).profit;
             if (verbose == 2)
-                std::cout << "Group: " << group_id
+                os << "Group: " << group_id
                     << "; Item: " << j
                     << "; Profit: " << item(group_id, j).profit
                     << std::endl;
@@ -137,12 +220,12 @@ public:
             = (overweight == 0)
             && (group_id == number_of_groups());
         if (verbose == 2)
-            std::cout << "---" << std::endl;
+            os << "---" << std::endl;
         if (verbose >= 1) {
-            std::cout << "Number of groups:           " << group_id << " / " << number_of_groups() << std::endl;
-            std::cout << "Overweight:                 " << overweight << std::endl;
-            std::cout << "Feasible:                   " << feasible << std::endl;
-            std::cout << "Profit:                     " << profit << std::endl;
+            os << "Number of groups:           " << group_id << " / " << number_of_groups() << std::endl;
+            os << "Overweight:                 " << overweight << std::endl;
+            os << "Feasible:                   " << feasible << std::endl;
+            os << "Profit:                     " << profit << std::endl;
         }
         return {feasible, profit};
     }
@@ -235,33 +318,10 @@ private:
 
     std::vector<Weight> capacities_;
     std::vector<std::vector<Item>> groups_;
+    ItemId number_of_items_ = 0;
     ItemId largest_group_size_ = 0;
 
 };
-
-static inline std::ostream& operator<<(
-        std::ostream &os, const Instance& instance)
-{
-    os << "number of groups " << instance.number_of_groups() << std::endl;
-    os << "number of resources " << instance.number_of_resources() << std::endl;
-    os << "capacities";
-    for (ResourceId r = 0; r < instance.number_of_resources(); ++r)
-        os << " " << instance.capacity(r);
-    os << std::endl;
-    os << "items" << std::endl;
-    for (GroupId group_id = 0; group_id < instance.number_of_groups(); ++group_id) {
-        for (ItemId j = 0; j < instance.number_of_items(group_id); ++j) {
-            os << "item " << j
-                << " group " << group_id
-                << " profit " << instance.item(group_id, j).profit
-                << " weights";
-            for (ResourceId r = 0; r < instance.number_of_resources(); ++r)
-                os << " " << instance.item(group_id, j).weights[r];
-            os << std::endl;
-        }
-    }
-    return os;
-}
 
 }
 
