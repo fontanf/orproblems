@@ -28,10 +28,10 @@ namespace orproblems
 namespace ushapedassemblylinebalancing1
 {
 
-typedef int64_t JobId;
-typedef int64_t JobPos;
-typedef int64_t StationId;
-typedef int64_t Time;
+using JobId = int64_t;
+using JobPos = int64_t;
+using StationId = int64_t;
+using Time = int64_t;
 
 struct Job
 {

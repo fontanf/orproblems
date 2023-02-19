@@ -27,9 +27,9 @@ namespace orproblems
 namespace travelingrepairman
 {
 
-typedef int64_t LocationId;
-typedef int64_t LocationPos;
-typedef double Time;
+using LocationId = int64_t;
+using LocationPos = int64_t;
+using Time = double;
 
 struct Location
 {

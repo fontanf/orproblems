@@ -37,12 +37,12 @@ namespace orproblems
 namespace generalizedquadraticmultipleknapsack
 {
 
-typedef int64_t ItemId;
-typedef int64_t ItemPos;
-typedef int64_t ClassId;
-typedef int64_t KnapsackId;
-typedef int64_t Weight;
-typedef double Profit;
+using ItemId = int64_t;
+using ItemPos = int64_t;
+using ClassId = int64_t;
+using KnapsackId = int64_t;
+using Weight = int64_t;
+using Profit = double;
 
 struct Class
 {

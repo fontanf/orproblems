@@ -25,11 +25,11 @@ namespace orproblems
 namespace cuttingstock
 {
 
-typedef int64_t ItemTypeId;
-typedef int64_t ItemPos;
-typedef int64_t Weight;
-typedef int64_t Demand;
-typedef int64_t BinId;
+using ItemTypeId = int64_t;
+using ItemPos = int64_t;
+using Weight = int64_t;
+using Demand = int64_t;
+using BinId = int64_t;
 
 struct Item
 {

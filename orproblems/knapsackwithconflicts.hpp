@@ -30,10 +30,10 @@ namespace orproblems
 namespace knapsackwithconflicts
 {
 
-typedef int64_t ItemId;
-typedef int64_t ItemPos;
-typedef int64_t Weight;
-typedef double Profit;
+using ItemId = int64_t;
+using ItemPos = int64_t;
+using Weight = int64_t;
+using Profit = double;
 
 struct Item
 {

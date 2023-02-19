@@ -29,9 +29,9 @@ namespace orproblems
 namespace travelingsalesmanwithreleasedates
 {
 
-typedef int64_t LocationId;
-typedef int64_t LocationPos;
-typedef int64_t Time;
+using LocationId = int64_t;
+using LocationPos = int64_t;
+using Time = int64_t;
 
 struct Location
 {

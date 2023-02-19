@@ -31,9 +31,9 @@ namespace orproblems
 namespace sequentialordering
 {
 
-typedef int64_t VertexId;
-typedef int64_t VertexPos;
-typedef int64_t Distance;
+using VertexId = int64_t;
+using VertexPos = int64_t;
+using Distance = int64_t;
 
 struct Location
 {

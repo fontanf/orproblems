@@ -31,10 +31,10 @@ namespace orproblems
 namespace starobservationscheduling
 {
 
-typedef int64_t TargetId;
-typedef int64_t NightId;
-typedef int64_t Profit;
-typedef int64_t Time;
+using TargetId = int64_t;
+using NightId = int64_t;
+using Profit = int64_t;
+using Time = int64_t;
 
 struct Observable
 {

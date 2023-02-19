@@ -40,13 +40,13 @@ namespace orproblems
 namespace thieforienteering
 {
 
-typedef int64_t LocationId;
-typedef int64_t Distance;
-typedef double Time;
-typedef int64_t ItemId;
-typedef int64_t ItemPos;
-typedef int64_t Profit;
-typedef int64_t Weight;
+using LocationId = int64_t;
+using Distance = int64_t;
+using Time = double;
+using ItemId = int64_t;
+using ItemPos = int64_t;
+using Profit = int64_t;
+using Weight = int64_t;
 
 struct Item
 {

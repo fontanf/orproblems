@@ -38,11 +38,11 @@ namespace orproblems
 namespace orderacceptanceandscheduling
 {
 
-typedef int64_t JobId;
-typedef int64_t JobPos;
-typedef int64_t Time;
-typedef double Weight;
-typedef double Profit;
+using JobId = int64_t;
+using JobPos = int64_t;
+using Time = int64_t;
+using Weight = double;
+using Profit = double;
 
 struct Job
 {

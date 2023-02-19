@@ -29,9 +29,9 @@ namespace orproblems
 namespace binpackingwithconflicts
 {
 
-typedef int64_t ItemId;
-typedef int64_t Weight;
-typedef int64_t BinId;
+using ItemId = int64_t;
+using Weight = int64_t;
+using BinId = int64_t;
 
 struct Item
 {

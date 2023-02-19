@@ -32,10 +32,10 @@ namespace orproblems
 namespace schedulingwithsdsttwt
 {
 
-typedef int64_t JobId;
-typedef int64_t JobPos;
-typedef int64_t Time;
-typedef double Weight;
+using JobId = int64_t;
+using JobPos = int64_t;
+using Time = int64_t;
+using Weight = double;
 
 struct Job
 {

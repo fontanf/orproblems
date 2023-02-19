@@ -31,11 +31,11 @@ namespace orproblems
 namespace batchschedulingtotalcompletiontime
 {
 
-typedef int64_t JobId;
-typedef int64_t JobPos;
-typedef int64_t Time;
-typedef int64_t Size;
-typedef int64_t Area;
+using JobId = int64_t;
+using JobPos = int64_t;
+using Time = int64_t;
+using Size = int64_t;
+using Area = int64_t;
 
 struct Job
 {

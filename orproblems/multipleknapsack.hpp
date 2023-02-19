@@ -25,11 +25,11 @@ namespace orproblems
 namespace multipleknapsack
 {
 
-typedef int64_t ItemId;
-typedef int64_t ItemPos;
-typedef int64_t KnapsackId;
-typedef int64_t Weight;
-typedef int64_t Profit;
+using ItemId = int64_t;
+using ItemPos = int64_t;
+using KnapsackId = int64_t;
+using Weight = int64_t;
+using Profit = int64_t;
 
 struct Item
 {

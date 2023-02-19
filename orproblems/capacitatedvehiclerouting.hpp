@@ -31,12 +31,12 @@ namespace orproblems
 namespace capacitatedvehiclerouting
 {
 
-typedef int64_t LocationId;
-typedef int64_t LocationPos;
-typedef int64_t RouteId;
-typedef int64_t Demand;
-typedef int64_t Distance;
-typedef int64_t RouteId;
+using LocationId = int64_t;
+using LocationPos = int64_t;
+using RouteId = int64_t;
+using Demand = int64_t;
+using Distance = int64_t;
+using RouteId = int64_t;
 
 struct Location
 {

@@ -39,12 +39,11 @@ namespace orproblems
 namespace vehicleroutingwithtimewindows
 {
 
-typedef int64_t LocationId;
-typedef int64_t LocationPos;
-typedef int64_t RouteId;
-typedef double Demand;
-//typedef double Time;
-typedef int64_t Time;
+using LocationId = int64_t;
+using LocationPos = int64_t;
+using RouteId = int64_t;
+using Demand = double;
+using Time = int64_t;
 
 struct Location
 {
