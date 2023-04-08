@@ -20,6 +20,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 
 namespace orproblems
 {
@@ -31,39 +32,69 @@ using VertexId = int64_t;
 using VertexPos = int64_t;
 using Distance = int64_t;
 
+/*
+ * Structure for a location.
+ */
 struct Location
 {
+    /** x-coordinate of the location. */
     double x;
+
+    /** y-coordinate of the location. */
     double y;
+
+    /** z-coordinate of the location. */
     double z;
 };
 
+/**
+ * Instance class for a 'travelingsalesman' problem.
+ */
 class Instance
 {
 
 public:
 
-    Instance(VertexId n):
-        locations_(n),
-        distances_(n, std::vector<Distance>(n, -1))
+    /*
+     * Constructors and destructor
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance(VertexId number_of_vertices):
+        locations_(number_of_vertices),
+        distances_(number_of_vertices, std::vector<Distance>(number_of_vertices, -1))
     {
-        for (VertexId j = 0; j < n; ++j)
-            distances_[j][j] = 0;
-    }
-    void set_xy(VertexId j, double x, double y, double z = -1)
-    {
-        locations_[j].x = x;
-        locations_[j].y = y;
-        locations_[j].z = z;
-    }
-    void set_distance(VertexId j1, VertexId j2, Distance d)
-    {
-        distances_[j1][j2] = d;
-        distances_[j2][j1] = d;
-        distance_max_ = std::max(distance_max_, d);
+        for (VertexId vertex_id = 0; vertex_id < number_of_vertices; ++vertex_id)
+            distances_[vertex_id][vertex_id] = 0;
     }
 
-    Instance(std::string instance_path, std::string format = "")
+    /** Set the coordinates of a vertex. */
+    void set_xy(
+            VertexId vertex_id,
+            double x,
+            double y,
+            double z = -1)
+    {
+        locations_[vertex_id].x = x;
+        locations_[vertex_id].y = y;
+        locations_[vertex_id].z = z;
+    }
+
+    /** Set the distance between two vertices. */
+    void set_distance(
+            VertexId vertex_id_1,
+            VertexId vertex_id_2,
+            Distance distance)
+    {
+        distances_[vertex_id_1][vertex_id_2] = distance;
+        distances_[vertex_id_2][vertex_id_1] = distance;
+        distance_max_ = std::max(distance_max_, distance);
+    }
+
+    /** Build an instance from a file. */
+    Instance(
+            std::string instance_path,
+            std::string format = "")
     {
         std::ifstream file(instance_path);
         if (!file.good()) {
@@ -79,71 +110,117 @@ public:
         file.close();
     }
 
-    virtual ~Instance() { }
+    /*
+     * Getters
+     */
 
+    /** Get the number of vertices. */
     inline VertexId number_of_vertices() const { return locations_.size(); }
-    inline double x(VertexId j) const { return locations_[j].x; }
-    inline double y(VertexId j) const { return locations_[j].y; }
-    inline Distance distance(VertexId j1, VertexId j2) const { return distances_[j1][j2]; }
+
+    /** Get the x-coordinate of a vertex. */
+    inline double x(VertexId vertex_id) const { return locations_[vertex_id].x; }
+
+    /** Get the y-coordinate of a vertex. */
+    inline double y(VertexId vertex_id) const { return locations_[vertex_id].y; }
+
+    /** Get the distance between two vertices. */
+    inline Distance distance(
+            VertexId vertex_id_1,
+            VertexId vertex_id_2) const
+    {
+        return distances_[vertex_id_1][vertex_id_2];
+    }
+
+    /** Get the maximum distance between two vertices. */
     inline Distance maximum_distance() const { return distance_max_; }
 
-    std::pair<bool, Distance> check(
-            std::string certificate_path,
+    /** Print the instance. */
+    std::ostream& print(
+            std::ostream& os,
             int verbose = 1) const
     {
-        // Initial display.
         if (verbose >= 1) {
-            std::cout
-                << "Checker" << std::endl
-                << "-------" << std::endl;
+            os << "Number of vertices:  " << number_of_vertices() << std::endl;
         }
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Loc. 1"
+                << std::setw(12) << "Loc. 2"
+                << std::setw(12) << "Distance"
+                << std::endl
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "--------"
+                << std::endl;
+            for (VertexId vertex_id_1 = 0; vertex_id_1 < number_of_vertices(); ++vertex_id_1) {
+                for (VertexId vertex_id_2 = vertex_id_1 + 1; vertex_id_2 < number_of_vertices(); ++vertex_id_2) {
+                    os
+                        << std::setw(12) << vertex_id_1
+                        << std::setw(12) << vertex_id_2
+                        << std::setw(12) << distance(vertex_id_1, vertex_id_2)
+                        << std::endl;
+                }
+            }
+        }
+        return os;
+    }
 
+    /** Check a certificate. */
+    std::pair<bool, Distance> check(
+            std::string certificate_path,
+            std::ostream& os,
+            int verbose = 1) const
+    {
         std::ifstream file(certificate_path);
         if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        VertexId n = number_of_vertices();
-        VertexId j_prec = 0;
-        VertexId j = -1;
-        optimizationtools::IndexedSet vertices(n);
+        VertexId vertex_id_pred = 0;
+        VertexId vertex_id = -1;
+        optimizationtools::IndexedSet vertices(number_of_vertices());
         vertices.add(0);
         VertexPos number_of_duplicates = 0;
         Distance total_distance = 0;
-        while (file >> j) {
-            if (vertices.contains(j)) {
+        while (file >> vertex_id) {
+            if (vertices.contains(vertex_id)) {
                 number_of_duplicates++;
                 if (verbose == 2)
-                    std::cout << "Vertex " << j << " has already been visited." << std::endl;
+                    os << "Vertex " << vertex_id << " has already been visited." << std::endl;
             }
-            vertices.add(j);
-            total_distance += distance(j_prec, j);
+            vertices.add(vertex_id);
+            total_distance += distance(vertex_id_pred, vertex_id);
             if (verbose == 2)
-                std::cout << "Vertex: " << j
-                    << "; Distance: " << distance(j_prec, j)
+                os << "Vertex: " << vertex_id
+                    << "; Distance: " << distance(vertex_id_pred, vertex_id)
                     << "; Total distance: " << total_distance
                     << std::endl;
-            j_prec = j;
+            vertex_id_pred = vertex_id;
         }
-        total_distance += distance(j_prec, 0);
+        total_distance += distance(vertex_id_pred, 0);
 
         bool feasible
-            = (vertices.size() == n)
+            = (vertices.size() == number_of_vertices())
             && (number_of_duplicates == 0);
         if (verbose == 2)
-            std::cout << "---" << std::endl;
+            os << std::endl;
         if (verbose >= 1) {
-            std::cout << "Number of vertices:     " << vertices.size() << " / " << n  << std::endl;
-            std::cout << "Number of duplicates:   " << number_of_duplicates << std::endl;
-            std::cout << "Feasible:               " << feasible << std::endl;
-            std::cout << "Total distance:         " << total_distance << std::endl;
+            os << "Number of vertices:     " << vertices.size() << " / " << number_of_vertices()  << std::endl;
+            os << "Number of duplicates:   " << number_of_duplicates << std::endl;
+            os << "Feasible:               " << feasible << std::endl;
+            os << "Total distance:         " << total_distance << std::endl;
         }
         return {feasible, total_distance};
     }
 
 private:
 
+    /*
+     * Private methods
+     */
+
+    /** Read an instance from a file in 'tsplib' format. */
     void read_tsplib(std::ifstream& file)
     {
         std::string tmp;
@@ -303,24 +380,19 @@ private:
             distances_[j][j] = std::numeric_limits<Distance>::max();
     }
 
+    /*
+     * Private attributes
+     */
+
+    /** Locations. */
     std::vector<Location> locations_;
+
+    /** Distances between locations. */
     std::vector<std::vector<Distance>> distances_;
+
+    /** Maximum distance. */
     Distance distance_max_ = 0;
-
 };
-
-static inline std::ostream& operator<<(
-        std::ostream &os, const Instance& instance)
-{
-    os << "number of vertices " << instance.number_of_vertices() << std::endl;
-    for (VertexId j1 = 0; j1 < instance.number_of_vertices(); ++j1) {
-        os << "vertex " << j1 << ":";
-        for (VertexId j2 = 0; j2 < instance.number_of_vertices(); ++j2)
-            os << " " << instance.distance(j1, j2);
-        os << std::endl;
-    }
-    return os;
-}
 
 }
 

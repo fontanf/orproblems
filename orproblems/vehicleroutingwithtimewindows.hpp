@@ -45,52 +45,92 @@ using RouteId = int64_t;
 using Demand = double;
 using Time = int64_t;
 
+/**
+ * Structure for a location.
+ */
 struct Location
 {
+    /** x-coordinate of the location. */
     double x;
+
+    /** y-coordinate of the location. */
     double y;
+
+    /** Demand of the location. */
     Demand demand;
+
+    /** Release date of the location. */
     Time release_date = 0;
+
+    /** Deadline of the location. */
     Time deadline = 0;
+
+    /** Service time of the location. */
     Time service_time = 0;
 };
 
+/**
+ * Instance class for a 'vehicleroutingwithtimewindows' problem.
+ */
 class Instance
 {
 
 public:
 
+    /*
+     * Constructors and destructor
+     */
+
+    /** Constructor to build an instance manually. */
     Instance(LocationId n):
         locations_(n),
         travel_times_(n, std::vector<Time>(n, -1)) { }
+
     void set_number_of_vehicles(RouteId m) { number_of_vehicles_ = m; }
+
+    /** Set the capacity of the vehicles. */
     void set_capacity(Demand capacity) { locations_[0].demand = capacity; }
+
+    /** Set the properties of a location. */
     void set_location(
-            LocationId j,
+            LocationId location_id,
             Demand demand,
             Time release_date,
             Time deadline,
             Time service_time)
     {
-        locations_[j].demand = demand;
-        locations_[j].release_date = release_date;
-        locations_[j].deadline = deadline;
-        locations_[j].service_time = service_time;
-        service_maximum_travel_time_ = std::max(service_maximum_travel_time_, service_time);
-    }
-    void set_xy(LocationId j, double x, double y)
-    {
-        locations_[j].x = x;
-        locations_[j].y = y;
-    }
-    void set_travel_time(LocationId j1, LocationId j2, Time d)
-    {
-        travel_times_[j1][j2] = d;
-        travel_times_[j2][j1] = d;
-        maximum_travel_time_ = std::max(maximum_travel_time_, d);
+        locations_[location_id].demand = demand;
+        locations_[location_id].release_date = release_date;
+        locations_[location_id].deadline = deadline;
+        locations_[location_id].service_time = service_time;
+        maximum_service_time_ = std::max(maximum_service_time_, service_time);
     }
 
-    Instance(std::string instance_path, std::string format = "")
+    /** Set the coordinates of a location. */
+    void set_xy(
+            LocationId location_id,
+            double x,
+            double y)
+    {
+        locations_[location_id].x = x;
+        locations_[location_id].y = y;
+    }
+
+    /** Set the travel time between two locations. */
+    void set_travel_time(
+            LocationId location_id_1,
+            LocationId location_id_2,
+            Time travel_time)
+    {
+        travel_times_[location_id_1][location_id_2] = travel_time;
+        travel_times_[location_id_2][location_id_1] = travel_time;
+        maximum_travel_time_ = std::max(maximum_travel_time_, travel_time);
+    }
+
+    /** Build an instance from a file. */
+    Instance(
+            std::string instance_path,
+            std::string format = "")
     {
         std::ifstream file(instance_path);
         if (!file.good()) {
@@ -106,16 +146,37 @@ public:
         file.close();
     }
 
-    virtual ~Instance() { }
+    /*
+     * Getters
+     */
 
-    RouteId number_of_vehicles() const { return number_of_vehicles_; }
-    LocationId number_of_locations() const { return locations_.size(); }
-    Demand capacity() const { return locations_[0].demand; }
-    inline const Location& location(LocationId j) const { return locations_[j]; }
-    Time travel_time(LocationId j1, LocationId j2) const { return travel_times_[j1][j2]; }
-    Time maximum_travel_time() const { return maximum_travel_time_; }
-    Time maximum_service_time() const { return service_maximum_travel_time_; }
+    /** Get the number of vehicles. */
+    inline RouteId number_of_vehicles() const { return number_of_vehicles_; }
 
+    /** Get the number of locations. */
+    inline LocationId number_of_locations() const { return locations_.size(); }
+
+    /** Get the vehicle capacity. */
+    inline Demand capacity() const { return locations_[0].demand; }
+
+    /** Get a location. */
+    inline const Location& location(LocationId location_id) const { return locations_[location_id]; }
+
+    /** Get the travel time between two locations. */
+    inline Time travel_time(
+            LocationId location_id_1,
+            LocationId location_id_2) const
+    {
+        return travel_times_[location_id_1][location_id_2];
+    }
+
+    /** Get the maximum travel time between two locations. */
+    inline Time maximum_travel_time() const { return maximum_travel_time_; }
+
+    /** Get the maximum service time between two locations. */
+    inline Time maximum_service_time() const { return maximum_service_time_; }
+
+    /** Print the instance. */
     std::ostream& print(
             std::ostream& os,
             int verbose = 1) const
@@ -139,12 +200,12 @@ public:
                 << std::setw(12) << "---------"
                 << std::setw(12) << "--------"
                 << std::endl;
-            for (LocationId j1 = 0; j1 < number_of_locations(); ++j1) {
-                os << std::setw(12) << j1
-                    << std::setw(12) << location(j1).demand
-                    << std::setw(12) << location(j1).service_time
-                    << std::setw(12) << location(j1).release_date
-                    << std::setw(12) << location(j1).deadline
+            for (LocationId location_id_1 = 0; location_id_1 < number_of_locations(); ++location_id_1) {
+                os << std::setw(12) << location_id_1
+                    << std::setw(12) << location(location_id_1).demand
+                    << std::setw(12) << location(location_id_1).service_time
+                    << std::setw(12) << location(location_id_1).release_date
+                    << std::setw(12) << location(location_id_1).deadline
                     << std::endl;
             }
             os << std::endl
@@ -154,17 +215,18 @@ public:
                 << std::setw(12) << "---------"
                 << "    ------------"
                 << std::endl;
-            for (LocationId j1 = 0; j1 < number_of_locations(); ++j1) {
-                os << std::setw(12) << j1
+            for (LocationId location_id_1 = 0; location_id_1 < number_of_locations(); ++location_id_1) {
+                os << std::setw(12) << location_id_1
                     << "   ";
-                for (LocationId j2 = 0; j2 < number_of_locations(); ++j2)
-                    os << " " << travel_time(j1, j2);
+                for (LocationId location_id_2 = 0; location_id_2 < number_of_locations(); ++location_id_2)
+                    os << " " << travel_time(location_id_1, location_id_2);
                 os << std::endl;
             }
         }
         return os;
     }
 
+    /** Check a certificate. */
     std::pair<bool, Time> check(
             std::string certificate_path,
             std::ostream& os,
@@ -200,8 +262,7 @@ public:
                 << std::endl;
         }
 
-        LocationId n = number_of_locations();
-        optimizationtools::IndexedSet visited_locations(n);
+        optimizationtools::IndexedSet visited_locations(number_of_locations());
         LocationPos number_of_duplicates = 0;
         LocationPos route_number_of_locations = -1;
         LocationPos number_of_late_visits = 0;
@@ -214,45 +275,45 @@ public:
             Time current_time = 0;
             Time route_travel_time = 0;
             Demand demand = 0;
-            LocationId j_prev = 0;
-            LocationId j = -1;
+            LocationId location_id_prev = 0;
+            LocationId location_id = -1;
             for (LocationPos pos = 0; pos <= route_number_of_locations; ++pos) {
                 if (pos < route_number_of_locations) {
-                    file >> j;
-                    if (visited_locations.contains(j)) {
+                    file >> location_id;
+                    if (visited_locations.contains(location_id)) {
                         number_of_duplicates++;
                         if (verbose >= 2)
-                            os << "Location " << j << " has already been visited." << std::endl;
+                            os << "Location " << location_id << " has already been visited." << std::endl;
                     }
-                    visited_locations.add(j);
-                    demand += location(j).demand;
+                    visited_locations.add(location_id);
+                    demand += location(location_id).demand;
                 } else {
-                    j = 0;
+                    location_id = 0;
                 }
-                current_time += travel_time(j_prev, j);
-                if (current_time < location(j).release_date)
-                    current_time = location(j).release_date;
-                if (current_time > location(j).deadline)
+                current_time += travel_time(location_id_prev, location_id);
+                if (current_time < location(location_id).release_date)
+                    current_time = location(location_id).release_date;
+                if (current_time > location(location_id).deadline)
                     number_of_late_visits++;
-                route_travel_time += travel_time(j_prev, j);
+                route_travel_time += travel_time(location_id_prev, location_id);
                 if (verbose >= 2) {
                     os
-                        << std::setw(10) << j
-                        << std::setw(12) << location(j).demand
-                        << std::setw(12) << location(j).release_date
-                        << std::setw(12) << location(j).deadline
-                        << std::setw(12) << travel_time(j_prev, j)
-                        << std::setw(12) << location(j).service_time
+                        << std::setw(10) << location_id
+                        << std::setw(12) << location(location_id).demand
+                        << std::setw(12) << location(location_id).release_date
+                        << std::setw(12) << location(location_id).deadline
+                        << std::setw(12) << travel_time(location_id_prev, location_id)
+                        << std::setw(12) << location(location_id).service_time
                         << std::setw(12) << demand
                         << std::setw(12) << current_time
                         << std::setw(12) << route_travel_time
                         << std::endl;
                 }
-                current_time += location(j).service_time;
-                j_prev = j;
+                current_time += location(location_id).service_time;
+                location_id_prev = location_id;
             }
-            if (j_prev != 0)
-                route_travel_time += travel_time(j_prev, 0);
+            if (location_id_prev != 0)
+                route_travel_time += travel_time(location_id_prev, 0);
             total_travel_time += route_travel_time;
             if (verbose >= 2) {
                 os << "Route " << number_of_routes
@@ -267,7 +328,7 @@ public:
         }
 
         bool feasible
-            = (visited_locations.size() == n - 1)
+            = (visited_locations.size() == number_of_locations() - 1)
             && (!visited_locations.contains(0))
             && (number_of_duplicates == 0)
             && (number_of_routes <= number_of_vehicles())
@@ -276,7 +337,7 @@ public:
         if (verbose == 2)
             os << std::endl;
         if (verbose >= 1) {
-            os << "Number of visited locations:    " << visited_locations.size() << " / " << n - 1 << std::endl;
+            os << "Number of visited locations:    " << visited_locations.size() << " / " << number_of_locations() - 1 << std::endl;
             os << "Number of duplicates:           " << number_of_duplicates << std::endl;
             os << "Number of routes:               " << number_of_routes << " / " << number_of_vehicles() << std::endl;
             os << "Number of overloaded vehicles:  " << number_of_overloaded_vehicles << std::endl;
@@ -289,6 +350,11 @@ public:
 
 private:
 
+    /*
+     * Private methods
+     */
+
+    /** Read an instance from a file in 'dimacs2021' format. */
     void read_dimacs2021(std::ifstream& file)
     {
         std::string tmp;
@@ -339,11 +405,24 @@ private:
         }
     }
 
+    /*
+     * Private attributes
+     */
+
+    /** Locations. */
     std::vector<Location> locations_;
+
+    /** Travel times. */
     std::vector<std::vector<Time>> travel_times_;
+
+    /** Number of vehicles. */
     RouteId number_of_vehicles_ = 0;
+
+    /** Maximum travel time. */
     Time maximum_travel_time_ = 0;
-    Time service_maximum_travel_time_ = 0;
+
+    /** Maximum service time. */
+    Time maximum_service_time_ = 0;
 
 };
 
