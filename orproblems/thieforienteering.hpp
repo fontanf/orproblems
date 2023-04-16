@@ -11,8 +11,8 @@
  * - A time limit T
  * - A capacity c
  * - A maximum speed vmax and a minimum speed vmin such that the time to travel
- *   from city j1 to city j2 is equal to:
- *       d(j1, j2) / (vmax - w * (vmax - vmin) / c)
+ *   from city location_id_1 to city location_id_2 is equal to:
+ *       d(location_id_1, location_id_2) / (vmax - w * (vmax - vmin) / c)
  *   with w the sum of the weights of the currently collected items
  * Problem:
  * - find a route from city 1 to city n and a set of items to collect such
@@ -33,6 +33,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 
 namespace orproblems
 {
@@ -48,61 +49,132 @@ using ItemPos = int64_t;
 using Profit = int64_t;
 using Weight = int64_t;
 
+/**
+ * Structure for an item.
+ */
 struct Item
 {
+    /** Profit of the item. */
     Profit profit;
+
+    /** Weight of the item. */
     Weight weight;
-    LocationId location;
+
+    /** Location of the item. */
+    LocationId location_id;
 };
 
+/**
+ * Structure for a location.
+ */
 struct Location
 {
+    /** x-coordinate. */
     double x;
+
+    /** y-coordinate. */
     double y;
+
+    /** z-coordinate. */
     double z;
-    std::vector<ItemId> items;
+
+    /** Items available at the location. */
+    std::vector<ItemId> item_ids;
 };
 
+/**
+ * Instance class for a 'thieforienteering' problem.
+ */
 class Instance
 {
 
 public:
 
+    /*
+     * Constructors and destructor
+     */
+
+    /** Constructor to build an instance manually. */
     Instance(LocationId n):
         locations_(n),
         distances_(n, std::vector<Distance>(n, -1))
     {
-        for (LocationId j = 0; j < n; ++j)
-            distances_[j][j] = 0;
+        for (LocationId location_id = 0;
+                location_id < n;
+                ++location_id) {
+            distances_[location_id][location_id] = 0;
+        }
     }
+
+    /** Set the time limit. */
     void set_time_limit(Time time_limit)
     {
         time_limit_ = time_limit;
     }
-    void set_xy(LocationId j, double x, double y, double z = -1)
+
+    /** Set the coordinates of a location. */
+    void set_xy(
+            LocationId location_id,
+            double x,
+            double y,
+            double z = -1)
     {
-        locations_[j].x = x;
-        locations_[j].y = y;
-        locations_[j].z = z;
+        locations_[location_id].x = x;
+        locations_[location_id].y = y;
+        locations_[location_id].z = z;
     }
-    void set_distance(LocationId j1, LocationId j2, Distance d)
+
+    /** Set the distance between two locations. */
+    void set_distance(
+            LocationId location_id_1,
+            LocationId location_id_2,
+            Distance distance)
     {
-        distances_[j1][j2] = d;
-        distances_[j2][j1] = d;
-        distance_max_ = std::max(distance_max_, d);
+        distances_[location_id_1][location_id_2] = distance;
+        distances_[location_id_2][location_id_1] = distance;
+        distance_max_ = std::max(distance_max_, distance);
     }
-    void add_item(LocationId j, Profit profit, Weight weight)
+
+    /** Set the minimum speed. */
+    void set_minimum_speed(double minimum_speed)
     {
-        ItemId i = items_.size();
-        locations_[j].items.push_back(i);
+        speed_min_ = minimum_speed;
+    }
+
+    /** Set the maximum speed. */
+    void set_maximum_speed(double maximum_speed)
+    {
+        speed_max_ = maximum_speed;
+    }
+
+    /** Set the capacity of the knapsack. */
+    void set_capacity(Weight capacity)
+    {
+        capacity_ = capacity;
+    }
+
+    /** Add an item. */
+    void add_item(
+            LocationId location_id,
+            Profit profit,
+            Weight weight)
+    {
+        ItemId item_id = items_.size();
+        locations_[location_id].item_ids.push_back(item_id);
+
         Item item;
-        item.location = j;
+        item.location_id = location_id;
         item.profit = profit;
         item.weight = weight;
         items_.push_back(item);
+
+        weight_sum_ += weight;
     }
 
-    Instance(std::string instance_path, std::string format = "")
+    /** Build an instance from a file. */
+    Instance(
+            std::string instance_path,
+            std::string format = "")
     {
         std::ifstream file(instance_path);
         if (!file.good()) {
@@ -118,93 +190,243 @@ public:
         file.close();
     }
 
-    virtual ~Instance() { }
+    /*
+     * Getters
+     */
 
+    /** Get the number of locations. */
     inline LocationId number_of_locations() const { return locations_.size(); }
-    inline double x(LocationId j) const { return locations_[j].x; }
-    inline double y(LocationId j) const { return locations_[j].y; }
-    inline Distance distance(LocationId j1, LocationId j2) const { return distances_[j1][j2]; }
-    inline Distance maximum_distance() const { return distance_max_; }
-    inline Time time_limit() const { return time_limit_; }
-    inline Time duration(LocationId j1, LocationId j2, Weight weight) const
+
+    /** Get a location. */
+    inline const Location& location(LocationId location_id) const { return locations_[location_id]; }
+
+    /** Get the x-coordinate of a location. */
+    inline double x(LocationId location_id) const { return locations_[location_id].x; }
+
+    /** Get the y-coordinate of a location. */
+    inline double y(LocationId location_id) const { return locations_[location_id].y; }
+
+    /** Get the distance between two locations. */
+    inline Distance distance(
+            LocationId location_id_1,
+            LocationId location_id_2) const
     {
-        double speed = speed_max_ - (double)(weight * (speed_max_ - speed_min_)) / capacity();
-        return (double)distance(j1, j2) / speed;
+        return distances_[location_id_1][location_id_2];
     }
 
+    /** Get the maximum distance between two locations. */
+    inline Distance maximum_distance() const { return distance_max_; }
+
+    /** Get the time limit. */
+    inline Time time_limit() const { return time_limit_; }
+
+    /** Get the duration between two locations. */
+    inline Time duration(
+            LocationId location_id_1,
+            LocationId location_id_2,
+            Weight weight) const
+    {
+        double speed = speed_max_ - (double)(weight * (speed_max_ - speed_min_)) / capacity();
+        return (double)distance(location_id_1, location_id_2) / speed;
+    }
+
+    /** Get the number of items. */
     inline ItemId number_of_items() const { return items_.size(); }
-    inline const Item& item(ItemId i) const { return items_[i]; }
-    inline const Location& location(LocationId j) const { return locations_[j]; }
+
+    /** Get an item. */
+    inline const Item& item(ItemId item_id) const { return items_[item_id]; }
+
+    /** Get the capacity of the knapsack. */
     inline Weight capacity() const { return capacity_; }
 
-    std::pair<bool, Time> check(
-            std::string certificate_path,
+    /** Print the instance. */
+    std::ostream& print(
+            std::ostream& os,
             int verbose = 1) const
     {
-        // Initial display.
         if (verbose >= 1) {
-            std::cout
-                << "Checker" << std::endl
-                << "-------" << std::endl;
+            os
+                << "Number of locations:  " << number_of_locations() << std::endl
+                << "Number of items:      " << number_of_items() << std::endl
+                << "Time limit:           " << time_limit() << std::endl
+                << "Capacity:             " << capacity() << std::endl
+                << "Minimum speed:        " << speed_min_ << std::endl
+                << "Maximum speed:        " << speed_max_ << std::endl
+                << "Weight sum:           " << weight_sum_ << std::endl
+                << "Weight ratio:         " << (double)weight_sum_ / capacity() << std::endl
+            ;
         }
 
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Location"
+                << std::setw(12) << "X"
+                << std::setw(12) << "Y"
+                << std::setw(12) << "Z"
+                << std::setw(12) << "# items"
+                << std::endl
+                << std::setw(12) << "------"
+                << std::setw(12) << "-"
+                << std::setw(12) << "-"
+                << std::setw(12) << "-"
+                << std::setw(12) << "-------"
+                << std::endl;
+            for (LocationId location_id = 0;
+                    location_id < number_of_locations();
+                    ++location_id) {
+                const Location& location = this->location(location_id);
+                os
+                    << std::setw(12) << location_id
+                    << std::setw(12) << location.x
+                    << std::setw(12) << location.y
+                    << std::setw(12) << location.z
+                    << std::setw(12) << location.item_ids.size()
+                    << std::endl;
+            }
+        }
+
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Item"
+                << std::setw(12) << "Location"
+                << std::setw(12) << "Weight"
+                << std::setw(12) << "Profit"
+                << std::endl
+                << std::setw(12) << "----"
+                << std::setw(12) << "--------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::endl;
+            for (ItemId item_id = 0;
+                    item_id < number_of_items();
+                    ++item_id) {
+                const Item& item = this->item(item_id);
+                os
+                    << std::setw(12) << item_id
+                    << std::setw(12) << item.location_id
+                    << std::setw(12) << item.weight
+                    << std::setw(12) << item.profit
+                    << std::endl;
+            }
+        }
+
+        if (verbose >= 3) {
+            os << std::endl
+                << std::setw(12) << "Loc. 1"
+                << std::setw(12) << "Loc. 2"
+                << std::setw(12) << "Distance"
+                << std::endl
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "--------"
+                << std::endl;
+            for (LocationId location_id_1 = 0;
+                    location_id_1 < number_of_locations();
+                    ++location_id_1) {
+                for (LocationId location_id_2 = location_id_1 + 1;
+                        location_id_2 < number_of_locations();
+                        ++location_id_2) {
+                    os
+                        << std::setw(12) << location_id_1
+                        << std::setw(12) << location_id_2
+                        << std::setw(12) << distance(location_id_1, location_id_2)
+                        << std::endl;
+                }
+            }
+        }
+
+        return os;
+    }
+
+    /** Check a certificate. */
+    std::pair<bool, Profit> check(
+            std::string certificate_path,
+            std::ostream& os,
+            int verbose = 1) const
+    {
         std::ifstream file(certificate_path);
         if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        Time t = 0;
-        Profit p = 0;
-        Weight w = 0;
-        LocationId j = 0;
-        ItemId i = -1;
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Item"
+                << std::setw(12) << "Location"
+                << std::setw(12) << "Time"
+                << std::setw(12) << "Weight"
+                << std::setw(12) << "Profit"
+                << std::endl
+                << std::setw(12) << "----"
+                << std::setw(12) << "--------"
+                << std::setw(12) << "----"
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::endl;
+        }
+
+        Time time = 0;
+        Profit profit = 0;
+        Weight weight = 0;
+        LocationId location_id = 0;
+        ItemId item_id = -1;
         optimizationtools::IndexedSet items(number_of_items());
         ItemPos duplicates = 0;
-        while (file >> i) {
+        while (file >> item_id) {
             //i--;
-            if (items.contains(i)) {
+            if (items.contains(item_id)) {
                 duplicates++;
-                if (verbose == 2)
-                    std::cout << "Item " << i << " already selected." << std::endl;
+                if (verbose >= 2)
+                    os << "Item " << item_id << " already selected." << std::endl;
             }
-            thieforienteering::LocationId j_next = item(i).location;
-            t += duration(j, j_next, w);
-            p += item(i).profit;
-            w += item(i).weight;
-            if (verbose == 2)
-                std::cout << "Item: " << i
-                    << "; Location: " << j_next
-                    << "; Duration: " << t << " / " << time_limit()
-                    << "; Weight: " << w << " / " << capacity()
-                    << "; Profit: " << p << std::endl;
-            j = j_next;
+            thieforienteering::LocationId location_id_next = item(item_id).location_id;
+            time += duration(location_id, location_id_next, weight);
+            profit += item(item_id).profit;
+            weight += item(item_id).weight;
+
+            if (verbose >= 2) {
+                os
+                    << std::setw(12) << item_id
+                    << std::setw(12) << location_id
+                    << std::setw(12) << time
+                    << std::setw(12) << weight
+                    << std::setw(12) << profit
+                    << std::endl;
+            }
+
+            location_id = location_id_next;
         }
-        t += duration(j, number_of_locations() - 1, w);
+        time += duration(location_id, number_of_locations() - 1, weight);
 
         bool feasible = (duplicates == 0)
-            && (t <= time_limit())
-            && (w <= capacity());
-        if (verbose == 2)
-            std::cout << "---" << std::endl;
+            && (time <= time_limit())
+            && (weight <= capacity());
+        if (verbose >= 2)
+            os << std::endl;
         if (verbose >= 1) {
-            std::cout << "Duration:  " << t << " / " << time_limit() << std::endl;
-            std::cout << "Weight:    " << w << " / " << capacity() << std::endl;
-            std::cout << "Feasible:  " << feasible << std::endl;
-            std::cout << "Profit:    " << p << std::endl;
+            os
+                << "Duration:  " << time << " / " << time_limit() << std::endl
+                << "Weight:    " << weight << " / " << capacity() << std::endl
+                << "Feasible:  " << feasible << std::endl
+                << "Profit:    " << profit << std::endl
+                ;
         }
-        return {feasible, p};
+        return {feasible, profit};
     }
-
 
 private:
 
+    /*
+     * Private methods
+     */
+
+    /** Read an instance from a file in 'santos2018' format. */
     void read_santos2018(std::ifstream& file)
     {
         std::string tmp;
         std::vector<std::string> line;
-        LocationId n = -1;
-        ItemId n_items = -1;
+        ItemId number_of_items = -1;
         std::string edge_weight_type;
         std::string edge_weight_format;
         std::string node_coord_type = "TWOD_COORDS";
@@ -218,19 +440,19 @@ private:
             } else if (tmp.rfind("KNAPSACK DATA TYPE", 0) == 0) {
             } else if (tmp.rfind("DISPLAY_DATA_TYPE", 0) == 0) {
             } else if (tmp.rfind("DIMENSION", 0) == 0) {
-                n = std::stol(line.back());
+                LocationId n = std::stol(line.back());
                 locations_ = std::vector<Location>(n);
                 distances_ = std::vector<std::vector<Distance>>(n, std::vector<Distance>(n, -1));
             } else if (tmp.rfind("NUMBER OF ITEMS", 0) == 0) {
-                n_items = std::stol(line.back());
+                number_of_items = std::stol(line.back());
             } else if (tmp.rfind("CAPACITY OF KNAPSACK", 0) == 0) {
-                capacity_ = std::stol(line.back());
+                set_capacity(std::stol(line.back()));
             } else if (tmp.rfind("MAX TIME", 0) == 0) {
-                time_limit_ = std::stol(line.back());
+                set_time_limit(std::stol(line.back()));
             } else if (tmp.rfind("MIN SPEED", 0) == 0) {
-                speed_min_ = std::stod(line.back());
+                set_minimum_speed(std::stod(line.back()));
             } else if (tmp.rfind("MAX SPEED", 0) == 0) {
-                speed_max_ = std::stod(line.back());
+                set_maximum_speed(std::stod(line.back()));
             } else if (tmp.rfind("EDGE_WEIGHT_TYPE", 0) == 0) {
                 edge_weight_type = line.back();
             } else if (tmp.rfind("EDGE_WEIGHT_FORMAT", 0) == 0) {
@@ -240,42 +462,62 @@ private:
             } else if (tmp.rfind("EDGE_WEIGHT_SECTION", 0) == 0) {
                 if (edge_weight_format == "UPPER_ROW") {
                     Distance d;
-                    for (LocationId j1 = 0; j1 < n - 1; ++j1) {
-                        for (LocationId j2 = j1 + 1; j2 < n; ++j2) {
+                    for (LocationId location_id_1 = 0;
+                            location_id_1 < number_of_locations() - 1;
+                            ++location_id_1) {
+                        for (LocationId location_id_2 = location_id_1 + 1;
+                                location_id_2 < number_of_locations();
+                                ++location_id_2) {
                             file >> d;
-                            set_distance(j1, j2, d);
+                            set_distance(location_id_1, location_id_2, d);
                         }
                     }
                 } else if (edge_weight_format == "LOWER_ROW") {
                     Distance d;
-                    for (LocationId j1 = 1; j1 < n; ++j1) {
-                        for (LocationId j2 = 0; j2 < j1; ++j2) {
+                    for (LocationId location_id_1 = 1;
+                            location_id_1 < number_of_locations();
+                            ++location_id_1) {
+                        for (LocationId location_id_2 = 0;
+                                location_id_2 < location_id_1;
+                                ++location_id_2) {
                             file >> d;
-                            set_distance(j1, j2, d);
+                            set_distance(location_id_1, location_id_2, d);
                         }
                     }
                 } else if (edge_weight_format == "UPPER_DIAG_ROW") {
                     Distance d;
-                    for (LocationId j1 = 0; j1 < n; ++j1) {
-                        for (LocationId j2 = j1; j2 < n; ++j2) {
+                    for (LocationId location_id_1 = 0;
+                            location_id_1 < number_of_locations();
+                            ++location_id_1) {
+                        for (LocationId location_id_2 = location_id_1;
+                                location_id_2 < number_of_locations();
+                                ++location_id_2) {
                             file >> d;
-                            set_distance(j1, j2, d);
+                            set_distance(location_id_1, location_id_2, d);
                         }
                     }
                 } else if (edge_weight_format == "LOWER_DIAG_ROW") {
                     Distance d;
-                    for (LocationId j1 = 0; j1 < n; ++j1) {
-                        for (LocationId j2 = 0; j2 <= j1; ++j2) {
+                    for (LocationId location_id_1 = 0;
+                            location_id_1 < number_of_locations();
+                            ++location_id_1) {
+                        for (LocationId location_id_2 = 0;
+                                location_id_2 <= location_id_1;
+                                ++location_id_2) {
                             file >> d;
-                            set_distance(j1, j2, d);
+                            set_distance(location_id_1, location_id_2, d);
                         }
                     }
                 } else if (edge_weight_format == "FULL_MATRIX") {
                     Distance d;
-                    for (LocationId j1 = 0; j1 < n; ++j1) {
-                        for (LocationId j2 = 0; j2 < n; ++j2) {
+                    for (LocationId location_id_1 = 0;
+                            location_id_1 < number_of_locations();
+                            ++location_id_1) {
+                        for (LocationId location_id_2 = 0;
+                                location_id_2 < number_of_locations();
+                                ++location_id_2) {
                             file >> d;
-                            set_distance(j1, j2, d);
+                            set_distance(location_id_1, location_id_2, d);
                         }
                     }
                 } else {
@@ -285,31 +527,37 @@ private:
                 if (node_coord_type == "TWOD_COORDS") {
                     LocationId tmp;
                     double x, y;
-                    for (LocationId j = 0; j < n; ++j) {
+                    for (LocationId location_id = 0;
+                            location_id < number_of_locations();
+                            ++location_id) {
                         file >> tmp >> x >> y;
-                        set_xy(j, x, y);
+                        set_xy(location_id, x, y);
                     }
                 } else if (node_coord_type == "THREED_COORDS") {
                     LocationId tmp;
                     double x, y, z;
-                    for (LocationId j = 0; j < n; ++j) {
+                    for (LocationId location_id = 0;
+                            location_id < number_of_locations();
+                            ++location_id) {
                         file >> tmp >> x >> y >> z;
-                        set_xy(j, x, y, z);
+                        set_xy(location_id, x, y, z);
                     }
                 }
             } else if (tmp.rfind("DISPLAY_DATA_SECTION", 0) == 0) {
                 LocationId tmp;
                 double x, y;
-                for (LocationId j = 0; j < n; ++j) {
+                for (LocationId location_id = 0;
+                        location_id < number_of_locations();
+                        ++location_id) {
                     file >> tmp >> x >> y;
-                    set_xy(j, x, y);
+                    set_xy(location_id, x, y);
                 }
             } else if (tmp.rfind("ITEMS SECTION", 0) == 0) {
                 ItemId tmp = -1;
                 Profit profit = -1;
                 Weight weight = -1;
                 LocationId location = -1;
-                for (ItemId i = 0; i < n_items; ++i) {
+                for (ItemId item_id = 0; item_id < number_of_items; ++item_id) {
                     file >> tmp >> profit >> weight >> location;
                     add_item(location - 1, profit, weight);
                 }
@@ -322,102 +570,120 @@ private:
 
         // Compute distances.
         if (edge_weight_type == "EUC_2D") {
-            for (LocationId j1 = 0; j1 < n; ++j1) {
-                for (LocationId j2 = j1 + 1; j2 < n; ++j2) {
-                    Distance xd = x(j2) - x(j1);
-                    Distance yd = y(j2) - y(j1);
+            for (LocationId location_id_1 = 0;
+                    location_id_1 < number_of_locations();
+                    ++location_id_1) {
+                for (LocationId location_id_2 = location_id_1 + 1;
+                        location_id_2 < number_of_locations();
+                        ++location_id_2) {
+                    Distance xd = x(location_id_2) - x(location_id_1);
+                    Distance yd = y(location_id_2) - y(location_id_1);
                     Distance d = std::round(std::sqrt(xd * xd + yd * yd));
-                    set_distance(j1, j2, d);
+                    set_distance(location_id_1, location_id_2, d);
                 }
             }
         } else if (edge_weight_type == "CEIL_2D") {
-            for (LocationId j1 = 0; j1 < n; ++j1) {
-                for (LocationId j2 = j1 + 1; j2 < n; ++j2) {
-                    Distance xd = x(j2) - x(j1);
-                    Distance yd = y(j2) - y(j1);
+            for (LocationId location_id_1 = 0;
+                    location_id_1 < number_of_locations();
+                    ++location_id_1) {
+                for (LocationId location_id_2 = location_id_1 + 1;
+                        location_id_2 < number_of_locations();
+                        ++location_id_2) {
+                    Distance xd = x(location_id_2) - x(location_id_1);
+                    Distance yd = y(location_id_2) - y(location_id_1);
                     Distance d = std::ceil(std::sqrt(xd * xd + yd * yd));
-                    set_distance(j1, j2, d);
+                    set_distance(location_id_1, location_id_2, d);
                 }
             }
         } else if (edge_weight_type == "GEO") {
-            std::vector<double> latitudes(n, 0);
-            std::vector<double> longitudes(n, 0);
-            for (LocationId j = 0; j < n; ++j) {
+            std::vector<double> latitudes(number_of_locations(), 0);
+            std::vector<double> longitudes(number_of_locations(), 0);
+            for (LocationId location_id = 0;
+                    location_id < number_of_locations();
+                    ++location_id) {
                 double pi = 3.141592;
-                int deg_x = std::round(x(j));
-                double min_x = x(j) - deg_x;
-                latitudes[j] = pi * (deg_x + 5.0 * min_x / 3.0) / 180.0;
-                int deg_y = std::round(y(j));
-                double min_y = y(j) - deg_y;
-                longitudes[j] = pi * (deg_y + 5.0 * min_y / 3.0) / 180.0;
+                int deg_x = std::round(x(location_id));
+                double min_x = x(location_id) - deg_x;
+                latitudes[location_id] = pi * (deg_x + 5.0 * min_x / 3.0) / 180.0;
+                int deg_y = std::round(y(location_id));
+                double min_y = y(location_id) - deg_y;
+                longitudes[location_id] = pi * (deg_y + 5.0 * min_y / 3.0) / 180.0;
             }
             double rrr = 6378.388;
-            for (LocationId j1 = 0; j1 < n; ++j1) {
-                for (LocationId j2 = j1 + 1; j2 < n; ++j2) {
-                    double q1 = cos(longitudes[j1] - longitudes[j2]);
-                    double q2 = cos(latitudes[j1] - latitudes[j2]);
-                    double q3 = cos(latitudes[j1] + latitudes[j2]);
+            for (LocationId location_id_1 = 0;
+                    location_id_1 < number_of_locations();
+                    ++location_id_1) {
+                for (LocationId location_id_2 = location_id_1 + 1;
+                        location_id_2 < number_of_locations();
+                        ++location_id_2) {
+                    double q1 = cos(longitudes[location_id_1] - longitudes[location_id_2]);
+                    double q2 = cos(latitudes[location_id_1] - latitudes[location_id_2]);
+                    double q3 = cos(latitudes[location_id_1] + latitudes[location_id_2]);
                     Distance d = (Distance)(rrr * acos(0.5 * ((1.0 + q1) * q2 - (1.0 - q1) * q3)) + 1.0);
-                    set_distance(j1, j2, d);
+                    set_distance(location_id_1, location_id_2, d);
                 }
             }
         } else if (edge_weight_type == "ATT") {
-            for (LocationId j1 = 0; j1 < n; ++j1) {
-                for (LocationId j2 = j1 + 1; j2 < n; ++j2) {
-                    double xd = x(j1) - x(j2);
-                    double yd = y(j1) - y(j2);
+            for (LocationId location_id_1 = 0;
+                    location_id_1 < number_of_locations();
+                    ++location_id_1) {
+                for (LocationId location_id_2 = location_id_1 + 1;
+                        location_id_2 < number_of_locations();
+                        ++location_id_2) {
+                    double xd = x(location_id_1) - x(location_id_2);
+                    double yd = y(location_id_1) - y(location_id_2);
                     double rij = sqrt((xd * xd + yd * yd) / 10.0);
                     int tij = std::round(rij);
                     Distance d = (tij < rij)? tij + 1: tij;
-                    set_distance(j1, j2, d);
+                    set_distance(location_id_1, location_id_2, d);
                 }
             }
         } else if (edge_weight_type == "EXPLICIT") {
         } else {
             std::cerr << "\033[31m" << "ERROR, EDGE_WEIGHT_TYPE \"" << edge_weight_type << "\" not implemented." << "\033[0m" << std::endl;
         }
-        for (LocationId j = 0; j < n; ++j)
-            distances_[j][j] = 0;
+        for (LocationId location_id = 0;
+                location_id < number_of_locations();
+                ++location_id)
+            distances_[location_id][location_id] = 0;
     }
 
+    /*
+     * Private attributes
+     */
+
+    /** Locations. */
     std::vector<Location> locations_;
+
+    /** Distances. */
     std::vector<std::vector<Distance>> distances_;
-    Distance distance_max_ = 0;
+
+    /** Minimum speed. */
     double speed_min_ = -1;
+
+    /** Maximum speed. */
     double speed_max_ = -1;
+
+    /** Time limit. */
     Time time_limit_ = -1;
 
+    /** Items. */
     std::vector<Item> items_;
+
+    /** Capacity of the knapsack. */
     Weight capacity_ = -1;
 
-};
+    /*
+     * Computed attributes
+     */
 
-static inline std::ostream& operator<<(
-        std::ostream &os, const Instance& instance)
-{
-    os << "number of locations: " << instance.number_of_locations() << std::endl;
-    os << "number of items: " << instance.number_of_items() << std::endl;
-    for (ItemId i = 0; i < instance.number_of_items(); ++i)
-        os << "item: " << i
-            << "; location: " << instance.item(i).location
-            << "; weight: " << instance.item(i).weight
-            << "; profit: " << instance.item(i).profit
-            << std::endl;
-    for (LocationId j = 0; j < instance.number_of_locations(); ++j) {
-        os << "location: " << j
-            << "; items:";
-        for (ItemId i: instance.location(j).items)
-            os << " " << i;
-        os << std::endl;
-    }
-    for (LocationId j1 = 0; j1 < instance.number_of_locations(); ++j1) {
-        os << "location " << j1 << ":";
-        for (LocationId j2 = 0; j2 < instance.number_of_locations(); ++j2)
-            os << " " << instance.distance(j1, j2);
-        os << std::endl;
-    }
-    return os;
-}
+    /** Maximum distance. */
+    Distance distance_max_ = 0;
+
+    /** Weight sum. */
+    Weight weight_sum_ = 0;
+
+};
 
 }
 
