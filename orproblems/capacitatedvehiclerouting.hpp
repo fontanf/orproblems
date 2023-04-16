@@ -4,7 +4,7 @@
  * Input:
  * - vehicles of capacity Q
  * - 1 depot
- * - n - 1 customers; for each customer j = 2..n, a demand qⱼ
+ * - n - 1 customers; for each customer location_id = 2..n, a demand qⱼ
  * - A n×n symmetric matrix d specifying the distances to travel between each
  *   pair of locations
  * Problem:
@@ -165,9 +165,12 @@ public:
             int verbose = 1) const
     {
         if (verbose >= 1) {
-            os << "Number of locations:  " << number_of_locations() << std::endl;
-            os << "Capacity:             " << capacity() << std::endl;
-            os << "Total demand:         " << total_demand() << std::endl;
+            os
+                << "Number of locations:  " << number_of_locations() << std::endl
+                << "Capacity:             " << capacity() << std::endl
+                << "Total demand:         " << total_demand() << std::endl
+                << "Demand ratio:         " << (double)total_demand() / capacity() << std::endl
+                ;
         }
 
         if (verbose >= 2) {
@@ -191,26 +194,33 @@ public:
                     << std::setw(12) << demand(location_id_1)
                     << std::endl;
             }
+        }
 
+        if (verbose >= 3) {
             os << std::endl
-                << std::setw(12) << "Location"
-                << "    Travel times"
+                << std::setw(12) << "Loc. 1"
+                << std::setw(12) << "Loc. 2"
+                << std::setw(12) << "Distance"
                 << std::endl
-                << std::setw(12) << "---------"
-                << "    ------------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "--------"
                 << std::endl;
             for (LocationId location_id_1 = 0;
                     location_id_1 < number_of_locations();
                     ++location_id_1) {
-                os << std::setw(12) << location_id_1
-                    << "   ";
                 for (LocationId location_id_2 = 0;
                         location_id_2 < number_of_locations();
-                        ++location_id_2)
-                    os << " " << distance(location_id_1, location_id_2);
-                os << std::endl;
+                        ++location_id_2) {
+                    os
+                        << std::setw(12) << location_id_1
+                        << std::setw(12) << location_id_2
+                        << std::setw(12) << distance(location_id_1, location_id_2)
+                        << std::endl;
+                }
             }
         }
+
         return os;
     }
 
@@ -304,12 +314,14 @@ public:
         if (verbose == 2)
             os << std::endl;
         if (verbose >= 1) {
-            os << "Number of visited locations:    " << visited_locations.size() << " / " << number_of_locations() - 1 << std::endl;
-            os << "Number of duplicates:           " << number_of_duplicates << std::endl;
-            os << "Number of routes:               " << number_of_routes << std::endl;
-            os << "Number of overloaded vehicles:  " << number_of_overloaded_vehicles << std::endl;
-            os << "Feasible:                       " << feasible << std::endl;
-            os << "Total distance:                 " << total_distance << std::endl;
+            os
+                << "Number of visited locations:    " << visited_locations.size() << " / " << number_of_locations() - 1 << std::endl
+                << "Number of duplicates:           " << number_of_duplicates << std::endl
+                << "Number of routes:               " << number_of_routes << std::endl
+                << "Number of overloaded vehicles:  " << number_of_overloaded_vehicles << std::endl
+                << "Feasible:                       " << feasible << std::endl
+                << "Total distance:                 " << total_distance << std::endl
+                ;
         }
         return {feasible, total_distance};
     }
@@ -325,7 +337,6 @@ private:
     {
         std::string tmp;
         std::vector<std::string> line;
-        LocationId n = -1;
         std::string edge_weight_type;
         while (getline(file, tmp)) {
             replace(begin(tmp), end(tmp), '\t', ' ');
@@ -338,7 +349,7 @@ private:
                 LocationId j_tmp;
                 file >> j_tmp >> j_tmp;
             } else if (tmp.rfind("DIMENSION", 0) == 0) {
-                n = std::stol(line.back());
+                LocationId n = std::stol(line.back());
                 locations_ = std::vector<Location>(n);
                 distances_ = std::vector<std::vector<Distance>>(n, std::vector<Distance>(n, -1));
             } else if (tmp.rfind("EDGE_WEIGHT_TYPE", 0) == 0) {
@@ -350,17 +361,21 @@ private:
                 LocationId j_tmp;
                 double x = -1;
                 double y = -1;
-                for (LocationId j = 0; j < n; ++j) {
+                for (LocationId location_id = 0;
+                        location_id < number_of_locations();
+                        ++location_id) {
                     file >> j_tmp >> x >> y;
-                    set_xy(j, x, y);
+                    set_xy(location_id, x, y);
                 }
             } else if (tmp.rfind("DEMAND_SECTION", 0) == 0) {
                 LocationId j_tmp = -1;
                 Demand demand = -1;
-                for (LocationId j = 0; j < n; ++j) {
+                for (LocationId location_id = 0;
+                        location_id < number_of_locations();
+                        ++location_id) {
                     file >> j_tmp >> demand;
-                    if (j != 0)
-                        set_demand(j, demand);
+                    if (location_id != 0)
+                        set_demand(location_id, demand);
                 }
             } else if (line[0].rfind("EOF", 0) == 0) {
                 break;
@@ -371,12 +386,16 @@ private:
 
         // Compute distances.
         if (edge_weight_type == "EUC_2D") {
-            for (LocationId j1 = 0; j1 < n; ++j1) {
-                for (LocationId j2 = j1 + 1; j2 < n; ++j2) {
-                    double xd = x(j2) - x(j1);
-                    double yd = y(j2) - y(j1);
+            for (LocationId location_id_1 = 0;
+                    location_id_1 < number_of_locations();
+                    ++location_id_1) {
+                for (LocationId location_id_2 = location_id_1 + 1;
+                        location_id_2 < number_of_locations();
+                        ++location_id_2) {
+                    double xd = x(location_id_2) - x(location_id_1);
+                    double yd = y(location_id_2) - y(location_id_1);
                     Distance d = std::round(std::sqrt(xd * xd + yd * yd));
-                    set_distance(j1, j2, d);
+                    set_distance(location_id_1, location_id_2, d);
                 }
             }
         } else {
@@ -393,6 +412,10 @@ private:
 
     /** Distances between locations. */
     std::vector<std::vector<Distance>> distances_;
+
+    /*
+     * Computed attributes
+     */
 
     /** Total demand. */
     Demand total_demand_ = 0;
