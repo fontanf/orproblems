@@ -253,9 +253,7 @@ int main(int argc, char *argv[])
 
     } else if (problem == "ushapedassemblylinebalancing1") {
         ushapedassemblylinebalancing1::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else {
         throw std::invalid_argument(
