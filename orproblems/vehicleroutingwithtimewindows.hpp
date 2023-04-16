@@ -182,10 +182,13 @@ public:
             int verbose = 1) const
     {
         if (verbose >= 1) {
-            os << "Number of vehicles:   " << number_of_vehicles() << std::endl;
-            os << "Number of locations:  " << number_of_locations() << std::endl;
-            os << "Capacity:             " << capacity() << std::endl;
+            os
+                << "Number of vehicles:   " << number_of_vehicles() << std::endl
+                << "Number of locations:  " << number_of_locations() << std::endl
+                << "Capacity:             " << capacity() << std::endl
+                ;
         }
+
         if (verbose >= 2) {
             os << std::endl
                 << std::setw(12) << "Location"
@@ -208,21 +211,33 @@ public:
                     << std::setw(12) << location(location_id_1).deadline
                     << std::endl;
             }
+        }
+
+        if (verbose >= 3) {
             os << std::endl
-                << std::setw(12) << "Location"
-                << "    Travel times"
+                << std::setw(12) << "Loc. 1"
+                << std::setw(12) << "Loc. 2"
+                << std::setw(12) << "Tr. time"
                 << std::endl
-                << std::setw(12) << "---------"
-                << "    ------------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "--------"
                 << std::endl;
-            for (LocationId location_id_1 = 0; location_id_1 < number_of_locations(); ++location_id_1) {
-                os << std::setw(12) << location_id_1
-                    << "   ";
-                for (LocationId location_id_2 = 0; location_id_2 < number_of_locations(); ++location_id_2)
-                    os << " " << travel_time(location_id_1, location_id_2);
-                os << std::endl;
+            for (LocationId location_id_1 = 0;
+                    location_id_1 < number_of_locations();
+                    ++location_id_1) {
+                for (LocationId location_id_2 = 0;
+                        location_id_2 < number_of_locations();
+                        ++location_id_2) {
+                    os
+                        << std::setw(12) << location_id_1
+                        << std::setw(12) << location_id_2
+                        << std::setw(12) << travel_time(location_id_1, location_id_2)
+                        << std::endl;
+                }
             }
         }
+
         return os;
     }
 
@@ -337,13 +352,15 @@ public:
         if (verbose == 2)
             os << std::endl;
         if (verbose >= 1) {
-            os << "Number of visited locations:    " << visited_locations.size() << " / " << number_of_locations() - 1 << std::endl;
-            os << "Number of duplicates:           " << number_of_duplicates << std::endl;
-            os << "Number of routes:               " << number_of_routes << " / " << number_of_vehicles() << std::endl;
-            os << "Number of overloaded vehicles:  " << number_of_overloaded_vehicles << std::endl;
-            os << "Number of late visits:          " << number_of_late_visits << std::endl;
-            os << "Feasible:                       " << feasible << std::endl;
-            os << "Total travel time:              " << total_travel_time << std::endl;
+            os
+                << "Number of visited locations:    " << visited_locations.size() << " / " << number_of_locations() - 1 << std::endl
+                << "Number of duplicates:           " << number_of_duplicates << std::endl
+                << "Number of routes:               " << number_of_routes << " / " << number_of_vehicles() << std::endl
+                << "Number of overloaded vehicles:  " << number_of_overloaded_vehicles << std::endl
+                << "Number of late visits:          " << number_of_late_visits << std::endl
+                << "Feasible:                       " << feasible << std::endl
+                << "Total travel time:              " << total_travel_time << std::endl
+                ;
         }
         return {feasible, total_travel_time};
     }
@@ -375,32 +392,41 @@ private:
             ;
 
         // Read locations.
-        LocationId j;
+        LocationId location_id;
         double x = -1;
         double y = -1;
         Demand demand = -1;
         Time release_date = -1;
         Time deadline = -1;
         Time service_time = -1;
-        while (file >> j >> x >> y >> demand >> release_date >> deadline >> service_time) {
+        while (file >> location_id >> x >> y >> demand >> release_date >> deadline >> service_time) {
             locations_.push_back({});
-            set_xy(j, x, y);
+            set_xy(location_id, x, y);
             //set_location(j, demand, release_date, deadline, service_time);
-            set_location(j, demand, 10 * release_date, 10 * deadline, 10 * service_time);
+            set_location(
+                    location_id,
+                    demand,
+                    10 * release_date,
+                    10 * deadline,
+                    10 * service_time);
         }
         set_capacity(capacity);
         LocationId n = locations_.size();
 
         // Compute times.
         travel_times_.resize(n, std::vector<Time>(n, -1));
-        for (LocationId j1 = 0; j1 < n; ++j1) {
-            for (LocationId j2 = j1 + 1; j2 < n; ++j2) {
-                double xd = location(j2).x - location(j1).x;
-                double yd = location(j2).y - location(j1).y;
+        for (LocationId location_id_1 = 0;
+                location_id_1 < number_of_locations();
+                ++location_id_1) {
+            for (LocationId location_id_2 = location_id_1 + 1;
+                    location_id_2 < number_of_locations();
+                    ++location_id_2) {
+                double xd = location(location_id_2).x - location(location_id_1).x;
+                double yd = location(location_id_2).y - location(location_id_1).y;
                 double e = std::sqrt(xd * xd + yd * yd);
                 //Time d = std::round(e * 10) / 10;
                 Time d = std::floor(e * 10);
-                set_travel_time(j1, j2, d);
+                set_travel_time(location_id_1, location_id_2, d);
             }
         }
     }
@@ -417,6 +443,10 @@ private:
 
     /** Number of vehicles. */
     RouteId number_of_vehicles_ = 0;
+
+    /*
+     * Computed attributes
+     */
 
     /** Maximum travel time. */
     Time maximum_travel_time_ = 0;
