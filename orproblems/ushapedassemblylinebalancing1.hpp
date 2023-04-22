@@ -229,23 +229,24 @@ public:
             JobId job_id = -1;
             Time time = 0;
             number_of_stations++;
-            for (JobPos j_pos = 0; j_pos < station_number_of_jobs; ++j_pos) {
+            for (JobPos job_pos = 0; job_pos < station_number_of_jobs; ++job_pos) {
                 file >> job_id;
                 // Check duplicates.
                 if (jobs.contains(job_id)) {
                     duplicates++;
-                    if (verbose == 2)
+                    if (verbose >= 2) {
                         os << "Job " << job_id
                             << " is already scheduled."
                             << std::endl;
+                    }
                 }
                 // Check predecessors.
-                for (JobId j_pred: job(job_id).predecessors) {
-                    if (!jobs.contains(j_pred)) {
-                        for (JobId j_succ: job(job_id).successors) {
-                            if (!jobs.contains(j_succ)) {
+                for (JobId job_id_pred: job(job_id).predecessors) {
+                    if (!jobs.contains(job_id_pred)) {
+                        for (JobId job_id_succ: job(job_id).successors) {
+                            if (!jobs.contains(job_id_succ)) {
                                 number_of_precedence_violations++;
-                                if (verbose == 2) {
+                                if (verbose >= 2) {
                                     os << std::endl << "Job " << job_id
                                         << " violates precedence constraints."
                                         << std::endl;
@@ -282,8 +283,8 @@ public:
             && (duplicates == 0)
             && (number_of_precedence_violations == 0)
             && (number_of_overloaded_stations == 0);
-        if (verbose == 2)
-            os << "---" << std::endl;
+        if (verbose >= 2)
+            os << std::endl;
         if (verbose >= 1) {
             os
                 << "Number of jobs:                   " << jobs.size() << " / " << number_of_jobs() << std::endl

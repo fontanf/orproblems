@@ -4,7 +4,7 @@
 #include "orproblems/cuttingstock.hpp"
 #include "orproblems/multipleknapsack.hpp"
 #include "orproblems/quadraticmultipleknapsack.hpp"
-#include "orproblems/generalizedquadraticmultipleknapsack.hpp"
+//#include "orproblems/generalizedquadraticmultipleknapsack.hpp"
 #include "orproblems/binpackingwithconflicts.hpp"
 
 #include "orproblems/travelingsalesman.hpp"
@@ -105,39 +105,27 @@ int main(int argc, char *argv[])
 
     } else if (problem == "quadraticassignment") {
         quadraticassignment::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "cuttingstock") {
         cuttingstock::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "multipleknapsack") {
         multipleknapsack::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "quadraticmultipleknapsack") {
         quadraticmultipleknapsack::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        check(instance, certificate_path, print_instance, print_checker);
 
-    } else if (problem == "generalizedquadraticmultipleknapsack") {
-        generalizedquadraticmultipleknapsack::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+    //} else if (problem == "generalizedquadraticmultipleknapsack") {
+    //    generalizedquadraticmultipleknapsack::Instance instance(instance_path, format);
+    //    check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "binpackingwithconflicts") {
         binpackingwithconflicts::Instance instance(instance_path, format);
-        //if (vm.count("print-instance"))
-        //    std::cout << instance << std::endl; TODO
-        //instance.check(certificate_path, print_checker); TODO
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "travelingsalesman") {
         travelingsalesman::Instance instance(instance_path, format);
@@ -145,9 +133,7 @@ int main(int argc, char *argv[])
 
     } else if (problem == "sequentialordering") {
         sequentialordering::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "travelingrepairman") {
         travelingrepairman::Instance instance(instance_path, format);
@@ -179,9 +165,7 @@ int main(int argc, char *argv[])
 
     } else if (problem == "capacitatedopenvehiclerouting") {
         capacitatedopenvehiclerouting::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        //instance.check(certificate_path, print_checker); TODO
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "schedulingwithsdsttwt") {
         schedulingwithsdsttwt::Instance instance(instance_path, format);
@@ -189,15 +173,11 @@ int main(int argc, char *argv[])
 
     } else if (problem == "orderacceptanceandscheduling") {
         orderacceptanceandscheduling::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        //instance.check(certificate_path, print_checker); TODO
 
     } else if (problem == "batchschedulingtotalcompletiontime") {
         batchschedulingtotalcompletiontime::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        //instance.check(certificate_path, print_checker); TODO
 
     } else if (problem == "batchschedulingtotalweightedtardiness") {
         batchschedulingtotalweightedtardiness::Instance instance(instance_path, format);
@@ -205,14 +185,10 @@ int main(int argc, char *argv[])
 
     } else if (problem == "parallelschedulingwithfamilysetuptimestwct") {
         parallelschedulingwithfamilysetuptimestwct::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
         //instance.check(certificate_path, print_checker); TODO
 
     } else if (problem == "starobservationscheduling") {
         starobservationscheduling::Instance instance(instance_path, format);
-        //if (vm.count("print-instance"))
-        //    std::cout << instance << std::endl; TODO
         //instance.check(certificate_path, print_checker); TODO
 
     } else if (problem == "permutationflowshopschedulingmakespan") {
@@ -221,15 +197,11 @@ int main(int argc, char *argv[])
 
     } else if (problem == "permutationflowshopschedulingtct") {
         permutationflowshopschedulingtct::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        //instance.check(certificate_path, print_checker); TODO
 
     } else if (problem == "permutationflowshopschedulingtt") {
         permutationflowshopschedulingtt::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        //instance.check(certificate_path, print_checker); TODO
 
     } else if (problem == "distributedpfssmakespan") {
         distributedpfssmakespan::Instance instance(instance_path, format);
@@ -241,15 +213,11 @@ int main(int argc, char *argv[])
 
     //} else if (problem == "nowaitjobshopschedulingmakespan") {
     //    nowaitjobshopschedulingmakespan::Instance instance(instance_path, format);
-    //    if (vm.count("print-instance"))
-    //        std::cout << instance << std::endl;
-    //    instance.check(certificate_path, print_checker);
+    //    check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "simpleassemblylinebalancing1") {
         simpleassemblylinebalancing1::Instance instance(instance_path, format);
-        if (vm.count("print-instance"))
-            std::cout << instance << std::endl;
-        instance.check(certificate_path, print_checker);
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "ushapedassemblylinebalancing1") {
         ushapedassemblylinebalancing1::Instance instance(instance_path, format);

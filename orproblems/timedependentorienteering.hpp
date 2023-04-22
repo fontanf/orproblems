@@ -41,30 +41,57 @@ using Time = double;
 using Length = double;
 using Profit = double;
 
+/**
+ * Structure for a location.
+ */
 struct Location
 {
+    /** x-coordinate. */
     Length x;
+
+    /** y-coordinate. */
     Length y;
+
+    /** Profit. */
     Profit profit;
 };
 
+/**
+ * Structure for an arc.
+ */
 struct Arc
 {
+    /** Category. */
     ArcCategory category;
+
+    /** Length. */
     Length length;
 };
 
+/**
+ * Instance class for a 'timedependentorienteering' problem.
+ */
 class Instance
 {
 
 public:
 
-    Instance(LocationId n):
-        locations_(n),
-        arcs_(n, std::vector<Arc>(n)) { }
+    /*
+     * Constructors and destructor
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance(LocationId number_of_locations):
+        locations_(number_of_locations),
+        arcs_(number_of_locations, std::vector<Arc>(number_of_locations)) { }
+
+    /** Set the maximum duration. */
     void set_maximum_duration(Time maximum_duration) { maximum_duration_ = maximum_duration; }
 
-    Instance(std::string instance_path, std::string format = "")
+    /** Build an instance from a file. */
+    Instance(
+            std::string instance_path,
+            std::string format = "")
     {
         std::ifstream file(instance_path);
         if (!file.good()) {
@@ -80,16 +107,31 @@ public:
         file.close();
     }
 
-    virtual ~Instance() { }
+    /*
+     * Getters
+     */
 
+    /** Get the number of locations. */
     inline LocationId number_of_locations() const { return locations_.size(); }
-    inline const Location& location(LocationId j) const { return locations_[j]; }
+
+    /** Get the maximum duraction. */
     inline Time maximum_duration() const { return maximum_duration_; }
-    inline Time arrival_time(LocationId j1, LocationId j2, Time start) const
+
+    /** Get a location. */
+    inline const Location& location(LocationId location_id) const { return locations_[location_id]; }
+
+    /**
+     * Get the arrival time at a location depending on the departure location
+     * and the departure time.
+     */
+    inline Time arrival_time(
+            LocationId location_id_1,
+            LocationId location_id_2,
+            Time start) const
     {
         Time current_time = start;
-        Length remaining_length = arcs_[j1][j2].length;
-        ArcCategory arc_category = arcs_[j1][j2].category;
+        Length remaining_length = arcs_[location_id_1][location_id_2].length;
+        ArcCategory arc_category = arcs_[location_id_1][location_id_2].category;
         TimePeriod time_period =
             (current_time < 9 - 7)? 0:
             (current_time < 17 - 7)? 1:
@@ -104,13 +146,13 @@ public:
             double speed = speed_matrix_[arc_category][time_period];
             Time at = current_time + remaining_length / speed;
             if (at <= time_period_end) {
-                //std::cout << "j1 " << j1
-                //    << " j2 " << j2
-                //    << " x1 " << locations_[j1].x
-                //    << " y1 " << locations_[j1].y
-                //    << " x2 " << locations_[j2].x
-                //    << " y2 " << locations_[j2].y
-                //    << " length " << arcs_[j1][j2].length
+                //std::cout << "location_id_1 " << location_id_1
+                //    << " location_id_2 " << location_id_2
+                //    << " x1 " << locations_[location_id_1].x
+                //    << " y1 " << locations_[location_id_1].y
+                //    << " x2 " << locations_[location_id_2].x
+                //    << " y2 " << locations_[location_id_2].y
+                //    << " length " << arcs_[location_id_1][location_id_2].length
                 //    << " cat " << arc_category
                 //    << " start " << start
                 //    << " dur " << at - start
@@ -126,13 +168,17 @@ public:
         return -1;
     }
 
+    /** Print the instance. */
     std::ostream& print(
             std::ostream& os,
             int verbose = 1) const
     {
         if (verbose >= 1) {
             os << "Number of locations:  " << number_of_locations() << std::endl;
+            os << "Maximum duration:     " << maximum_duration() << std::endl;
         }
+
+        // Print locations.
         if (verbose >= 2) {
             os << std::endl
                 << std::setw(12) << "Location"
@@ -141,15 +187,20 @@ public:
                 << std::setw(12) << "--------"
                 << std::setw(12) << "------"
                 << std::endl;
-            for (LocationId j1 = 0; j1 < number_of_locations(); ++j1) {
-                os << std::setw(12) << j1
-                    << std::setw(12) << location(j1).profit
+            for (LocationId location_id = 0;
+                    location_id < number_of_locations();
+                    ++location_id) {
+                os
+                    << std::setw(12) << location_id
+                    << std::setw(12) << location(location_id).profit
                     << std::endl;
             }
         }
+
         return os;
     }
 
+    /** Check a certificate. */
     std::pair<bool, Profit> check(
             std::string certificate_path,
             std::ostream& os,
@@ -175,40 +226,47 @@ public:
                 << std::endl;
         }
 
-        LocationId n = number_of_locations();
-        LocationId j = -1;
-        LocationId j_prec = 0;
-        optimizationtools::IndexedSet locations(n);
+        LocationId location_id = -1;
+        LocationId location_id_prev = 0;
+        optimizationtools::IndexedSet locations(number_of_locations());
         locations.add(0);
-        locations.add(n - 1);
+        locations.add(number_of_locations() - 1);
         LocationPos number_of_duplicates = 0;
         Time current_time = 0;
         Profit profit = location(0).profit;
-        while (file >> j) {
-            if (locations.contains(j)) {
+        while (file >> location_id) {
+            // Check duplicates.
+            if (locations.contains(location_id)) {
                 number_of_duplicates++;
                 if (verbose >= 2)
-                    os << "Location " << j << " is already scheduled." << std::endl;
+                    os << "Location " << location_id
+                        << " has already been visited." << std::endl;
             }
-            locations.add(j);
-            current_time = arrival_time(j_prec, j, current_time);
-            profit += location(j).profit;
+            locations.add(location_id);
+            current_time = arrival_time(
+                    location_id_prev,
+                    location_id,
+                    current_time);
+            profit += location(location_id).profit;
+
             if (verbose >= 2) {
                 os
-                    << std::setw(12) << j
-                    << std::setw(12) << location(j).profit
+                    << std::setw(12) << location_id
+                    << std::setw(12) << location(location_id).profit
                     << std::setw(12) << current_time
                     << std::setw(12) << profit
                     << std::endl;
             }
-            j_prec = j;
+
+            location_id_prev = location_id;
         }
-        current_time = arrival_time(j_prec, n - 1, current_time);
-        profit += location(n - 1).profit;
+        current_time = arrival_time(location_id_prev, number_of_locations() - 1, current_time);
+        profit += location(number_of_locations() - 1).profit;
+
         if (verbose >= 2) {
             os
-                << std::setw(12) << n - 1
-                << std::setw(12) << location(n - 1).profit
+                << std::setw(12) << number_of_locations() - 1
+                << std::setw(12) << location(number_of_locations() - 1).profit
                 << std::setw(12) << current_time
                 << std::setw(12) << profit
                 << std::endl;
@@ -217,10 +275,11 @@ public:
         bool feasible
             = (current_time <= maximum_duration())
             && (number_of_duplicates == 0);
+
         if (verbose >= 2)
             os << std::endl;
         if (verbose >= 1) {
-            os << "Number of locations:       " << locations.size() << " / " << n  << std::endl;
+            os << "Number of locations:       " << locations.size() << " / " << number_of_locations()  << std::endl;
             os << "Number of duplicates:      " << number_of_duplicates << std::endl;
             os << "Duraction:                 " << current_time << " / " << maximum_duration() << std::endl;
             os << "Feasible:                  " << feasible << std::endl;
@@ -231,28 +290,42 @@ public:
 
 private:
 
+    /*
+     * Private methods
+     */
+
+    /** Read an instance from a file in 'verbeeck2014' format. */
     void read_verbeeck2014(
             std::ifstream& file,
             std::string instance_path)
     {
         std::string tmp;
-        LocationId n = -1;
+        LocationId number_of_locations = -1;
         file
-            >> tmp >> n
+            >> tmp >> number_of_locations
             >> tmp >> tmp
             >> tmp >> maximum_duration_
             ;
-        locations_ = std::vector<Location>(n);
-        for (LocationId j = 0; j < n; ++j)
-            file >> locations_[j].x >> locations_[j].y >> locations_[j].profit;
-        arcs_ = std::vector<std::vector<Arc>>(n, std::vector<Arc>(n));
-        for (LocationId j1 = 0; j1 < n; ++j1) {
-            for (LocationId j2 = 0; j2 < n; ++j2) {
-                Length dx = locations_[j1].x - locations_[j2].x;
-                Length dy = locations_[j1].y - locations_[j2].y;
+        locations_ = std::vector<Location>(number_of_locations);
+        for (LocationId location_id = 0;
+                location_id < number_of_locations;
+                ++location_id)
+            file
+                >> locations_[location_id].x
+                >> locations_[location_id].y
+                >> locations_[location_id].profit;
+        arcs_ = std::vector<std::vector<Arc>>(number_of_locations, std::vector<Arc>(number_of_locations));
+        for (LocationId location_id_1 = 0;
+                location_id_1 < number_of_locations;
+                ++location_id_1) {
+            for (LocationId location_id_2 = 0;
+                    location_id_2 < number_of_locations;
+                    ++location_id_2) {
+                Length dx = locations_[location_id_1].x - locations_[location_id_2].x;
+                Length dy = locations_[location_id_1].y - locations_[location_id_2].y;
                 Length dxy = std::sqrt(dx * dx + dy * dy);
                 dxy /= 5;
-                arcs_[j1][j2].length = dxy;
+                arcs_[location_id_1][location_id_2].length = dxy;
             }
         }
 
@@ -283,15 +356,30 @@ private:
                 continue;
             // File matches, store it
             std::ifstream arc_category_file(it->path().string());
-            for (LocationId location_id_1 = 0; location_id_1 < number_of_locations(); ++location_id_1)
-                for (LocationId location_id_2 = 0; location_id_2 < number_of_locations(); ++location_id_2)
+            for (LocationId location_id_1 = 0;
+                    location_id_1 < number_of_locations;
+                    ++location_id_1)
+                for (LocationId location_id_2 = 0;
+                        location_id_2 < number_of_locations;
+                        ++location_id_2)
                     arc_category_file >> arcs_[location_id_1][location_id_2].category;
         }
     }
 
+    /*
+     * Private attributes
+     */
+
+    /** Locations. */
     std::vector<Location> locations_;
+
+    /** Arcs. */
     std::vector<std::vector<Arc>> arcs_;
+
+    /** Speed matrix. */
     std::vector<std::vector<double>> speed_matrix_;
+
+    /** Maximum duration. */
     Time maximum_duration_ = 0;
 
 };

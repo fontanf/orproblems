@@ -18,6 +18,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 
 namespace orproblems
 {
@@ -31,26 +32,49 @@ using KnapsackId = int64_t;
 using Weight = int64_t;
 using Profit = int64_t;
 
+/**
+ * Structure for an item.
+ */
 struct Item
 {
+    /** Weight of the item. */
     Weight weight;
+
+    /** Profit of the item. */
     Profit profit;
 };
 
+/**
+ * Instance class for a 'multipleknapsack' problem.
+ */
 class Instance
 {
 
 public:
 
+    /*
+     * Constructors and destructor
+     */
+
+    /** Constructor to build an instance manually. */
     Instance() {  }
+
+    /** Add a knapsack. */
     void add_knapsack(Weight capacity) { capacities_.push_back(capacity); }
-    void add_item(Weight weight, Profit profit)
+
+    /** Add an item. */
+    void add_item(
+            Weight weight,
+            Profit profit)
     {
         items_.push_back(Item{weight, profit});
         profit_sum_ += profit;
     }
 
-    Instance(std::string instance_path, std::string format = "")
+    /** Build an instance from a file. */
+    Instance(
+            std::string instance_path,
+            std::string format = "")
     {
         std::ifstream file(instance_path);
         if (!file.good()) {
@@ -66,126 +90,222 @@ public:
         file.close();
     }
 
-    virtual ~Instance() { }
+    /*
+     * Getters
+     */
 
+    /** Get the number of knapsacks. */
     KnapsackId number_of_knapsacks() const { return capacities_.size(); }
+
+    /** Get the number of items. */
     ItemId number_of_items() const { return items_.size(); }
-    const Item& item(ItemId j) const { return items_[j]; }
-    Weight weight(ItemId j) const { return items_[j].weight; }
-    Weight profit(ItemId j) const { return items_[j].profit; }
-    Weight capacity(KnapsackId i) const { return capacities_[i]; }
+
+    /** Get an item. */
+    const Item& item(ItemId item_id) const { return items_[item_id]; }
+
+    /** Get the capacity of a knapsack. */
+    Weight capacity(KnapsackId knapsack_id) const { return capacities_[knapsack_id]; }
+
+    /** Get the total profit of the items. */
     Profit total_profit() const { return profit_sum_; }
 
-    std::pair<bool, Profit> check(
-            std::string certificate_path,
+    /** Print the instance. */
+    std::ostream& print(
+            std::ostream& os,
             int verbose = 1) const
     {
-        // Initial display.
         if (verbose >= 1) {
-            std::cout
-                << "Checker" << std::endl
-                << "-------" << std::endl;
+            os
+                << "Number of knapsacks:  " << number_of_knapsacks() << std::endl
+                << "Number of items:      " << number_of_items() << std::endl
+                ;
         }
 
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Knapsack"
+                << std::setw(12) << "Capacity"
+                << std::endl
+                << std::setw(12) << "--------"
+                << std::setw(12) << "--------"
+                << std::endl;
+            for (KnapsackId knapsack_id = 0;
+                    knapsack_id < number_of_knapsacks();
+                    ++knapsack_id) {
+                os
+                    << std::setw(12) << knapsack_id
+                    << std::setw(12) << capacity(knapsack_id)
+                    << std::endl;
+            }
+        }
+
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Item"
+                << std::setw(12) << "Weight"
+                << std::setw(12) << "Profit"
+                << std::endl
+                << std::setw(12) << "----"
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::endl;
+            for (ItemId item_id = 0;
+                    item_id < number_of_items();
+                    ++item_id) {
+                const Item& item = this->item(item_id);
+                os
+                    << std::setw(12) << item_id
+                    << std::setw(12) << item.weight
+                    << std::setw(12) << item.profit
+                    << std::endl;
+            }
+        }
+
+        return os;
+    }
+
+    /** Check a certificate. */
+    std::pair<bool, Profit> check(
+            std::string certificate_path,
+            std::ostream& os,
+            int verbose = 1) const
+    {
         std::ifstream file(certificate_path);
         if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        Weight overweight = 0;
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Knapsack"
+                << std::setw(12) << "Item"
+                << std::setw(12) << "Weight"
+                << std::setw(12) << "Profit"
+                << std::endl
+                << std::setw(12) << "--------"
+                << std::setw(12) << "----"
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::endl;
+        }
+
         Profit profit = 0;
-        ItemId n = -1;  // Number of items in knapsack i.
-        ItemId j = -1;
-        optimizationtools::IndexedSet items(n);
+        ItemId knapsack_cur_number_of_items = -1;
+        ItemId item_id = -1;
+        optimizationtools::IndexedSet items(number_of_items());
+
+        KnapsackId number_of_overweighted_knapsacks = 0;
         ItemPos number_of_duplicates = 0;
-        for (KnapsackId i = 0; i < number_of_knapsacks(); ++i) {
+
+        for (KnapsackId knapsack_id = 0;
+                knapsack_id < number_of_knapsacks();
+                ++knapsack_id) {
             Weight weight = 0;
-            file >> n;
-            for (ItemPos j_pos = 0; j_pos < n; ++j_pos) {
-                file >> j;
-                weight += item(j).weight;
-                profit += item(j).profit;
-                if (verbose == 2)
-                    std::cout << "Job: " << j
-                        << "; Weight: " << weight
-                        << "; Profit: " << profit
+            file >> knapsack_cur_number_of_items;
+            for (ItemPos item_pos = 0;
+                    item_pos < knapsack_cur_number_of_items;
+                    ++item_pos) {
+                file >> item_id;
+                weight += item(item_id).weight;
+                profit += item(item_id).profit;
+
+                if (verbose >= 2) {
+                    os
+                        << std::setw(12) << knapsack_id
+                        << std::setw(12) << item_id
+                        << std::setw(12) << weight
+                        << std::setw(12) << profit
                         << std::endl;
-                if (items.contains(j)) {
-                    number_of_duplicates++;
-                    if (verbose == 2)
-                        std::cout << "Job " << j << " already scheduled." << std::endl;
                 }
-                items.add(j);
+
+                // Check duplicates.
+                if (items.contains(item_id)) {
+                    number_of_duplicates++;
+                    if (verbose >= 2) {
+                        os << "Item " << item_id
+                            << " has already scheduled." << std::endl;
+                    }
+                }
+                items.add(item_id);
             }
-            if (weight > capacity(i)) {
-                if (verbose == 2)
-                    std::cout << "Knapsack " << i
-                        << " has overweight: " << weight << "/" << capacity(i)
-                        << std::endl;
-                overweight += (capacity(i) - weight);
+
+            // Check capacity.
+            if (weight > capacity(knapsack_id)) {
+                number_of_overweighted_knapsacks++;
+                if (verbose >= 2) {
+                    os << "Knapsack " << knapsack_id
+                        << " is overweighted." << std::endl;
+                }
             }
         }
 
         bool feasible
             = (number_of_duplicates == 0)
-            && (overweight == 0);
-        if (verbose == 2)
-            std::cout << "---" << std::endl;
+            && (number_of_overweighted_knapsacks == 0);
+
+        if (verbose >= 2)
+            os << std::endl;
         if (verbose >= 1) {
-            std::cout << "Number of items:            " << items.size() << " / " << number_of_items() << std::endl;
-            std::cout << "Number of duplicates:       " << number_of_duplicates << std::endl;
-            std::cout << "Overweight:                 " << overweight << std::endl;
-            std::cout << "Feasible:                   " << feasible << std::endl;
-            std::cout << "Profit:                     " << profit << std::endl;
+            os
+                << "Number of items:                   " << items.size() << " / " << number_of_items() << std::endl
+                << "Number of duplicates:              " << number_of_duplicates << std::endl
+                << "Number of overweighted knapsacks:  " << number_of_overweighted_knapsacks << std::endl
+                << "Feasible:                          " << feasible << std::endl
+                << "Profit:                            " << profit << std::endl
+                ;
         }
         return {feasible, profit};
     }
 
 private:
 
+    /*
+     * Private methods
+     */
+
+    /** Read an instance from a file in 'dellamico2018' format. */
     void read_dellamico2018(std::ifstream& file)
     {
-        KnapsackId m;
-        ItemId n;
-        file >> m >> n;
-        Weight c;
-        for (KnapsackId i = 0; i < m; ++i) {
-            file >> c;
-            add_knapsack(c);
+        KnapsackId number_of_knapsacks;
+        ItemId number_of_items;
+        file >> number_of_knapsacks >> number_of_items;
+        Weight capacity;
+        for (KnapsackId knapsack_id = 0;
+                knapsack_id < number_of_knapsacks;
+                ++knapsack_id) {
+            file >> capacity;
+            add_knapsack(capacity);
         }
-        Weight w;
-        Profit p;
-        for (ItemId j = 0; j < n; ++j) {
-            file >> w >> p;
-            add_item(w, p);
+
+        Weight weight;
+        Profit profit;
+        for (ItemId item_id = 0;
+                item_id < number_of_items;
+                ++item_id) {
+            file >> weight >> profit;
+            add_item(weight, profit);
         }
     }
 
+    /*
+     * Private attributes
+     */
+
+    /** Items. */
     std::vector<Item> items_;
+
+    /** Capacities. */
     std::vector<Weight> capacities_;
+
+    /*
+     * Computed attributes
+     */
+
+    /** Profit sum. */
     Profit profit_sum_ = 0;
 
 };
-
-static inline std::ostream& operator<<(
-        std::ostream &os, const Instance& instance)
-{
-    os << "number of knapsacks " << instance.number_of_knapsacks() << std::endl;
-    os << "number of items " << instance.number_of_items() << std::endl;
-    for (KnapsackId i = 0; i < instance.number_of_knapsacks(); ++i) {
-        os << "knapsack " << i
-            << " capacity " << instance.capacity(i)
-            << std::endl;
-    }
-    for (ItemId j = 0; j < instance.number_of_items(); ++j) {
-        os << "item " << j
-            << " weight " << instance.item(j).weight
-            << " profit " << instance.item(j).profit
-            << std::endl;
-    }
-    return os;
-}
 
 }
 

@@ -35,49 +35,88 @@ using ItemPos = int64_t;
 using Weight = int64_t;
 using Profit = double;
 
+/*
+ * Structure for an item.
+ */
 struct Item
 {
-    ItemId id;
+    /** Weight of the item. */
     Weight weight = 0;
+
+    /** Profit of the item. */
     Profit profit = 0;
+
+    /** Conflicting items. */
     std::vector<ItemId> neighbors;
 };
 
+/**
+ * Instance class for a 'knapsackwithconflicts' problem.
+ */
 class Instance
 {
 
 public:
 
+    /*
+     * Constructors and destructor
+     */
+
+    /** Constructor to build an instance manually. */
     Instance() { }
-    void add_item(Weight w, Profit p)
+
+    /** Add an item. */
+    void add_item(
+            Weight weight,
+            Profit profit)
     {
         Item item;
-        item.id = items_.size();
-        item.weight = w;
-        total_weight_ += w;
-        item.profit = p;
+        item.weight = weight;
+        item.profit = profit;
         items_.push_back(item);
+
+        total_weight_ += weight;
     }
-    void set_weight(ItemId j, Weight w)
+
+    /** Set the weight of an item. */
+    void set_weight(
+            ItemId item_id,
+            Weight w)
     {
-        total_weight_ -= items_[j].weight;
-        items_[j].weight = w;
-        total_weight_ += items_[j].weight;
+        total_weight_ -= items_[item_id].weight;
+        items_[item_id].weight = w;
+        total_weight_ += items_[item_id].weight;
     }
-    void set_profit(ItemId j, Profit p) { items_[j].profit = p; }
-    void add_conflict(ItemId j1, ItemId j2)
+
+    /** Set the profit of an item. */
+    void set_profit(
+            ItemId item_id,
+            Profit profit)
     {
-        assert(j1 >= 0);
-        assert(j2 >= 0);
-        assert(j1 < number_of_items());
-        assert(j2 < number_of_items());
-        items_[j1].neighbors.push_back(j2);
-        items_[j2].neighbors.push_back(j1);
+        items_[item_id].profit = profit;
+    }
+
+    /** Add a conflict between two items. */
+    void add_conflict(
+            ItemId item_id_1,
+            ItemId item_id_2)
+    {
+        assert(item_id_1 >= 0);
+        assert(item_id_2 >= 0);
+        assert(item_id_1 < number_of_items());
+        assert(item_id_2 < number_of_items());
+        items_[item_id_1].neighbors.push_back(item_id_2);
+        items_[item_id_2].neighbors.push_back(item_id_1);
         number_of_conflicts_++;
     }
+
+    /** Set the capacity of the knapsack. */
     void set_capacity(Weight capacity) { capacity_ = capacity; }
 
-    Instance(std::string instance_path, std::string format = "")
+    /** Build an instance from a file. */
+    Instance(
+            std::string instance_path,
+            std::string format = "")
     {
         std::ifstream file(instance_path);
         if (!file.good()) {
@@ -95,25 +134,40 @@ public:
         file.close();
     }
 
-    virtual ~Instance() { }
+    /*
+     * Getters
+     */
 
+    /** Get the number of items. */
     inline ItemId number_of_items() const { return items_.size(); }
-    inline const Item& item(ItemId j) const { return items_[j]; }
+
+    /** Get an item. */
+    inline const Item& item(ItemId item_id) const { return items_[item_id]; }
+
+    /** Get the capacity of the knapsack. */
     inline Weight capacity() const { return capacity_; }
+
+    /** Get the total weight of the items. */
     inline Weight total_weight() const { return total_weight_; }
+
+    /** Get the number of conflicts. */
     inline ItemPos number_of_conflicts() const { return number_of_conflicts_; }
 
+    /** Print the instance. */
     std::ostream& print(
             std::ostream& os,
             int verbose = 1) const
     {
         if (verbose >= 1) {
-            os << "Number of items:         " << number_of_items() << std::endl;
-            os << "Capacity:                " << capacity() << std::endl;
-            os << "Number of conflicts:     " << number_of_conflicts() << std::endl;
-            os << "Average weight:          " << (double)total_weight() / number_of_items() << std::endl;
-            os << "Average # of conflicts:  " << (double)number_of_conflicts() / number_of_items() << std::endl;
+            os
+                << "Number of items:         " << number_of_items() << std::endl
+                << "Capacity:                " << capacity() << std::endl
+                << "Number of conflicts:     " << number_of_conflicts() << std::endl
+                << "Weight ratio:            " << (double)total_weight() / capacity() << std::endl
+                << "Average # of conflicts:  " << (double)number_of_conflicts() / number_of_items() << std::endl
+                ;
         }
+
         // Print items.
         if (verbose >= 2) {
             os << std::endl
@@ -129,15 +183,18 @@ public:
                 << std::setw(12) << "----------"
                 << std::setw(12) << "-----------"
                 << std::endl;
-            for (ItemId j = 0; j < number_of_items(); ++j) {
-                os << std::setw(12) << j
-                    << std::setw(12) << item(j).profit
-                    << std::setw(12) << item(j).weight
-                    << std::setw(12) << (double)item(j).profit / item(j).weight
-                    << std::setw(12) << item(j).neighbors.size()
+            for (ItemId item_id = 0; item_id < number_of_items(); ++item_id) {
+                const Item& item = this->item(item_id);
+                os
+                    << std::setw(12) << item_id
+                    << std::setw(12) << item.profit
+                    << std::setw(12) << item.weight
+                    << std::setw(12) << (double)item.profit / item.weight
+                    << std::setw(12) << item.neighbors.size()
                     << std::endl;
             }
         }
+
         // Print conflicts.
         if (verbose >= 3) {
             os << std::endl
@@ -147,17 +204,20 @@ public:
                 << std::setw(12) << "------"
                 << std::setw(12) << "------"
                 << std::endl;
-            for (ItemId j = 0; j < number_of_items(); ++j) {
-                for (ItemId j_neighbor: item(j).neighbors) {
-                    os << std::setw(12) << j
-                        << std::setw(12) << j_neighbor
+            for (ItemId item_id = 0; item_id < number_of_items(); ++item_id) {
+                for (ItemId item_id_neighbor: item(item_id).neighbors) {
+                    os
+                        << std::setw(12) << item_id
+                        << std::setw(12) << item_id_neighbor
                         << std::endl;
                 }
             }
         }
+
         return os;
     }
 
+    /** Check a certificate. */
     std::pair<bool, Profit> check(
             std::string certificate_path,
             std::ostream& os,
@@ -169,120 +229,164 @@ public:
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        ItemId n = number_of_items();
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Item"
+                << std::setw(12) << "Weight"
+                << std::setw(12) << "Profit"
+                << std::endl
+                << std::setw(12) << "----"
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::endl;
+        }
+
         Weight weight = 0;
         Profit profit = 0;
-        ItemId j = -1;
-        optimizationtools::IndexedSet items(n);
+        ItemId item_id = -1;
+        optimizationtools::IndexedSet items(number_of_items());
         ItemPos number_of_duplicates = 0;
         ItemPos number_of_conflict_violations = 0;
-        while (file >> j) {
-            weight += item(j).weight;
-            profit += item(j).profit;
-            if (verbose == 2)
-                os << "Job: " << j
-                    << "; Weight: " << weight
-                    << "; Profit: " << profit
+        while (file >> item_id) {
+            weight += item(item_id).weight;
+            profit += item(item_id).profit;
+
+            if (verbose >= 2) {
+                os
+                    << std::setw(12) << item_id
+                    << std::setw(12) << weight
+                    << std::setw(12) << profit
                     << std::endl;
-            if (items.contains(j)) {
-                number_of_duplicates++;
-                if (verbose == 2)
-                    os << "Job " << j << " already scheduled." << std::endl;
             }
-            for (ItemId j_con: item(j).neighbors) {
-                if (items.contains(j_con)) {
-                    number_of_conflict_violations++;
-                    if (verbose == 2)
-                        os << "Job " << j << " is in conflict with job " << j_con << "." << std::endl;
+
+            if (items.contains(item_id)) {
+                number_of_duplicates++;
+                if (verbose >= 2) {
+                    os << "Item " << item_id
+                        << " is already packed." << std::endl;
                 }
             }
-            items.add(j);
+            for (ItemId item_id_con: item(item_id).neighbors) {
+                if (items.contains(item_id_con)) {
+                    number_of_conflict_violations++;
+                    if (verbose >= 2) {
+                        os << "Item " << item_id
+                            << " is in conflict with item "
+                            << item_id_con << "."
+                            << std::endl;
+                    }
+                }
+            }
+            items.add(item_id);
         }
 
         bool feasible
             = (number_of_duplicates == 0)
             && (weight <= capacity())
             && (number_of_conflict_violations == 0);
-        if (verbose == 2)
-            os << "---" << std::endl;
+        if (verbose >= 2)
+            os << std::endl;
         if (verbose >= 1) {
-            os << "Number of Items:                " << items.size() << " / " << n << std::endl;
-            os << "Number of duplicates:           " << number_of_duplicates << std::endl;
-            os << "Number of conflict violations:  " << number_of_conflict_violations << std::endl;
-            os << "Weight:                         " << weight << " / " << capacity() << std::endl;
-            os << "Feasible:                       " << feasible << std::endl;
-            os << "Profit:                         " << profit << std::endl;
+            os
+                << "Number of Items:                " << items.size() << " / " << number_of_items() << std::endl
+                << "Number of duplicates:           " << number_of_duplicates << std::endl
+                << "Number of conflict violations:  " << number_of_conflict_violations << std::endl
+                << "Weight:                         " << weight << " / " << capacity() << std::endl
+                << "Feasible:                       " << feasible << std::endl
+                << "Profit:                         " << profit << std::endl
+                ;
         }
         return {feasible, profit};
     }
 
 private:
 
+    /*
+     * Private methods
+     */
+
+    /** Read an instance from a file in 'hifi2006' format. */
     void read_hifi2006(std::ifstream& file)
     {
-        ItemId n = -1;
-        file >> n;
+        ItemId number_of_items = -1;
+        file >> number_of_items;
 
         ItemPos number_of_conflicts = -1;
         file >> number_of_conflicts;
 
-        Weight c = -1;
-        file >> c;
-        set_capacity(c);
+        Weight capacity = -1;
+        file >> capacity;
+        set_capacity(capacity);
 
-        Profit p = -1;
-        for (ItemId j = 0; j < n; ++j) {
-            file >> p;
-            add_item(0, p);
+        Profit profit = -1;
+        for (ItemId item_id = 0; item_id < number_of_items; ++item_id) {
+            file >> profit;
+            add_item(0, profit);
         }
 
-        Weight w = -1;
-        for (ItemId j = 0; j < n; ++j) {
-            file >> w;
-            set_weight(j, w);
+        Weight weight = -1;
+        for (ItemId item_id = 0; item_id < number_of_items; ++item_id) {
+            file >> weight;
+            set_weight(item_id, weight);
         }
 
-        ItemId j1 = -1;
-        ItemId j2 = -1;
+        ItemId item_id_1 = -1;
+        ItemId item_id_2 = -1;
         for (ItemPos conflict_id = 0; conflict_id < number_of_conflicts; ++conflict_id) {
-            file >> j1 >> j2;
-            add_conflict(j1 - 1, j2 - 1);
+            file >> item_id_1 >> item_id_2;
+            add_conflict(item_id_1 - 1, item_id_2 - 1);
         }
     }
 
+    /** Read an instance from a file in 'bettinelli2017' format. */
     void read_bettinelli2017(std::ifstream& file)
     {
-        ItemId n = -1;
-        Weight c = -1;
+        ItemId number_of_items = -1;
+        Weight capacity = -1;
         std::string tmp;
-        file >> tmp >> tmp >> tmp >> n >> tmp;
-        file >> tmp >> tmp >> tmp >> c >> tmp;
-        set_capacity(c);
+        file >> tmp >> tmp >> tmp >> number_of_items >> tmp;
+        file >> tmp >> tmp >> tmp >> capacity >> tmp;
+        set_capacity(capacity);
         if (tmp == ";")
             file >> tmp;
         file >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp;
 
-        Weight w = -1;
-        Profit p = -1;
-        for (ItemId j = 0; j < n; ++j) {
-            file >> tmp >> p >> w;
-            add_item(w, p);
+        Weight weight = -1;
+        Profit profit = -1;
+        for (ItemId item_id = 0; item_id < number_of_items; ++item_id) {
+            file >> tmp >> profit >> weight;
+            add_item(weight, profit);
         }
 
         file >> tmp >> tmp >> tmp >> tmp;
-        ItemId j1 = -1;
-        ItemId j2 = -1;
+        ItemId item_id_1 = -1;
+        ItemId item_id_2 = -1;
         for (;;) {
-            file >> j1 >> j2;
+            file >> item_id_1 >> item_id_2;
             if (!file)
                 break;
-            add_conflict(j1, j2);
+            add_conflict(item_id_1, item_id_2);
         }
     }
 
+    /*
+     * Private attributes
+     */
+
+    /** Items. */
     std::vector<Item> items_;
+
+    /** Capacity. */
     Weight capacity_ = 0;
+
+    /*
+     * Computed attributes
+     */
+
+    /** Number of conflicts. */
     ItemPos number_of_conflicts_ = 0;
+
+    /** Total weight of the items. */
     Weight total_weight_ = 0;
 
 };

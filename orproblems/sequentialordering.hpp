@@ -5,13 +5,13 @@
  * Input:
  * - n locations and an n×n matrix containing the distances between each pair of
  *   locations (not necessarily symmetric)
- * - a directed acyclic graph such that each vertex corresponds to a location
+ * - a directed acyclic graph such that each location corresponds to a location
  * Problem:
  * - find a route from location 1 such that:
  *   - each location is visited exactly once
  *   - precedence constraints are satisfied
- *   - if there exists an arc from vertex j1 to vertex j2 in G, then location
- *     j1 is visited before location j2
+ *   - if there exists an arc from location location_id_1 to location location_id_2 in G, then location
+ *     location_id_1 is visited before location location_id_2
  * Objective:
  * - Minimize the total length of the route
  *
@@ -24,6 +24,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 
 namespace orproblems
 {
@@ -31,46 +32,69 @@ namespace orproblems
 namespace sequentialordering
 {
 
-using VertexId = int64_t;
-using VertexPos = int64_t;
+using LocationId = int64_t;
+using LocationPos = int64_t;
 using Distance = int64_t;
 
+/**
+ * Structure for a location.
+ */
 struct Location
 {
-    std::vector<VertexId> predecessors;
+    /** Predecessors. */
+    std::vector<LocationId> predecessors;
 };
 
+
+/**
+ * Instance class for a 'sequentialordering' problem.
+ */
 class Instance
 {
 
 public:
 
-    /** Create an instance manually. */
-    Instance(VertexId n):
-        locations_(n),
-        distances_(n, std::vector<Distance>(n, -1))
+    /*
+     * Constructors and destructor
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance(LocationId number_of_locations):
+        locations_(number_of_locations),
+        distances_(number_of_locations, std::vector<Distance>(number_of_locations, -1))
     {
-        for (VertexId j = 0; j < n; ++j)
-            distances_[j][j] = 0;
+        for (LocationId location_id = 0;
+                location_id < number_of_locations;
+                ++location_id)
+            distances_[location_id][location_id] = 0;
     }
-    /** Set the distance between vertex 'j1' and vertex 'j2' to 'd'. */
-    void set_distance(VertexId j1, VertexId j2, Distance d)
+
+    /** Set the distance between two locations. */
+    void set_distance(
+            LocationId location_id_1,
+            LocationId location_id_2,
+            Distance distance)
     {
-        check_vertex_index(j1);
-        check_vertex_index(j2);
-        distances_[j1][j2] = d;
-        distance_max_ = std::max(distance_max_, d);
+        check_location_index(location_id_1);
+        check_location_index(location_id_2);
+        distances_[location_id_1][location_id_2] = distance;
+        distance_max_ = std::max(distance_max_, distance);
     }
-    /** Add vertex 'j2' as predecessor of vertex 'j1'. */
-    void add_predecessor(VertexId j1, VertexId j2)
+
+    /** Add a predecessor to a location. */
+    void add_predecessor(
+            LocationId location_id_1,
+            LocationId location_id_2)
     {
-        check_vertex_index(j1);
-        check_vertex_index(j2);
-        locations_[j1].predecessors.push_back(j2);
+        check_location_index(location_id_1);
+        check_location_index(location_id_2);
+        locations_[location_id_1].predecessors.push_back(location_id_2);
     }
 
     /** Create an instance from a file. */
-    Instance(std::string instance_path, std::string format = "")
+    Instance(
+            std::string instance_path,
+            std::string format = "")
     {
         std::ifstream file(instance_path);
         if (!file.good()) {
@@ -89,104 +113,190 @@ public:
         file.close();
     }
 
-    /** Destructor. */
-    virtual ~Instance() { }
+    /*
+     * Getters
+     */
 
-    /** Get the number of vertices */
-    inline VertexId number_of_vertices() const { return locations_.size(); }
-    /** Get the distance between vertex 'j1' and vertex 'j2'. */
-    inline Distance distance(VertexId j1, VertexId j2) const { return distances_[j1][j2]; }
-    /** Get the predecessors of vertex 'j'. */
-    inline const std::vector<VertexId>& predecessors(VertexId j) const { return locations_[j].predecessors; }
-    /** Get the maximum distance between two vertices. */
+    /** Get the number of locations */
+    inline LocationId number_of_locations() const { return locations_.size(); }
+
+    /** Get the distance between two locations. */
+    inline Distance distance(
+            LocationId location_id_1,
+            LocationId location_id_2) const
+    {
+        return distances_[location_id_1][location_id_2];
+    }
+
+    /** Get the predecessors of location. */
+    inline const std::vector<LocationId>& predecessors(LocationId location_id) const { return locations_[location_id].predecessors; }
+
+    /** Get the maximum distance between two locations. */
     inline Distance maximum_distance() const { return distance_max_; }
 
-    /** Check a certificate file 'certificate_path'. */
-    std::pair<bool, Distance> check(
-            std::string certificate_path,
+    /** Print the instance. */
+    std::ostream& print(
+            std::ostream& os,
             int verbose = 1) const
     {
-        // Initial display.
         if (verbose >= 1) {
-            std::cout
-                << "Checker" << std::endl
-                << "-------" << std::endl;
+            os << "Number of locations:  " << number_of_locations() << std::endl;
         }
 
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Loc. 1"
+                << std::setw(12) << "Loc. 2"
+                << std::setw(12) << "Distance"
+                << std::endl
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "--------"
+                << std::endl;
+            for (LocationId location_id_1 = 0;
+                    location_id_1 < number_of_locations();
+                    ++location_id_1) {
+                for (LocationId location_id_2 = location_id_1 + 1;
+                        location_id_2 < number_of_locations();
+                        ++location_id_2) {
+                    os
+                        << std::setw(12) << location_id_1
+                        << std::setw(12) << location_id_2
+                        << std::setw(12) << distance(location_id_1, location_id_2)
+                        << std::endl;
+                }
+            }
+        }
+
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Loc. 1"
+                << std::setw(12) << "Pred."
+                << std::endl
+                << std::setw(12) << "------"
+                << std::setw(12) << "-----"
+                << std::endl;
+            for (LocationId location_id_1 = 0;
+                    location_id_1 < number_of_locations();
+                    ++location_id_1) {
+                for (LocationId location_id_2: predecessors(location_id_1)) {
+                    os
+                        << std::setw(12) << location_id_1
+                        << std::setw(12) << location_id_2
+                        << std::endl;
+                }
+            }
+        }
+
+        return os;
+    }
+
+    /** Check a certificate. */
+    std::pair<bool, Distance> check(
+            std::string certificate_path,
+            std::ostream& os,
+            int verbose = 1) const
+    {
         std::ifstream file(certificate_path);
         if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        VertexId n = number_of_vertices();
-        VertexId j_prec = 0;
-        VertexId j = -1;
-        optimizationtools::IndexedSet vertices(n);
-        vertices.add(0);
-        VertexPos number_of_duplicates = 0;
-        VertexPos number_of_precedence_violations = 0;
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Location"
+                << std::setw(12) << "Distance"
+                << std::endl
+                << std::setw(12) << "--------"
+                << std::setw(12) << "--------"
+                << std::endl;
+        }
+
+        LocationId location_id_pred = 0;
+        LocationId location_id = -1;
+        optimizationtools::IndexedSet locations(number_of_locations());
+        locations.add(0);
+        LocationPos number_of_duplicates = 0;
+        LocationPos number_of_precedence_violations = 0;
         Distance total_distance = 0;
-        while (file >> j) {
-            if (vertices.contains(j)) {
+        while (file >> location_id) {
+            // Check duplicates.
+            if (locations.contains(location_id)) {
                 number_of_duplicates++;
-                if (verbose == 2)
-                    std::cout << "Vertex " << j << " has already been visited." << std::endl;
-            }
-            // Check predecessors.
-            for (VertexId j_pred: predecessors(j)) {
-                if (!vertices.contains(j_pred)) {
-                    number_of_precedence_violations++;
-                    if (verbose == 2)
-                        std::cout << std::endl << "Vertex " << j << " depends on vertex "
-                            << j_pred << " which has not been visited yet."
-                            << std::endl;
+                if (verbose >= 2) {
+                    os << "Location " << location_id
+                        << " has already been visited." << std::endl;
                 }
             }
-            vertices.add(j);
-            total_distance += distance(j_prec, j);
-            if (verbose == 2)
-                std::cout << "Job: " << j
-                    << "; Distance: " << distance(j_prec, j)
-                    << "; Total distance: " << total_distance
+            // Check predecessors.
+            for (LocationId location_id_predeceoor: predecessors(location_id)) {
+                if (!locations.contains(location_id_predeceoor)) {
+                    number_of_precedence_violations++;
+                    if (verbose >= 2) {
+                        os << std::endl << "Location " << location_id
+                            << " depends on location "
+                            << location_id_predeceoor
+                            << " which has not been visited yet."
+                            << std::endl;
+                    }
+                }
+            }
+
+            locations.add(location_id);
+            total_distance += distance(location_id_pred, location_id);
+
+            if (verbose >= 2) {
+                os
+                    << std::setw(12) << location_id
+                    << std::setw(12) << total_distance
                     << std::endl;
-            j_prec = j;
+            }
+
+            location_id_pred = location_id;
         }
 
         bool feasible
-            = (vertices.size() == n)
+            = (locations.size() == number_of_locations())
             && (number_of_duplicates == 0)
             && (number_of_precedence_violations == 0);
-        if (verbose == 2)
-            std::cout << "---" << std::endl;
+
+        if (verbose >= 2)
+            os << std::endl;
         if (verbose >= 1) {
-            std::cout << "Number of Vertices:               " << vertices.size() << " / " << n  << std::endl;
-            std::cout << "Number of duplicates:             " << number_of_duplicates << std::endl;
-            std::cout << "Number of precedence violations:  " << number_of_precedence_violations << std::endl;
-            std::cout << "Feasible:                         " << feasible << std::endl;
-            std::cout << "Total distance:                   " << total_distance << std::endl;
+            os
+                << "Number of Vertices:               " << locations.size() << " / " << number_of_locations() << std::endl
+                << "Number of duplicates:             " << number_of_duplicates << std::endl
+                << "Number of precedence violations:  " << number_of_precedence_violations << std::endl
+                << "Feasible:                         " << feasible << std::endl
+                << "Total distance:                   " << total_distance << std::endl
+                ;
         }
         return {feasible, total_distance};
     }
 
-    /** Check if vertex index 'j' is within the correct range. */
-    inline void check_vertex_index(VertexId j)
+    /** Check if a location index is within the correct range. */
+    inline void check_location_index(LocationId location_id)
     {
-        if (j < 0 || j >= number_of_vertices())
+        if (location_id < 0 || location_id >= number_of_locations())
             throw std::out_of_range(
-                    "Invalid vertex index: \"" + std::to_string(j) + "\"."
-                    + " Vertex indices should belong to [0, "
-                    + std::to_string(number_of_vertices() - 1) + "].");
+                    "Invalid location index: \"" + std::to_string(location_id) + "\"."
+                    + " Location indices should belong to [0, "
+                    + std::to_string(number_of_locations() - 1) + "].");
     }
 
 private:
+
+    /*
+     * Private methods
+     */
 
     /** Read a file in 'tsplib' format. */
     void read_tsplib(std::ifstream& file)
     {
         std::string tmp;
         std::vector<std::string> line;
-        VertexId n = -1;
+        LocationId number_of_locations = -1;
         std::string edge_weight_type;
         std::string edge_weight_format;
         for (;;) {
@@ -197,27 +307,39 @@ private:
             } else if (tmp.rfind("COMMENT", 0) == 0) {
             } else if (tmp.rfind("TYPE", 0) == 0) {
             } else if (tmp.rfind("DIMENSION", 0) == 0) {
-                n = std::stol(line.back());
-                locations_ = std::vector<Location>(n);
-                distances_ = std::vector<std::vector<Distance>>(n, std::vector<Distance>(n, -1));
-                for (VertexId j = 0; j < n; ++j)
-                    distances_[j][j] = std::numeric_limits<Distance>::max();
+                number_of_locations = std::stol(line.back());
+                locations_ = std::vector<Location>(number_of_locations);
+                distances_ = std::vector<std::vector<Distance>>(
+                        number_of_locations, std::vector<Distance>(number_of_locations, -1));
+                for (LocationId location_id = 0;
+                        location_id < number_of_locations;
+                        ++location_id)
+                    distances_[location_id][location_id]
+                        = std::numeric_limits<Distance>::max();
             } else if (tmp.rfind("EDGE_WEIGHT_TYPE", 0) == 0) {
                 edge_weight_type = line.back();
             } else if (tmp.rfind("EDGE_WEIGHT_FORMAT", 0) == 0) {
                 edge_weight_format = line.back();
             } else if (tmp.rfind("EDGE_WEIGHT_SECTION", 0) == 0) {
                 if (edge_weight_format == "FULL_MATRIX") {
-                    Distance d;
-                    file >> d;
-                    for (VertexId j1 = 0; j1 < n; ++j1) {
-                        for (VertexId j2 = 0; j2 < n; ++j2) {
-                            file >> d;
-                            if (d == -1)
-                                add_predecessor(j1, j2);
-                            if (j2 == j1 || d == -1)
-                                d = std::numeric_limits<Distance>::max();
-                            set_distance(j1, j2, d);
+                    Distance distance;
+                    file >> distance;
+                    for (LocationId location_id_1 = 0;
+                            location_id_1 < number_of_locations;
+                            ++location_id_1) {
+                        for (LocationId location_id_2 = 0;
+                                location_id_2 < number_of_locations;
+                                ++location_id_2) {
+                            file >> distance;
+                            if (distance == -1)
+                                add_predecessor(location_id_1, location_id_2);
+                            if (location_id_2 == location_id_1
+                                    || distance == -1)
+                                distance = std::numeric_limits<Distance>::max();
+                            set_distance(
+                                    location_id_1,
+                                    location_id_2,
+                                    distance);
                         }
                     }
                 } else {
@@ -242,49 +364,47 @@ private:
     {
         std::string tmp;
         std::vector<std::string> line;
-        for (VertexId j1 = 0; getline(file, tmp); ++j1) {
+        for (LocationId location_id_1 = 0; getline(file, tmp); ++location_id_1) {
             line = optimizationtools::split(tmp, '\t');
-            if (j1 == 0) {
-                VertexId n = line.size();
+            if (location_id_1 == 0) {
+                LocationId n = line.size();
                 locations_ = std::vector<Location>(n);
                 distances_ = std::vector<std::vector<Distance>>(n, std::vector<Distance>(n, -1));
             }
-            for (VertexId j2 = 0; j2 < number_of_vertices(); ++j2) {
-                Distance d = std::stol(line[j2]);
-                if (d == -1)
-                    add_predecessor(j1, j2);
-                if (j2 == j1 || d == -1)
-                    d = std::numeric_limits<Distance>::max();
-                set_distance(j1, j2, d);
+            for (LocationId location_id_2 = 0;
+                    location_id_2 < number_of_locations();
+                    ++location_id_2) {
+                Distance distance = std::stol(line[location_id_2]);
+                if (distance == -1)
+                    add_predecessor(location_id_1, location_id_2);
+                if (location_id_2 == location_id_1 || distance == -1)
+                    distance = std::numeric_limits<Distance>::max();
+                set_distance(
+                        location_id_1,
+                        location_id_2,
+                        distance);
             }
         }
     }
 
+    /*
+     * Private attributes
+     */
+
+    /** Locations. */
     std::vector<Location> locations_;
+
+    /** Distances. */
     std::vector<std::vector<Distance>> distances_;
+
+    /*
+     * Computed attributes
+     */
+
+    /** Maximum distance. */
     Distance distance_max_ = 0;
 
 };
-
-static inline std::ostream& operator<<(
-        std::ostream &os, const Instance& instance)
-{
-    os << "number of vertices: " << instance.number_of_vertices() << std::endl;
-    for (VertexId j = 0; j < instance.number_of_vertices(); ++j) {
-        os << "vertex: " << j
-            << "; predecessors:";
-        for (VertexId j_pred: instance.predecessors(j))
-            os << " " << j_pred;
-        os << std::endl;
-    }
-    for (VertexId j1 = 0; j1 < instance.number_of_vertices(); ++j1) {
-        os << "vertex " << j1 << ":";
-        for (VertexId j2 = 0; j2 < instance.number_of_vertices(); ++j2)
-            os << " " << instance.distance(j1, j2);
-        os << std::endl;
-    }
-    return os;
-}
 
 }
 

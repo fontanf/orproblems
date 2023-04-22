@@ -18,6 +18,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 
 namespace orproblems
 {
@@ -31,27 +32,55 @@ using Weight = int64_t;
 using Demand = int64_t;
 using BinId = int64_t;
 
-struct Item
+/**
+ * Structure for an item type.
+ */
+struct ItemType
 {
+    /** Weight of the item. */
     Weight weight;
+
+    /** Demand of the item. */
     Demand demand;
 };
 
+/**
+ * Instance class for a 'cuttingstock' problem.
+ */
 class Instance
 {
 
 public:
 
+
+    /*
+     * Constructors and destructor
+     */
+
+    /** Constructor to build an instance manually. */
     Instance() { }
+
+    /** Set the capacity of the bins. */
     void set_capacity(Weight capacity) { capacity_ = capacity; }
-    void add_item_type(Weight weight, Demand demand = 1)
+
+    /** Add an item. */
+    void add_item_type(
+            Weight weight,
+            Demand demand = 1)
     {
-        item_types_.push_back(Item{weight, demand});
+        ItemType item_type;
+        item_type.weight = weight;
+        item_type.demand = demand;
+        item_types_.push_back(item_type);
+
         demand_max_ = std::max(demand_max_, demand);
         demand_sum_ += demand;
     }
 
-    Instance(std::string instance_path, std::string format = "")
+    /** Build an instance from a file. */
+    Instance(
+            std::string instance_path,
+            std::string format = "")
     {
         std::ifstream file(instance_path);
         if (!file.good()) {
@@ -69,30 +98,84 @@ public:
         file.close();
     }
 
-    virtual ~Instance() { }
+    /*
+     * Getters
+     */
 
+    /** Get the number of item types. */
     ItemTypeId number_of_item_types() const { return item_types_.size(); }
+
+    /** Get the capacity. */
     Weight capacity() const { return capacity_; }
-    Weight weight(ItemTypeId j) const { return item_types_[j].weight; }
-    Demand demand(ItemTypeId j) const { return item_types_[j].demand; }
+
+    /** Get an item type. */
+    const ItemType& item_type(ItemTypeId item_type_id) const { return item_types_[item_type_id]; }
+
+    /** Get the maximum demand. */
     Demand maximum_demand() const { return demand_max_; }
+
+    /** Get the total demand. */
     Demand total_demand() const { return demand_sum_; }
 
-    std::pair<bool, BinId> check(
-            std::string certificate_path,
+    /** Print the instance. */
+    std::ostream& print(
+            std::ostream& os,
             int verbose = 1) const
     {
-        // Initial display.
         if (verbose >= 1) {
-            std::cout
-                << "Checker" << std::endl
-                << "-------" << std::endl;
+            os
+                << "Number of item_types:  " << number_of_item_types() << std::endl
+                << "Capacity:              " << capacity() << std::endl
+                ;
         }
 
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Item type"
+                << std::setw(12) << "Weight"
+                << std::setw(12) << "Demand"
+                << std::endl
+                << std::setw(12) << "---------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::endl;
+            for (ItemTypeId item_type_id = 0;
+                    item_type_id < number_of_item_types();
+                    ++item_type_id) {
+                const ItemType& item_type = this->item_type(item_type_id);
+                os
+                    << std::setw(12) << item_type_id
+                    << std::setw(12) << item_type.weight
+                    << std::setw(12) << item_type.demand
+                    << std::endl;
+            }
+        }
+
+        return os;
+    }
+
+    /** Check a certificate. */
+    std::pair<bool, BinId> check(
+            std::string certificate_path,
+            std::ostream& os,
+            int verbose = 1) const
+    {
         std::ifstream file(certificate_path);
         if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
+        }
+
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Bin"
+                << std::setw(12) << "Item type"
+                << std::setw(12) << "Weight"
+                << std::endl
+                << std::setw(12) << "---"
+                << std::setw(12) << "---------"
+                << std::setw(12) << "------"
+                << std::endl;
         }
 
         std::vector<Demand> demands(number_of_item_types(), 0);
@@ -102,32 +185,42 @@ public:
         BinId bin_number_of_copies = -1;
         ItemPos bin_number_of_items = -1;
         while (file >> bin_number_of_copies >> bin_number_of_items) {
-            ItemTypeId j = -1;
+            ItemTypeId item_type_id = -1;
             Weight bin_weight = 0;
             number_of_bins++;
-            if (verbose == 2)
-                std::cout << "Bin: " << number_of_bins - 1 << "; Jobs";
-            for (ItemPos j_pos = 0; j_pos < bin_number_of_items; ++j_pos) {
-                file >> j;
-                demands[j] += bin_number_of_copies;
-                if (verbose == 2)
-                    std::cout << " " << j;
-                bin_weight += weight(j);
+            for (ItemPos item_pos = 0; item_pos < bin_number_of_items; ++item_pos) {
+                file >> item_type_id;
+                demands[item_type_id] += bin_number_of_copies;
+                bin_weight += item_type(item_type_id).weight;
+
+                if (verbose >= 2) {
+                    os
+                        << std::setw(12) << number_of_bins
+                        << std::setw(12) << item_type_id
+                        << std::setw(12) << bin_weight
+                        << std::endl;
+                }
             }
-            if (verbose == 2)
-                std::cout << "; Weight: " << bin_weight << " / " << capacity() << std::endl;
+
             if (bin_weight > capacity()) {
                 number_of_overweighted_bins++;
-                if (verbose == 2)
-                    std::cout << "Bin " << number_of_bins - 1 << " is overloaded." << std::endl;
+                if (verbose >= 2) {
+                    os << "Bin " << number_of_bins - 1
+                        << " is overloaded." << std::endl;
+                }
             }
         }
-        for (ItemTypeId j = 0; j < number_of_item_types(); ++j) {
-            if (demands[j] != demand(j)) {
+
+        for (ItemTypeId item_type_id = 0;
+                item_type_id < number_of_item_types();
+                ++item_type_id) {
+            if (demands[item_type_id] != item_type(item_type_id).demand) {
                 number_of_unsatisfied_demands++;
-                if (verbose == 2)
-                    std::cout << "Item type " << j
-                        << "; Demand: " << demands[j] << " / " << demand(j)
+                if (verbose >= 2)
+                    os << "Item type " << item_type_id
+                        << ", demand is not satisfied: "
+                        << demands[item_type_id]
+                        << " / " << item_type(item_type_id).demand
                         << "." << std::endl;
             }
         }
@@ -135,19 +228,27 @@ public:
         bool feasible
             = (number_of_unsatisfied_demands == 0)
             && (number_of_overweighted_bins);
-        if (verbose == 2)
-            std::cout << "---" << std::endl;
+
+        if (verbose >= 2)
+            os << std::endl;
         if (verbose >= 1) {
-            std::cout << "Number of unsatisfied demands:  " << number_of_unsatisfied_demands  << std::endl;
-            std::cout << "Number of overweighted bins:    " << number_of_overweighted_bins << std::endl;
-            std::cout << "Feasible:                       " << feasible << std::endl;
-            std::cout << "Number of bins:                 " << number_of_bins << std::endl;
+            os
+                << "Number of unsatisfied demands:  " << number_of_unsatisfied_demands  << std::endl
+                << "Number of overweighted bins:    " << number_of_overweighted_bins << std::endl
+                << "Feasible:                       " << feasible << std::endl
+                << "Number of bins:                 " << number_of_bins << std::endl
+                ;
         }
         return {feasible, number_of_bins};
     }
 
 private:
 
+    /*
+     * Private methods
+     */
+
+    /** Read an instance from a file in 'bpplib_bpp' format. */
     void read_bpplib_bpp(std::ifstream& file)
     {
         ItemTypeId n;
@@ -161,6 +262,7 @@ private:
         }
     }
 
+    /** Read an instance from a file in 'bpplib_csp' format. */
     void read_bpplib_csp(std::ifstream& file)
     {
         ItemTypeId n;
@@ -175,26 +277,27 @@ private:
         }
     }
 
-    std::vector<Item> item_types_;
+    /*
+     * Private attributes
+     */
+
+    /** Item types. */
+    std::vector<ItemType> item_types_;
+
+    /** Capacity. */
     Weight capacity_;
+
+    /*
+     * Computed attributes
+     */
+
+    /** Maximum demand. */
     Demand demand_max_ = 0;
+
+    /** Total demand. */
     Demand demand_sum_ = 0;
 
 };
-
-static inline std::ostream& operator<<(
-        std::ostream &os, const Instance& instance)
-{
-    os << "Number of item types: " << instance.number_of_item_types() << std::endl;
-    os << "Capacity: " << instance.capacity() << std::endl;
-    for (ItemTypeId j = 0; j < instance.number_of_item_types(); ++j) {
-        os << "Item " << j
-            << ": weight " << instance.weight(j)
-            << "; demand" << instance.demand(j)
-            << std::endl;
-    }
-    return os;
-}
 
 }
 

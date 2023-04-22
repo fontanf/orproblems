@@ -95,12 +95,12 @@ public:
      */
 
     /** Constructor to build an instance manually. */
-    Instance(LocationId n):
-        locations_(n),
-        distances_(n, std::vector<Distance>(n, -1))
+    Instance(LocationId number_of_locations):
+        locations_(number_of_locations),
+        distances_(number_of_locations, std::vector<Distance>(number_of_locations, -1))
     {
         for (LocationId location_id = 0;
-                location_id < n;
+                location_id < number_of_locations;
                 ++location_id) {
             distances_[location_id][location_id] = 0;
         }

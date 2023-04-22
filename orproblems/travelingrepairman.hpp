@@ -31,30 +31,54 @@ using LocationId = int64_t;
 using LocationPos = int64_t;
 using Time = double;
 
+/**
+ * Structure for a location.
+ */
 struct Location
 {
+    /** x-coordinate. */
     double x;
+
+    /** y-coordinate. */
     double y;
 };
 
+/**
+ * Instance class for a 'travelingrepairman' problem.
+ */
 class Instance
 {
 
 public:
 
-    Instance(LocationId n):
-        locations_(n),
-        travel_times_(n, std::vector<Time>(n, -1))
+    /*
+     * Constructors and destructor
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance(LocationId number_of_locations):
+        locations_(number_of_locations),
+        travel_times_(number_of_locations, std::vector<Time>(number_of_locations, -1))
     {
-        for (LocationId j = 0; j < n; ++j)
-            travel_times_[j][j] = 0;
-    }
-    void set_travel_time(LocationId j1, LocationId j2, Time travel_time)
-    {
-        travel_times_[j1][j2] = travel_time;
+        for (LocationId location_id = 0;
+                location_id < number_of_locations;
+                ++location_id)
+            travel_times_[location_id][location_id] = 0;
     }
 
-    Instance(std::string instance_path, std::string format = "")
+    /** Set the travel time between two locations. */
+    void set_travel_time(
+            LocationId location_id_1,
+            LocationId location_id_2,
+            Time travel_time)
+    {
+        travel_times_[location_id_1][location_id_2] = travel_time;
+    }
+
+    /** Build an instance from a file. */
+    Instance(
+            std::string instance_path,
+            std::string format = "")
     {
         std::ifstream file(instance_path);
         if (!file.good()) {
@@ -70,11 +94,22 @@ public:
         file.close();
     }
 
-    virtual ~Instance() { }
+    /*
+     * Getters
+     */
 
+    /** Get the number of locations. */
     inline LocationId number_of_locations() const { return travel_times_.size(); }
-    inline Time travel_time(LocationId j1, LocationId j2) const { return travel_times_[j1][j2]; }
 
+    /** Get the travel time between two locations. */
+    inline Time travel_time(
+            LocationId location_id_1,
+            LocationId location_id_2) const
+    {
+        return travel_times_[location_id_1][location_id_2];
+    }
+
+    /** Print the instance. */
     std::ostream& print(
             std::ostream& os,
             int verbose = 1) const
@@ -82,25 +117,36 @@ public:
         if (verbose >= 1) {
             os << "Number of locations:  " << number_of_locations() << std::endl;
         }
+
         if (verbose >= 2) {
             os << std::endl
-                << std::setw(12) << "Location"
-                << "    Travel times"
+                << std::setw(12) << "Loc. 1"
+                << std::setw(12) << "Loc. 2"
+                << std::setw(12) << "Tr. time"
                 << std::endl
-                << std::setw(12) << "---------"
-                << "    ------------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "--------"
                 << std::endl;
-            for (LocationId j1 = 0; j1 < number_of_locations(); ++j1) {
-                os << std::setw(12) << j1
-                    << "   ";
-                for (LocationId j2 = 0; j2 < number_of_locations(); ++j2)
-                    os << " " << travel_time(j1, j2);
-                os << std::endl;
+            for (LocationId location_id_1 = 0;
+                    location_id_1 < number_of_locations();
+                    ++location_id_1) {
+                for (LocationId location_id_2 = location_id_1 + 1;
+                        location_id_2 < number_of_locations();
+                        ++location_id_2) {
+                    os
+                        << std::setw(12) << location_id_1
+                        << std::setw(12) << location_id_2
+                        << std::setw(12) << travel_time(location_id_1, location_id_2)
+                        << std::endl;
+                }
             }
         }
+
         return os;
     }
 
+    /** Check a certificate. */
     std::pair<bool, Time> check(
             std::string certificate_path,
             std::ostream& os,
@@ -115,52 +161,54 @@ public:
         if (verbose >= 2) {
             os << std::endl << std::right
                 << std::setw(12) << "Location"
-                << std::setw(12) << "Travel time"
                 << std::setw(12) << "Time"
                 << std::setw(12) << "TCT"
                 << std::endl
                 << std::setw(12) << "--------"
-                << std::setw(12) << "-----------"
                 << std::setw(12) << "----"
                 << std::setw(12) << "---"
                 << std::endl;
         }
 
-        LocationId n = number_of_locations();
-        LocationId j = -1;
-        LocationId j_prec = 0;
-        optimizationtools::IndexedSet locations(n);
+        LocationId location_id = -1;
+        LocationId location_id_prev = 0;
+        optimizationtools::IndexedSet locations(number_of_locations());
         locations.add(0);
         LocationPos number_of_duplicates = 0;
         Time current_time = 0;
         Time total_completion_time = 0;
-        while (file >> j) {
-            if (locations.contains(j)) {
+        while (file >> location_id) {
+            // Check duplicates.
+            if (locations.contains(location_id)) {
                 number_of_duplicates++;
                 if (verbose >= 2)
-                    os << "Location " << j << " is already scheduled." << std::endl;
+                    os << "Location " << location_id
+                        << " has already been visited." << std::endl;
             }
-            locations.add(j);
-            current_time += travel_time(j_prec, j);
+            locations.add(location_id);
+
+            current_time += travel_time(location_id_prev, location_id);
             total_completion_time += current_time;
+
             if (verbose >= 2) {
                 os
-                    << std::setw(12) << j
-                    << std::setw(12) << travel_time(j_prec, j)
+                    << std::setw(12) << location_id
                     << std::setw(12) << current_time
                     << std::setw(12) << total_completion_time
                     << std::endl;
             }
-            j_prec = j;
+
+            location_id_prev = location_id;
         }
 
         bool feasible
-            = (locations.size() == n)
+            = (locations.size() == number_of_locations())
             && (number_of_duplicates == 0);
+
         if (verbose >= 2)
             os << std::endl;
         if (verbose >= 1) {
-            std::cout << "Number of locations:       " << locations.size() << " / " << n  << std::endl;
+            std::cout << "Number of locations:       " << locations.size() << " / " << number_of_locations()  << std::endl;
             std::cout << "Number of duplicates:      " << number_of_duplicates << std::endl;
             std::cout << "Feasible:                  " << feasible << std::endl;
             std::cout << "Total completion time:     " << total_completion_time << std::endl;
@@ -170,32 +218,51 @@ public:
 
 private:
 
+    /*
+     * Private methods
+     */
+
+    /** Read an instance from a file in 'salehipour2011' format. */
     void read_salehipour2011(std::ifstream& file)
     {
         std::string tmp;
-        LocationId n = -1;
+        LocationId number_of_locations = -1;
         file
             >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp
             >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp
-            >> n
+            >> number_of_locations
             >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp
             ;
-        locations_ = std::vector<Location>(n + 1);
+        locations_ = std::vector<Location>(number_of_locations + 1);
         travel_times_ = std::vector<std::vector<Time>>(
-                n + 1, std::vector<Time>(n + 1, -1));
-        for (LocationId j = 0; j < n + 1; ++j)
-            file >> tmp >> locations_[j].x >> locations_[j].y;
-        for (LocationId j1 = 0; j1 < n + 1; ++j1) {
-            for (LocationId j2 = 0; j2 < n + 1; ++j2) {
-                Time dx = locations_[j1].x - locations_[j2].x;
-                Time dy = locations_[j1].y - locations_[j2].y;
+                number_of_locations + 1, std::vector<Time>(number_of_locations + 1, -1));
+        for (LocationId location_id = 0;
+                location_id < number_of_locations + 1;
+                ++location_id) {
+            file >> tmp >> locations_[location_id].x >> locations_[location_id].y;
+        }
+        for (LocationId location_id_1 = 0;
+                location_id_1 < number_of_locations + 1;
+                ++location_id_1) {
+            for (LocationId location_id_2 = 0;
+                    location_id_2 < number_of_locations + 1;
+                    ++location_id_2) {
+                Time dx = locations_[location_id_1].x - locations_[location_id_2].x;
+                Time dy = locations_[location_id_1].y - locations_[location_id_2].y;
                 Time dxy = std::floor(std::sqrt(dx * dx + dy * dy));
-                set_travel_time(j1, j2, dxy);
+                set_travel_time(location_id_1, location_id_2, dxy);
             }
         }
     }
 
+    /*
+     * Private attributes
+     */
+
+    /** Locations. */
     std::vector<Location> locations_;
+
+    /** Travel times. */
     std::vector<std::vector<Time>> travel_times_;
 
 };
