@@ -263,6 +263,7 @@ public:
                         << std::endl;
                 }
 
+                // Check duplicates.
                 if (items.contains(item_id)) {
                     number_of_duplicates++;
                     if (verbose >= 2) {

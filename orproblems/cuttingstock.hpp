@@ -179,19 +179,26 @@ public:
         }
 
         std::vector<Demand> demands(number_of_item_types(), 0);
-        ItemPos number_of_unsatisfied_demands = 0;
-        BinId number_of_overweighted_bins = 0;
-        BinId number_of_bins = 0;
+        BinId number_of_bins = -1;
         BinId bin_number_of_copies = -1;
         ItemPos bin_number_of_items = -1;
-        while (file >> bin_number_of_copies >> bin_number_of_items) {
-            ItemTypeId item_type_id = -1;
+        ItemTypeId item_type_id = -1;
+        Demand item_copies = -1;
+
+        ItemPos number_of_unsatisfied_demands = 0;
+        BinId number_of_overweighted_bins = 0;
+
+        file >> number_of_bins;
+        for (BinId bin_pos = 0; bin_pos < number_of_bins; ++bin_pos) {
+            file >> bin_number_of_copies >> bin_number_of_items;
+
             Weight bin_weight = 0;
-            number_of_bins++;
-            for (ItemPos item_pos = 0; item_pos < bin_number_of_items; ++item_pos) {
-                file >> item_type_id;
-                demands[item_type_id] += bin_number_of_copies;
-                bin_weight += item_type(item_type_id).weight;
+            for (ItemPos item_pos = 0;
+                    item_pos < bin_number_of_items;
+                    ++item_pos) {
+                file >> item_type_id >> item_copies;
+                demands[item_type_id] += bin_number_of_copies * item_copies;
+                bin_weight += item_copies * item_type(item_type_id).weight;
 
                 if (verbose >= 2) {
                     os
@@ -227,7 +234,7 @@ public:
 
         bool feasible
             = (number_of_unsatisfied_demands == 0)
-            && (number_of_overweighted_bins);
+            && (number_of_overweighted_bins == 0);
 
         if (verbose >= 2)
             os << std::endl;

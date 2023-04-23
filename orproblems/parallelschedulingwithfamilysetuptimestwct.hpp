@@ -26,6 +26,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 
 namespace orproblems
 {
@@ -39,50 +40,81 @@ using FamilyId = int64_t;
 using Time = int64_t;
 using Weight = int64_t;
 
+/**
+ * Structure for a family.
+ */
 struct Family
 {
-    FamilyId id;
+    /** Setup time of the family. */
     Time setup_time;
-    std::vector<JobId> jobs;
+
+    /** Jobs of the family. */
+    std::vector<JobId> job_ids;
 };
 
+/**
+ * Structure for a job.
+ */
 struct Job
 {
-    JobId id;
+    /** Processing-time of the job. */
     Time processing_time;
+
+    /** Weight of the job. */
     Weight weight;
-    FamilyId family;
+
+    /** Family of the job. */
+    FamilyId family_id;
 };
 
+/**
+ * Instance class for a 'parallelschedulingwithfamilysetuptimestwct' problem.
+ */
 class Instance
 {
 
 public:
 
-    Instance(MachineId number_of_machines, FamilyId number_of_familiess):
+    /*
+     * Constructors and destructor
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance(
+            MachineId number_of_machines,
+            FamilyId number_of_familiess):
         number_of_machines_(number_of_machines),
         families_(number_of_familiess)
     {
-        for (FamilyId k = 0; k < number_of_familiess; ++k)
-            families_[k].id = k;
     }
-    void set_setup_time(FamilyId k, Time setup_time) { families_[k].setup_time = setup_time; }
+
+    /** Set the setup time of a family. */
+    void set_setup_time(
+            FamilyId family_id,
+            Time setup_time)
+    {
+        families_[family_id].setup_time = setup_time;
+    }
+
+    /** Add a job. */
     void add_job(
             Time processing_time,
             Weight weight,
-            FamilyId family)
+            FamilyId family_id)
     {
         JobId id = jobs_.size();
         Job job;
-        job.id = id;
         job.processing_time = processing_time;
         job.weight = weight;
-        job.family = family;
+        job.family_id = family_id;
         jobs_.push_back(job);
-        families_[family].jobs.push_back(id);
+        families_[family_id].job_ids.push_back(id);
     }
 
-    Instance(std::string instance_path, std::string format = "")
+    /** Build an instance from a file. */
+    Instance(
+            std::string instance_path,
+            std::string format = "")
     {
         std::ifstream file(instance_path);
         if (!file.good()) {
@@ -98,70 +130,214 @@ public:
         file.close();
     }
 
-    virtual ~Instance() { }
+    /*
+     * Getters
+     */
 
+    /** Get the number of machines. */
     MachineId number_of_machines() const { return number_of_machines_; }
-    FamilyId number_of_familiess() const { return families_.size(); }
+
+    /** Get the number of families. */
+    FamilyId number_of_families() const { return families_.size(); }
+
+    /** Get a family. */
+    const Family& family(FamilyId family_id) const { return families_[family_id]; }
+
+    /** Get the number of jobs. */
     JobId number_of_jobs() const { return jobs_.size(); }
-    const Job& job(JobId j) const { return jobs_[j]; }
-    const Family& family(FamilyId k) const { return families_[k]; }
+
+    /** Get a job. */
+    const Job& job(JobId job_id) const { return jobs_[job_id]; }
+
+    /** Print the instance. */
+    std::ostream& print(
+            std::ostream& os,
+            int verbose = 1) const
+    {
+        if (verbose >= 1) {
+            os << "Number of machines:  " << number_of_machines() << std::endl;
+            os << "Number of families:  " << number_of_families() << std::endl;
+            os << "Number of jobs:      " << number_of_jobs() << std::endl;
+        }
+
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Family"
+                << std::setw(12) << "Setup"
+                << std::setw(12) << "# jobs"
+                << std::endl
+                << std::setw(12) << "------"
+                << std::setw(12) << "-----"
+                << std::setw(12) << "------"
+                << std::endl;
+            for (FamilyId family_id = 0;
+                    family_id < number_of_families();
+                    ++family_id) {
+                const Family& family = this->family(family_id);
+                os
+                    << std::setw(12) << family_id
+                    << std::setw(12) << family.setup_time
+                    << std::setw(12) << family.job_ids.size()
+                    << std::endl;
+            }
+        }
+
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Job"
+                << std::setw(12) << "Proc. time"
+                << std::setw(12) << "Weight"
+                << std::setw(12) << "Family"
+                << std::endl
+                << std::setw(12) << "---"
+                << std::setw(12) << "----------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::endl;
+            for (JobId job_id = 0;
+                    job_id < number_of_jobs();
+                    ++job_id) {
+                const Job& job = this->job(job_id);
+                os
+                    << std::setw(12) << job_id
+                    << std::setw(12) << job.processing_time
+                    << std::setw(12) << job.weight
+                    << std::setw(12) << job.family_id
+                    << std::endl;
+            }
+        }
+
+        return os;
+    }
+
+    /** Check a certificate. */
+    std::pair<bool, Time> check(
+            std::string certificate_path,
+            std::ostream& os,
+            int verbose = 1) const
+    {
+        std::ifstream file(certificate_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + certificate_path + "\".");
+        }
+
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Job"
+                << std::setw(12) << "Time"
+                << std::setw(12) << "TWCT"
+                << std::endl
+                << std::setw(12) << "---"
+                << std::setw(12) << "----"
+                << std::setw(12) << "----"
+                << std::endl;
+        }
+
+        JobId job_id_pred = 0;
+        JobId job_id = -1;
+        optimizationtools::IndexedSet jobs(number_of_jobs());
+        JobId number_of_duplicates = 0;
+        Time time = 0;
+        Time total_weighted_completion_time = 0;
+        while (file >> job_id) {
+            const Job& job = this->job(job_id);
+
+            // Check duplicates.
+            if (jobs.contains(job_id)) {
+                number_of_duplicates++;
+                if (verbose >= 2) {
+                    os << "Job " << job_id
+                        << " has already been scheduled." << std::endl;
+                }
+            }
+            jobs.add(job_id);
+
+            if (job.family_id != this->job(job_id_pred).family_id)
+                time += this->family(job.family_id).setup_time;
+            time += job.processing_time;
+            total_weighted_completion_time += job.weight * time;
+
+            if (verbose >= 2) {
+                os
+                    << std::setw(12) << job_id
+                    << std::setw(12) << time
+                    << std::setw(12) << total_weighted_completion_time
+                    << std::endl;
+            }
+
+            job_id_pred = job_id;
+        }
+
+        bool feasible
+            = (jobs.size() == number_of_jobs())
+            && (number_of_duplicates == 0);
+        if (verbose >= 2)
+            os << std::endl;
+        if (verbose >= 1) {
+            os
+                << "Number of jobs:                  " << jobs.size() << " / " << number_of_jobs()  << std::endl
+                << "Number of duplicates:            " << number_of_duplicates << std::endl
+                << "Feasible:                        " << feasible << std::endl
+                << "Total weighted completion time:  " << total_weighted_completion_time << std::endl
+                ;
+        }
+        return {feasible, total_weighted_completion_time};
+    }
 
 private:
 
+    /*
+     * Private methods
+     */
+
+    /** Read an instance from a file in 'default' format. */
     void read_default(std::ifstream& file)
     {
         file >> number_of_machines_;
 
-        FamilyId o = -1;
+        FamilyId number_of_families = -1;
 
-        file >> o;
-        families_.resize(o);
-        for (FamilyId k = 0; k < o; ++k)
-            families_[k].id = k;
-        Time s;
-        for (FamilyId k = 0; k < o; ++k) {
-            file >> s;
-            set_setup_time(k, s);
+        file >> number_of_families;
+        families_.resize(number_of_families);
+        Time setup_time;
+        for (FamilyId family_id = 0;
+                family_id < number_of_families;
+                ++family_id) {
+            file >> setup_time;
+            set_setup_time(family_id, setup_time);
         }
 
-        JobId n = -1;
-        file >> n;
-        Time p = -1;
-        Weight w = -1;
-        FamilyId k = -1;
-        for (JobId j = 0; j < n; ++j) {
-            file >> p >> w >> k;
-            add_job(p, w, k);
+        JobId number_of_jobs = -1;
+        file >> number_of_jobs;
+        Time processing_time = -1;
+        Weight weight = -1;
+        FamilyId family_id = -1;
+        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id) {
+            file
+                >> processing_time
+                >> weight
+                >> family_id;
+            add_job(processing_time,
+                    weight,
+                    family_id);
         }
     }
 
+    /*
+     * Private attributes
+     */
+
+    /** Number of machines. */
     MachineId number_of_machines_;
+
+    /** Jobs. */
     std::vector<Job> jobs_;
+
+    /** Families. */
     std::vector<Family> families_;
 
 };
-
-static inline std::ostream& operator<<(std::ostream &os, const Instance& instance)
-{
-    os << "number of machines " << instance.number_of_machines() << std::endl;
-    os << "number of jobs " << instance.number_of_jobs() << std::endl;
-    os << "number of families " << instance.number_of_familiess() << std::endl;
-    for (JobId j = 0; j < instance.number_of_jobs(); ++j)
-        os << "job " << j
-            << " p " << instance.job(j).processing_time
-            << " w " << instance.job(j).weight
-            << " f " << instance.job(j).family
-            << std::endl;
-    for (FamilyId k = 0; k < instance.number_of_familiess(); ++k) {
-        os << "family " << k
-            << " s " << instance.family(k).setup_time
-            << " j";
-        for (JobId j: instance.family(k).jobs)
-            os << " " << j;
-        os << std::endl;
-    }
-    return os;
-}
 
 }
 

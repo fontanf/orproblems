@@ -173,11 +173,11 @@ int main(int argc, char *argv[])
 
     } else if (problem == "orderacceptanceandscheduling") {
         orderacceptanceandscheduling::Instance instance(instance_path, format);
-        //instance.check(certificate_path, print_checker); TODO
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "batchschedulingtotalcompletiontime") {
         batchschedulingtotalcompletiontime::Instance instance(instance_path, format);
-        //instance.check(certificate_path, print_checker); TODO
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "batchschedulingtotalweightedtardiness") {
         batchschedulingtotalweightedtardiness::Instance instance(instance_path, format);
@@ -185,11 +185,11 @@ int main(int argc, char *argv[])
 
     } else if (problem == "parallelschedulingwithfamilysetuptimestwct") {
         parallelschedulingwithfamilysetuptimestwct::Instance instance(instance_path, format);
-        //instance.check(certificate_path, print_checker); TODO
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "starobservationscheduling") {
         starobservationscheduling::Instance instance(instance_path, format);
-        //instance.check(certificate_path, print_checker); TODO
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "permutationflowshopschedulingmakespan") {
         permutationflowshopschedulingmakespan::Instance instance(instance_path, format);
@@ -197,11 +197,11 @@ int main(int argc, char *argv[])
 
     } else if (problem == "permutationflowshopschedulingtct") {
         permutationflowshopschedulingtct::Instance instance(instance_path, format);
-        //instance.check(certificate_path, print_checker); TODO
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "permutationflowshopschedulingtt") {
         permutationflowshopschedulingtt::Instance instance(instance_path, format);
-        //instance.check(certificate_path, print_checker); TODO
+        check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "distributedpfssmakespan") {
         distributedpfssmakespan::Instance instance(instance_path, format);

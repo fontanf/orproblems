@@ -249,19 +249,17 @@ public:
 
         if (verbose >= 2) {
             os << std::endl << std::right
+                << std::setw(10) << "Route"
                 << std::setw(10) << "Location"
-                << std::setw(12) << "Demand"
-                << std::setw(12) << "Distance"
                 << std::setw(12) << "Route dem."
-                << std::setw(12) << "Tot. dist."
                 << std::setw(12) << "Route dist."
+                << std::setw(12) << "Tot. dist."
                 << std::endl
+                << std::setw(10) << "-----"
                 << std::setw(10) << "--------"
-                << std::setw(12) << "------"
-                << std::setw(12) << "--------"
-                << std::setw(12) << "----------"
                 << std::setw(12) << "----------"
                 << std::setw(12) << "-----------"
+                << std::setw(12) << "----------"
                 << std::endl;
         }
 
@@ -272,7 +270,8 @@ public:
         RouteId number_of_overloaded_vehicles = 0;
         RouteId number_of_route_maximum_length_violations = 0;
         Distance total_distance = 0;
-        while (file >> route_number_of_locations) {
+        file >> number_of_routes;
+        for (RouteId route_id = 0; route_id < number_of_routes; ++route_id) {
             if (route_number_of_locations == 0)
                 continue;
             Distance route_distance = 0;
@@ -298,9 +297,8 @@ public:
 
                 if (verbose >= 2) {
                     os
+                        << std::setw(10) << route_id
                         << std::setw(10) << location_id
-                        << std::setw(12) << demand(location_id)
-                        << std::setw(12) << distance(location_id_prev, location_id)
                         << std::setw(12) << route_demand
                         << std::setw(12) << route_distance
                         << std::setw(12) << total_distance
@@ -309,23 +307,12 @@ public:
 
                 location_id_prev = location_id;
             }
-            if (location_id_prev != 0) {
-                route_distance += distance(location_id_prev, 0);
-                total_distance += distance(location_id_prev, 0);
-            }
-            if (verbose >= 2) {
-                os << "Route " << number_of_routes
-                    << "; demand: " << route_demand
-                    << "; travel time: " << route_distance
-                    << "; total travel time: " << total_distance
-                    << "." << std::endl;
-            }
 
             // Check route maximum length.
             if (route_distance > maximum_route_length()) {
                 number_of_route_maximum_length_violations++;
                 if (verbose >= 2) {
-                    os << "Route " << number_of_routes
+                    os << "Route " << route_id
                         << " is too long." << std::endl;
                 }
             }
@@ -334,12 +321,10 @@ public:
             if (route_demand > capacity()) {
                 number_of_overloaded_vehicles++;
                 if (verbose >= 2) {
-                    os << "Vehicle " << number_of_routes
+                    os << "Vehicle " << route_id
                         << " is overloaded." << std::endl;
                 }
             }
-
-            number_of_routes++;
         }
 
         bool feasible

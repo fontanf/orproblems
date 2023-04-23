@@ -204,14 +204,17 @@ public:
                 }
                 continue;
             }
+
+            // Check duplicates.
             if (location_set.contains(location_id)) {
                 number_of_duplicates++;
                 if (verbose >= 2) {
                     os << "Location " << location_id
-                        << " is already assigned." << std::endl;
+                        << " has already been assigned." << std::endl;
                 }
             }
             location_set.add(location_id);
+
             locations[facility_id] = location_id;
             facility_id++;
             if (verbose >= 2) {

@@ -31,6 +31,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 
 namespace orproblems
 {
@@ -44,31 +45,52 @@ using Time = int64_t;
 using Weight = double;
 using Profit = double;
 
+/**
+ * Structure for a job.
+ */
 struct Job
 {
-    JobId id;
+    /** Release date of the job. */
     Time release_date;
+
+    /** Due date of the job. */
     Time due_date;
+
+    /** Deadline of the job. */
     Time deadline;
+
+    /** Processing-time of the job. */
     Time processing_time;
+
+    /** Weight of the job. */
     Weight weight;
+
+    /** Profit of the job. */
     Profit profit;
 };
 
+/**
+ * Instance class for a 'orderacceptanceandscheduling' problem.
+ */
 class Instance
 {
 
 public:
 
-    Instance(JobId n):
-        jobs_(n),
-        setup_times_(n, std::vector<Time>(n))
+    /*
+     * Constructors and destructor
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance(JobId number_of_jobs):
+        jobs_(number_of_jobs),
+        setup_times_(number_of_jobs, std::vector<Time>(number_of_jobs))
     {
-        for (JobId j = 0; j < n; ++j)
-            jobs_[j].id = j;
     }
+
+    /** Set the attributes of a job. */
     void set_job(
-            JobId j,
+            JobId job_id,
             Time release_date,
             Time due_date,
             Time deadline,
@@ -76,19 +98,27 @@ public:
             Weight weight,
             Profit profit)
     {
-        jobs_[j].release_date = release_date;
-        jobs_[j].due_date = due_date;
-        jobs_[j].deadline = deadline;
-        jobs_[j].processing_time = processing_time;
-        jobs_[j].weight = weight;
-        jobs_[j].profit = profit;
-    }
-    void set_setup_time(JobId j1, JobId j2, Time setup_time)
-    {
-        setup_times_[j1][j2] = setup_time;
+        jobs_[job_id].release_date = release_date;
+        jobs_[job_id].due_date = due_date;
+        jobs_[job_id].deadline = deadline;
+        jobs_[job_id].processing_time = processing_time;
+        jobs_[job_id].weight = weight;
+        jobs_[job_id].profit = profit;
     }
 
-    Instance(std::string instance_path, std::string format = "")
+    /** Set the setup time between two jobs. */
+    void set_setup_time(
+            JobId job_id_1,
+            JobId job_id_2,
+            Time setup_time)
+    {
+        setup_times_[job_id_1][job_id_2] = setup_time;
+    }
+
+    /** Build an instance from a file. */
+    Instance(
+            std::string instance_path,
+            std::string format = "")
     {
         std::ifstream file(instance_path);
         if (!file.good()) {
@@ -104,91 +134,197 @@ public:
         file.close();
     }
 
-    virtual ~Instance() { }
+    /*
+     * Getters
+     */
 
+    /** Get the number of jobs. */
     inline JobId number_of_jobs() const { return jobs_.size(); }
-    inline const Job& job(JobId j) const { return jobs_[j]; }
-    inline Time setup_time(JobId j1, JobId j2) const { return setup_times_[j1][j2]; }
 
-    std::pair<bool, Time> check(
-            std::string certificate_path,
+    /** Get a job. */
+    inline const Job& job(JobId job_id) const { return jobs_[job_id]; }
+
+    /** Get the setup time between two jobs. */
+    inline Time setup_time(
+            JobId job_id_1,
+            JobId job_id_2) const
+    {
+        return setup_times_[job_id_1][job_id_2];
+    }
+
+    /** Print the instance. */
+    std::ostream& print(
+            std::ostream& os,
             int verbose = 1) const
     {
-        // Initial display.
         if (verbose >= 1) {
-            std::cout
-                << "Checker" << std::endl
-                << "-------" << std::endl;
+            os << "Number of jobs:  " << number_of_jobs() << std::endl;
         }
 
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Job"
+                << std::setw(12) << "Proc. time"
+                << std::setw(12) << "Rel. date"
+                << std::setw(12) << "Due date"
+                << std::setw(12) << "Deadline"
+                << std::setw(12) << "Weight"
+                << std::setw(12) << "Profit"
+                << std::endl
+                << std::setw(12) << "---"
+                << std::setw(12) << "----------"
+                << std::setw(12) << "---------"
+                << std::setw(12) << "--------"
+                << std::setw(12) << "--------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::endl;
+            for (JobId job_id = 0; job_id < number_of_jobs(); ++job_id) {
+                const Job& job = this->job(job_id);
+                os
+                    << std::setw(12) << job_id
+                    << std::setw(12) << job.processing_time
+                    << std::setw(12) << job.release_date
+                    << std::setw(12) << job.due_date
+                    << std::setw(12) << job.deadline
+                    << std::setw(12) << job.weight
+                    << std::setw(12) << job.profit
+                    << std::endl;
+            }
+        }
+
+        if (verbose >= 3) {
+            os << std::endl
+                << std::setw(12) << "Job 1"
+                << std::setw(12) << "Job 2"
+                << std::setw(12) << "Setup"
+                << std::endl
+                << std::setw(12) << "-----"
+                << std::setw(12) << "-----"
+                << std::setw(12) << "-----"
+                << std::endl;
+            for (JobId job_id_1 = 0;
+                    job_id_1 < number_of_jobs();
+                    ++job_id_1) {
+                for (JobId job_id_2 = job_id_1 + 1;
+                        job_id_2 < number_of_jobs();
+                        ++job_id_2) {
+                    os
+                        << std::setw(12) << job_id_1
+                        << std::setw(12) << job_id_2
+                        << std::setw(12) << setup_time(job_id_1, job_id_2)
+                        << std::endl;
+                }
+            }
+        }
+
+        return os;
+    }
+
+    /** Check a certificate. */
+    std::pair<bool, Time> check(
+            std::string certificate_path,
+            std::ostream& os,
+            int verbose = 1) const
+    {
         std::ifstream file(certificate_path);
         if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        JobId n = number_of_jobs();
-        JobId j = -1;
-        JobId j_prec = 0;
-        optimizationtools::IndexedSet jobs(n);
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Job"
+                << std::setw(12) << "Time"
+                << std::setw(12) << "Profit"
+                << std::setw(12) << "TWT"
+                << std::endl
+                << std::setw(12) << "---"
+                << std::setw(12) << "----"
+                << std::setw(12) << "------"
+                << std::setw(12) << "---"
+                << std::endl;
+        }
+
+        JobId job_id = -1;
+        JobId job_id_pred = 0;
+        optimizationtools::IndexedSet jobs(number_of_jobs());
         JobPos duplicates = 0;
         JobPos number_of_deadline_violations = 0;
         Time current_time = 0;
         Profit profit = 0.0;
         Weight total_weighted_tardiness = 0.0;
-        while (file >> j) {
-            if (jobs.contains(j)) {
+        while (file >> job_id) {
+            const Job& job = this->job(job_id);
+
+            // Check duplicates.
+            if (jobs.contains(job_id)) {
                 duplicates++;
-                if (verbose == 2)
-                    std::cout << "Job " << j << " is already scheduled." << std::endl;
+                if (verbose >= 2) {
+                    os << "Job " << job_id
+                        << " has already been scheduled." << std::endl;
+                }
             }
-            jobs.add(j);
-            current_time = std::max(current_time, job(j).release_date)
-                + setup_time(j_prec, j) + job(j).processing_time;
-            profit += job(j).profit;
-            if (current_time > job(j).due_date)
-                total_weighted_tardiness += job(j).weight * (current_time - job(j).due_date);
-            if (current_time > job(j).deadline) {
+            jobs.add(job_id);
+
+            current_time = std::max(current_time, job.release_date)
+                + setup_time(job_id_pred, job_id) + job.processing_time;
+            profit += job.profit;
+            if (current_time > job.due_date)
+                total_weighted_tardiness += job.weight * (current_time - job.due_date);
+
+            // Check deadline.
+            if (current_time > job.deadline) {
                 number_of_deadline_violations++;
-                if (verbose == 2)
-                    std::cout << "Job " << j << " ends after its deadline: "
-                        << current_time << " / " << job(j).deadline << "." << std::endl;
+                if (verbose >= 2) {
+                    os << "Job " << job_id << " ends after its deadline: "
+                        << current_time << " / " << job.deadline
+                        << "." << std::endl;
+                }
             }
-            if (verbose == 2)
-                std::cout << "Job: " << j
-                    //<< "; rj: " << job(j).release_date
-                    //<< "; st: " << setup_time(j_prec, j)
-                    //<< "; pj: " << job(j).processing_time
-                    << "; Time: " << current_time
-                    //<< "; dj: " << job(j).due_date
-                    //<< "; dj: " << job(j).deadline
-                    << "; Profit: " << profit
-                    << "; Total weighted tardiness: " << total_weighted_tardiness
+
+            if (verbose >= 2) {
+                os
+                    << std::setw(12) << job_id
+                    << std::setw(12) << current_time
+                    << std::setw(12) << profit
+                    << std::setw(12) << total_weighted_tardiness
                     << std::endl;
-            j_prec = j;
+            }
+
+            job_id_pred = job_id;
         }
 
         bool feasible
             = (duplicates == 0)
             && (number_of_deadline_violations == 0)
             && (!jobs.contains(0))
-            && (!jobs.contains(n - 1));
-        if (verbose == 2)
-            std::cout << "---" << std::endl;
+            && (!jobs.contains(number_of_jobs() - 1));
+
+        if (verbose >= 2)
+            os << std::endl;
         if (verbose >= 1) {
-            std::cout << "Number of jobs:                 " << jobs.size() << " / " << n - 2 << std::endl;
-            std::cout << "Number of duplicates:           " << duplicates << std::endl;
-            std::cout << "Number of deadline violations:  " << number_of_deadline_violations << std::endl;
-            std::cout << "Feasible:                       " << feasible << std::endl;
-            std::cout << "Profit:                         " << profit << std::endl;
-            std::cout << "Total weighted tardiness:       " << total_weighted_tardiness << std::endl;
-            std::cout << "Objective:                      " << profit - total_weighted_tardiness << std::endl;
+            os
+                << "Number of jobs:                 " << jobs.size() << " / " << number_of_jobs() - 2 << std::endl
+                << "Number of duplicates:           " << duplicates << std::endl
+                << "Number of deadline violations:  " << number_of_deadline_violations << std::endl
+                << "Feasible:                       " << feasible << std::endl
+                << "Profit:                         " << profit << std::endl
+                << "Total weighted tardiness:       " << total_weighted_tardiness << std::endl
+                << "Objective:                      " << profit - total_weighted_tardiness << std::endl
+                ;
         }
         return {feasible, profit - total_weighted_tardiness};
     }
 
 private:
 
+    /*
+     * Private methods
+     */
+
+    /** Read an instance from a file in 'cesaret2012' format. */
     void read_cesaret2012(std::ifstream& file)
     {
         std::string tmp;
@@ -196,65 +332,50 @@ private:
 
         getline(file, tmp);
         line = optimizationtools::split(tmp, ',');
-        JobId n = line.size();
-        jobs_.resize(n);
-        setup_times_.resize(n, std::vector<Time>(n));
-        for (JobId j = 0; j < n; ++j)
-            jobs_[j].release_date = std::stol(line[j]);
+        JobId number_of_jobs = line.size();
+        jobs_.resize(number_of_jobs);
+        setup_times_.resize(number_of_jobs, std::vector<Time>(number_of_jobs));
+        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id)
+            jobs_[job_id].release_date = std::stol(line[job_id]);
         getline(file, tmp);
         line = optimizationtools::split(tmp, ',');
-        for (JobId j = 0; j < n; ++j)
-            jobs_[j].processing_time = std::stol(line[j]);
+        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id)
+            jobs_[job_id].processing_time = std::stol(line[job_id]);
         getline(file, tmp);
         line = optimizationtools::split(tmp, ',');
-        for (JobId j = 0; j < n; ++j)
-            jobs_[j].due_date = std::stol(line[j]);
+        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id)
+            jobs_[job_id].due_date = std::stol(line[job_id]);
         getline(file, tmp);
         line = optimizationtools::split(tmp, ',');
-        for (JobId j = 0; j < n; ++j)
-            jobs_[j].deadline = std::stol(line[j]);
+        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id)
+            jobs_[job_id].deadline = std::stol(line[job_id]);
         getline(file, tmp);
         line = optimizationtools::split(tmp, ',');
-        for (JobId j = 0; j < n; ++j)
-            jobs_[j].profit = std::stod(line[j]);
+        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id)
+            jobs_[job_id].profit = std::stod(line[job_id]);
         getline(file, tmp);
         line = optimizationtools::split(tmp, ',');
-        for (JobId j = 0; j < n; ++j)
-            jobs_[j].weight = std::stod(line[j]);
-        for (JobId j1 = 0; j1 < n; ++j1) {
+        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id)
+            jobs_[job_id].weight = std::stod(line[job_id]);
+        for (JobId job_id_1 = 0; job_id_1 < number_of_jobs; ++job_id_1) {
             getline(file, tmp);
             line = optimizationtools::split(tmp, ',');
-            for (JobId j2 = 0; j2 < n; ++j2)
-                setup_times_[j1][j2] = std::stol(line[j2]);
+            for (JobId job_id_2 = 0; job_id_2 < number_of_jobs; ++job_id_2)
+                setup_times_[job_id_1][job_id_2] = std::stol(line[job_id_2]);
         }
     }
 
+    /*
+     * Private attributes
+     */
+
+    /** Jobs. */
     std::vector<Job> jobs_;
+
+    /** Setup times. */
     std::vector<std::vector<Time>> setup_times_;
 
 };
-
-static inline std::ostream& operator<<(
-        std::ostream &os, const Instance& instance)
-{
-    os << "number of jobs: " << instance.number_of_jobs() << std::endl;
-    for (JobId j = 0; j < instance.number_of_jobs(); ++j)
-        os << "job: " << j
-            << "; processing time: " << instance.job(j).processing_time
-            << "; release date: " << instance.job(j).release_date
-            << "; due date: " << instance.job(j).due_date
-            << "; deadline: " << instance.job(j).deadline
-            << "; weight: " << instance.job(j).weight
-            << "; profit: " << instance.job(j).profit
-            << std::endl;
-    for (JobId j1 = 0; j1 <= instance.number_of_jobs(); ++j1) {
-        os << "job " << j1 << ":";
-        for (JobId j2 = 0; j2 < instance.number_of_jobs(); ++j2)
-            os << " " << instance.setup_time(j1, j2);
-        os << std::endl;
-    }
-    return os;
-}
 
 }
 

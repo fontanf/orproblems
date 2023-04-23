@@ -200,12 +200,17 @@ public:
         VertexPos number_of_duplicates = 0;
         Distance total_distance = 0;
         while (file >> vertex_id) {
+
+            // Check duplicates.
             if (vertices.contains(vertex_id)) {
                 number_of_duplicates++;
-                if (verbose >= 2)
-                    os << "Vertex " << vertex_id << " has already been visited." << std::endl;
+                if (verbose >= 2) {
+                    os << "Vertex " << vertex_id
+                        << " has already been visited." << std::endl;
+                }
             }
             vertices.add(vertex_id);
+
             total_distance += distance(vertex_id_pred, vertex_id);
 
             if (verbose >= 2) {
@@ -222,6 +227,7 @@ public:
         bool feasible
             = (vertices.size() == number_of_vertices())
             && (number_of_duplicates == 0);
+
         if (verbose >= 2)
             os << std::endl;
         if (verbose >= 1) {
@@ -462,6 +468,7 @@ private:
 
     /** Maximum distance. */
     Distance distance_max_ = 0;
+
 };
 
 }

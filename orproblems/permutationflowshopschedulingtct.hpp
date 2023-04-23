@@ -23,6 +23,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 
 namespace orproblems
 {
@@ -35,22 +36,40 @@ using JobPos = int64_t;
 using MachineId = int64_t;
 using Time = int64_t;
 
+/**
+ * Instance class for a 'permutationflowshopschedulingtct' problem.
+ */
 class Instance
 {
 
 public:
 
-    Instance(MachineId m, JobId n):
-        processing_times_(n, std::vector<Time>(m, 0)) { }
+
+    /*
+     * Constructors and destructor
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance(
+            MachineId number_of_machines,
+            JobId number_of_jobs):
+        processing_times_(
+                number_of_jobs,
+                std::vector<Time>(number_of_machines, 0)) { }
+
+    /** Set the processing-time of a job on a machine. */
     void set_processing_time(
-            JobId j,
-            MachineId i,
+            JobId job_id,
+            MachineId machine_id,
             Time processing_time)
     {
-        processing_times_[j][i] = processing_time;
+        processing_times_[job_id][machine_id] = processing_time;
     }
 
-    Instance(std::string instance_path, std::string format = "")
+    /** Build an instance from a file. */
+    Instance(
+            std::string instance_path,
+            std::string format = "")
     {
         std::ifstream file(instance_path);
         if (!file.good()) {
@@ -66,111 +85,174 @@ public:
         file.close();
     }
 
-    virtual ~Instance() { }
+    /*
+     * Getters
+     */
 
+    /** Get the number of jobs. */
     inline JobId number_of_jobs() const { return processing_times_.size(); }
-    inline MachineId number_of_machines() const { return processing_times_[0].size(); }
-    inline Time processing_time(JobId j, MachineId i) const { return processing_times_[j][i]; }
 
-    std::pair<bool, Time> check(
-            std::string certificate_path,
+    /** Get the number of machines. */
+    inline MachineId number_of_machines() const { return processing_times_[0].size(); }
+
+    /** Get the processing-time of a job on a machine. */
+    inline Time processing_time(
+            JobId job_id,
+            MachineId machine_id) const
+    {
+        return processing_times_[job_id][machine_id];
+    }
+
+    /** Print the instance. */
+    std::ostream& print(
+            std::ostream& os,
             int verbose = 1) const
     {
-        // Initial display.
         if (verbose >= 1) {
-            std::cout
-                << "Checker" << std::endl
-                << "-------" << std::endl;
+            os
+                << "Number of machines:   " << number_of_machines() << std::endl
+                << "Number of jobs:       " << number_of_jobs() << std::endl
+                ;
         }
 
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Job"
+                << std::setw(12) << "Machine"
+                << std::setw(12) << "Proc. time"
+                << std::endl
+                << std::setw(12) << "---"
+                << std::setw(12) << "-------"
+                << std::setw(12) << "----------"
+                << std::endl;
+            for (JobId job_id = 0; job_id < number_of_jobs(); ++job_id) {
+                for (MachineId machine_id = 0;
+                        machine_id < number_of_machines();
+                        ++machine_id) {
+                    os
+                        << std::setw(12) << job_id
+                        << std::setw(12) << machine_id
+                        << std::setw(12) << processing_time(job_id, machine_id)
+                        << std::endl;
+                }
+            }
+        }
+        return os;
+    }
+
+    /** Check a certificate. */
+    std::pair<bool, Time> check(
+            std::string certificate_path,
+            std::ostream& os,
+            int verbose = 1) const
+    {
         std::ifstream file(certificate_path);
         if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        MachineId m = number_of_machines();
-        JobId n = number_of_jobs();
-        std::vector<Time> times(m, 0);
-        JobId j = -1;
-        optimizationtools::IndexedSet jobs(n);
+        if (verbose >= 2) {
+            os << std::endl << std::right
+                << std::setw(12) << "Job"
+                << std::setw(12) << "TCT"
+                << std::endl
+                << std::setw(12) << "---"
+                << std::setw(12) << "---"
+                << std::endl;
+        }
+
+        std::vector<Time> times(number_of_machines(), 0);
+        JobId job_id = -1;
+        optimizationtools::IndexedSet jobs(number_of_jobs());
         JobPos number_of_duplicates = 0;
         Time total_completion_time = 0;
-        while (file >> j) {
-            if (jobs.contains(j)) {
+        while (file >> job_id) {
+            // Check duplicates.
+            if (jobs.contains(job_id)) {
                 number_of_duplicates++;
-                if (verbose == 2)
-                    std::cout << "Job " << j << " is already scheduled." << std::endl;
-            }
-            jobs.add(j);
-            times[0] = times[0] + processing_time(j, 0);
-            for (MachineId i = 1; i < m; ++i) {
-                if (times[i - 1] > times[i]) {
-                    times[i] = times[i - 1] + processing_time(j, i);
-                } else {
-                    times[i] = times[i] + processing_time(j, i);
+                if (verbose >= 2) {
+                    os << "Job " << job_id
+                        << " has already been scheduled." << std::endl;
                 }
             }
-            total_completion_time += times[m - 1];
-            if (verbose == 2)
-                std::cout << "Job: " << j
-                    << "; Time: " << times[m - 1]
-                    << "; Total completion time: " << total_completion_time
+            jobs.add(job_id);
+
+            times[0] = times[0] + processing_time(job_id, 0);
+            for (MachineId machine_id = 1;
+                    machine_id < number_of_machines();
+                    ++machine_id) {
+                if (times[machine_id - 1] > times[machine_id]) {
+                    times[machine_id] = times[machine_id - 1]
+                        + processing_time(job_id, machine_id);
+                } else {
+                    times[machine_id] = times[machine_id]
+                        + processing_time(job_id, machine_id);
+                }
+            }
+            total_completion_time += times[number_of_machines() - 1];
+
+            if (verbose >= 2) {
+                os
+                    << std::setw(12) << job_id
+                    << std::setw(12) << total_completion_time
                     << std::endl;
+            }
         }
 
         bool feasible
-            = (jobs.size() == n)
+            = (jobs.size() == number_of_jobs())
             && (number_of_duplicates == 0);
-        if (verbose == 2)
-            std::cout << "---" << std::endl;
+
+        if (verbose >= 2)
+            os << std::endl;
         if (verbose >= 1) {
-            std::cout << "Number of jobs:         " << jobs.size() << " / " << n  << std::endl;
-            std::cout << "Number of duplicates:   " << number_of_duplicates << std::endl;
-            std::cout << "Feasible:               " << feasible << std::endl;
-            std::cout << "Total completion time:  " << total_completion_time << std::endl;
+            os
+                << "Number of jobs:         " << jobs.size() << " / " << number_of_jobs()  << std::endl
+                << "Number of duplicates:   " << number_of_duplicates << std::endl
+                << "Feasible:               " << feasible << std::endl
+                << "Total completion time:  " << total_completion_time << std::endl
+                ;
         }
         return {feasible, total_completion_time};
     }
 
 private:
 
+    /*
+     * Private methods
+     */
+
+    /** Read an instance from a file in 'default' format. */
     void read_default(std::ifstream& file)
     {
-        JobId n;
-        MachineId m;
-        file >> n;
-        file >> m;
-        processing_times_ = std::vector<std::vector<Time>>(n, std::vector<Time>(m, 0));
+        JobId number_of_jobs;
+        MachineId number_of_machines;
+        file >> number_of_jobs;
+        file >> number_of_machines;
+        processing_times_ = std::vector<std::vector<Time>>(
+                number_of_jobs,
+                std::vector<Time>(number_of_machines, 0));
 
-        for (MachineId i = 0; i < m; i++) {
-            Time p;
-            for (JobId j = 0; j < n; j++) {
-                file >> p;
-                set_processing_time(j, i, p);
+        Time processing_time;
+        for (MachineId machine_id = 0;
+                machine_id < number_of_machines;
+                machine_id++) {
+            for (JobId job_id = 0; job_id < number_of_jobs; job_id++) {
+                file >> processing_time;
+                set_processing_time(job_id, machine_id, processing_time);
             }
         }
     }
 
+    /*
+     * Private attributes
+     */
+
+    /** Processing-times. */
     std::vector<std::vector<Time>> processing_times_;
-    Time machine_total_processing_time_max = 0;
-    Time job_total_processing_time_max = 0;
 
 };
-
-static inline std::ostream& operator<<(
-        std::ostream &os, const Instance& instance)
-{
-    os << "number of machines " << instance.number_of_machines() << std::endl;
-    os << "number of jobs " << instance.number_of_jobs() << std::endl;
-    for (JobId j = 0; j < instance.number_of_jobs(); ++j) {
-        os << "job " << j << ":";
-        for (MachineId i = 0; i < instance.number_of_machines(); ++i)
-            os << " " << instance.processing_time(j, i);
-        os << std::endl;
-    }
-    return os;
-}
 
 }
 

@@ -259,13 +259,17 @@ public:
                     << std::endl;
             }
 
+            // Check duplicates.
             if (items.contains(item_id)) {
                 number_of_duplicates++;
                 if (verbose >= 2) {
                     os << "Item " << item_id
-                        << " is already packed." << std::endl;
+                        << " has already been packed." << std::endl;
                 }
             }
+            items.add(item_id);
+
+            // Check conflict violations.
             for (ItemId item_id_con: item(item_id).neighbors) {
                 if (items.contains(item_id_con)) {
                     number_of_conflict_violations++;
@@ -277,7 +281,6 @@ public:
                     }
                 }
             }
-            items.add(item_id);
         }
 
         bool feasible

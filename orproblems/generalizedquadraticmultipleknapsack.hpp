@@ -137,7 +137,7 @@ public:
         Weight overweight = 0;
         Profit total_profit = 0;
         ItemId n = -1;  // Number of items in knapsack i.
-        ItemId j = -1;
+        ItemId job_id = -1;
         optimizationtools::IndexedSet items(n);
         optimizationtools::IndexedSet knapsack_classes(number_of_classes());
         std::vector<KnapsackId> class_number_of_knapsacks(number_of_classes(), 0);
@@ -147,24 +147,29 @@ public:
             file >> n;
             std::vector<ItemId> current_knapsack_items;
             for (ItemPos j_pos = 0; j_pos < n; ++j_pos) {
-                file >> j;
-                total_weight += item(j).weight;
-                total_profit += item_profit(j, i);
+                file >> job_id;
+                total_weight += item(job_id).weight;
+                total_profit += item_profit(job_id, i);
                 for (ItemId j2: current_knapsack_items)
-                    total_profit += pair_profit(j, j2);
-                current_knapsack_items.push_back(j);
+                    total_profit += pair_profit(job_id, j2);
+                current_knapsack_items.push_back(job_id);
                 if (verbose == 2)
-                    std::cout << "Job: " << j
+                    std::cout << "Job: " << job_id
                         << "; Weight: " << total_weight
                         << "; Profit: " << total_profit
                         << std::endl;
-                knapsack_classes.add(item(j).class_id);
-                if (items.contains(j)) {
+                knapsack_classes.add(item(job_id).class_id);
+
+                // Check duplicates.
+                if (items.contains(job_id)) {
                     number_of_duplicates++;
-                    if (verbose == 2)
-                        std::cout << "Job " << j << " already scheduled." << std::endl;
+                    if (verbose >= 2) {
+                        std::cout << "Job " << job_id
+                            << " has already been scheduled." << std::endl;
+                    }
                 }
-                items.add(j);
+                items.add(job_id);
+
             }
             if (total_weight > capacity(i)) {
                 if (verbose == 2)
@@ -187,12 +192,14 @@ public:
                 number_of_class_maximum_number_of_knapsacks_violations++;
             }
         }
+
         bool feasible
             = (number_of_duplicates == 0)
             && (overweight == 0)
             && (number_of_class_maximum_number_of_knapsacks_violations == 0);
-        if (verbose == 2)
-            std::cout << "---" << std::endl;
+
+        if (verbose >= 2)
+            std::cout << std::endl;
         if (verbose >= 1) {
             std::cout << "Number of items:                          " << items.size() << " / " << number_of_items() << std::endl;
             std::cout << "Number of duplicates:                     " << number_of_duplicates << std::endl;

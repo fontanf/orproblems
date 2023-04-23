@@ -235,6 +235,7 @@ public:
         Time current_time = 0;
         Profit profit = location(0).profit;
         while (file >> location_id) {
+
             // Check duplicates.
             if (locations.contains(location_id)) {
                 number_of_duplicates++;
@@ -243,6 +244,7 @@ public:
                         << " has already been visited." << std::endl;
             }
             locations.add(location_id);
+
             current_time = arrival_time(
                     location_id_prev,
                     location_id,

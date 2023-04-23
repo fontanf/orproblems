@@ -255,22 +255,14 @@ public:
 
         if (verbose >= 2) {
             os << std::endl << std::right
+                << std::setw(10) << "Route"
                 << std::setw(10) << "Location"
-                << std::setw(12) << "Demand"
-                << std::setw(12) << "Rel. date"
-                << std::setw(12) << "Deadline"
-                << std::setw(12) << "Travel time"
-                << std::setw(12) << "Serv. time"
                 << std::setw(12) << "Route dem."
                 << std::setw(12) << "Time"
                 << std::setw(12) << "Route tr."
                 << std::endl
+                << std::setw(10) << "-----"
                 << std::setw(10) << "--------"
-                << std::setw(12) << "------"
-                << std::setw(12) << "---------"
-                << std::setw(12) << "--------"
-                << std::setw(12) << "-----------"
-                << std::setw(12) << "----------"
                 << std::setw(12) << "----------"
                 << std::setw(12) << "----"
                 << std::setw(12) << "---------"
@@ -278,13 +270,17 @@ public:
         }
 
         optimizationtools::IndexedSet visited_locations(number_of_locations());
-        LocationPos number_of_duplicates = 0;
+        RouteId number_of_routes = -1;
         LocationPos route_number_of_locations = -1;
-        LocationPos number_of_late_visits = 0;
-        RouteId number_of_routes = 0;
+
+        LocationPos number_of_duplicates = 0;
         RouteId number_of_overloaded_vehicles = 0;
+        LocationPos number_of_late_visits = 0;
+
         Time total_travel_time = 0;
-        while (file >> route_number_of_locations) {
+        file >> number_of_routes;
+        for (RouteId route_id = 0; route_id < number_of_routes; ++route_id) {
+            file >> route_number_of_locations;
             if (route_number_of_locations == 0)
                 continue;
             Time current_time = 0;
@@ -295,12 +291,16 @@ public:
             for (LocationPos pos = 0; pos <= route_number_of_locations; ++pos) {
                 if (pos < route_number_of_locations) {
                     file >> location_id;
+
+                    // Check duplicates.
                     if (visited_locations.contains(location_id)) {
                         number_of_duplicates++;
                         if (verbose >= 2)
-                            os << "Location " << location_id << " has already been visited." << std::endl;
+                            os << "Location " << location_id
+                                << " has already been visited." << std::endl;
                     }
                     visited_locations.add(location_id);
+
                     demand += location(location_id).demand;
                 } else {
                     location_id = 0;
@@ -308,36 +308,41 @@ public:
                 current_time += travel_time(location_id_prev, location_id);
                 if (current_time < location(location_id).release_date)
                     current_time = location(location_id).release_date;
+
+                // Check deadline.
                 if (current_time > location(location_id).deadline)
                     number_of_late_visits++;
+
                 route_travel_time += travel_time(location_id_prev, location_id);
+
                 if (verbose >= 2) {
                     os
+                        << std::setw(10) << route_id
                         << std::setw(10) << location_id
-                        << std::setw(12) << location(location_id).demand
-                        << std::setw(12) << location(location_id).release_date
-                        << std::setw(12) << location(location_id).deadline
-                        << std::setw(12) << travel_time(location_id_prev, location_id)
-                        << std::setw(12) << location(location_id).service_time
                         << std::setw(12) << demand
                         << std::setw(12) << current_time
                         << std::setw(12) << route_travel_time
                         << std::endl;
                 }
+
                 current_time += location(location_id).service_time;
                 location_id_prev = location_id;
             }
             if (location_id_prev != 0)
                 route_travel_time += travel_time(location_id_prev, 0);
             total_travel_time += route_travel_time;
+
             if (verbose >= 2) {
-                os << "Route " << number_of_routes
-                    << "; demand: " << demand
-                    << "; travel time: " << route_travel_time
-                    << "; total travel time: " << total_travel_time
-                    << "." << std::endl;
+                os
+                    << std::setw(10) << route_id
+                    << std::setw(10) << 0
+                    << std::setw(12) << demand
+                    << std::setw(12) << current_time
+                    << std::setw(12) << route_travel_time
+                    << std::endl;
             }
-            number_of_routes++;
+
+            // Check vehicle capacity.
             if (demand > capacity())
                 number_of_overloaded_vehicles++;
         }

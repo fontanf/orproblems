@@ -24,6 +24,7 @@
 #include <stdexcept>
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 
 namespace orproblems
 {
@@ -37,30 +38,52 @@ using Time = int64_t;
 using Size = int64_t;
 using Area = int64_t;
 
+/**
+ * Structure for a job.
+ */
 struct Job
 {
-    JobId id;
+    /** Processing-time of the job. */
     Time processing_time;
+
+    /** Size of the job. */
     Size size;
 };
 
+/**
+ * Instance class for a 'batchschedulingtotalcompletiontime' problem.
+ */
 class Instance
 {
 
 public:
 
+
+    /*
+     * Constructors and destructor
+     */
+
+    /** Constructor to build an instance manually. */
     Instance() { }
-    void add_job(Time p, Size s)
+
+    /** Add a job. */
+    void add_job(
+            Time processing_time,
+            Size size)
     {
         Job job;
-        job.id = jobs_.size();
-        job.processing_time = p;
-        job.size = s;
+        job.processing_time = processing_time;
+        job.size = size;
         jobs_.push_back(job);
     }
-    void set_capacity(Size q) { capacity_ = q; }
 
-    Instance(std::string instance_path, std::string format = "")
+    /** Set the capacity of the batches. */
+    void set_capacity(Size capacity) { capacity_ = capacity; }
+
+    /** Build an instance from a file. */
+    Instance(
+            std::string instance_path,
+            std::string format = "")
     {
         std::ifstream file(instance_path);
         if (!file.good()) {
@@ -76,126 +99,202 @@ public:
         file.close();
     }
 
-    virtual ~Instance() { }
+    /*
+     * Getters
+     */
 
+    /** Get the number of jobs. */
     inline JobId number_of_jobs() const { return jobs_.size(); }
-    inline const Job& job(JobId j) const { return jobs_[j]; }
+
+    /** Get a job. */
+    inline const Job& job(JobId job_id) const { return jobs_[job_id]; }
+
+    /** Get the capacity of the batches. */
     inline Size capacity() const { return capacity_; }
 
-    std::pair<bool, Time> check(
-            std::string certificate_path,
+    /** Print the instance. */
+    std::ostream& print(
+            std::ostream& os,
             int verbose = 1) const
     {
-        // Initial display.
         if (verbose >= 1) {
-            std::cout
-                << "Checker" << std::endl
-                << "-------" << std::endl;
+            os << "Number of jobs:  " << number_of_jobs() << std::endl;
+            os << "Batch capacity:  " << capacity() << std::endl;
         }
 
+        if (verbose >= 2) {
+            os << std::endl
+                << std::setw(12) << "Job"
+                << std::setw(12) << "Proc. time"
+                << std::setw(12) << "Size"
+                << std::endl
+                << std::setw(12) << "---"
+                << std::setw(12) << "----------"
+                << std::setw(12) << "---------"
+                << std::setw(12) << "--------"
+                << std::setw(12) << "----"
+                << std::setw(12) << "------"
+                << std::endl;
+            for (JobId job_id = 0; job_id < number_of_jobs(); ++job_id) {
+                const Job& job = this->job(job_id);
+                os << std::setw(12) << job_id
+                    << std::setw(12) << job.processing_time
+                    << std::setw(12) << job.size
+                    << std::endl;
+            }
+        }
+        return os;
+    }
+
+    /** Check a certificate. */
+    std::pair<bool, Time> check(
+            std::string certificate_path,
+            std::ostream& os,
+            int verbose = 1) const
+    {
         std::ifstream file(certificate_path);
         if (!file.good()) {
             throw std::runtime_error(
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        JobId n = number_of_jobs();
-        JobPos s = -1;
-        optimizationtools::IndexedSet jobs(n);
+        JobPos current_batch_size = -1;
+        optimizationtools::IndexedSet jobs(number_of_jobs());
         JobPos number_of_batches = 0;
         JobPos number_of_duplicates = 0;
         JobPos number_of_overloaded_batches = 0;
-        Time total_completion_time = 0;
-        Time current_batch_start = 0;
         Time current_batch_end = 0;
+        Time total_completion_time = 0;
 
-        while (file >> s) {
-            JobId j = -1;
-            Size size = 0;
+        if (verbose >= 2) {
+            os << std::endl << std::right
+                << std::setw(12) << "Job"
+                << std::setw(12) << "Proc. time"
+                << std::setw(12) << "Size"
+                << std::setw(12) << "Bat. start"
+                << std::setw(12) << "Batch size"
+                << std::setw(12) << "Batch end"
+                << std::setw(12) << "TCT"
+                << std::endl
+                << std::setw(12) << "---"
+                << std::setw(12) << "----------"
+                << std::setw(12) << "----"
+                << std::setw(12) << "----------"
+                << std::setw(12) << "----------"
+                << std::setw(12) << "---------"
+                << std::setw(12) << "---"
+                << std::endl;
+        }
+
+        while (file >> current_batch_size) {
+            JobId job_id = -1;
             number_of_batches++;
-            if (verbose == 2)
-                std::cout << "batch: " << number_of_batches - 1 << "; Jobs";
-            std::vector<JobId> batch_jobs;
-            for (JobPos j_pos = 0; j_pos < s; ++j_pos) {
-                file >> j;
+            Time current_batch_start = current_batch_end;
+            Time current_batch_time = 0;
+            Size current_batch_size = 0;
+            for (JobPos job_pos = 0; job_pos < current_batch_size; ++job_pos) {
+                file >> job_id;
+                const Job& job = this->job(job_id);
+
                 // Check duplicates.
-                if (jobs.contains(j)) {
+                if (jobs.contains(job_id)) {
                     number_of_duplicates++;
-                    if (verbose == 2)
-                        std::cout << std::endl << "Job " << j << " has already benn scheduled." << std::endl;
+                    if (verbose >= 2) {
+                        os << std::endl << "Job " << job_id
+                            << " has already benn scheduled." << std::endl;
+                    }
                 }
-                if (verbose == 2)
-                    std::cout << " " << j;
-                jobs.add(j);
-                batch_jobs.push_back(j);
-                size += job(j).size;
+                jobs.add(job_id);
+
+                current_batch_size += job.size;
+                if (current_batch_time < job.processing_time)
+                    current_batch_time = job.processing_time;
+                current_batch_end = current_batch_start + current_batch_time;
+
+                if (verbose >= 2) {
+                    os
+                        << std::setw(12) << job_id
+                        << std::setw(12) << job.processing_time
+                        << std::setw(12) << job.size
+                        << std::setw(12) << current_batch_start
+                        << std::setw(12) << current_batch_size
+                        << std::setw(12) << current_batch_end
+                        << std::endl;
+                }
+
             }
-            current_batch_start = current_batch_end;
-            for (JobId j: batch_jobs)
-                if (current_batch_end < current_batch_start + job(j).processing_time)
-                    current_batch_end = current_batch_start + job(j).processing_time;
-            total_completion_time += current_batch_end * batch_jobs.size();
-            if (verbose == 2)
-                std::cout << "; Size: " << size << " / " << capacity() << std::endl;
-            if (size > capacity()) {
+            total_completion_time += current_batch_size * current_batch_end;
+
+            if (verbose >= 2) {
+                os << "Batch " << number_of_batches - 1
+                    << "; number of jobs: " << current_batch_size
+                    << "; total completion time: " << total_completion_time
+                    << std::endl;
+            }
+
+            // Check batch capacity.
+            if (current_batch_size > capacity()) {
                 number_of_overloaded_batches++;
                 if (verbose == 2)
-                    std::cout << "Batch " << number_of_batches - 1 << " is overloaded." << std::endl;
+                    os << "Batch " << number_of_batches - 1 << " is overloaded." << std::endl;
             }
+
             current_batch_start = current_batch_end;
         }
 
         bool feasible
-            = (jobs.size() == n)
+            = (jobs.size() == number_of_jobs())
             && (number_of_duplicates == 0)
             && (number_of_overloaded_batches == 0);
-        if (verbose == 2)
-            std::cout << "---" << std::endl;
+
+        if (verbose >= 2)
+            os << std::endl;
         if (verbose >= 1) {
-            std::cout << "Number of jobs:                " << jobs.size() << " / " << n  << std::endl;
-            std::cout << "Number of duplicates:          " << number_of_duplicates << std::endl;
-            std::cout << "Number of overloaded batches:  " << number_of_overloaded_batches << std::endl;
-            std::cout << "Feasible:                      " << feasible << std::endl;
-            std::cout << "Number of batches:             " << number_of_batches << std::endl;
-            std::cout << "Total completion time:         " << total_completion_time << std::endl;
+            os
+                << "Number of jobs:                " << jobs.size() << " / " << number_of_jobs()  << std::endl
+                << "Number of duplicates:          " << number_of_duplicates << std::endl
+                << "Number of overloaded batches:  " << number_of_overloaded_batches << std::endl
+                << "Feasible:                      " << feasible << std::endl
+                << "Number of batches:             " << number_of_batches << std::endl
+                << "Total completion time:         " << total_completion_time << std::endl
+                ;
         }
         return {feasible, total_completion_time};
     }
 
 private:
 
+    /*
+     * Private methods
+     */
+
+    /** Read an instance from a file in 'alfieri2021' format. */
     void read_alfieri2021(std::ifstream& file)
     {
-        JobId n = -1;
-        Size c = -1;
-        file >> n >> c;
-        set_capacity(c);
+        JobId number_of_jobs = -1;
+        Size capacity = -1;
+        file >> number_of_jobs >> capacity;
+        set_capacity(capacity);
 
-        Time p;
-        Size s;
-        for (JobId j = 0; j < n; ++j) {
-            file >> p >> s;
-            add_job(p, s);
+        Time processing_time;
+        Size size;
+        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id) {
+            file >> processing_time >> size;
+            add_job(processing_time, size);
         }
     }
 
+    /*
+     * Private attributes
+     */
+
+    /** Jobs. */
     std::vector<Job> jobs_;
+
+    /** Capacity of the batches. */
     Size capacity_ = 0;
 
 };
-
-static inline std::ostream& operator<<(
-        std::ostream &os, const Instance& instance)
-{
-    os << "number of jobs: " << instance.number_of_jobs() << std::endl;
-    os << "capacity: " << instance.capacity() << std::endl;
-    for (JobId j = 0; j < instance.number_of_jobs(); ++j)
-        os << "job: " << j
-            << "; processing time: " << instance.job(j).processing_time
-            << "; size: " << instance.job(j).size
-            << std::endl;
-    return os;
-}
 
 }
 

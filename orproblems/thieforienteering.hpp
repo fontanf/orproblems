@@ -372,14 +372,20 @@ public:
         LocationId location_id = 0;
         ItemId item_id = -1;
         optimizationtools::IndexedSet items(number_of_items());
-        ItemPos duplicates = 0;
+        ItemPos number_of_duplicates = 0;
         while (file >> item_id) {
             //i--;
+
+            // Check duplicates.
             if (items.contains(item_id)) {
-                duplicates++;
-                if (verbose >= 2)
-                    os << "Item " << item_id << " already selected." << std::endl;
+                number_of_duplicates++;
+                if (verbose >= 2) {
+                    os << "Item " << item_id
+                        << " has already been selected." << std::endl;
+                }
             }
+            items.add(item_id);
+
             thieforienteering::LocationId location_id_next = item(item_id).location_id;
             time += duration(location_id, location_id_next, weight);
             profit += item(item_id).profit;
@@ -399,17 +405,19 @@ public:
         }
         time += duration(location_id, number_of_locations() - 1, weight);
 
-        bool feasible = (duplicates == 0)
+        bool feasible = (number_of_duplicates == 0)
             && (time <= time_limit())
             && (weight <= capacity());
         if (verbose >= 2)
             os << std::endl;
         if (verbose >= 1) {
             os
-                << "Duration:  " << time << " / " << time_limit() << std::endl
-                << "Weight:    " << weight << " / " << capacity() << std::endl
-                << "Feasible:  " << feasible << std::endl
-                << "Profit:    " << profit << std::endl
+                << "Number of items:       " << items.size() << " / " << number_of_items()  << std::endl
+                << "Number of duplicates:  " << number_of_duplicates << std::endl
+                << "Duration:              " << time << " / " << time_limit() << std::endl
+                << "Weight:                " << weight << " / " << capacity() << std::endl
+                << "Feasible:              " << feasible << std::endl
+                << "Profit:                " << profit << std::endl
                 ;
         }
         return {feasible, profit};

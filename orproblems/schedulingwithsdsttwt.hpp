@@ -37,43 +37,85 @@ using JobPos = int64_t;
 using Time = int64_t;
 using Weight = double;
 
+/**
+ * Structure for a job.
+ */
 struct Job
 {
+    /** Processing-time of the job. */
     Time processing_time = 0;
+
+    /** Due date of the job. */
     Time due_date = 0;
+
+    /** Weight of the job. */
     Weight weight = 1;
 };
 
+/**
+ * Instance class for a 'schedulingwithsdsttwt' problem.
+ */
 class Instance
 {
 
 public:
 
-    Instance(JobId n):
-        jobs_(n),
-        setup_times_(n + 1, std::vector<Time>(n, -1))
+    /*
+     * Constructors and destructor
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance(JobId number_of_jobs):
+        jobs_(number_of_jobs),
+        setup_times_(number_of_jobs + 1, std::vector<Time>(number_of_jobs, -1))
     {
-        for (JobId j = 0; j < n; ++j)
-            setup_times_[j][j] = 0;
-    }
-    void set_processing_time(JobId j, Time processing_time) { jobs_[j].processing_time = processing_time; }
-    void set_due_date(JobId j, Time due_date) { jobs_[j].due_date = due_date; }
-    void set_weight(JobId j, Weight weight)
-    {
-        if (jobs_[j].weight == 0)
-            number_of_zero_weight_jobs_--;
-        jobs_[j].weight = weight;
-        if (jobs_[j].weight == 0)
-            number_of_zero_weight_jobs_++;
-    }
-    void set_setup_time(JobId j1, JobId j2, Time d)
-    {
-        if (j1 == -1)
-            j1 = number_of_jobs();
-        setup_times_[j1][j2] = d;
+        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id)
+            setup_times_[job_id][job_id] = 0;
     }
 
-    Instance(std::string instance_path, std::string format = "")
+    /** Set the processing-time of a job. */
+    void set_processing_time(
+            JobId job_id,
+            Time processing_time)
+    {
+        jobs_[job_id].processing_time = processing_time;
+    }
+
+    /** Set the due date of a job. */
+    void set_due_date(
+            JobId job_id,
+            Time due_date)
+    {
+        jobs_[job_id].due_date = due_date;
+    }
+
+    /** Set the weight of a job. */
+    void set_weight(
+            JobId job_id,
+            Weight weight)
+    {
+        if (jobs_[job_id].weight == 0)
+            number_of_zero_weight_jobs_--;
+        jobs_[job_id].weight = weight;
+        if (jobs_[job_id].weight == 0)
+            number_of_zero_weight_jobs_++;
+    }
+
+    /** Set the setup time between two jobs. */
+    void set_setup_time(
+            JobId job_id_1,
+            JobId job_id_2,
+            Time setup_time)
+    {
+        if (job_id_1 == -1)
+            job_id_1 = number_of_jobs();
+        setup_times_[job_id_1][job_id_2] = setup_time;
+    }
+
+    /** Build an instance from a file. */
+    Instance(
+            std::string instance_path,
+            std::string format = "")
     {
         std::ifstream file(instance_path);
         if (!file.good()) {
@@ -90,13 +132,28 @@ public:
         file.close();
     }
 
-    virtual ~Instance() { }
+    /*
+     * Getters
+     */
 
+    /** Get the number of jobs. */
     inline JobId number_of_jobs() const { return jobs_.size(); }
-    inline JobId number_of_zero_weight_jobs() const { return number_of_zero_weight_jobs_; }
-    inline const Job& job(JobId j) const { return jobs_[j]; }
-    inline Time setup_time(JobId j1, JobId j2) const { return setup_times_[j1][j2]; }
 
+    /** Get a job. */
+    inline const Job& job(JobId job_id) const { return jobs_[job_id]; }
+
+    /** Get the number of jobs with a null weight. */
+    inline JobId number_of_zero_weight_jobs() const { return number_of_zero_weight_jobs_; }
+
+    /** Get the setup time between two jobs. */
+    inline Time setup_time(
+            JobId job_id_1,
+            JobId job_id_2) const
+    {
+        return setup_times_[job_id_1][job_id_2];
+    }
+
+    /** Print the instance. */
     std::ostream& print(
             std::ostream& os,
             int verbose = 1) const
@@ -104,6 +161,7 @@ public:
         if (verbose >= 1) {
             os << "Number of jobs:  " << number_of_jobs() << std::endl;
         }
+
         if (verbose >= 2) {
             os << std::endl
                 << std::setw(12) << "Job"
@@ -116,24 +174,41 @@ public:
                 << std::setw(12) << "--------"
                 << std::setw(12) << "------"
                 << std::endl;
-            for (JobId j = 0; j < number_of_jobs(); ++j) {
-                os << std::setw(12) << j
-                    << std::setw(12) << job(j).processing_time
-                    << std::setw(12) << job(j).due_date
-                    << std::setw(12) << job(j).weight
+            for (JobId job_id = 0; job_id < number_of_jobs(); ++job_id) {
+                const Job& job = this->job(job_id);
+                os
+                    << std::setw(12) << job_id
+                    << std::setw(12) << job.processing_time
+                    << std::setw(12) << job.due_date
+                    << std::setw(12) << job.weight
                     << std::endl;
             }
+        }
+
+        if (verbose >= 3) {
             os << std::endl
-                << "Setup times:" << std::endl;
-            for (JobId j1 = 0; j1 <= number_of_jobs(); ++j1) {
-                for (JobId j2 = 0; j2 < number_of_jobs(); ++j2)
-                    os << " " << setup_time(j1, j2);
-                os << std::endl;
+                << std::setw(12) << "Job 1"
+                << std::setw(12) << "Job 2"
+                << std::setw(12) << "Setup"
+                << std::endl
+                << std::setw(12) << "-----"
+                << std::setw(12) << "-----"
+                << std::setw(12) << "-----"
+                << std::endl;
+            for (JobId job_id_1 = 0; job_id_1 <= number_of_jobs(); ++job_id_1) {
+                for (JobId job_id_2 = 0; job_id_2 < number_of_jobs(); ++job_id_2)
+                    os
+                        << std::setw(12) << job_id_1
+                        << std::setw(12) << job_id_2
+                        << std::setw(12) << setup_time(job_id_1, job_id_2)
+                        << std::endl;
             }
         }
+
         return os;
     }
 
+    /** Check a certificate. */
     std::pair<bool, Time> check(
             std::string certificate_path,
             std::ostream& os,
@@ -165,48 +240,54 @@ public:
                 << std::endl;
         }
 
-        JobId n = number_of_jobs();
-        JobId j = -1;
-        JobId j_prec = n;
-        optimizationtools::IndexedSet jobs(n);
-        JobPos duplicates = 0;
+        JobId job_id = -1;
+        JobId job_id_prev = number_of_jobs();
+        optimizationtools::IndexedSet jobs(number_of_jobs());
+        JobPos number_of_duplicates = 0;
         Time current_time = 0;
         Weight total_weighted_tardiness = 0;
-        while (file >> j) {
-            if (jobs.contains(j)) {
-                duplicates++;
-                if (verbose >= 2)
-                    std::cout << "Job " << j << " is already scheduled." << std::endl;
+        while (file >> job_id) {
+            const Job& job = this->job(job_id);
+
+            // Check duplicates.
+            if (jobs.contains(job_id)) {
+                number_of_duplicates++;
+                if (verbose >= 2) {
+                    std::cout << "Job " << job_id
+                        << " has already been scheduled." << std::endl;
+                }
             }
-            jobs.add(j);
-            current_time += setup_time(j_prec, j);
-            current_time += job(j).processing_time;
-            if (current_time > job(j).due_date)
+            jobs.add(job_id);
+
+            current_time += setup_time(job_id_prev, job_id);
+            current_time += job.processing_time;
+            if (current_time > job.due_date)
                 total_weighted_tardiness
-                    += job(j).weight
-                    * (current_time - job(j).due_date);
+                    += job.weight
+                    * (current_time - job.due_date);
             if (verbose >= 2) {
                 os
-                    << std::setw(12) << j
-                    << std::setw(12) << job(j).processing_time
-                    << std::setw(12) << job(j).due_date
-                    << std::setw(12) << job(j).weight
-                    << std::setw(12) << setup_time(j_prec, j)
+                    << std::setw(12) << job_id
+                    << std::setw(12) << job.processing_time
+                    << std::setw(12) << job.due_date
+                    << std::setw(12) << job.weight
+                    << std::setw(12) << setup_time(job_id_prev, job_id)
                     << std::setw(12) << current_time
                     << std::setw(12) << total_weighted_tardiness
                     << std::endl;
             }
-            j_prec = j;
+            job_id_prev = job_id;
         }
 
         bool feasible
-            = (jobs.size() == n)
-            && (duplicates == 0);
+            = (jobs.size() == number_of_jobs())
+            && (number_of_duplicates == 0);
+
         if (verbose >= 2)
             std::cout << std::endl;
         if (verbose >= 1) {
-            std::cout << "Number of jobs:            " << jobs.size() << " / " << n  << std::endl;
-            std::cout << "Number of duplicates:      " << duplicates << std::endl;
+            std::cout << "Number of jobs:            " << jobs.size() << " / " << number_of_jobs()  << std::endl;
+            std::cout << "Number of duplicates:      " << number_of_duplicates << std::endl;
             std::cout << "Feasible:                  " << feasible << std::endl;
             std::cout << "Total weighted tardiness:  " << total_weighted_tardiness << std::endl;
         }
@@ -215,17 +296,25 @@ public:
 
 private:
 
+    /*
+     * Private methods
+     */
+
+    /** Read an instance from a file in 'cicirello2005' format. */
     void read_cicirello2005(std::ifstream& file)
     {
         std::string tmp;
-        JobId n = -1;
-        file >> tmp >> tmp >> tmp;
-        file >> tmp >> tmp >> n;
+        JobId number_of_jobs = -1;
 
-        jobs_ = std::vector<Job>(n);
-        setup_times_ = std::vector<std::vector<Time>>(n + 1, std::vector<Time>(n, -1));
-        for (JobId j = 0; j < n; ++j)
-            setup_times_[j][j] = 0;
+        file >> tmp >> tmp >> tmp;
+        file >> tmp >> tmp >> number_of_jobs;
+
+        jobs_ = std::vector<Job>(number_of_jobs);
+        setup_times_ = std::vector<std::vector<Time>>(
+                number_of_jobs + 1,
+                std::vector<Time>(number_of_jobs, -1));
+        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id)
+            setup_times_[job_id][job_id] = 0;
 
         file >> tmp >> tmp >> tmp;
         file >> tmp >> tmp;
@@ -243,39 +332,48 @@ private:
 
         file >> tmp >> tmp;
         Time p = -1;
-        for (JobId j = 0; j < n; ++j) {
+        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id) {
             file >> p;
-            set_processing_time(j, p);
+            set_processing_time(job_id, p);
         }
 
         file >> tmp;
-        Weight w = -1;
-        for (JobId j = 0; j < n; ++j) {
-            file >> w;
-            set_weight(j, w);
+        Weight weight = -1;
+        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id) {
+            file >> weight;
+            set_weight(job_id, weight);
         }
 
         file >> tmp;
-        Time d = -1;
-        for (JobId j = 0; j < n; ++j) {
-            file >> d;
-            set_due_date(j, d);
+        Time due_date = -1;
+        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id) {
+            file >> due_date;
+            set_due_date(job_id, due_date);
         }
 
         file >> tmp >> tmp;
-        Time st = -1;
-        for (JobId j1 = -1; j1 < n; ++j1) {
-            for (JobId j2 = 0; j2 < n; ++j2) {
-                if (j1 == j2)
+        Time setup_time = -1;
+        for (JobId job_id_1 = -1; job_id_1 < number_of_jobs; ++job_id_1) {
+            for (JobId job_id_2 = 0; job_id_2 < number_of_jobs; ++job_id_2) {
+                if (job_id_1 == job_id_2)
                     continue;
-                file >> tmp >> tmp >> st;
-                set_setup_time(j1, j2, st);
+                file >> tmp >> tmp >> setup_time;
+                set_setup_time(job_id_1, job_id_2, setup_time);
             }
         }
     }
 
+    /*
+     * Private attributes
+     */
+
+    /** Jobs. */
     std::vector<Job> jobs_;
+
+    /** Setup times. */
     std::vector<std::vector<Time>> setup_times_;
+
+    /** Number of jobs with a null weight. */
     JobPos number_of_zero_weight_jobs_ = 0;
 
 };

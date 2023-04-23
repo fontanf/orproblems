@@ -221,6 +221,7 @@ public:
         LocationPos number_of_precedence_violations = 0;
         Distance total_distance = 0;
         while (file >> location_id) {
+
             // Check duplicates.
             if (locations.contains(location_id)) {
                 number_of_duplicates++;
@@ -229,6 +230,8 @@ public:
                         << " has already been visited." << std::endl;
                 }
             }
+            locations.add(location_id);
+
             // Check predecessors.
             for (LocationId location_id_predeceoor: predecessors(location_id)) {
                 if (!locations.contains(location_id_predeceoor)) {
@@ -243,7 +246,6 @@ public:
                 }
             }
 
-            locations.add(location_id);
             total_distance += distance(location_id_pred, location_id);
 
             if (verbose >= 2) {

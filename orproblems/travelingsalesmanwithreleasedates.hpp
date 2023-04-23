@@ -135,7 +135,13 @@ public:
     inline LocationId number_of_locations() const { return locations_.size(); }
 
     /** Get a location. */
-    inline const Location& location(LocationId location_id) const { return locations_[location_id]; }
+    inline Time release_date(LocationId location_id) const { return locations_[location_id].release_date; }
+
+    /** Get the x-coordinate of a location. */
+    inline double x(LocationId location_id) const { return locations_[location_id].x; }
+
+    /** Get the y-coordinate of a location. */
+    inline double y(LocationId location_id) const { return locations_[location_id].y; }
 
     /** Get the travel time between two locations. */
     inline Time travel_time(
@@ -170,7 +176,7 @@ public:
                     ++location_id) {
                 os
                     << std::setw(12) << location_id
-                    << std::setw(12) << location(location_id).release_date
+                    << std::setw(12) << release_date(location_id)
                     << std::endl;
             }
         }
@@ -259,13 +265,13 @@ public:
                 locations.add(location_id);
 
                 trip_duration += travel_time(location_id_prev, location_id);
-                if (trip_start < location(location_id).release_date)
-                    trip_start = location(location_id).release_date;
+                if (trip_start < release_date(location_id))
+                    trip_start = release_date(location_id);
 
                 if (verbose >= 2) {
                     os
                         << std::setw(12) << location_id
-                        << std::setw(12) << location(location_id).release_date
+                        << std::setw(12) << release_date(location_id)
                         << std::setw(12) << travel_time(location_id_prev, location_id)
                         << std::setw(12) << trip_start
                         << std::setw(12) << trip_duration
@@ -352,8 +358,8 @@ private:
             for (LocationId location_id_2 = 0;
                     location_id_2 < number_of_locations;
                     ++location_id_2) {
-                double xd = location(location_id_2).x - location(location_id_1).x;
-                double yd = location(location_id_2).y - location(location_id_1).y;
+                double xd = x(location_id_2) - x(location_id_1);
+                double yd = y(location_id_2) - y(location_id_1);
                 Time travel_time = std::round(std::sqrt(xd * xd + yd * yd));
                 travel_times_tmp[location_id_1][location_id_2] = travel_time;
                 travel_times_tmp[location_id_2][location_id_1] = travel_time;
@@ -613,8 +619,8 @@ private:
                 for (LocationId location_id_2 = location_id_1 + 1;
                         location_id_2 < number_of_locations;
                         ++location_id_2) {
-                    double xd = x(location_id_1) - x(location_id_2);
-                    double yd = y(location_id_1) - y(location_id_2);
+                    double xd = x(location_id_2) - x(location_id_1);
+                    double yd = y(location_id_2) - y(location_id_1);
                     double rij = sqrt((xd * xd + yd * yd) / 10.0);
                     int tij = std::round(rij);
                     Time d = (tij < rij)? tij + 1: tij;
@@ -625,8 +631,11 @@ private:
         } else {
             std::cerr << "\033[31m" << "ERROR, EDGE_WEIGHT_TYPE \"" << edge_weight_type << "\" not implemented." << "\033[0m" << std::endl;
         }
-        for (LocationId j = 0; j < n; ++j)
-            travel_times_[j][j] = std::numeric_limits<Time>::max();
+        for (LocationId location_id = 0;
+                location_id < number_of_locations;
+                ++location_id) {
+            travel_times_[location_id][location_id] = std::numeric_limits<Time>::max();
+        }
     }
 
     /*

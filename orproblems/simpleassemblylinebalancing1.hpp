@@ -221,7 +221,7 @@ public:
 
         JobPos station_number_of_jobs = -1;
         optimizationtools::IndexedSet jobs(number_of_jobs());
-        JobPos duplicates = 0;
+        JobPos number_of_duplicates = 0;
         JobPos number_of_precedence_violations = 0;
         StationId number_of_overloaded_stations = 0;
         StationId number_of_stations = 0;
@@ -231,15 +231,17 @@ public:
             number_of_stations++;
             for (JobPos job_pos = 0; job_pos < station_number_of_jobs; ++job_pos) {
                 file >> job_id;
+
                 // Check duplicates.
                 if (jobs.contains(job_id)) {
-                    duplicates++;
+                    number_of_duplicates++;
                     if (verbose >= 2) {
                         os << "Job " << job_id
-                            << " is already scheduled."
-                            << std::endl;
+                            << " has already been scheduled." << std::endl;
                     }
                 }
+                jobs.add(job_id);
+
                 // Check predecessors.
                 for (JobId job_id_pred: job(job_id).predecessors) {
                     if (!jobs.contains(job_id_pred)) {
@@ -252,7 +254,7 @@ public:
                         }
                     }
                 }
-                jobs.add(job_id);
+
                 time += job(job_id).processing_time;
 
                 if (verbose >= 2) {
@@ -275,7 +277,7 @@ public:
 
         bool feasible
             = (jobs.size() == number_of_jobs())
-            && (duplicates == 0)
+            && (number_of_duplicates == 0)
             && (number_of_precedence_violations == 0)
             && (number_of_overloaded_stations == 0);
         if (verbose >= 2)
@@ -283,7 +285,7 @@ public:
         if (verbose >= 1) {
             os
                 << "Number of jobs:                   " << jobs.size() << " / " << number_of_jobs() << std::endl
-                << "Number of duplicates:             " << duplicates << std::endl
+                << "Number of duplicates:             " << number_of_duplicates << std::endl
                 << "Number of precedence violations:  " << number_of_precedence_violations << std::endl
                 << "Number of overloaded stations:    " << number_of_overloaded_stations << std::endl
                 << "Feasible:                         " << feasible << std::endl
@@ -318,33 +320,36 @@ public:
         StationId number_of_overloaded_stations = 0;
         StationId number_of_stations = 0;
         while (file >> s) {
-            JobId j = -1;
+            JobId job_id = -1;
             Time t = 0;
             number_of_stations++;
             if (verbose == 2)
                 std::cout << "Station: " << number_of_stations - 1 << "; Jobs";
             for (JobPos j_pos = 0; j_pos < s; ++j_pos) {
-                file >> j;
+                file >> job_id;
+
                 // Check duplicates.
-                if (jobs.contains(j)) {
+                if (jobs.contains(job_id)) {
                     number_of_duplicates++;
-                    if (verbose == 2)
-                        std::cout << std::endl << "Job " << j << " already scheduled." << std::endl;
+                    if (verbose >= 2)
+                        std::cout << "Job " << job_id
+                            << " has already been scheduled." << std::endl;
                 }
+                jobs.add(job_id);
+
                 // Check predecessors.
-                for (JobId j_pred: job(j).predecessors) {
+                for (JobId j_pred: job(job_id).predecessors) {
                     if (!jobs.contains(j_pred)) {
                         number_of_precedence_violations++;
                         if (verbose == 2)
-                            std::cout << std::endl << "Job " << j << " depends on job "
+                            std::cout << std::endl << "Job " << job_id << " depends on job "
                                 << j_pred << " which has not been scheduled yet."
                                 << std::endl;
                     }
                 }
                 if (verbose == 2)
-                    std::cout << " " << j;
-                jobs.add(j);
-                t += job(j).processing_time;
+                    std::cout << " " << job_id;
+                t += job(job_id).processing_time;
             }
             if (verbose == 2)
                 std::cout << "; Cycle time: " << t << " / " << cycle_time() << std::endl;

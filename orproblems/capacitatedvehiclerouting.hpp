@@ -238,29 +238,31 @@ public:
 
         if (verbose >= 2) {
             os << std::endl << std::right
+                << std::setw(10) << "Route"
                 << std::setw(10) << "Location"
-                << std::setw(12) << "Demand"
-                << std::setw(12) << "Distance"
                 << std::setw(12) << "Route dem."
-                << std::setw(12) << "Tot. dist."
                 << std::setw(12) << "Route dist."
+                << std::setw(12) << "Tot. dist."
                 << std::endl
+                << std::setw(10) << "-----"
                 << std::setw(10) << "--------"
-                << std::setw(12) << "------"
-                << std::setw(12) << "--------"
-                << std::setw(12) << "----------"
                 << std::setw(12) << "----------"
                 << std::setw(12) << "-----------"
+                << std::setw(12) << "----------"
                 << std::endl;
         }
 
         optimizationtools::IndexedSet visited_locations(number_of_locations());
-        LocationPos number_of_duplicates = 0;
-        LocationPos route_number_of_locations = -1;
         RouteId number_of_routes = 0;
+        LocationPos route_number_of_locations = -1;
+
+        LocationPos number_of_duplicates = 0;
         RouteId number_of_overloaded_vehicles = 0;
+
         Distance total_distance = 0;
-        while (file >> route_number_of_locations) {
+        file >> number_of_routes;
+        for (RouteId route_id = 0; route_id < number_of_routes; ++route_id) {
+            file >> route_number_of_locations;
             if (route_number_of_locations == 0)
                 continue;
             Distance route_distance = 0;
@@ -269,39 +271,49 @@ public:
             LocationId location_id = -1;
             for (LocationPos pos = 0; pos < route_number_of_locations; ++pos) {
                 file >> location_id;
+
+                // Check duplicates.
                 if (visited_locations.contains(location_id)) {
                     number_of_duplicates++;
-                    if (verbose >= 2)
-                        os << "Location " << location_id << " has already been visited." << std::endl;
+                    if (verbose >= 2) {
+                        os << "Location " << location_id
+                            << " has already been visited." << std::endl;
+                    }
                 }
                 visited_locations.add(location_id);
+
                 route_demand += demand(location_id);
                 route_distance += distance(location_id_prev, location_id);
                 total_distance += distance(location_id_prev, location_id);
+
                 if (verbose >= 2) {
                     os
+                        << std::setw(10) << route_id
                         << std::setw(10) << location_id
-                        << std::setw(12) << demand(location_id)
-                        << std::setw(12) << distance(location_id_prev, location_id)
                         << std::setw(12) << route_demand
                         << std::setw(12) << route_distance
                         << std::setw(12) << total_distance
                         << std::endl;
                 }
+
                 location_id_prev = location_id;
             }
             if (location_id_prev != 0) {
                 route_distance += distance(location_id_prev, 0);
                 total_distance += distance(location_id_prev, 0);
             }
+
             if (verbose >= 2) {
-                os << "Route " << number_of_routes
-                    << "; demand: " << route_demand
-                    << "; travel time: " << route_distance
-                    << "; total travel time: " << total_distance
-                    << "." << std::endl;
+                os
+                    << std::setw(10) << route_id
+                    << std::setw(10) << 0
+                    << std::setw(12) << route_demand
+                    << std::setw(12) << route_distance
+                    << std::setw(12) << total_distance
+                    << std::endl;
             }
-            number_of_routes++;
+
+            // Check vehicle capacity.
             if (route_demand > capacity())
                 number_of_overloaded_vehicles++;
         }
