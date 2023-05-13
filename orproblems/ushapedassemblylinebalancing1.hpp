@@ -249,7 +249,7 @@ public:
                             if (!jobs.contains(job_id_succ)) {
                                 number_of_precedence_violations++;
                                 if (verbose >= 2) {
-                                    os << std::endl << "Job " << job_id
+                                    os << "Job " << job_id
                                         << " violates precedence constraints."
                                         << std::endl;
                                 }

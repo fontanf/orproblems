@@ -7,7 +7,6 @@
 //#include "orproblems/generalizedquadraticmultipleknapsack.hpp"
 #include "orproblems/binpackingwithconflicts.hpp"
 
-#include "orproblems/travelingsalesman.hpp"
 #include "orproblems/sequentialordering.hpp"
 #include "orproblems/travelingsalesmanwithreleasedates.hpp"
 #include "orproblems/travelingrepairman.hpp"
@@ -125,10 +124,6 @@ int main(int argc, char *argv[])
 
     } else if (problem == "binpackingwithconflicts") {
         binpackingwithconflicts::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
-
-    } else if (problem == "travelingsalesman") {
-        travelingsalesman::Instance instance(instance_path, format);
         check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "sequentialordering") {

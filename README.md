@@ -307,37 +307,6 @@ The data also include CSV files listing the instances for each problem and their
 ### Single vehicle
 
 
-[Traveling Salesman Problem](orproblems/travelingsalesman.hpp)
-* Three field classification: `1 | sᵢⱼ | Cₘₐₓ`
-
-<details><summary>Literature</summary>
-<p>
-
-* Taillard ÉD (2021) A linearithmic Heuristic for the Travelling Salesman Problem. European Journal of Operational Research. https://doi.org/10.1016/j.ejor.2021.05.034
-* Taillard ÉD, Helsgaun K (2019) POPMUSIC for the travelling salesman problem. European Journal of Operational Research 272:420–429. https://doi.org/10.1016/j.ejor.2018.06.039
-* Osterman C, Rego C (2016) A k-level data structure for large-scale traveling salesman problems. Ann Oper Res 244:583–601. https://doi.org/10.1007/s10479-016-2159-7
-* Applegate DL, Bixby RE, Chvátal V, Cook WJ (2011) The Traveling Salesman Problem: A Computational Study. Princeton University Press
-* Rego C, Gamboa D, Glover F, Osterman C (2011) Traveling salesman problem heuristics: Leading methods, implementations and latest advances. European Journal of Operational Research 211:427–441. https://doi.org/10.1016/j.ejor.2010.09.010
-* Helsgaun K (2009) General k-opt submoves for the Lin–Kernighan TSP heuristic. Math Prog Comp 1:119–163. https://doi.org/10.1007/s12532-009-0004-6
-* Merz P, Huhse J (2008) An Iterated Local Search Approach for Finding Provably Good Solutions for Very Large TSP Instances. In: Rudolph G, Jansen T, Beume N, et al. (eds) Parallel Problem Solving from Nature – PPSN X. Springer, Berlin, Heidelberg, pp 929–939, https://doi.org/10.1007/978-3-540-87700-4_92
-* Gamboa D, Rego C, Glover F (2006) Implementation analysis of efficient heuristic algorithms for the traveling salesman problem. Computers & Operations Research 33:1154–1172. https://doi.org/10.1016/j.cor.2005.06.014
-* Gamboa D, Rego C, Glover F (2005) Data structures and ejection chains for solving large-scale traveling salesman problems. European Journal of Operational Research 160:154–171. https://doi.org/10.1016/j.ejor.2004.04.023
-* Applegate D, Cook W, Rohe A (2003) Chained Lin-Kernighan for Large Traveling Salesman Problems. INFORMS Journal on Computing 15:82–92. https://doi.org/10.1287/ijoc.15.1.82.15157
-* Helsgaun K (2000) An effective implementation of the Lin–Kernighan traveling salesman heuristic. European Journal of Operational Research 126:106–130. https://doi.org/10.1016/S0377-2217(99)00284-2
-* Voudouris C, Tsang E (1999) Guided local search and its application to the traveling salesman problem. European Journal of Operational Research 113:469–499. https://doi.org/10.1016/S0377-2217(98)00099-X
-* Potvin J-Y (1996) Genetic algorithms for the traveling salesman problem. Ann Oper Res 63:337–370. https://doi.org/10.1007/BF02125403
-* Gendreau M, Hertz A, Laporte G (1992) New Insertion and Postoptimization Procedures for the Traveling Salesman Problem. Operations Research 40:1086–1094. https://doi.org/10.1287/opre.40.6.1086
-* Bentley JJ (1992) Fast Algorithms for Geometric Traveling Salesman Problems. ORSA Journal on Computing 4:387–411. https://doi.org/10.1287/ijoc.4.4.387
-* Laporte G (1992) The traveling salesman problem: An overview of exact and approximate algorithms. European Journal of Operational Research 59:231–247. https://doi.org/10.1016/0377-2217(92)90138-Y
-* Bentley JL (1990) Experiments on traveling salesman heuristics. In: Proceedings of the first annual ACM-SIAM symposium on Discrete algorithms. Society for Industrial and Applied Mathematics, USA, pp 91–99
-
-</p>
-</details>
-
-* Data: [travelingsalesman.7z](https://github.com/fontanf/orproblems/releases/download/data/travelingsalesman.7z)
-* Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/travelingsalesman.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/travelingsalesman.hpp)
-
-
 [Sequential Ordering Problem](orproblems/sequentialordering.hpp)
 * Three field classification: `1 | sᵢⱼ, prec | Cₘₐₓ`
 

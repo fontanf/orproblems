@@ -79,16 +79,6 @@ cc_library(
 )
 
 cc_library(
-        name = "travelingsalesman",
-        hdrs = ["travelingsalesman.hpp"],
-        deps = [
-                "@optimizationtools//optimizationtools/containers:containers",
-                "@optimizationtools//optimizationtools/utils:utils",
-        ],
-        visibility = ["//visibility:public"],
-)
-
-cc_library(
         name = "sequentialordering",
         hdrs = ["sequentialordering.hpp"],
         deps = [
@@ -345,7 +335,6 @@ cc_binary(
                 ":generalizedquadraticmultipleknapsack",
                 ":binpackingwithconflicts",
 
-                ":travelingsalesman",
                 ":sequentialordering",
                 ":travelingsalesmanwithreleasedates",
                 ":travelingrepairman",
