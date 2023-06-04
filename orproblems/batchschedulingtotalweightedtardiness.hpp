@@ -223,7 +223,6 @@ public:
             std::vector<JobId> batch_jobs;
             Time current_batch_start = current_batch_end;
             Time current_batch_time = 0;
-            Size current_batch_size = 0;
             for (JobPos job_pos = 0; job_pos < current_batch_size; ++job_pos) {
                 file >> job_id;
                 const Job& job = this->job(job_id);
@@ -239,7 +238,6 @@ public:
                 jobs.add(job_id);
 
                 batch_jobs.push_back(job_id);
-                current_batch_size += job.size;
                 if (current_batch_start < job.release_date)
                     current_batch_start = job.release_date;
                 if (current_batch_time < job.processing_time)
@@ -255,7 +253,7 @@ public:
                         << std::setw(12) << job.size
                         << std::setw(12) << job.weight
                         << std::setw(12) << current_batch_start
-                        << std::setw(12) << current_batch_size
+                        << std::setw(12) << batch_jobs.size()
                         << std::setw(12) << current_batch_end
                         << std::endl;
                 }
