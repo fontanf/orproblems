@@ -107,7 +107,7 @@ public:
     }
 
     /** Set the coordinates of a location. */
-    void set_xy(
+    void set_coordinates(
             LocationId location_id,
             double x,
             double y)
@@ -354,7 +354,7 @@ public:
             && (number_of_routes <= number_of_vehicles())
             && (number_of_overloaded_vehicles == 0)
             && (number_of_late_visits == 0);
-        if (verbose == 2)
+        if (verbose >= 2)
             os << std::endl;
         if (verbose >= 1) {
             os
@@ -406,7 +406,7 @@ private:
         Time service_time = -1;
         while (file >> location_id >> x >> y >> demand >> release_date >> deadline >> service_time) {
             locations_.push_back({});
-            set_xy(location_id, x, y);
+            set_coordinates(location_id, x, y);
             //set_location(j, demand, release_date, deadline, service_time);
             set_location(
                     location_id,

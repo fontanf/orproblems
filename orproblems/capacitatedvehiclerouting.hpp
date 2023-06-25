@@ -102,7 +102,7 @@ public:
             Distance distance)
     {
         distances_[location_id_1][location_id_2] = distance;
-        distances_[location_id_2][location_id_2] = distance;
+        distances_[location_id_2][location_id_1] = distance;
         distance_max_ = std::max(distance_max_, distance);
     }
 
@@ -177,15 +177,9 @@ public:
             os << std::endl
                 << std::setw(12) << "Location"
                 << std::setw(12) << "Demand"
-                << std::setw(12) << "Serv. time"
-                << std::setw(12) << "Rel. date"
-                << std::setw(12) << "Deadline"
                 << std::endl
                 << std::setw(12) << "--------"
                 << std::setw(12) << "----------"
-                << std::setw(12) << "------"
-                << std::setw(12) << "---------"
-                << std::setw(12) << "--------"
                 << std::endl;
             for (LocationId location_id_1 = 0;
                     location_id_1 < number_of_locations();
@@ -323,7 +317,7 @@ public:
             && (!visited_locations.contains(0))
             && (number_of_duplicates == 0)
             && (number_of_overloaded_vehicles == 0);
-        if (verbose == 2)
+        if (verbose >= 2)
             os << std::endl;
         if (verbose >= 1) {
             os
