@@ -12,7 +12,6 @@
 #include "orproblems/travelingrepairman.hpp"
 #include "orproblems/timedependentorienteering.hpp"
 #include "orproblems/orienteeringwithhotelselection.hpp"
-#include "orproblems/thieforienteering.hpp"
 #include "orproblems/capacitatedvehiclerouting.hpp"
 #include "orproblems/vehicleroutingwithtimewindows.hpp"
 #include "orproblems/capacitatedopenvehiclerouting.hpp"
@@ -144,10 +143,6 @@ int main(int argc, char *argv[])
 
     } else if (problem == "orienteeringwithhotelselection") {
         orienteeringwithhotelselection::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
-
-    } else if (problem == "thieforienteering") {
-        thieforienteering::Instance instance(instance_path, format);
         check(instance, certificate_path, print_instance, print_checker);
 
     } else if (problem == "capacitatedvehiclerouting") {

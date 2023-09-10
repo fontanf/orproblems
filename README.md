@@ -422,28 +422,6 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [orienteeringwithhotelselection.7z](https://github.com/fontanf/orproblems/releases/download/data/orienteeringwithhotelselection.7z)
 
 
-[Thief Orienteering Problem](orproblems/thieforienteering.hpp)
-* Description:
-  * Determine a subset of items to collect
-  * Maximize the profit of collected items
-  * Each item is in a location, a location may contain multiple items
-  * Each collected item decreases the speed of the traveller
-  * Time limit and capacity constraint
-
-<details><summary>Literature</summary>
-<p>
-
-* Chagas JBC, Wagner M (2021) Efficiently solving the thief orienteering problem with a max–min ant colony optimization approach. Optim Lett. https://doi.org/10.1007/s11590-021-01824-y
-* Chagas JBC, Wagner M (2020) Ants can orienteer a thief in their robbery. Operations Research Letters. https://doi.org/10.1016/j.orl.2020.08.011
-* Santos AG, Chagas JBC (2018) The Thief Orienteering Problem: Formulation and Heuristic Approaches. In: 2018 IEEE Congress on Evolutionary Computation (CEC). pp 1–9, https://doi.org/10.1109/CEC.2018.8477853
-
-</p>
-</details>
-
-* Data: [thieforienteering.7z](https://github.com/fontanf/orproblems/releases/download/data/thieforienteering.7z)
-* Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/thieforienteering.hpp)
-
-
 ### Multiple vehicles
 
 

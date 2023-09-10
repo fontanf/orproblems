@@ -130,16 +130,6 @@ cc_library(
 )
 
 cc_library(
-        name = "thieforienteering",
-        hdrs = ["thieforienteering.hpp"],
-        deps = [
-                "@optimizationtools//optimizationtools/containers:containers",
-                "@optimizationtools//optimizationtools/utils:utils",
-        ],
-        visibility = ["//visibility:public"],
-)
-
-cc_library(
         name = "capacitatedvehiclerouting",
         hdrs = ["capacitatedvehiclerouting.hpp"],
         deps = [
@@ -340,7 +330,6 @@ cc_binary(
                 ":travelingrepairman",
                 ":timedependentorienteering",
                 ":orienteeringwithhotelselection",
-                ":thieforienteering",
                 ":capacitatedvehiclerouting",
                 ":vehicleroutingwithtimewindows",
                 ":capacitatedopenvehiclerouting",
