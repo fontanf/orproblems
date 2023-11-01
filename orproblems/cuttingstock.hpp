@@ -124,7 +124,7 @@ public:
     {
         if (verbose >= 1) {
             os
-                << "Number of item_types:  " << number_of_item_types() << std::endl
+                << "Number of item types:  " << number_of_item_types() << std::endl
                 << "Capacity:              " << capacity() << std::endl
                 ;
         }
