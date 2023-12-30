@@ -1,5 +1,5 @@
 /**
- * Single machine batch scheduling problem, Total weighted tardiness.
+ * Single machine batch scheduling problem, total weighted tardiness
  *
  * Input:
  * - n jobs; for each job j = 1..n
@@ -32,7 +32,6 @@
 
 namespace orproblems
 {
-
 namespace batchschedulingtotalweightedtardiness
 {
 
@@ -73,52 +72,6 @@ class Instance
 public:
 
     /*
-     * Constructors and destructor
-     */
-
-    /** Constructor to build an instance manually. */
-    Instance() { }
-
-    /** Add a job. */
-    void add_job(
-            Time processing_time,
-            Time release_date,
-            Time due_date,
-            Size size,
-            Weight weight)
-    {
-        Job job;
-        job.processing_time = processing_time;
-        job.release_date = release_date;
-        job.due_date = due_date;
-        job.size = size;
-        job.weight = weight;
-        jobs_.push_back(job);
-    }
-
-    /** Set the capacity of the batches. */
-    void set_capacity(Size capacity) { capacity_ = capacity; }
-
-    /** Build an instance from a file. */
-    Instance(
-            std::string instance_path,
-            std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-        if (format == "" || format == "queiroga2020") {
-            read_queiroga2020(file);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
-
-    /*
      * Getters
      */
 
@@ -131,17 +84,21 @@ public:
     /** Get the capacity of the batches. */
     inline Size capacity() const { return capacity_; }
 
+    /*
+     * Outputs
+     */
+
     /** Print the instance. */
-    std::ostream& print(
+    void format(
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os << "Number of jobs:  " << number_of_jobs() << std::endl;
             os << "Batch capacity:  " << capacity() << std::endl;
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Job"
                 << std::setw(12) << "Proc. time"
@@ -168,14 +125,13 @@ public:
                     << std::endl;
             }
         }
-        return os;
     }
 
     /** Check a certificate. */
     std::pair<bool, Time> check(
-            std::string certificate_path,
+            const std::string& certificate_path,
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
         std::ifstream file(certificate_path);
         if (!file.good()) {
@@ -191,7 +147,7 @@ public:
         Time current_batch_end = 0;
         Time total_weighted_tardiness = 0;
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl << std::right
                 << std::setw(12) << "Job"
                 << std::setw(12) << "Proc. time"
@@ -230,7 +186,7 @@ public:
                 // Check duplicates.
                 if (jobs.contains(job_id)) {
                     number_of_duplicates++;
-                    if (verbose >= 2) {
+                    if (verbosity_level >= 2) {
                         os << std::endl << "Job " << job_id
                             << " has already benn scheduled." << std::endl;
                     }
@@ -244,7 +200,7 @@ public:
                     current_batch_time = job.processing_time;
                 current_batch_end = current_batch_start + current_batch_time;
 
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os
                         << std::setw(12) << job_id
                         << std::setw(12) << job.processing_time
@@ -266,7 +222,7 @@ public:
                         * (current_batch_end - job.due_date);
                 }
             }
-            if (verbose >= 2) {
+            if (verbosity_level >= 2) {
                 os << "Batch " << number_of_batches - 1
                     << "; number of jobs: " << batch_jobs.size()
                     << "; total weighted tardiness: " << total_weighted_tardiness
@@ -276,7 +232,7 @@ public:
             // Check batch capacity.
             if (current_batch_size > capacity()) {
                 number_of_overloaded_batches++;
-                if (verbose == 2)
+                if (verbosity_level == 2)
                     os << "Batch " << number_of_batches - 1 << " is overloaded." << std::endl;
             }
 
@@ -288,9 +244,9 @@ public:
             && (number_of_duplicates == 0)
             && (number_of_overloaded_batches == 0);
 
-        if (verbose >= 2)
+        if (verbosity_level >= 2)
             os << std::endl;
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of jobs:                " << jobs.size() << " / " << number_of_jobs()  << std::endl
                 << "Number of duplicates:          " << number_of_duplicates << std::endl
@@ -301,6 +257,85 @@ public:
                 ;
         }
         return {feasible, total_weighted_tardiness};
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance() { }
+
+    /*
+     * Private attributes
+     */
+
+    /** Jobs. */
+    std::vector<Job> jobs_;
+
+    /** Batch capacity. */
+    Size capacity_ = 0;
+
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /** Add a job. */
+    void add_job(
+            Time processing_time,
+            Time release_date,
+            Time due_date,
+            Size size,
+            Weight weight)
+    {
+        Job job;
+        job.processing_time = processing_time;
+        job.release_date = release_date;
+        job.due_date = due_date;
+        job.size = size;
+        job.weight = weight;
+        instance_.jobs_.push_back(job);
+    }
+
+    /** Set the capacity of the batches. */
+    void set_capacity(Size capacity) { instance_.capacity_ = capacity; }
+
+    /** Build an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+        if (format == "" || format == "queiroga2020") {
+            read_queiroga2020(file);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        return std::move(instance_);
     }
 
 private:
@@ -341,15 +376,10 @@ private:
      * Private attributes
      */
 
-    /** Jobs. */
-    std::vector<Job> jobs_;
-
-    /** Batch capacity. */
-    Size capacity_ = 0;
+    /** Instance. */
+    Instance instance_;
 
 };
 
 }
-
 }
-

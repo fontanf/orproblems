@@ -4,7 +4,7 @@
 #include "orproblems/cuttingstock.hpp"
 #include "orproblems/multipleknapsack.hpp"
 #include "orproblems/quadraticmultipleknapsack.hpp"
-//#include "orproblems/generalizedquadraticmultipleknapsack.hpp"
+#include "orproblems/generalizedquadraticmultipleknapsack.hpp"
 #include "orproblems/binpackingwithconflicts.hpp"
 
 #include "orproblems/sequentialordering.hpp"
@@ -21,13 +21,12 @@
 #include "orproblems/batchschedulingtotalcompletiontime.hpp"
 #include "orproblems/batchschedulingtotalweightedtardiness.hpp"
 #include "orproblems/parallelschedulingwithfamilysetuptimestwct.hpp"
-#include "orproblems/starobservationscheduling.hpp"
 #include "orproblems/permutationflowshopschedulingmakespan.hpp"
 #include "orproblems/permutationflowshopschedulingtct.hpp"
 #include "orproblems/permutationflowshopschedulingtt.hpp"
 #include "orproblems/distributedpfssmakespan.hpp"
 #include "orproblems/distributedpfsstct.hpp"
-//#include "orproblems/nowaitjobshopschedulingmakespan.hpp"
+#include "orproblems/nowaitjobshopschedulingmakespan.hpp"
 #include "orproblems/simpleassemblylinebalancing1.hpp"
 #include "orproblems/ushapedassemblylinebalancing1.hpp"
 
@@ -37,48 +36,48 @@ using namespace orproblems;
 
 namespace po = boost::program_options;
 
-template<typename Instance>
+template<typename InstanceBuilder>
 void check(
-        const Instance& instance,
-        std::string certificate_path,
-        int print_instance,
-        int print_checker)
+        InstanceBuilder instance_builder,
+        const std::string& instance_path,
+        const std::string& instance_format,
+        const std::string& certificate_path,
+        int verbosity_level)
 {
-    if (print_instance > 0) {
+    instance_builder.read(instance_path, instance_format);
+    auto instance = instance_builder.build();
+    if (verbosity_level > 0) {
         std::cout
             << "Instance" << std::endl
             << "--------" << std::endl;
-        instance.print(std::cout, print_instance);
+        instance.format(std::cout, verbosity_level);
     }
-    if (print_checker > 0) {
+    if (verbosity_level > 0) {
         std::cout
             << "Checker" << std::endl
             << "-------" << std::endl;
-        instance.check(certificate_path, std::cout, print_checker);
+        instance.check(certificate_path, std::cout, verbosity_level);
     }
 }
 
 int main(int argc, char *argv[])
 {
-
     // Parse program options
 
     std::string problem = "";
     std::string instance_path = "";
-    std::string format = "";
+    std::string instance_format = "";
     std::string certificate_path = "";
-    int print_instance = 1;
-    int print_checker = 1;
+    int verbosity_level = 1;
 
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help,h", "produce help message")
         ("problem,p", po::value<std::string>(&problem)->required(), "set problem (required)")
         ("input,i", po::value<std::string>(&instance_path)->required(), "set input path (required)")
+        ("format,f", po::value<std::string>(&instance_format), "set input file format (default: orlibrary)")
         ("certificate,c", po::value<std::string>(&certificate_path), "set certificate path")
-        ("format,f", po::value<std::string>(&format), "set input file format (default: orlibrary)")
-        ("print-instance,v", po::value<int>(&print_instance), "print instance")
-        ("print-checker,v", po::value<int>(&print_checker), "print checker")
+        ("verbosity-level,v", po::value<int>(&verbosity_level), "print instance")
         ;
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -94,124 +93,236 @@ int main(int argc, char *argv[])
     }
 
     if (problem == "knapsackwithconflicts") {
-        knapsackwithconflicts::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                knapsackwithconflicts::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "multidimensionalmultiplechoiceknapsack") {
-        multidimensionalmultiplechoiceknapsack::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                multidimensionalmultiplechoiceknapsack::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "quadraticassignment") {
-        quadraticassignment::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                quadraticassignment::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "cuttingstock") {
-        cuttingstock::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                cuttingstock::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "multipleknapsack") {
-        multipleknapsack::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                multipleknapsack::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "quadraticmultipleknapsack") {
-        quadraticmultipleknapsack::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                quadraticmultipleknapsack::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
-    //} else if (problem == "generalizedquadraticmultipleknapsack") {
-    //    generalizedquadraticmultipleknapsack::Instance instance(instance_path, format);
-    //    check(instance, certificate_path, print_instance, print_checker);
+    } else if (problem == "generalizedquadraticmultipleknapsack") {
+        check(
+                generalizedquadraticmultipleknapsack::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "binpackingwithconflicts") {
-        binpackingwithconflicts::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                binpackingwithconflicts::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "sequentialordering") {
-        sequentialordering::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                sequentialordering::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "travelingrepairman") {
-        travelingrepairman::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                travelingrepairman::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "travelingsalesmanwithreleasedates") {
-        travelingsalesmanwithreleasedates::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                travelingsalesmanwithreleasedates::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "timedependentorienteering") {
-        timedependentorienteering::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                timedependentorienteering::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "orienteeringwithhotelselection") {
-        orienteeringwithhotelselection::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                orienteeringwithhotelselection::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "capacitatedvehiclerouting") {
-        capacitatedvehiclerouting::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                capacitatedvehiclerouting::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "vehicleroutingwithtimewindows") {
-        vehicleroutingwithtimewindows::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                vehicleroutingwithtimewindows::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "capacitatedopenvehiclerouting") {
-        capacitatedopenvehiclerouting::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                capacitatedopenvehiclerouting::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "schedulingwithsdsttwt") {
-        schedulingwithsdsttwt::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                schedulingwithsdsttwt::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "orderacceptanceandscheduling") {
-        orderacceptanceandscheduling::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                orderacceptanceandscheduling::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "batchschedulingtotalcompletiontime") {
-        batchschedulingtotalcompletiontime::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                batchschedulingtotalcompletiontime::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "batchschedulingtotalweightedtardiness") {
-        batchschedulingtotalweightedtardiness::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                batchschedulingtotalweightedtardiness::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "parallelschedulingwithfamilysetuptimestwct") {
-        parallelschedulingwithfamilysetuptimestwct::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
-
-    } else if (problem == "starobservationscheduling") {
-        starobservationscheduling::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                parallelschedulingwithfamilysetuptimestwct::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "permutationflowshopschedulingmakespan") {
-        permutationflowshopschedulingmakespan::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                permutationflowshopschedulingmakespan::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "permutationflowshopschedulingtct") {
-        permutationflowshopschedulingtct::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                permutationflowshopschedulingtct::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "permutationflowshopschedulingtt") {
-        permutationflowshopschedulingtt::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                permutationflowshopschedulingtt::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "distributedpfssmakespan") {
-        distributedpfssmakespan::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                distributedpfssmakespan::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "distributedpfsstct") {
-        distributedpfsstct::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                distributedpfsstct::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
-    //} else if (problem == "nowaitjobshopschedulingmakespan") {
-    //    nowaitjobshopschedulingmakespan::Instance instance(instance_path, format);
-    //    check(instance, certificate_path, print_instance, print_checker);
+    } else if (problem == "nowaitjobshopschedulingmakespan") {
+        check(
+                nowaitjobshopschedulingmakespan::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "simpleassemblylinebalancing1") {
-        simpleassemblylinebalancing1::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                simpleassemblylinebalancing1::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else if (problem == "ushapedassemblylinebalancing1") {
-        ushapedassemblylinebalancing1::Instance instance(instance_path, format);
-        check(instance, certificate_path, print_instance, print_checker);
+        check(
+                ushapedassemblylinebalancing1::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
 
     } else {
         throw std::invalid_argument(

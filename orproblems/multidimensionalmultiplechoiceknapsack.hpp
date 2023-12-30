@@ -1,5 +1,5 @@
 /**
- * Multidimmensional Multiple-choice Knapsack Problem.
+ * Multidimmensional multiple-choice knapsack problem
  *
  * Input:
  * - m resources with capacity cᵢ
@@ -27,7 +27,6 @@
 
 namespace orproblems
 {
-
 namespace multidimensionalmultiplechoiceknapsack
 {
 
@@ -56,66 +55,6 @@ class Instance
 {
 
 public:
-
-    /*
-     * Constructors and destructor
-     */
-
-    /** Constructor to build an instance manually. */
-    Instance() { }
-
-    /** Add a resource. */
-    void add_resource(Weight capacity) { capacities_.push_back(capacity); }
-
-    /** Add an item. */
-    void add_item(
-            GroupId group_id,
-            Profit profit)
-    {
-        while ((GroupId)groups_.size() <= group_id)
-            groups_.push_back({});
-
-        Item item;
-        item.profit = profit;
-        item.weights.resize(number_of_resources(), 0);
-        groups_[group_id].push_back(item);
-        if (largest_group_size_ < (ItemId)groups_[group_id].size())
-            largest_group_size_ = groups_[group_id].size();
-        number_of_items_++;
-    }
-
-    /** Set the weight of an item. */
-    void set_weight(
-            GroupId group_id,
-            ItemId item_id,
-            ResourceId resource_id,
-            Weight weight)
-    {
-        groups_[group_id][item_id].weights[resource_id] = weight;
-    }
-
-    /** Build an instance from a file. */
-    Instance(
-            std::string instance_path,
-            std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-        if (format == "" || format == "khan2002") {
-            read_khan2002(file);
-        } else if (format == "shojaei2013") {
-            read_shojaei2013(file);
-        } else if (format == "mansi2013") {
-            read_mansi2013(file);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
 
     /*
      * Getters
@@ -147,12 +86,16 @@ public:
     /** Get the capacity of a resource. */
     inline Weight capacity(ResourceId resource_id) const { return capacities_[resource_id]; }
 
+    /*
+     * Outputs
+     */
+
     /** Print the instance. */
-    std::ostream& print(
+    void format(
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of groups:        " << number_of_groups() << std::endl
                 << "Number of items:         " << number_of_items() << std::endl
@@ -160,7 +103,7 @@ public:
                 ;
         }
         // Print resources.
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Resource"
                 << std::setw(12) << "Capacity"
@@ -178,7 +121,7 @@ public:
             }
         }
         // Print groups.
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Group"
                 << std::setw(12) << "# items"
@@ -196,7 +139,7 @@ public:
             }
         }
         // Print items.
-        if (verbose >= 3) {
+        if (verbosity_level >= 3) {
             os << std::endl
                 << std::setw(12) << "Group"
                 << std::setw(12) << "Item"
@@ -220,7 +163,7 @@ public:
             }
         }
         // Print weights.
-        if (verbose >= 4) {
+        if (verbosity_level >= 4) {
             os << std::endl
                 << std::setw(12) << "Group"
                 << std::setw(12) << "Item"
@@ -252,14 +195,13 @@ public:
                 }
             }
         }
-        return os;
     }
 
     /** Check a certificate. */
     std::pair<bool, Profit> check(
-            std::string certificate_path,
+            const std::string& certificate_path,
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
         std::ifstream file(certificate_path);
         if (!file.good()) {
@@ -267,7 +209,7 @@ public:
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Group"
                 << std::setw(12) << "Item"
@@ -292,7 +234,7 @@ public:
             }
             profit += item.profit;
 
-            if (verbose >= 2) {
+            if (verbosity_level >= 2) {
                 os
                     << std::setw(12) << group_id
                     << std::setw(12) << item_id
@@ -314,9 +256,9 @@ public:
         bool feasible
             = (overweight == 0)
             && (group_id == number_of_groups());
-        if (verbose >= 2)
+        if (verbosity_level >= 2)
             os << std::endl;
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of groups:           " << group_id << " / " << number_of_groups() << std::endl
                 << "Overweight:                 " << overweight << std::endl
@@ -333,6 +275,134 @@ private:
      * Private methods
      */
 
+    /** Constructor to build an instance manually. */
+    Instance() { }
+
+    /*
+     * Private attributes
+     */
+
+    /** Capacities. */
+    std::vector<Weight> capacities_;
+
+    /** Groups. */
+    std::vector<std::vector<Item>> groups_;
+
+    /** Number of items. */
+    ItemId number_of_items_ = 0;
+
+    /*
+     * Computed attributes
+     */
+
+    /** Largest group size. */
+    ItemId largest_group_size_ = 0;
+
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /**
+     * Set the number of resources.
+     *
+     * This method clears the instance.
+     */
+    void set_number_of_resources(ResourceId number_of_resources)
+    {
+        instance_ = Instance();
+        instance_.capacities_ = std::vector<Weight>(number_of_resources);
+    }
+
+    /** Set the capacity of a resource. */
+    void set_resource_capacity(
+            ResourceId resource_id,
+            Weight capacity)
+    {
+        instance_.capacities_[resource_id] = capacity;
+    }
+
+    /** Add an item. */
+    void add_item(
+            GroupId group_id,
+            Profit profit)
+    {
+        while ((GroupId)instance_.groups_.size() <= group_id)
+            instance_.groups_.push_back({});
+
+        Item item;
+        item.profit = profit;
+        item.weights.resize(instance_.number_of_resources(), 0);
+        instance_.groups_[group_id].push_back(item);
+    }
+
+    /** Set the weight of an item. */
+    void set_weight(
+            GroupId group_id,
+            ItemId item_id,
+            ResourceId resource_id,
+            Weight weight)
+    {
+        instance_.groups_[group_id][item_id].weights[resource_id] = weight;
+    }
+
+    /** Build an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+        if (format == "" || format == "khan2002") {
+            read_khan2002(file);
+        } else if (format == "shojaei2013") {
+            read_shojaei2013(file);
+        } else if (format == "mansi2013") {
+            read_mansi2013(file);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        // Compute largest group and number of items.
+        instance_.largest_group_size_ = 0;
+        instance_.number_of_items_ = 0;
+        for (GroupId group_id = 0;
+                group_id < instance_.number_of_groups();
+                ++group_id) {
+            ItemId group_size = instance_.groups_[group_id].size();
+            if (instance_.largest_group_size_ < group_size)
+                instance_.largest_group_size_ = group_size;
+            instance_.number_of_items_ += group_size;
+        }
+
+        return std::move(instance_);
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
+
     /** Read an instance from a file in 'khan2002' format. */
     void read_khan2002(std::ifstream& file)
     {
@@ -341,12 +411,13 @@ private:
         ResourceId number_of_resources = -1;
         file >> number_of_groups >> group_size >> number_of_resources;
 
+        set_number_of_resources(number_of_resources);
         ResourceId capacity = -1;
         for (ResourceId resource_id = 0;
                 resource_id < number_of_resources;
                 ++resource_id) {
             file >> capacity;
-            add_resource(capacity);
+            set_resource_capacity(resource_id, capacity);
         }
 
         std::string tmp;
@@ -378,12 +449,13 @@ private:
         ResourceId number_of_resources = -1;
         file >> number_of_groups >> number_of_resources;
 
+        set_number_of_resources(number_of_resources);
         ResourceId capacity = -1;
         for (ResourceId resource_id = 0;
                 resource_id < number_of_resources;
                 ++resource_id) {
             file >> capacity;
-            add_resource(capacity);
+            set_resource_capacity(resource_id, capacity);
         }
 
         ItemId group_size = -1;
@@ -416,12 +488,13 @@ private:
         ResourceId number_of_resources = -1;
         file >> number_of_groups >> group_size >> number_of_resources;
 
+        set_number_of_resources(number_of_resources);
         ResourceId capacity = -1;
         for (ResourceId resource_id = 0;
                 resource_id < number_of_resources;
                 ++resource_id) {
             file >> capacity;
-            add_resource(capacity);
+            set_resource_capacity(resource_id, capacity);
         }
 
         Profit profit = -1;
@@ -448,25 +521,10 @@ private:
      * Private attributes
      */
 
-    /** Capacities. */
-    std::vector<Weight> capacities_;
-
-    /** Groups. */
-    std::vector<std::vector<Item>> groups_;
-
-    /** Number of items. */
-    ItemId number_of_items_ = 0;
-
-    /*
-     * Computed attributes
-     */
-
-    /** Largest group size. */
-    ItemId largest_group_size_ = 0;
+    /** Instance. */
+    Instance instance_;
 
 };
 
 }
-
 }
-

@@ -1,5 +1,5 @@
 /**
- * Multiple Knapsack Problem.
+ * Multiple knapsack problem
  *
  * Input:
  * - m containers (knapsacks); for each knapsack i = 1..m,  a capacity cᵢ
@@ -22,7 +22,6 @@
 
 namespace orproblems
 {
-
 namespace multipleknapsack
 {
 
@@ -53,44 +52,6 @@ class Instance
 public:
 
     /*
-     * Constructors and destructor
-     */
-
-    /** Constructor to build an instance manually. */
-    Instance() {  }
-
-    /** Add a knapsack. */
-    void add_knapsack(Weight capacity) { capacities_.push_back(capacity); }
-
-    /** Add an item. */
-    void add_item(
-            Weight weight,
-            Profit profit)
-    {
-        items_.push_back(Item{weight, profit});
-        profit_sum_ += profit;
-    }
-
-    /** Build an instance from a file. */
-    Instance(
-            std::string instance_path,
-            std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-        if (format == "" || format == "dellamico2018") {
-            read_dellamico2018(file);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
-
-    /*
      * Getters
      */
 
@@ -109,19 +70,23 @@ public:
     /** Get the total profit of the items. */
     Profit total_profit() const { return profit_sum_; }
 
+    /*
+     * Outputs
+     */
+
     /** Print the instance. */
-    std::ostream& print(
+    void format(
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of knapsacks:  " << number_of_knapsacks() << std::endl
                 << "Number of items:      " << number_of_items() << std::endl
                 ;
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Knapsack"
                 << std::setw(12) << "Capacity"
@@ -139,7 +104,7 @@ public:
             }
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Item"
                 << std::setw(12) << "Weight"
@@ -160,15 +125,13 @@ public:
                     << std::endl;
             }
         }
-
-        return os;
     }
 
     /** Check a certificate. */
     std::pair<bool, Profit> check(
-            std::string certificate_path,
+            const std::string& certificate_path,
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
         std::ifstream file(certificate_path);
         if (!file.good()) {
@@ -176,7 +139,7 @@ public:
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Knapsack"
                 << std::setw(12) << "Item"
@@ -210,7 +173,7 @@ public:
                 weight += item(item_id).weight;
                 profit += item(item_id).profit;
 
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os
                         << std::setw(12) << knapsack_id
                         << std::setw(12) << item_id
@@ -222,7 +185,7 @@ public:
                 // Check duplicates.
                 if (items.contains(item_id)) {
                     number_of_duplicates++;
-                    if (verbose >= 2) {
+                    if (verbosity_level >= 2) {
                         os << "Item " << item_id
                             << " has already scheduled." << std::endl;
                     }
@@ -233,7 +196,7 @@ public:
             // Check capacity.
             if (weight > capacity(knapsack_id)) {
                 number_of_overweighted_knapsacks++;
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os << "Knapsack " << knapsack_id
                         << " is overweighted." << std::endl;
                 }
@@ -244,9 +207,9 @@ public:
             = (number_of_duplicates == 0)
             && (number_of_overweighted_knapsacks == 0);
 
-        if (verbose >= 2)
+        if (verbosity_level >= 2)
             os << std::endl;
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of items:                   " << items.size() << " / " << number_of_items() << std::endl
                 << "Number of duplicates:              " << number_of_duplicates << std::endl
@@ -256,6 +219,92 @@ public:
                 ;
         }
         return {feasible, profit};
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance() { }
+
+    /*
+     * Private attributes
+     */
+
+    /** Items. */
+    std::vector<Item> items_;
+
+    /** Capacities. */
+    std::vector<Weight> capacities_;
+
+    /*
+     * Computed attributes
+     */
+
+    /** Profit sum. */
+    Profit profit_sum_ = 0;
+
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /** Add a knapsack. */
+    void add_knapsack(Weight capacity) { instance_.capacities_.push_back(capacity); }
+
+    /** Add an item. */
+    void add_item(
+            Weight weight,
+            Profit profit)
+    {
+        instance_.items_.push_back(Item{weight, profit});
+    }
+
+    /** Build an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+        if (format == "" || format == "dellamico2018") {
+            read_dellamico2018(file);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        // Compute profit sum.
+        instance_.profit_sum_ = 0;
+        for (ItemId item_id = 0;
+                item_id < instance_.number_of_items();
+                ++item_id) {
+            const Item& item = instance_.item(item_id);
+            instance_.profit_sum_ += item.profit;
+        }
+
+        return std::move(instance_);
     }
 
 private:
@@ -292,21 +341,10 @@ private:
      * Private attributes
      */
 
-    /** Items. */
-    std::vector<Item> items_;
-
-    /** Capacities. */
-    std::vector<Weight> capacities_;
-
-    /*
-     * Computed attributes
-     */
-
-    /** Profit sum. */
-    Profit profit_sum_ = 0;
+    /** Instance. */
+    Instance instance_;
 
 };
 
 }
-
 }

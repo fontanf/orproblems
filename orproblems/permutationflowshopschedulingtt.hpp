@@ -1,5 +1,5 @@
 /**
- * Permutation flow shop scheduling problem, Total tardiness.
+ * Permutation flow shop scheduling problem, total tardiness
  *
  * Input:
  * - m machines
@@ -27,7 +27,6 @@
 
 namespace orproblems
 {
-
 namespace permutationflowshopschedulingtt
 {
 
@@ -57,57 +56,6 @@ class Instance
 public:
 
     /*
-     * Constructors and destructor
-     */
-
-    /** Constructor to build an instance manually. */
-    Instance(
-            MachineId number_of_machines,
-            JobId number_of_jobs):
-        jobs_(number_of_jobs)
-    {
-        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id)
-            jobs_[job_id].processing_times.resize(number_of_machines);
-    }
-
-    /** Set the due date of a job. */
-    void set_due_date(
-            JobId job_id,
-            Time due_date)
-    {
-        jobs_[job_id].due_date = due_date;
-    }
-
-    /** Set the processing-time of a job on a machine. */
-    void set_processing_time(
-            JobId job_id,
-            MachineId machine_id,
-            Time processing_time)
-    {
-        jobs_[job_id].processing_times[machine_id] = processing_time;
-    }
-
-    /** Build an instance from a file. */
-    Instance(
-            std::string instance_path,
-            std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-
-        if (format == "" || format == "vallada2008") {
-            read_vallada2008(file);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
-
-    /*
      * Getters
      */
 
@@ -120,19 +68,23 @@ public:
     /** Get a job. */
     inline const Job& job(JobId job_id) const { return jobs_[job_id]; }
 
+    /*
+     * Outputs
+     */
+
     /** Print the instance. */
-    std::ostream& print(
+    void format(
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of machines:   " << number_of_machines() << std::endl
                 << "Number of jobs:       " << number_of_jobs() << std::endl
                 ;
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Job"
                 << std::setw(12) << "Due date"
@@ -149,7 +101,7 @@ public:
             }
         }
 
-        if (verbose >= 3) {
+        if (verbosity_level >= 3) {
             os << std::endl
                 << std::setw(12) << "Job"
                 << std::setw(12) << "Machine"
@@ -172,14 +124,13 @@ public:
                 }
             }
         }
-        return os;
     }
 
     /** Check a certificate. */
     std::pair<bool, Time> check(
-            std::string certificate_path,
+            const std::string& certificate_path,
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
         std::ifstream file(certificate_path);
         if (!file.good()) {
@@ -187,7 +138,7 @@ public:
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl << std::right
                 << std::setw(12) << "Job"
                 << std::setw(12) << "TT"
@@ -208,7 +159,7 @@ public:
             // Check duplicates.
             if (jobs.contains(job_id)) {
                 number_of_duplicates++;
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os << "Job " << job_id
                         << " has already been scheduled." << std::endl;
                 }
@@ -230,7 +181,7 @@ public:
             if (times[number_of_machines() - 1] > job.due_date)
                 total_tardiness += (times[number_of_machines() - 1] - job.due_date);
 
-            if (verbose >= 2) {
+            if (verbosity_level >= 2) {
                 os
                     << std::setw(12) << job_id
                     << std::setw(12) << total_tardiness
@@ -242,9 +193,9 @@ public:
             = (jobs.size() == number_of_jobs())
             && (number_of_duplicates == 0);
 
-        if (verbose >= 2)
+        if (verbosity_level >= 2)
             os << std::endl;
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of jobs:         " << jobs.size() << " / " << number_of_jobs() << std::endl
                 << "Number of duplicates:   " << number_of_duplicates << std::endl
@@ -261,15 +212,113 @@ private:
      * Private methods
      */
 
+    /** Constructor to build an instance manually. */
+    Instance() { }
+
+    /*
+     * Private attributes
+     */
+
+    /** Number of machines. */
+    MachineId number_of_machines_ = 1;
+
+    /** Jobs. */
+    std::vector<Job> jobs_;
+
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /**
+     * Set the number of machines.
+     *
+     * This method resets all the jobs.
+     */
+    void set_number_of_machines(MachineId number_of_machines)
+    {
+        instance_.jobs_.clear();
+        instance_.number_of_machines_ = number_of_machines;
+    }
+
+    /** Add jobs. */
+    void add_jobs(JobId number_of_jobs)
+    {
+        Job job;
+        job.processing_times = std::vector<Time>(instance_.number_of_machines(), 0);
+        instance_.jobs_.insert(
+                instance_.jobs_.end(),
+                number_of_jobs,
+                job);
+    }
+
+    /** Set the due date of a job. */
+    void set_due_date(
+            JobId job_id,
+            Time due_date)
+    {
+        instance_.jobs_[job_id].due_date = due_date;
+    }
+
+    /** Set the processing-time of a job on a machine. */
+    void set_processing_time(
+            JobId job_id,
+            MachineId machine_id,
+            Time processing_time)
+    {
+        instance_.jobs_[job_id].processing_times[machine_id] = processing_time;
+    }
+
+    /** Build an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+
+        if (format == "" || format == "vallada2008") {
+            read_vallada2008(file);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        return std::move(instance_);
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
+
     /** Read an instance from a file in 'vallada2008' format. */
     void read_vallada2008(std::ifstream& file)
     {
         JobId number_of_jobs;
         MachineId number_of_machines;
         file >> number_of_jobs >> number_of_machines;
-        jobs_ = std::vector<Job>(number_of_jobs);
-        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id)
-            jobs_[job_id].processing_times.resize(number_of_machines);
+        set_number_of_machines(number_of_machines);
+        add_jobs(number_of_jobs);
 
         for (JobId job_id = 0; job_id < number_of_jobs; ++job_id) {
             Time processing_time = -1;
@@ -295,12 +344,10 @@ private:
      * Private attributes
      */
 
-    /** Jobs. */
-    std::vector<Job> jobs_;
+    /** Instance. */
+    Instance instance_;
 
 };
 
 }
-
 }
-

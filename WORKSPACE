@@ -10,10 +10,24 @@ git_repository(
 load("@com_github_nelhage_rules_boost//:boost/boost.bzl", "boost_deps")
 boost_deps()
 
+http_archive(
+    name = "json",
+    build_file_content = """
+cc_library(
+        name = "json",
+        hdrs = ["single_include/nlohmann/json.hpp"],
+        visibility = ["//visibility:public"],
+        strip_include_prefix = "single_include/"
+)
+""",
+    urls = ["https://github.com/nlohmann/json/releases/download/v3.7.3/include.zip"],
+    sha256 = "87b5884741427220d3a33df1363ae0e8b898099fbc59f1c451113f6732891014",
+)
+
 git_repository(
     name = "optimizationtools",
     remote = "https://github.com/fontanf/optimizationtools.git",
-    commit = "e4b1995bd230a80f2bbfa83ccf8e229db3bb01a6",
+    commit = "49a279e7df70b21f8c62cb89ec58e363c053ead8",
 )
 
 local_repository(

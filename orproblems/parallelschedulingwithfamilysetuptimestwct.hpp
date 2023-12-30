@@ -1,6 +1,6 @@
 /**
- * Identical parallel machine scheduling problem with family setup times, Total
- * weighted completion time.
+ * Identical parallel machine scheduling problem with family setup times, total
+ * weighted completion time
  *
  * Input:
  * - m machines
@@ -30,7 +30,6 @@
 
 namespace orproblems
 {
-
 namespace parallelschedulingwithfamilysetuptimestwct
 {
 
@@ -76,61 +75,6 @@ class Instance
 public:
 
     /*
-     * Constructors and destructor
-     */
-
-    /** Constructor to build an instance manually. */
-    Instance(
-            MachineId number_of_machines,
-            FamilyId number_of_familiess):
-        number_of_machines_(number_of_machines),
-        families_(number_of_familiess)
-    {
-    }
-
-    /** Set the setup time of a family. */
-    void set_setup_time(
-            FamilyId family_id,
-            Time setup_time)
-    {
-        families_[family_id].setup_time = setup_time;
-    }
-
-    /** Add a job. */
-    void add_job(
-            Time processing_time,
-            Weight weight,
-            FamilyId family_id)
-    {
-        JobId id = jobs_.size();
-        Job job;
-        job.processing_time = processing_time;
-        job.weight = weight;
-        job.family_id = family_id;
-        jobs_.push_back(job);
-        families_[family_id].job_ids.push_back(id);
-    }
-
-    /** Build an instance from a file. */
-    Instance(
-            std::string instance_path,
-            std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-        if (format == "" || format == "default") {
-            read_default(file);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
-
-    /*
      * Getters
      */
 
@@ -149,18 +93,22 @@ public:
     /** Get a job. */
     const Job& job(JobId job_id) const { return jobs_[job_id]; }
 
+    /*
+     * Outputs
+     */
+
     /** Print the instance. */
-    std::ostream& print(
+    void format(
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os << "Number of machines:  " << number_of_machines() << std::endl;
             os << "Number of families:  " << number_of_families() << std::endl;
             os << "Number of jobs:      " << number_of_jobs() << std::endl;
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Family"
                 << std::setw(12) << "Setup"
@@ -182,7 +130,7 @@ public:
             }
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Job"
                 << std::setw(12) << "Proc. time"
@@ -206,15 +154,13 @@ public:
                     << std::endl;
             }
         }
-
-        return os;
     }
 
     /** Check a certificate. */
     std::pair<bool, Time> check(
-            std::string certificate_path,
+            const std::string& certificate_path,
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
         std::ifstream file(certificate_path);
         if (!file.good()) {
@@ -222,7 +168,7 @@ public:
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Job"
                 << std::setw(12) << "Time"
@@ -246,7 +192,7 @@ public:
             // Check duplicates.
             if (jobs.contains(job_id)) {
                 number_of_duplicates++;
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os << "Job " << job_id
                         << " has already been scheduled." << std::endl;
                 }
@@ -258,7 +204,7 @@ public:
             time += job.processing_time;
             total_weighted_completion_time += job.weight * time;
 
-            if (verbose >= 2) {
+            if (verbosity_level >= 2) {
                 os
                     << std::setw(12) << job_id
                     << std::setw(12) << time
@@ -272,9 +218,9 @@ public:
         bool feasible
             = (jobs.size() == number_of_jobs())
             && (number_of_duplicates == 0);
-        if (verbose >= 2)
+        if (verbosity_level >= 2)
             os << std::endl;
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of jobs:                  " << jobs.size() << " / " << number_of_jobs()  << std::endl
                 << "Number of duplicates:            " << number_of_duplicates << std::endl
@@ -291,21 +237,115 @@ private:
      * Private methods
      */
 
+    /** Constructor to build an instance manually. */
+    Instance() { }
+
+    /*
+     * Private attributes
+     */
+
+    /** Number of machines. */
+    MachineId number_of_machines_;
+
+    /** Jobs. */
+    std::vector<Job> jobs_;
+
+    /** Families. */
+    std::vector<Family> families_;
+
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /** Set the number of machines. */
+    void set_number_of_machines(
+            MachineId number_of_machines)
+    {
+        instance_.number_of_machines_ = number_of_machines;
+    }
+
+    /** Add a family. */
+    void add_family(
+            Time setup_time)
+    {
+        Family family;
+        family.setup_time = setup_time;
+        instance_.families_.push_back(family);
+    }
+
+    /** Add a job. */
+    void add_job(
+            Time processing_time,
+            Weight weight,
+            FamilyId family_id)
+    {
+        JobId id = instance_.jobs_.size();
+        Job job;
+        job.processing_time = processing_time;
+        job.weight = weight;
+        job.family_id = family_id;
+        instance_.jobs_.push_back(job);
+        instance_.families_[family_id].job_ids.push_back(id);
+    }
+
+    /** Build an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+        if (format == "" || format == "default") {
+            read_default(file);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        return std::move(instance_);
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
+
     /** Read an instance from a file in 'default' format. */
     void read_default(std::ifstream& file)
     {
-        file >> number_of_machines_;
+        MachineId number_of_machines = -1;
+        file >> number_of_machines;
+        set_number_of_machines(number_of_machines);
 
         FamilyId number_of_families = -1;
-
         file >> number_of_families;
-        families_.resize(number_of_families);
+
         Time setup_time;
         for (FamilyId family_id = 0;
                 family_id < number_of_families;
                 ++family_id) {
             file >> setup_time;
-            set_setup_time(family_id, setup_time);
+            add_family(setup_time);
         }
 
         JobId number_of_jobs = -1;
@@ -328,17 +368,10 @@ private:
      * Private attributes
      */
 
-    /** Number of machines. */
-    MachineId number_of_machines_;
-
-    /** Jobs. */
-    std::vector<Job> jobs_;
-
-    /** Families. */
-    std::vector<Family> families_;
+    /** Instance. */
+    Instance instance_;
 
 };
 
 }
-
 }

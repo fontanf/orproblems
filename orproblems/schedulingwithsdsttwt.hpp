@@ -1,6 +1,6 @@
 /**
- * Single machine scheduling problem with sequence-dependent setup times, Total
- * weighted tardiness.
+ * Single machine scheduling problem with sequence-dependent setup times, total
+ * weighted tardiness
  *
  * Input:
  * - n jobs; for each job j = 1..n
@@ -28,7 +28,6 @@
 
 namespace orproblems
 {
-
 namespace schedulingwithsdsttwt
 {
 
@@ -61,78 +60,6 @@ class Instance
 public:
 
     /*
-     * Constructors and destructor
-     */
-
-    /** Constructor to build an instance manually. */
-    Instance(JobId number_of_jobs):
-        jobs_(number_of_jobs),
-        setup_times_(number_of_jobs + 1, std::vector<Time>(number_of_jobs, -1))
-    {
-        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id)
-            setup_times_[job_id][job_id] = 0;
-    }
-
-    /** Set the processing-time of a job. */
-    void set_processing_time(
-            JobId job_id,
-            Time processing_time)
-    {
-        jobs_[job_id].processing_time = processing_time;
-    }
-
-    /** Set the due date of a job. */
-    void set_due_date(
-            JobId job_id,
-            Time due_date)
-    {
-        jobs_[job_id].due_date = due_date;
-    }
-
-    /** Set the weight of a job. */
-    void set_weight(
-            JobId job_id,
-            Weight weight)
-    {
-        if (jobs_[job_id].weight == 0)
-            number_of_zero_weight_jobs_--;
-        jobs_[job_id].weight = weight;
-        if (jobs_[job_id].weight == 0)
-            number_of_zero_weight_jobs_++;
-    }
-
-    /** Set the setup time between two jobs. */
-    void set_setup_time(
-            JobId job_id_1,
-            JobId job_id_2,
-            Time setup_time)
-    {
-        if (job_id_1 == -1)
-            job_id_1 = number_of_jobs();
-        setup_times_[job_id_1][job_id_2] = setup_time;
-    }
-
-    /** Build an instance from a file. */
-    Instance(
-            std::string instance_path,
-            std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-
-        if (format == "" || format == "cicirello2005") {
-            read_cicirello2005(file);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
-
-    /*
      * Getters
      */
 
@@ -153,16 +80,20 @@ public:
         return setup_times_[job_id_1][job_id_2];
     }
 
+    /*
+     * Outputs
+     */
+
     /** Print the instance. */
-    std::ostream& print(
+    void format(
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os << "Number of jobs:  " << number_of_jobs() << std::endl;
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Job"
                 << std::setw(12) << "Proc. time"
@@ -185,7 +116,7 @@ public:
             }
         }
 
-        if (verbose >= 3) {
+        if (verbosity_level >= 3) {
             os << std::endl
                 << std::setw(12) << "Job 1"
                 << std::setw(12) << "Job 2"
@@ -204,15 +135,13 @@ public:
                         << std::endl;
             }
         }
-
-        return os;
     }
 
     /** Check a certificate. */
     std::pair<bool, Time> check(
-            std::string certificate_path,
+            const std::string& certificate_path,
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
         std::ifstream file(certificate_path);
         if (!file.good()) {
@@ -220,7 +149,7 @@ public:
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl << std::right
                 << std::setw(12) << "Job"
                 << std::setw(12) << "Proc. time"
@@ -252,8 +181,8 @@ public:
             // Check duplicates.
             if (jobs.contains(job_id)) {
                 number_of_duplicates++;
-                if (verbose >= 2) {
-                    std::cout << "Job " << job_id
+                if (verbosity_level >= 2) {
+                    os << "Job " << job_id
                         << " has already been scheduled." << std::endl;
                 }
             }
@@ -265,7 +194,7 @@ public:
                 total_weighted_tardiness
                     += job.weight
                     * (current_time - job.due_date);
-            if (verbose >= 2) {
+            if (verbosity_level >= 2) {
                 os
                     << std::setw(12) << job_id
                     << std::setw(12) << job.processing_time
@@ -283,15 +212,138 @@ public:
             = (jobs.size() == number_of_jobs())
             && (number_of_duplicates == 0);
 
-        if (verbose >= 2)
-            std::cout << std::endl;
-        if (verbose >= 1) {
-            std::cout << "Number of jobs:            " << jobs.size() << " / " << number_of_jobs()  << std::endl;
-            std::cout << "Number of duplicates:      " << number_of_duplicates << std::endl;
-            std::cout << "Feasible:                  " << feasible << std::endl;
-            std::cout << "Total weighted tardiness:  " << total_weighted_tardiness << std::endl;
+        if (verbosity_level >= 2)
+            os << std::endl;
+        if (verbosity_level >= 1) {
+            os
+                << "Number of jobs:            " << jobs.size() << " / " << number_of_jobs()  << std::endl
+                << "Number of duplicates:      " << number_of_duplicates << std::endl
+                << "Feasible:                  " << feasible << std::endl
+                << "Total weighted tardiness:  " << total_weighted_tardiness << std::endl
+                ;
         }
         return {feasible, total_weighted_tardiness};
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance() { }
+
+    /*
+     * Private attributes
+     */
+
+    /** Jobs. */
+    std::vector<Job> jobs_;
+
+    /** Setup times. */
+    std::vector<std::vector<Time>> setup_times_;
+
+    /** Number of jobs with a null weight. */
+    JobPos number_of_zero_weight_jobs_ = 0;
+
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /**
+     * Set the number of jobs.
+     *
+     * This method resets the instance.
+     */
+    void set_number_of_jobs(JobId number_of_jobs)
+    {
+        instance_.jobs_ = std::vector<Job>(number_of_jobs),
+        instance_.setup_times_ = std::vector<std::vector<Time>>(
+                number_of_jobs + 1,
+                std::vector<Time>(number_of_jobs + 1, 0));
+    }
+
+    /** Set the processing-time of a job. */
+    void set_processing_time(
+            JobId job_id,
+            Time processing_time)
+    {
+        instance_.jobs_[job_id].processing_time = processing_time;
+    }
+
+    /** Set the due date of a job. */
+    void set_due_date(
+            JobId job_id,
+            Time due_date)
+    {
+        instance_.jobs_[job_id].due_date = due_date;
+    }
+
+    /** Set the weight of a job. */
+    void set_weight(
+            JobId job_id,
+            Weight weight)
+    {
+        instance_.jobs_[job_id].weight = weight;
+    }
+
+    /** Set the setup time between two jobs. */
+    void set_setup_time(
+            JobId job_id_1,
+            JobId job_id_2,
+            Time setup_time)
+    {
+        if (job_id_1 == -1)
+            job_id_1 = instance_.number_of_jobs();
+        instance_.setup_times_[job_id_1][job_id_2] = setup_time;
+    }
+
+    /** Build an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+
+        if (format == "" || format == "cicirello2005") {
+            read_cicirello2005(file);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        // Compute the number of jobs with a null weight.
+        instance_.number_of_zero_weight_jobs_ = 0;
+        for (JobId job_id = 0;
+                job_id < instance_.number_of_jobs();
+                ++job_id) {
+            const Job& job = instance_.job(job_id);
+            if (job.weight == 0)
+                instance_.number_of_zero_weight_jobs_++;
+        }
+
+        return std::move(instance_);
     }
 
 private:
@@ -309,12 +361,7 @@ private:
         file >> tmp >> tmp >> tmp;
         file >> tmp >> tmp >> number_of_jobs;
 
-        jobs_ = std::vector<Job>(number_of_jobs);
-        setup_times_ = std::vector<std::vector<Time>>(
-                number_of_jobs + 1,
-                std::vector<Time>(number_of_jobs, -1));
-        for (JobId job_id = 0; job_id < number_of_jobs; ++job_id)
-            setup_times_[job_id][job_id] = 0;
+        set_number_of_jobs(number_of_jobs);
 
         file >> tmp >> tmp >> tmp;
         file >> tmp >> tmp;
@@ -367,18 +414,10 @@ private:
      * Private attributes
      */
 
-    /** Jobs. */
-    std::vector<Job> jobs_;
-
-    /** Setup times. */
-    std::vector<std::vector<Time>> setup_times_;
-
-    /** Number of jobs with a null weight. */
-    JobPos number_of_zero_weight_jobs_ = 0;
+    /** Instance. */
+    Instance instance_;
 
 };
 
 }
-
 }
-

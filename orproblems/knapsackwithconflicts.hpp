@@ -1,5 +1,5 @@
 /**
- * Knapsack Problem with Conflicts.
+ * Knapsack problem with conflicts
  *
  * Input:
  * - a knapsack with capacity C
@@ -26,7 +26,6 @@
 
 namespace orproblems
 {
-
 namespace knapsackwithconflicts
 {
 
@@ -59,82 +58,6 @@ class Instance
 public:
 
     /*
-     * Constructors and destructor
-     */
-
-    /** Constructor to build an instance manually. */
-    Instance() { }
-
-    /** Add an item. */
-    void add_item(
-            Weight weight,
-            Profit profit)
-    {
-        Item item;
-        item.weight = weight;
-        item.profit = profit;
-        items_.push_back(item);
-
-        total_weight_ += weight;
-    }
-
-    /** Set the weight of an item. */
-    void set_weight(
-            ItemId item_id,
-            Weight w)
-    {
-        total_weight_ -= items_[item_id].weight;
-        items_[item_id].weight = w;
-        total_weight_ += items_[item_id].weight;
-    }
-
-    /** Set the profit of an item. */
-    void set_profit(
-            ItemId item_id,
-            Profit profit)
-    {
-        items_[item_id].profit = profit;
-    }
-
-    /** Add a conflict between two items. */
-    void add_conflict(
-            ItemId item_id_1,
-            ItemId item_id_2)
-    {
-        assert(item_id_1 >= 0);
-        assert(item_id_2 >= 0);
-        assert(item_id_1 < number_of_items());
-        assert(item_id_2 < number_of_items());
-        items_[item_id_1].neighbors.push_back(item_id_2);
-        items_[item_id_2].neighbors.push_back(item_id_1);
-        number_of_conflicts_++;
-    }
-
-    /** Set the capacity of the knapsack. */
-    void set_capacity(Weight capacity) { capacity_ = capacity; }
-
-    /** Build an instance from a file. */
-    Instance(
-            std::string instance_path,
-            std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-        if (format == "" || format == "default" || format == "hifi2006") {
-            read_hifi2006(file);
-        } else if (format == "bettinelli2017") {
-            read_bettinelli2017(file);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
-
-    /*
      * Getters
      */
 
@@ -153,12 +76,16 @@ public:
     /** Get the number of conflicts. */
     inline ItemPos number_of_conflicts() const { return number_of_conflicts_; }
 
+    /*
+     * Outputs
+     */
+
     /** Print the instance. */
-    std::ostream& print(
+    void format(
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of items:         " << number_of_items() << std::endl
                 << "Capacity:                " << capacity() << std::endl
@@ -169,7 +96,7 @@ public:
         }
 
         // Print items.
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Item"
                 << std::setw(12) << "Profit"
@@ -196,7 +123,7 @@ public:
         }
 
         // Print conflicts.
-        if (verbose >= 3) {
+        if (verbosity_level >= 3) {
             os << std::endl
                 << std::setw(12) << "Item 1"
                 << std::setw(12) << "Item 2"
@@ -213,15 +140,13 @@ public:
                 }
             }
         }
-
-        return os;
     }
 
     /** Check a certificate. */
     std::pair<bool, Profit> check(
-            std::string certificate_path,
+            const std::string& certificate_path,
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
         std::ifstream file(certificate_path);
         if (!file.good()) {
@@ -229,7 +154,7 @@ public:
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Item"
                 << std::setw(12) << "Weight"
@@ -251,7 +176,7 @@ public:
             weight += item(item_id).weight;
             profit += item(item_id).profit;
 
-            if (verbose >= 2) {
+            if (verbosity_level >= 2) {
                 os
                     << std::setw(12) << item_id
                     << std::setw(12) << weight
@@ -262,7 +187,7 @@ public:
             // Check duplicates.
             if (items.contains(item_id)) {
                 number_of_duplicates++;
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os << "Item " << item_id
                         << " has already been packed." << std::endl;
                 }
@@ -273,7 +198,7 @@ public:
             for (ItemId item_id_con: item(item_id).neighbors) {
                 if (items.contains(item_id_con)) {
                     number_of_conflict_violations++;
-                    if (verbose >= 2) {
+                    if (verbosity_level >= 2) {
                         os << "Item " << item_id
                             << " is in conflict with item "
                             << item_id_con << "."
@@ -287,9 +212,9 @@ public:
             = (number_of_duplicates == 0)
             && (weight <= capacity())
             && (number_of_conflict_violations == 0);
-        if (verbose >= 2)
+        if (verbosity_level >= 2)
             os << std::endl;
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of Items:                " << items.size() << " / " << number_of_items() << std::endl
                 << "Number of duplicates:           " << number_of_duplicates << std::endl
@@ -300,6 +225,126 @@ public:
                 ;
         }
         return {feasible, profit};
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance() { }
+
+    /*
+     * Private attributes
+     */
+
+    /** Items. */
+    std::vector<Item> items_;
+
+    /** Capacity. */
+    Weight capacity_ = 0;
+
+    /*
+     * Computed attributes
+     */
+
+    /** Number of conflicts. */
+    ItemPos number_of_conflicts_ = 0;
+
+    /** Total weight of the items. */
+    Weight total_weight_ = 0;
+
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /** Add an item. */
+    void add_item(
+            Weight weight,
+            Profit profit)
+    {
+        Item item;
+        item.weight = weight;
+        item.profit = profit;
+        instance_.items_.push_back(item);
+    }
+
+    /** Set the weight of an item. */
+    void set_weight(
+            ItemId item_id,
+            Weight w)
+    {
+        instance_.items_[item_id].weight = w;
+    }
+
+    /** Set the profit of an item. */
+    void set_profit(
+            ItemId item_id,
+            Profit profit)
+    {
+        instance_.items_[item_id].profit = profit;
+    }
+
+    /** Add a conflict between two items. */
+    void add_conflict(
+            ItemId item_id_1,
+            ItemId item_id_2)
+    {
+        instance_.items_[item_id_1].neighbors.push_back(item_id_2);
+        instance_.items_[item_id_2].neighbors.push_back(item_id_1);
+        instance_.number_of_conflicts_++;
+    }
+
+    /** Set the capacity of the knapsack. */
+    void set_capacity(Weight capacity) { instance_.capacity_ = capacity; }
+
+    /** Build an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+        if (format == "" || format == "default" || format == "hifi2006") {
+            read_hifi2006(file);
+        } else if (format == "bettinelli2017") {
+            read_bettinelli2017(file);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        // Compute total weight.
+        instance_.total_weight_ = 0;
+        for (ItemId item_id = 0;
+                item_id < instance_.number_of_items();
+                ++item_id) {
+            const Item& item = instance_.item(item_id);
+            instance_.total_weight_ += item.weight;
+        }
+
+        return std::move(instance_);
     }
 
 private:
@@ -376,25 +421,10 @@ private:
      * Private attributes
      */
 
-    /** Items. */
-    std::vector<Item> items_;
-
-    /** Capacity. */
-    Weight capacity_ = 0;
-
-    /*
-     * Computed attributes
-     */
-
-    /** Number of conflicts. */
-    ItemPos number_of_conflicts_ = 0;
-
-    /** Total weight of the items. */
-    Weight total_weight_ = 0;
+    /** Instance. */
+    Instance instance_;
 
 };
 
 }
-
 }
-

@@ -1,5 +1,5 @@
 /**
- * Traveling salesman problem with release dates.
+ * Traveling salesman problem with release dates
  *
  * Input:
  * - n locations; for each location j, j = 1..n, a release date rⱼ
@@ -25,7 +25,6 @@
 
 namespace orproblems
 {
-
 namespace travelingsalesmanwithreleasedates
 {
 
@@ -60,74 +59,6 @@ class Instance
 public:
 
     /*
-     * Constructors and destructor
-     */
-
-    /** Constructor to build an instance manually. */
-    Instance(LocationId number_of_locations):
-        locations_(number_of_locations),
-        travel_times_(number_of_locations, std::vector<Time>(number_of_locations, -1))
-    {
-        for (LocationId location_id = 0;
-                location_id < number_of_locations;
-                ++location_id) {
-            travel_times_[location_id][location_id] = 0;
-        }
-    }
-
-    /** Set the coordinates of a location. */
-    void set_xy(
-            LocationId location_id,
-            double x,
-            double y,
-            double z = -1)
-    {
-        locations_[location_id].x = x;
-        locations_[location_id].y = y;
-        locations_[location_id].z = z;
-    }
-
-    /** Set the travel time between two location. */
-    void set_travel_time(
-            LocationId location_id_1,
-            LocationId location_id_2,
-            Time travel_time)
-    {
-        travel_times_[location_id_1][location_id_2] = travel_time;
-        travel_times_[location_id_2][location_id_1] = travel_time;
-        maximum_travel_time_ = std::max(maximum_travel_time_, travel_time);
-    }
-
-    /** Set the release date for a location. */
-    void set_release_date(
-            LocationId location_id,
-            Time release_date)
-    {
-        locations_[location_id].release_date = release_date;
-    }
-
-    /** Build an instance from a file. */
-    Instance(
-            std::string instance_path,
-            std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-        if (format == "" || format == "default" || format == "archetti2018") {
-            read_archetti2018(file);
-        } else if (format == "archetti2018_atsplib") {
-            read_archetti2018_atsplib(file);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
-
-    /*
      * Getters
      */
 
@@ -154,16 +85,20 @@ public:
     /** Get the maximum travel time. */
     inline Time maximum_travel_time() const { return maximum_travel_time_; }
 
+    /*
+     * Outputs
+     */
+
     /** Print the instance. */
-    std::ostream& print(
+    void format(
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os << "Number of locations:  " << number_of_locations() << std::endl;
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Location"
                 << std::setw(12) << "Rel. date"
@@ -181,7 +116,7 @@ public:
             }
         }
 
-        if (verbose >= 3) {
+        if (verbosity_level >= 3) {
             os << std::endl
                 << std::setw(12) << "Loc. 1"
                 << std::setw(12) << "Loc. 2"
@@ -205,15 +140,13 @@ public:
                 }
             }
         }
-
-        return os;
     }
 
     /** Check a certificate. */
     std::pair<bool, Time> check(
-            std::string certificate_path,
+            const std::string& certificate_path,
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
         // Initial display.
         std::ifstream file(certificate_path);
@@ -222,7 +155,7 @@ public:
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl << std::right
                 << std::setw(12) << "Location"
                 << std::setw(12) << "Rel. date"
@@ -257,7 +190,7 @@ public:
                 // Check duplicates.
                 if (locations.contains(location_id)) {
                     number_of_duplicates++;
-                    if (verbose >= 2) {
+                    if (verbosity_level >= 2) {
                         os << "Location " << location_id
                             << " has already been visited." << std::endl;
                     }
@@ -268,7 +201,7 @@ public:
                 if (trip_start < release_date(location_id))
                     trip_start = release_date(location_id);
 
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os
                         << std::setw(12) << location_id
                         << std::setw(12) << release_date(location_id)
@@ -284,7 +217,7 @@ public:
             current_time = trip_start + trip_duration;
             number_of_trips++;
 
-            if (verbose >= 2) {
+            if (verbosity_level >= 2) {
                 os
                     << std::setw(12) << 0
                     << std::setw(12) << 0
@@ -301,9 +234,9 @@ public:
             && (!locations.contains(0))
             && (number_of_duplicates == 0);
 
-        if (verbose >= 2)
+        if (verbosity_level >= 2)
             os << std::endl;
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of locations:    " << locations.size() << " / " << number_of_locations() - 1  << std::endl
                 << "Number of trips:        " << number_of_trips << std::endl
@@ -321,10 +254,136 @@ private:
      * Private methods
      */
 
+    /** Constructor to build an instance manually. */
+    Instance() { }
+
+    /*
+     * Private attributes
+     */
+
+    /** Locations. */
+    std::vector<Location> locations_;
+
+    /** Travel times. */
+    std::vector<std::vector<Time>> travel_times_;
+
+    /*
+     * Computed attributes
+     */
+
+    /** Maximum travel time. */
+    Time maximum_travel_time_ = 0;
+
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /**
+     * Set the number of locations.
+     *
+     * This method resets the locations and travel times.
+     */
+    void set_number_of_locations(LocationId number_of_locations)
+    {
+        instance_.locations_ = std::vector<Location>(number_of_locations),
+        instance_.travel_times_ = std::vector<std::vector<Time>>(
+                number_of_locations,
+                std::vector<Time>(number_of_locations, -1));
+    }
+
+    /** Set the coordinates of a location. */
+    void set_location_coordinates(
+            LocationId location_id,
+            double x,
+            double y,
+            double z = -1)
+    {
+        instance_.locations_[location_id].x = x;
+        instance_.locations_[location_id].y = y;
+        instance_.locations_[location_id].z = z;
+    }
+
+    /** Set the travel time between two location. */
+    void set_travel_time(
+            LocationId location_id_1,
+            LocationId location_id_2,
+            Time travel_time)
+    {
+        instance_.travel_times_[location_id_1][location_id_2] = travel_time;
+        instance_.travel_times_[location_id_2][location_id_1] = travel_time;
+    }
+
+    /** Set the release date for a location. */
+    void set_location_release_date(
+            LocationId location_id,
+            Time release_date)
+    {
+        instance_.locations_[location_id].release_date = release_date;
+    }
+
+    /** Build an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+        if (format == "" || format == "default" || format == "archetti2018") {
+            read_archetti2018(file);
+        } else if (format == "archetti2018_atsplib") {
+            read_archetti2018_atsplib(file);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        // Compute maximum travel time.
+        instance_.maximum_travel_time_ = 0;
+        for (LocationId location_id_1 = 0;
+                location_id_1 < instance_.number_of_locations();
+                ++location_id_1) {
+            for (LocationId location_id_2 = 0;
+                    location_id_2 < instance_.number_of_locations();
+                    ++location_id_2) {
+                instance_.maximum_travel_time_ = std::max(
+                        instance_.maximum_travel_time_,
+                        instance_.travel_time(location_id_2, location_id_1));
+            }
+        }
+
+        return std::move(instance_);
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
+
     /** Read an instance from a file in 'archetti2018' format. */
     void read_archetti2018(std::ifstream& file)
     {
         std::string tmp;
+
         LocationId number_of_locations = -1;
         file
             >> tmp >> number_of_locations
@@ -333,14 +392,9 @@ private:
             >> tmp >> tmp
             >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp
             >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp;
-        locations_ = std::vector<Location>(number_of_locations);
-        travel_times_ = std::vector<std::vector<Time>>(
-                number_of_locations,
-                std::vector<Time>(number_of_locations, -1));
-        std::vector<std::vector<Time>> travel_times_tmp(
-                number_of_locations,
-                std::vector<Time>(number_of_locations, -1));
+        set_number_of_locations(number_of_locations);
 
+        // Read location coordinates and release dates.
         for (LocationId location_id = 0;
                 location_id < number_of_locations;
                 ++location_id) {
@@ -348,18 +402,21 @@ private:
             double y = -1;
             Time release_date = -1;
             file >> x >> y >> tmp >> tmp >> tmp >> tmp >> release_date;
-            set_xy(location_id, x, y);
-            set_release_date(location_id, release_date);
+            set_location_coordinates(location_id, x, y);
+            set_location_release_date(location_id, release_date);
         }
 
+        std::vector<std::vector<Time>> travel_times_tmp(
+                number_of_locations,
+                std::vector<Time>(number_of_locations, -1));
         for (LocationId location_id_1 = 0;
                 location_id_1 < number_of_locations;
                 ++location_id_1) {
             for (LocationId location_id_2 = 0;
                     location_id_2 < number_of_locations;
                     ++location_id_2) {
-                double xd = x(location_id_2) - x(location_id_1);
-                double yd = y(location_id_2) - y(location_id_1);
+                double xd = instance_.x(location_id_2) - instance_.x(location_id_1);
+                double yd = instance_.y(location_id_2) - instance_.y(location_id_1);
                 Time travel_time = std::round(std::sqrt(xd * xd + yd * yd));
                 travel_times_tmp[location_id_1][location_id_2] = travel_time;
                 travel_times_tmp[location_id_2][location_id_1] = travel_time;
@@ -380,7 +437,7 @@ private:
                     Time travel_time = travel_times_tmp[location_id_2][location_id_1]
                         + travel_times_tmp[location_id_1][location_id_3];
                     if (travel_times_tmp[location_id_2][location_id_3] > travel_time) {
-                        //std::cout << location_id_2
+                        //os << location_id_2
                         //    << " " << location_id_3
                         //    << " " << travel_times_tmp[location_id_2][location_id_3]
                         //    << " -> " << d
@@ -423,10 +480,7 @@ private:
             } else if (tmp.rfind("DISPLAY_DATA_TYPE", 0) == 0) {
             } else if (tmp.rfind("DIMENSION", 0) == 0) {
                 number_of_locations = std::stol(line.back());
-                locations_ = std::vector<Location>(number_of_locations);
-                travel_times_ = std::vector<std::vector<Time>>(
-                        number_of_locations,
-                        std::vector<Time>(number_of_locations, -1));
+                set_number_of_locations(number_of_locations);
             } else if (tmp.rfind("EDGE_WEIGHT_TYPE", 0) == 0) {
                 edge_weight_type = line.back();
             } else if (tmp.rfind("EDGE_WEIGHT_FORMAT", 0) == 0) {
@@ -520,7 +574,7 @@ private:
                             location_id < number_of_locations;
                             ++location_id) {
                         file >> tmp >> x >> y;
-                        set_xy(location_id, x, y);
+                        set_location_coordinates(location_id, x, y);
                     }
                 } else if (node_coord_type == "THREED_COORDS") {
                     LocationId tmp;
@@ -529,7 +583,7 @@ private:
                             location_id < number_of_locations;
                             ++location_id) {
                         file >> tmp >> x >> y >> z;
-                        set_xy(location_id, x, y, z);
+                        set_location_coordinates(location_id, x, y, z);
                     }
                 }
             } else if (tmp.rfind("DISPLAY_DATA_SECTION", 0) == 0) {
@@ -539,7 +593,7 @@ private:
                         location_id < number_of_locations;
                         ++location_id) {
                     file >> tmp >> x >> y;
-                    set_xy(location_id, x, y);
+                    set_location_coordinates(location_id, x, y);
                 }
             } else if (tmp.rfind("RELEASE_DATES", 0) == 0) {
                 Time release_date;
@@ -547,7 +601,7 @@ private:
                         location_id < number_of_locations;
                         ++location_id) {
                     file >> release_date;
-                    set_release_date(location_id, release_date);
+                    set_location_release_date(location_id, release_date);
                 }
             } else if (tmp.rfind("EOF", 0) == 0) {
                 break;
@@ -564,8 +618,8 @@ private:
                 for (LocationId location_id_2 = location_id_1 + 1;
                         location_id_2 < number_of_locations;
                         ++location_id_2) {
-                    double xd = x(location_id_2) - x(location_id_1);
-                    double yd = y(location_id_2) - y(location_id_1);
+                    double xd = instance_.x(location_id_2) - instance_.x(location_id_1);
+                    double yd = instance_.y(location_id_2) - instance_.y(location_id_1);
                     Time d = std::round(std::sqrt(xd * xd + yd * yd));
                     set_travel_time(location_id_1, location_id_2, d);
                 }
@@ -577,8 +631,8 @@ private:
                 for (LocationId location_id_2 = location_id_1 + 1;
                         location_id_2 < number_of_locations;
                         ++location_id_2) {
-                    double xd = x(location_id_2) - x(location_id_1);
-                    double yd = y(location_id_2) - y(location_id_1);
+                    double xd = instance_.x(location_id_2) - instance_.x(location_id_1);
+                    double yd = instance_.y(location_id_2) - instance_.y(location_id_1);
                     Time d = std::ceil(std::sqrt(xd * xd + yd * yd));
                     set_travel_time(location_id_1, location_id_2, d);
                 }
@@ -588,11 +642,11 @@ private:
             std::vector<double> longitudes(number_of_locations, 0);
             for (LocationId j = 0; j < number_of_locations; ++j) {
                 double pi = 3.141592;
-                int deg_x = std::round(x(j));
-                double min_x = x(j) - deg_x;
+                int deg_x = std::round(instance_.x(j));
+                double min_x = instance_.x(j) - deg_x;
                 latitudes[j] = pi * (deg_x + 5.0 * min_x / 3.0) / 180.0;
-                int deg_y = std::round(y(j));
-                double min_y = y(j) - deg_y;
+                int deg_y = std::round(instance_.y(j));
+                double min_y = instance_.y(j) - deg_y;
                 longitudes[j] = pi * (deg_y + 5.0 * min_y / 3.0) / 180.0;
             }
             double rrr = 6378.388;
@@ -619,8 +673,8 @@ private:
                 for (LocationId location_id_2 = location_id_1 + 1;
                         location_id_2 < number_of_locations;
                         ++location_id_2) {
-                    double xd = x(location_id_2) - x(location_id_1);
-                    double yd = y(location_id_2) - y(location_id_1);
+                    double xd = instance_.x(location_id_2) - instance_.x(location_id_1);
+                    double yd = instance_.y(location_id_2) - instance_.y(location_id_1);
                     double rij = sqrt((xd * xd + yd * yd) / 10.0);
                     int tij = std::round(rij);
                     Time d = (tij < rij)? tij + 1: tij;
@@ -629,12 +683,15 @@ private:
             }
         } else if (edge_weight_type == "EXPLICIT") {
         } else {
-            std::cerr << "\033[31m" << "ERROR, EDGE_WEIGHT_TYPE \"" << edge_weight_type << "\" not implemented." << "\033[0m" << std::endl;
+            throw std::invalid_argument(
+                    "EDGE_WEIGHT_TYPE \""
+                    + edge_weight_type
+                    + "\" not implemented.");
         }
         for (LocationId location_id = 0;
                 location_id < number_of_locations;
                 ++location_id) {
-            travel_times_[location_id][location_id] = std::numeric_limits<Time>::max();
+            set_travel_time(location_id, location_id, std::numeric_limits<Time>::max());
         }
     }
 
@@ -642,22 +699,10 @@ private:
      * Private attributes
      */
 
-    /** Locations. */
-    std::vector<Location> locations_;
-
-    /** Travel times. */
-    std::vector<std::vector<Time>> travel_times_;
-
-    /*
-     * Computed attributes
-     */
-
-    /** Maximum travel time. */
-    Time maximum_travel_time_ = 0;
+    /** Instance. */
+    Instance instance_;
 
 };
 
 }
-
 }
-

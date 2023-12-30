@@ -210,16 +210,6 @@ cc_library(
 )
 
 cc_library(
-        name = "starobservationscheduling",
-        hdrs = ["starobservationscheduling.hpp"],
-        deps = [
-                "@optimizationtools//optimizationtools/containers:containers",
-                "@optimizationtools//optimizationtools/utils:utils",
-        ],
-        visibility = ["//visibility:public"],
-)
-
-cc_library(
         name = "permutationflowshopschedulingmakespan",
         hdrs = ["permutationflowshopschedulingmakespan.hpp"],
         deps = [
@@ -300,18 +290,6 @@ cc_library(
         visibility = ["//visibility:public"],
 )
 
-cc_library(
-        name = "roadef2020",
-        hdrs = ["roadef2020.hpp"],
-        srcs = ["roadef2020.cpp"],
-        deps = [
-                "@simdjson//:simdjson",
-                "@optimizationtools//optimizationtools/containers:containers",
-                "@optimizationtools//optimizationtools/utils:utils",
-        ],
-        visibility = ["//visibility:public"],
-)
-
 cc_binary(
         name = "checker",
         srcs = ["checker.cpp"],
@@ -339,20 +317,18 @@ cc_binary(
                 ":batchschedulingtotalcompletiontime",
                 ":batchschedulingtotalweightedtardiness",
                 ":parallelschedulingwithfamilysetuptimestwct",
-                ":starobservationscheduling",
                 ":permutationflowshopschedulingmakespan",
                 ":permutationflowshopschedulingtct",
                 ":permutationflowshopschedulingtt",
                 ":distributedpfssmakespan",
                 ":distributedpfsstct",
-                #":nowaitjobshopschedulingmakespan",
+                ":nowaitjobshopschedulingmakespan",
                 ":simpleassemblylinebalancing1",
                 ":ushapedassemblylinebalancing1",
-                ":roadef2020",
 
                 "@boost//:program_options",
         ],
-        copts = ["-std=c++11"],
-        linkopts = ["-std=c++11"],
+        copts = ["-std=c++14"],
+        linkopts = ["-std=c++14"],
 )
 

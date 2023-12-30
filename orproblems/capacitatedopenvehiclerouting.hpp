@@ -1,5 +1,5 @@
 /**
- * Capacitated Open Vehicle Routing Problem.
+ * Capacitated open vehicle routing problem
  *
  * Input:
  * - m vehicles of capacity Q
@@ -31,7 +31,6 @@
 
 namespace orproblems
 {
-
 namespace capacitatedopenvehiclerouting
 {
 
@@ -64,72 +63,6 @@ class Instance
 {
 
 public:
-
-
-    /*
-     * Constructors and destructor
-     */
-
-    /** Constructor to build an instance manually. */
-    Instance(LocationId number_of_locations):
-        locations_(number_of_locations),
-        distances_(number_of_locations, std::vector<Distance>(number_of_locations, -1)),
-        number_of_vehicles_(number_of_locations) { }
-
-    /** Set the number of vehicles. */
-    void set_number_of_vehicles(VehicleId number_of_vehicles) { number_of_vehicles_ = number_of_vehicles; }
-
-    /** Set the maximum route length. */
-    void set_maximum_route_length(Distance maximum_route_length) { maximum_route_length_ = maximum_route_length; }
-
-    /** Set the demand of a location. */
-    void set_demand(
-            LocationId location_id,
-            Demand demand)
-    {
-        locations_[location_id].demand = demand;
-    }
-
-    /** Set the coordinates of a location. */
-    void set_xy(
-            LocationId location_id,
-            double x,
-            double y)
-    {
-        locations_[location_id].x = x;
-        locations_[location_id].y = y;
-    }
-
-    /** Set the distance between two locations. */
-    void set_distance(
-            LocationId location_id_1,
-            LocationId location_id_2,
-            Distance distance)
-    {
-        distances_[location_id_1][location_id_2] = distance;
-        distances_[location_id_2][location_id_1] = distance;
-        distance_max_ = std::max(distance_max_, distance);
-    }
-
-    /** Build an instance from a file. */
-    Instance(
-            std::string instance_path,
-            std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-
-        if (format == "" || format == "vrplib") {
-            read_vrplib(file);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
 
     /*
      * Getters
@@ -170,12 +103,16 @@ public:
     /** Get a bound. */
     Distance bound() const { return powf(10.0f, ceil(log10f(number_of_locations() * maximum_distance()))); }
 
+    /*
+     * Outputs
+     */
+
     /** Print the instance. */
-    std::ostream& print(
+    void format(
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of vehicles:    " << number_of_vehicles() << std::endl
                 << "Number of locations:   " << number_of_locations() << std::endl
@@ -184,7 +121,7 @@ public:
                 ;
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Location"
                 << std::setw(12) << "Demand"
@@ -207,7 +144,7 @@ public:
             }
         }
 
-        if (verbose >= 3) {
+        if (verbosity_level >= 3) {
             os << std::endl
                 << std::setw(12) << "Loc. 1"
                 << std::setw(12) << "Loc. 2"
@@ -231,15 +168,13 @@ public:
                 }
             }
         }
-
-        return os;
     }
 
     /** Check a certificate. */
     std::pair<bool, Distance> check(
-            std::string certificate_path,
+            const std::string& certificate_path,
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
         std::ifstream file(certificate_path);
         if (!file.good()) {
@@ -247,7 +182,7 @@ public:
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl << std::right
                 << std::setw(10) << "Route"
                 << std::setw(10) << "Location"
@@ -284,7 +219,7 @@ public:
                 // Check duplicates.
                 if (visited_locations.contains(location_id)) {
                     number_of_duplicates++;
-                    if (verbose >= 2) {
+                    if (verbosity_level >= 2) {
                         os << "Location " << location_id
                             << " has already been visited." << std::endl;
                     }
@@ -295,7 +230,7 @@ public:
                 route_distance += distance(location_id_prev, location_id);
                 total_distance += distance(location_id_prev, location_id);
 
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os
                         << std::setw(10) << route_id
                         << std::setw(10) << location_id
@@ -311,7 +246,7 @@ public:
             // Check route maximum length.
             if (route_distance > maximum_route_length()) {
                 number_of_route_maximum_length_violations++;
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os << "Route " << route_id
                         << " is too long." << std::endl;
                 }
@@ -320,7 +255,7 @@ public:
             // Check capacity.
             if (route_demand > capacity()) {
                 number_of_overloaded_vehicles++;
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os << "Vehicle " << route_id
                         << " is overloaded." << std::endl;
                 }
@@ -335,9 +270,9 @@ public:
             && (number_of_routes <= number_of_vehicles())
             && (number_of_route_maximum_length_violations == 0);
 
-        if (verbose == 2)
+        if (verbosity_level == 2)
             os << std::endl;
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of visited locations:    " << visited_locations.size() << " / " << number_of_locations() - 1 << std::endl
                 << "Number of duplicates:           " << number_of_duplicates << std::endl
@@ -348,6 +283,128 @@ public:
                 ;
         }
         return {feasible, total_distance};
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance() { }
+
+    /*
+     * Private attributes
+     */
+
+    /** Locations. */
+    std::vector<Location> locations_;
+
+    /** Distances. */
+    std::vector<std::vector<Distance>> distances_;
+
+    /** Number of vehicles. */
+    VehicleId number_of_vehicles_ = 0;
+
+    /** Maximum length of a rotue. */
+    Distance maximum_route_length_ = std::numeric_limits<Distance>::infinity();;
+
+    /*
+     * Computed attributes
+     */
+
+    /** Maximum distance. */
+    Distance distance_max_ = 0;
+
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /**
+     * Set the number of locations.
+     *
+     * This method resets the whole instance.
+     */
+    void set_number_of_locations(LocationId number_of_locations)
+    {
+        instance_.locations_ = std::vector<Location>(number_of_locations),
+        instance_.distances_ = std::vector<std::vector<Distance>>(
+                number_of_locations,
+                std::vector<Distance>(number_of_locations, -1));
+        instance_.number_of_vehicles_ = number_of_locations;
+    }
+
+    /** Set the number of vehicles. */
+    void set_number_of_vehicles(VehicleId number_of_vehicles) { instance_.number_of_vehicles_ = number_of_vehicles; }
+
+    /** Set the maximum route length. */
+    void set_maximum_route_length(Distance maximum_route_length) { instance_.maximum_route_length_ = maximum_route_length; }
+
+    /** Set the demand of a location. */
+    void set_demand(
+            LocationId location_id,
+            Demand demand)
+    {
+        instance_.locations_[location_id].demand = demand;
+    }
+
+    /** Set the coordinates of a location. */
+    void set_coordinates(
+            LocationId location_id,
+            double x,
+            double y)
+    {
+        instance_.locations_[location_id].x = x;
+        instance_.locations_[location_id].y = y;
+    }
+
+    /** Set the distance between two locations. */
+    void set_distance(
+            LocationId location_id_1,
+            LocationId location_id_2,
+            Distance distance)
+    {
+        instance_.distances_[location_id_1][location_id_2] = distance;
+        instance_.distances_[location_id_2][location_id_1] = distance;
+        instance_.distance_max_ = std::max(instance_.distance_max_, distance);
+    }
+
+    /** Build an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+
+        if (format == "" || format == "vrplib") {
+            read_vrplib(file);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        return std::move(instance_);
     }
 
 private:
@@ -375,11 +432,7 @@ private:
                 file >> location_id_tmp >> location_id_tmp;
             } else if (tmp.rfind("DIMENSION", 0) == 0) {
                 number_of_locations = std::stol(line.back());
-                locations_ = std::vector<Location>(number_of_locations);
-                distances_ = std::vector<std::vector<Distance>>(
-                        number_of_locations,
-                        std::vector<Distance>(number_of_locations, -1));
-                number_of_vehicles_ = number_of_locations;
+                set_number_of_locations(number_of_locations);
             } else if (tmp.rfind("EDGE_WEIGHT_TYPE", 0) == 0) {
                 edge_weight_type = line.back();
             } else if (tmp.rfind("DISTANCE", 0) == 0) {
@@ -396,7 +449,7 @@ private:
                         location_id < number_of_locations;
                         ++location_id) {
                     file >> location_id_tmp >> x >> y;
-                    set_xy(location_id, x, y);
+                    set_coordinates(location_id, x, y);
                 }
             } else if (tmp.rfind("DEMAND_SECTION", 0) == 0) {
                 LocationId location_id_tmp = -1;
@@ -423,15 +476,18 @@ private:
                 for (LocationId location_id_2 = location_id_1 + 1;
                         location_id_2 < number_of_locations;
                         ++location_id_2) {
-                    double xd = x(location_id_2) - x(location_id_1);
-                    double yd = y(location_id_2) - y(location_id_1);
+                    double xd = instance_.x(location_id_2) - instance_.x(location_id_1);
+                    double yd = instance_.y(location_id_2) - instance_.y(location_id_1);
                     //Distance d = std::round(std::sqrt(xd * xd + yd * yd));
                     Distance distance = std::sqrt(xd * xd + yd * yd);
                     set_distance(location_id_1, location_id_2, distance);
                 }
             }
         } else {
-            std::cerr << "\033[31m" << "ERROR, EDGE_WEIGHT_TYPE \"" << edge_weight_type << "\" not implemented." << "\033[0m" << std::endl;
+            throw std::invalid_argument(
+                    "EDGE_WEIGHT_TYPE \""
+                    + edge_weight_type
+                    + "\" not implemented.");
         }
     }
 
@@ -439,27 +495,10 @@ private:
      * Private attributes
      */
 
-    /** Locations. */
-    std::vector<Location> locations_;
-
-    /** Distances. */
-    std::vector<std::vector<Distance>> distances_;
-
-    /** Number of vehicles. */
-    VehicleId number_of_vehicles_ = 0;
-
-    /** Maximum length of a rotue. */
-    Distance maximum_route_length_ = std::numeric_limits<Distance>::infinity();;
-
-    /*
-     * Computed attributes
-     */
-
-    /** Maximum distance. */
-    Distance distance_max_ = 0;
+    /** Instance. */
+    Instance instance_;
 
 };
 
 }
-
 }

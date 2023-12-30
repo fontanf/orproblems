@@ -1,5 +1,5 @@
 /**
- * Generalized Quadratic Multiple Knapsack Problem.
+ * Generalized quadratic multiple knapsack problem
  *
  * Input:
  * - m containers (knapsacks); for each knapsack i = 1..m, a capacity cᵢ
@@ -30,10 +30,10 @@
 
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 
 namespace orproblems
 {
-
 namespace generalizedquadraticmultipleknapsack
 {
 
@@ -44,86 +44,222 @@ using KnapsackId = int64_t;
 using Weight = int64_t;
 using Profit = double;
 
-struct Class
+/*
+ * Structure for a class.
+ */
+struct ItemClass
 {
-    ClassId id;
+    /** Setup time of the class of items. */
     Weight setup_time;
+
+    /** Maximum number of knapsacks. */
     KnapsackId maximum_number_of_knapsacks;
+
+    /** Items of the class. */
+    std::vector<ItemId> item_ids;
 };
 
+/*
+ * Structure for an item.
+ */
 struct Item
 {
-    ItemId id;
+    /** Weight of the item. */
     Weight weight;
+
+    /** Class of the item. */
     ClassId class_id;
+
+    /** For each knapsack, the profit of assinging the item to this knapsack. */
     std::vector<Profit> profits;
 };
 
+/**
+ * Instance class for a 'generalizedquadraticmultipleknapsack' problem.
+ */
 class Instance
 {
 
 public:
 
-    Instance() {  }
-    void add_knapsack(Weight capacity) { capacities_.push_back(capacity); }
-    void add_class(Weight setup_time, KnapsackId maximum_number_of_knapsacks)
-    {
-        Class item_class;
-        item_class.id = classes_.size();
-        item_class.setup_time = setup_time;
-        item_class.maximum_number_of_knapsacks = maximum_number_of_knapsacks;
-        classes_.push_back(item_class);
-    }
-    void add_item(Weight weight, ClassId k)
-    {
-        Item item;
-        item.id = items_.size();
-        item.weight = weight;
-        item.class_id = k;
-        item.profits = std::vector<Profit>(number_of_knapsacks(), 0);
-        items_.push_back(item);
-        profits_.push_back(std::vector<Profit>(items_.size()));
-    }
-    void set_item_profit(ItemId j, KnapsackId i, Profit profit) { items_[j].profits[i] = profit; }
-    void set_pair_profit(ItemId j1, ItemId j2, Profit profit)
-    {
-        profits_[std::min(j1, j2)][std::max(j1, j2)] = profit;
-    }
-
-    Instance(std::string instance_path, std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-        if (format == "" || format == "sarac2014") {
-            read_sarac2014(file);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
-
-    virtual ~Instance() { }
-
+    /** Get the number of knapsacks. */
     KnapsackId number_of_knapsacks() const { return capacities_.size(); }
-    ClassId number_of_classes() const { return classes_.size(); }
-    ItemId number_of_items() const { return items_.size(); }
-    const Class& item_class(ClassId k) const { return classes_[k]; }
-    const Item& item(ItemId j) const { return items_[j]; }
-    Profit item_profit(ItemId j, KnapsackId i) const { return items_[j].profits[i]; }
-    Profit pair_profit(ItemId j1, ItemId j2) const { return profits_[std::min(j1, j2)][std::max(j1, j2)]; }
-    Weight capacity(KnapsackId i) const { return capacities_[i]; }
 
+    /** Get the number of classes. */
+    ClassId number_of_classes() const { return classes_.size(); }
+
+    /** Get the number of items. */
+    ItemId number_of_items() const { return items_.size(); }
+
+    /** Get a class. */
+    const ItemClass& item_class(ClassId class_id) const { return classes_[class_id]; }
+
+    /** Get an item. */
+    const Item& item(ItemId item_id) const { return items_[item_id]; }
+
+    /** Get the profit of assigning an item to a knapsack. */
+    Profit item_profit(
+            ItemId item_id,
+            KnapsackId knapsack_id) const
+    {
+        return items_[item_id].profits[knapsack_id];
+    }
+
+    /** Get the profit of a pair of items. */
+    Profit pair_profit(
+            ItemId item_id_1,
+            ItemId item_id_2) const
+    {
+        return profits_[std::max(item_id_1, item_id_2)][std::min(item_id_1, item_id_2)];
+    }
+
+    /** Get the capacity of a knapsack. */
+    Weight capacity(KnapsackId knapsack_id) const { return capacities_[knapsack_id]; }
+
+    /*
+     * Outputs
+     */
+
+    /** Print the instance. */
+    void format(
+            std::ostream& os,
+            int verbosity_level = 1) const
+    {
+        if (verbosity_level >= 1) {
+            os
+                << "Number of knapsacks:  " << number_of_knapsacks() << std::endl
+                << "Number of classes:    " << number_of_classes() << std::endl
+                << "Number of items:      " << number_of_items() << std::endl
+                ;
+        }
+
+        // Print knapsacks.
+        if (verbosity_level >= 2) {
+            os << std::endl
+                << std::setw(12) << "Knapsack"
+                << std::setw(12) << "Capacity"
+                << std::endl
+                << std::setw(12) << "--------"
+                << std::setw(12) << "--------"
+                << std::endl;
+            for (KnapsackId knapsack_id = 0;
+                    knapsack_id < number_of_knapsacks();
+                    ++knapsack_id) {
+                os
+                    << std::setw(12) << knapsack_id
+                    << std::setw(12) << capacity(knapsack_id)
+                    << std::endl;
+            }
+        }
+
+        // Print classes.
+        if (verbosity_level >= 2) {
+            os << std::endl
+                << std::setw(12) << "Class"
+                << std::setw(12) << "setup"
+                << std::setw(12) << "Max # knap."
+                << std::setw(12) << "# items"
+                << std::endl
+                << std::setw(12) << "-----"
+                << std::setw(12) << "-----"
+                << std::setw(12) << "-----------"
+                << std::setw(12) << "-------"
+                << std::endl;
+            for (ClassId class_id = 0;
+                    class_id < number_of_classes();
+                    ++class_id) {
+                const ItemClass& item_class = this->item_class(class_id);
+                os
+                    << std::setw(12) << class_id
+                    << std::setw(12) << item_class.setup_time
+                    << std::setw(12) << item_class.maximum_number_of_knapsacks
+                    << std::setw(12) << item_class.item_ids.size()
+                    << std::endl;
+            }
+        }
+
+        // Print items.
+        if (verbosity_level >= 2) {
+            os << std::endl
+                << std::setw(12) << "Item"
+                << std::setw(12) << "Weight"
+                << std::setw(12) << "Class"
+                << std::endl
+                << std::setw(12) << "----"
+                << std::setw(12) << "------"
+                << std::setw(12) << "-----"
+                << std::endl;
+            for (ItemId item_id = 0; item_id < number_of_items(); ++item_id) {
+                const Item& item = this->item(item_id);
+                os
+                    << std::setw(12) << item_id
+                    << std::setw(12) << item.weight
+                    << std::setw(12) << item.class_id
+                    << std::endl;
+            }
+        }
+
+        // Print item profits.
+        if (verbosity_level >= 3) {
+            os << std::endl
+                << std::setw(12) << "Item"
+                << std::setw(12) << "Knapsack"
+                << std::setw(12) << "Profit"
+                << std::endl
+                << std::setw(12) << "----"
+                << std::setw(12) << "--------"
+                << std::setw(12) << "------"
+                << std::endl;
+            for (ItemId item_id = 0; item_id < number_of_items(); ++item_id) {
+                const Item& item = this->item(item_id);
+                for (KnapsackId knapsack_id = 0;
+                        knapsack_id < number_of_knapsacks();
+                        ++knapsack_id) {
+                    os
+                        << std::setw(12) << item_id
+                        << std::setw(12) << knapsack_id
+                        << std::setw(12) << item.profits[knapsack_id]
+                        << std::endl;
+                }
+            }
+        }
+
+        // Print item pairs profits
+        if (verbosity_level >= 4) {
+            os << std::endl
+                << std::setw(12) << "Item 1"
+                << std::setw(12) << "Item 2"
+                << std::setw(12) << "Profit"
+                << std::endl
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::setw(12) << "------"
+                << std::endl;
+            for (ItemId item_id_1 = 0;
+                    item_id_1 < number_of_items();
+                    ++item_id_1) {
+                for (ItemId item_id_2 = item_id_1 + 1;
+                        item_id_2 < number_of_items();
+                        ++item_id_2) {
+                    os
+                        << std::setw(12) << item_id_1
+                        << std::setw(12) << item_id_2
+                        << std::setw(12) << pair_profit(item_id_1, item_id_2)
+                        << std::endl;
+                }
+            }
+        }
+    }
+
+    /** Check a certificate. */
     std::pair<bool, Profit> check(
-            std::string certificate_path,
-            int verbose = 1) const
+            const std::string& certificate_path,
+            std::ostream& os,
+            int verbosity_level = 1) const
     {
         // Initial display.
-        if (verbose >= 1) {
-            std::cout
+        if (verbosity_level >= 1) {
+            os
                 << "Checker" << std::endl
                 << "-------" << std::endl;
         }
@@ -150,11 +286,11 @@ public:
                 file >> job_id;
                 total_weight += item(job_id).weight;
                 total_profit += item_profit(job_id, i);
-                for (ItemId j2: current_knapsack_items)
-                    total_profit += pair_profit(job_id, j2);
+                for (ItemId item_id_2: current_knapsack_items)
+                    total_profit += pair_profit(job_id, item_id_2);
                 current_knapsack_items.push_back(job_id);
-                if (verbose == 2)
-                    std::cout << "Job: " << job_id
+                if (verbosity_level == 2)
+                    os << "Job: " << job_id
                         << "; Weight: " << total_weight
                         << "; Profit: " << total_profit
                         << std::endl;
@@ -163,8 +299,8 @@ public:
                 // Check duplicates.
                 if (items.contains(job_id)) {
                     number_of_duplicates++;
-                    if (verbose >= 2) {
-                        std::cout << "Job " << job_id
+                    if (verbosity_level >= 2) {
+                        os << "Job " << job_id
                             << " has already been scheduled." << std::endl;
                     }
                 }
@@ -172,8 +308,8 @@ public:
 
             }
             if (total_weight > capacity(i)) {
-                if (verbose == 2)
-                    std::cout << "Knapsack " << i
+                if (verbosity_level == 2)
+                    os << "Knapsack " << i
                         << " has overweight: " << total_weight << "/" << capacity(i)
                         << std::endl;
                 overweight += (capacity(i) - total_weight);
@@ -184,8 +320,8 @@ public:
         ClassId number_of_class_maximum_number_of_knapsacks_violations = 0;
         for (ClassId k = 0; k < number_of_classes(); ++k) {
             if (class_number_of_knapsacks[k] > item_class(k).maximum_number_of_knapsacks) {
-                if (verbose == 2)
-                    std::cout << "Class " << k
+                if (verbosity_level == 2)
+                    os << "Class " << k
                         << " number of knapsacks " << class_number_of_knapsacks[k]
                         << " / " << item_class(k).maximum_number_of_knapsacks
                         << std::endl;
@@ -198,20 +334,158 @@ public:
             && (overweight == 0)
             && (number_of_class_maximum_number_of_knapsacks_violations == 0);
 
-        if (verbose >= 2)
-            std::cout << std::endl;
-        if (verbose >= 1) {
-            std::cout << "Number of items:                          " << items.size() << " / " << number_of_items() << std::endl;
-            std::cout << "Number of duplicates:                     " << number_of_duplicates << std::endl;
-            std::cout << "Overweight:                               " << overweight << std::endl;
-            std::cout << "Number of max # of knapsacks violations:  " << number_of_class_maximum_number_of_knapsacks_violations << std::endl;
-            std::cout << "Feasible:                                 " << feasible << std::endl;
-            std::cout << "Profit:                                   " << total_profit << std::endl;
+        if (verbosity_level >= 2)
+            os << std::endl;
+        if (verbosity_level >= 1) {
+            os
+                << "Number of items:                          " << items.size() << " / " << number_of_items() << std::endl
+                << "Number of duplicates:                     " << number_of_duplicates << std::endl
+                << "Overweight:                               " << overweight << std::endl
+                << "Number of max # of knapsacks violations:  " << number_of_class_maximum_number_of_knapsacks_violations << std::endl
+                << "Feasible:                                 " << feasible << std::endl
+                << "Profit:                                   " << total_profit << std::endl
+                ;
         }
         return {feasible, total_profit};
     }
 
 private:
+
+    /*
+     * Private methods
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance() { }
+
+    /*
+     * Private attributes
+     */
+
+    /** Classes. */
+    std::vector<ItemClass> classes_;
+
+    /** Items. */
+    std::vector<Item> items_;
+
+    /** Profits of pairs of items. */
+    std::vector<std::vector<Profit>> profits_;
+
+    /** Capacities of the knapsacks. */
+    std::vector<Weight> capacities_;
+
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /**
+     * Set the number of knapsacks.
+     *
+     * This method resets all the items.
+     */
+    void set_number_of_knapsacks(KnapsackId number_of_knapsacks)
+    {
+        instance_.items_.clear();
+        instance_.capacities_ = std::vector<Weight>(number_of_knapsacks, 0);
+    }
+
+    /** Set the capacity of a knapsack. */
+    void set_knapsack_capacity(Weight capacity)
+    {
+        instance_.capacities_.push_back(capacity);
+    }
+
+    /** Add a class. */
+    void add_class(
+            Weight setup_time,
+            KnapsackId maximum_number_of_knapsacks)
+    {
+        ItemClass item_class;
+        item_class.setup_time = setup_time;
+        item_class.maximum_number_of_knapsacks = maximum_number_of_knapsacks;
+        instance_.classes_.push_back(item_class);
+    }
+
+    /** Add an item. */
+    void add_item(
+            Weight weight,
+            ClassId class_id)
+    {
+        Item item;
+        item.weight = weight;
+        item.class_id = class_id;
+        item.profits = std::vector<Profit>(instance_.number_of_knapsacks(), 0);
+        instance_.items_.push_back(item);
+        instance_.profits_.push_back(std::vector<Profit>(instance_.items_.size()));
+    }
+
+    /** Set the profit of assigning an item to a knapsack. */
+    void set_item_profit(
+            ItemId item_id,
+            KnapsackId knapsack_id,
+            Profit profit)
+    {
+        instance_.items_[item_id].profits[knapsack_id] = profit;
+    }
+
+    /** Set the profit of a pair of items. */
+    void set_pair_profit(
+            ItemId item_id_1,
+            ItemId item_id_2,
+            Profit profit)
+    {
+        instance_.profits_[std::max(item_id_1, item_id_2)][std::min(item_id_1, item_id_2)] = profit;
+    }
+
+    /** Build an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+        if (format == "" || format == "sarac2014") {
+            read_sarac2014(file);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        // Compute class.item_ids.
+        for (ItemId item_id = 0;
+                item_id < instance_.number_of_items();
+                ++item_id) {
+            const Item& item = instance_.item(item_id);
+            instance_.classes_[item.class_id].item_ids.push_back(item_id);
+        }
+
+        return std::move(instance_);
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
 
     void read_sarac2014(std::ifstream& file)
     {
@@ -229,10 +503,10 @@ private:
         //    file >> p;
         //    set_profit(j, p);
         //}
-        //for (ItemId j1 = 0; j1 < n; ++j1) {
-        //    for (ItemId j2 = j1 + 1; j2 < n; ++j2) {
+        //for (ItemId item_id_1 = 0; item_id_1 < n; ++item_id_1) {
+        //    for (ItemId item_id_2 = item_id_1 + 1; item_id_2 < n; ++item_id_2) {
         //        file >> p;
-        //        set_profit(j1, j2, p);
+        //        set_profit(item_id_1, item_id_2, p);
         //    }
         //}
 
@@ -249,46 +523,14 @@ private:
         //}
     }
 
-    std::vector<Class> classes_;
-    std::vector<Item> items_;
-    std::vector<std::vector<Profit>> profits_;
-    std::vector<Weight> capacities_;
+    /*
+     * Private attributes
+     */
+
+    /** Instance. */
+    Instance instance_;
 
 };
 
-static inline std::ostream& operator<<(
-        std::ostream &os, const Instance& instance)
-{
-    os << "number of knapsacks " << instance.number_of_knapsacks() << std::endl;
-    os << "number of classes " << instance.number_of_classes() << std::endl;
-    os << "number of items " << instance.number_of_items() << std::endl;
-    for (KnapsackId i = 0; i < instance.number_of_knapsacks(); ++i) {
-        os << "knapsack " << i
-            << " capacity " << instance.capacity(i)
-            << std::endl;
-    }
-    for (ClassId k = 0; k < instance.number_of_classes(); ++k) {
-        os << "class " << k
-            << " setup time " << instance.item_class(k).setup_time
-            << " maximum number of knapsacks " << instance.item_class(k).maximum_number_of_knapsacks
-            << std::endl;
-    }
-    for (ItemId j = 0; j < instance.number_of_items(); ++j) {
-        os << "item " << j
-            << " weight " << instance.item(j).weight
-            << " class " << instance.item(j).class_id;
-        os << "item profits";
-        for (KnapsackId i = 0; i < instance.number_of_knapsacks(); ++i)
-            os << " " << instance.item_profit(j, i);
-        os << std::endl;
-        os << "pair profits";
-        for (ItemId j2 = j; j2 < instance.number_of_items(); ++j2)
-            os << " " << instance.pair_profit(j, j2);
-        os << std::endl;
-    }
-    return os;
 }
-
-}
-
 }

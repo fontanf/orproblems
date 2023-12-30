@@ -1,5 +1,5 @@
 /**
- * Capacitated Vehicle Routing Problem.
+ * Capacitated vehicle routing problem
  *
  * Input:
  * - vehicles of capacity Q
@@ -27,7 +27,6 @@
 
 namespace orproblems
 {
-
 namespace capacitatedvehiclerouting
 {
 
@@ -62,71 +61,6 @@ class Instance
 public:
 
     /*
-     * Constructors and destructor
-     */
-
-    /** Constructor to build an instance manually. */
-    Instance(LocationId number_of_locations):
-        locations_(number_of_locations),
-        distances_(number_of_locations, std::vector<Distance>(number_of_locations, -1)) { }
-
-    /** Set the capacity of the vehicles. */
-    void set_capacity(Demand capacity) { locations_[0].demand = capacity; }
-
-    /** Set the demand of a location. */
-    void set_demand(
-            LocationId location_id,
-            Demand demand)
-    {
-        if (location_id != 0)
-            total_demand_ -= locations_[location_id].demand;
-        locations_[location_id].demand = demand;
-        if (location_id != 0)
-            total_demand_ += locations_[location_id].demand;
-    }
-
-    /** Set the coordinates of a location. */
-    void set_xy(
-            LocationId location_id,
-            double x,
-            double y)
-    {
-        locations_[location_id].x = x;
-        locations_[location_id].y = y;
-    }
-
-    /** Set the distance between two locations. */
-    void set_distance(
-            LocationId location_id_1,
-            LocationId location_id_2,
-            Distance distance)
-    {
-        distances_[location_id_1][location_id_2] = distance;
-        distances_[location_id_2][location_id_1] = distance;
-        distance_max_ = std::max(distance_max_, distance);
-    }
-
-    /** Build an instance from a file. */
-    Instance(
-            std::string instance_path,
-            std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-
-        if (format == "" || format == "vrplib") {
-            read_cvrplib(file);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
-
-    /*
      * Getters
      */
 
@@ -159,12 +93,16 @@ public:
     /** Get the maximum distance between two locations. */
     inline Distance maximum_distance() const { return distance_max_; }
 
+    /*
+     * Outputs
+     */
+
     /** Print the instance. */
-    std::ostream& print(
+    void format(
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of locations:  " << number_of_locations() << std::endl
                 << "Capacity:             " << capacity() << std::endl
@@ -173,7 +111,7 @@ public:
                 ;
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Location"
                 << std::setw(12) << "Demand"
@@ -190,7 +128,7 @@ public:
             }
         }
 
-        if (verbose >= 3) {
+        if (verbosity_level >= 3) {
             os << std::endl
                 << std::setw(12) << "Loc. 1"
                 << std::setw(12) << "Loc. 2"
@@ -214,15 +152,13 @@ public:
                 }
             }
         }
-
-        return os;
     }
 
     /** Check a certificate. */
     std::pair<bool, Distance> check(
-            std::string certificate_path,
+            const std::string& certificate_path,
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
         std::ifstream file(certificate_path);
         if (!file.good()) {
@@ -230,7 +166,7 @@ public:
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl << std::right
                 << std::setw(10) << "Route"
                 << std::setw(10) << "Location"
@@ -269,7 +205,7 @@ public:
                 // Check duplicates.
                 if (visited_locations.contains(location_id)) {
                     number_of_duplicates++;
-                    if (verbose >= 2) {
+                    if (verbosity_level >= 2) {
                         os << "Location " << location_id
                             << " has already been visited." << std::endl;
                     }
@@ -280,7 +216,7 @@ public:
                 route_distance += distance(location_id_prev, location_id);
                 total_distance += distance(location_id_prev, location_id);
 
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os
                         << std::setw(10) << route_id
                         << std::setw(10) << location_id
@@ -297,7 +233,7 @@ public:
                 total_distance += distance(location_id_prev, 0);
             }
 
-            if (verbose >= 2) {
+            if (verbosity_level >= 2) {
                 os
                     << std::setw(10) << route_id
                     << std::setw(10) << 0
@@ -317,9 +253,9 @@ public:
             && (!visited_locations.contains(0))
             && (number_of_duplicates == 0)
             && (number_of_overloaded_vehicles == 0);
-        if (verbose >= 2)
+        if (verbosity_level >= 2)
             os << std::endl;
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of visited locations:    " << visited_locations.size() << " / " << number_of_locations() - 1 << std::endl
                 << "Number of duplicates:           " << number_of_duplicates << std::endl
@@ -330,6 +266,142 @@ public:
                 ;
         }
         return {feasible, total_distance};
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance() { }
+
+    /*
+     * Private attributes
+     */
+
+    /** Locations. */
+    std::vector<Location> locations_;
+
+    /** Distances between locations. */
+    std::vector<std::vector<Distance>> distances_;
+
+    /*
+     * Computed attributes
+     */
+
+    /** Total demand. */
+    Demand total_demand_ = 0;
+
+    /** Maximum distance between two locations. */
+    Distance distance_max_ = 0;
+
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /**
+     * Set the number of locations.
+     *
+     * This method resets the whole instance.
+     */
+    void set_number_of_locations(LocationId number_of_locations)
+    {
+        instance_.locations_ = std::vector<Location>(number_of_locations),
+        instance_.distances_ = std::vector<std::vector<Distance>>(
+                number_of_locations,
+                std::vector<Distance>(number_of_locations, -1));
+    }
+
+    /** Set the capacity of the vehicles. */
+    void set_capacity(Demand capacity) { instance_.locations_[0].demand = capacity; }
+
+    /** Set the demand of a location. */
+    void set_location_demand(
+            LocationId location_id,
+            Demand demand)
+    {
+        instance_.locations_[location_id].demand = demand;
+    }
+
+    /** Set the coordinates of a location. */
+    void set_location_coordinates(
+            LocationId location_id,
+            double x,
+            double y)
+    {
+        instance_.locations_[location_id].x = x;
+        instance_.locations_[location_id].y = y;
+    }
+
+    /** Set the distance between two locations. */
+    void set_distance(
+            LocationId location_id_1,
+            LocationId location_id_2,
+            Distance distance)
+    {
+        instance_.distances_[location_id_1][location_id_2] = distance;
+        instance_.distances_[location_id_2][location_id_1] = distance;
+    }
+
+    /** Build an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+
+        if (format == "" || format == "vrplib") {
+            read_cvrplib(file);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        // Compute total demand.
+        instance_.total_demand_ = 0;
+        for (LocationId location_id = 0;
+                location_id < instance_.number_of_locations();
+                ++location_id) {
+            instance_.total_demand_ += instance_.demand(location_id);
+        }
+
+        // Compute maximum distance.
+        instance_.distance_max_ = 0;
+        for (LocationId location_id_1 = 0;
+                location_id_1 < instance_.number_of_locations();
+                ++location_id_1) {
+            for (LocationId location_id_2 = location_id_1 + 1;
+                    location_id_2 < instance_.number_of_locations();
+                    ++location_id_2) {
+                instance_.distance_max_ = std::max(
+                        instance_.distance_max_,
+                        instance_.distance(location_id_2, location_id_2));
+            }
+        }
+
+        return std::move(instance_);
     }
 
 private:
@@ -355,57 +427,62 @@ private:
                 LocationId j_tmp;
                 file >> j_tmp >> j_tmp;
             } else if (tmp.rfind("DIMENSION", 0) == 0) {
-                LocationId n = std::stol(line.back());
-                locations_ = std::vector<Location>(n);
-                distances_ = std::vector<std::vector<Distance>>(n, std::vector<Distance>(n, -1));
+                LocationId number_of_locations = std::stol(line.back());
+                set_number_of_locations(number_of_locations);
             } else if (tmp.rfind("EDGE_WEIGHT_TYPE", 0) == 0) {
                 edge_weight_type = line.back();
             } else if (tmp.rfind("CAPACITY", 0) == 0) {
                 Demand c = std::stol(line.back());
-                set_demand(0, c);
+                set_location_demand(0, c);
             } else if (tmp.rfind("NODE_COORD_SECTION", 0) == 0) {
                 LocationId j_tmp;
                 double x = -1;
                 double y = -1;
                 for (LocationId location_id = 0;
-                        location_id < number_of_locations();
+                        location_id < instance_.number_of_locations();
                         ++location_id) {
                     file >> j_tmp >> x >> y;
-                    set_xy(location_id, x, y);
+                    set_location_coordinates(location_id, x, y);
                 }
             } else if (tmp.rfind("DEMAND_SECTION", 0) == 0) {
                 LocationId j_tmp = -1;
                 Demand demand = -1;
                 for (LocationId location_id = 0;
-                        location_id < number_of_locations();
+                        location_id < instance_.number_of_locations();
                         ++location_id) {
                     file >> j_tmp >> demand;
                     if (location_id != 0)
-                        set_demand(location_id, demand);
+                        set_location_demand(location_id, demand);
                 }
             } else if (line[0].rfind("EOF", 0) == 0) {
                 break;
             } else {
-                std::cerr << "\033[31m" << "ERROR, ENTRY \"" << line[0] << "\" not implemented." << "\033[0m" << std::endl;
+                throw std::invalid_argument(
+                        "Entry \""
+                        + line[0]
+                        + "\" not implemented.");
             }
         }
 
         // Compute distances.
         if (edge_weight_type == "EUC_2D") {
             for (LocationId location_id_1 = 0;
-                    location_id_1 < number_of_locations();
+                    location_id_1 < instance_.number_of_locations();
                     ++location_id_1) {
                 for (LocationId location_id_2 = location_id_1 + 1;
-                        location_id_2 < number_of_locations();
+                        location_id_2 < instance_.number_of_locations();
                         ++location_id_2) {
-                    double xd = x(location_id_2) - x(location_id_1);
-                    double yd = y(location_id_2) - y(location_id_1);
+                    double xd = instance_.x(location_id_2) - instance_.x(location_id_1);
+                    double yd = instance_.y(location_id_2) - instance_.y(location_id_1);
                     Distance d = std::round(std::sqrt(xd * xd + yd * yd));
                     set_distance(location_id_1, location_id_2, d);
                 }
             }
         } else {
-            std::cerr << "\033[31m" << "ERROR, EDGE_WEIGHT_TYPE \"" << edge_weight_type << "\" not implemented." << "\033[0m" << std::endl;
+            throw std::invalid_argument(
+                    "EDGE_WEIGHT_TYPE \""
+                    + edge_weight_type
+                    + "\" not implemented.");
         }
     }
 
@@ -413,24 +490,10 @@ private:
      * Private attributes
      */
 
-    /** Locations. */
-    std::vector<Location> locations_;
-
-    /** Distances between locations. */
-    std::vector<std::vector<Distance>> distances_;
-
-    /*
-     * Computed attributes
-     */
-
-    /** Total demand. */
-    Demand total_demand_ = 0;
-
-    /** Maximum distance between two locations. */
-    Distance distance_max_ = 0;
+    /** Instance. */
+    Instance instance_;
 
 };
 
 }
-
 }

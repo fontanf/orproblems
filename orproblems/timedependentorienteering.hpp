@@ -1,5 +1,5 @@
 /**
- * Time-dependent orienteering problem.
+ * Time-dependent orienteering problem
  *
  * Input:
  * - n locations; for each location j = 1..n, a profit pⱼ
@@ -29,7 +29,6 @@
 
 namespace orproblems
 {
-
 namespace timedependentorienteering
 {
 
@@ -77,37 +76,6 @@ class Instance
 public:
 
     /*
-     * Constructors and destructor
-     */
-
-    /** Constructor to build an instance manually. */
-    Instance(LocationId number_of_locations):
-        locations_(number_of_locations),
-        arcs_(number_of_locations, std::vector<Arc>(number_of_locations)) { }
-
-    /** Set the maximum duration. */
-    void set_maximum_duration(Time maximum_duration) { maximum_duration_ = maximum_duration; }
-
-    /** Build an instance from a file. */
-    Instance(
-            std::string instance_path,
-            std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-        if (format == "" || format == "verbeeck2014") {
-            read_verbeeck2014(file, instance_path);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
-
-    /*
      * Getters
      */
 
@@ -146,7 +114,7 @@ public:
             double speed = speed_matrix_[arc_category][time_period];
             Time at = current_time + remaining_length / speed;
             if (at <= time_period_end) {
-                //std::cout << "location_id_1 " << location_id_1
+                //os << "location_id_1 " << location_id_1
                 //    << " location_id_2 " << location_id_2
                 //    << " x1 " << locations_[location_id_1].x
                 //    << " y1 " << locations_[location_id_1].y
@@ -161,25 +129,29 @@ public:
                 return at;
             }
             remaining_length -= (time_period_end - current_time) * speed;
-            //std::cout << "remaining_length " << remaining_length << std::endl;
+            //os << "remaining_length " << remaining_length << std::endl;
             current_time = time_period_end;
             time_period++;
         }
         return -1;
     }
 
+    /*
+     * Outputs
+     */
+
     /** Print the instance. */
-    std::ostream& print(
+    void format(
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os << "Number of locations:  " << number_of_locations() << std::endl;
             os << "Maximum duration:     " << maximum_duration() << std::endl;
         }
 
         // Print locations.
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Location"
                 << std::setw(12) << "Profit"
@@ -196,15 +168,13 @@ public:
                     << std::endl;
             }
         }
-
-        return os;
     }
 
     /** Check a certificate. */
     std::pair<bool, Profit> check(
-            std::string certificate_path,
+            const std::string& certificate_path,
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
         std::ifstream file(certificate_path);
         if (!file.good()) {
@@ -212,7 +182,7 @@ public:
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl << std::right
                 << std::setw(12) << "Location"
                 << std::setw(12) << "Profit"
@@ -239,7 +209,7 @@ public:
             // Check duplicates.
             if (locations.contains(location_id)) {
                 number_of_duplicates++;
-                if (verbose >= 2)
+                if (verbosity_level >= 2)
                     os << "Location " << location_id
                         << " has already been visited." << std::endl;
             }
@@ -251,7 +221,7 @@ public:
                     current_time);
             profit += location(location_id).profit;
 
-            if (verbose >= 2) {
+            if (verbosity_level >= 2) {
                 os
                     << std::setw(12) << location_id
                     << std::setw(12) << location(location_id).profit
@@ -265,7 +235,7 @@ public:
         current_time = arrival_time(location_id_prev, number_of_locations() - 1, current_time);
         profit += location(number_of_locations() - 1).profit;
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os
                 << std::setw(12) << number_of_locations() - 1
                 << std::setw(12) << location(number_of_locations() - 1).profit
@@ -278,9 +248,9 @@ public:
             = (current_time <= maximum_duration())
             && (number_of_duplicates == 0);
 
-        if (verbose >= 2)
+        if (verbosity_level >= 2)
             os << std::endl;
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os << "Number of locations:       " << locations.size() << " / " << number_of_locations()  << std::endl;
             os << "Number of duplicates:      " << number_of_duplicates << std::endl;
             os << "Duraction:                 " << current_time << " / " << maximum_duration() << std::endl;
@@ -296,38 +266,172 @@ private:
      * Private methods
      */
 
+    /** Constructor to build an instance manually. */
+    Instance() { }
+
+    /*
+     * Private attributes
+     */
+
+    /** Locations. */
+    std::vector<Location> locations_;
+
+    /** Arcs. */
+    std::vector<std::vector<Arc>> arcs_;
+
+    /** Speed matrix. */
+    std::vector<std::vector<double>> speed_matrix_;
+
+    /** Maximum duration. */
+    Time maximum_duration_ = 0;
+
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /**
+     * Set the number of locations.
+     *
+     * This method resets the locations, arcs and the speed matrix.
+     */
+    void set_number_of_locations(LocationId number_of_locations)
+    {
+        instance_.locations_ = std::vector<Location>(number_of_locations);
+        instance_.arcs_ = std::vector<std::vector<Arc>>(
+                number_of_locations,
+                std::vector<Arc>(number_of_locations));
+        instance_.speed_matrix_ = std::vector<std::vector<double>>(
+                5,
+                std::vector<double>(4, 0.0));
+    }
+
+    /** Set the maximum duration. */
+    void set_maximum_duration(Time maximum_duration) { instance_.maximum_duration_ = maximum_duration; }
+
+    /** Set the profit of a location; */
+    void set_location_profit(
+            LocationId location_id,
+            Profit profit)
+    {
+        instance_.locations_[location_id].profit = profit;
+    }
+
+    /** Set the coordinates of a location. */
+    void set_location_coordinates(
+            LocationId location_id,
+            double x,
+            double y)
+    {
+        instance_.locations_[location_id].x = x;
+        instance_.locations_[location_id].y = y;
+    }
+
+    /** Set the length of an arc. */
+    void set_arc_length(
+        LocationId location_id_1,
+        LocationId location_id_2,
+        Length length)
+    {
+        instance_.arcs_[location_id_1][location_id_2].length = length;
+    }
+
+    /** Set the category of an arc. */
+    void set_arc_category(
+        LocationId location_id_1,
+        LocationId location_id_2,
+        ArcCategory category)
+    {
+        instance_.arcs_[location_id_1][location_id_2].category = category;
+    }
+
+    /** Set the speed for an arc category and a given time period. */
+    void set_speed(
+            ArcCategory arc_category,
+            TimePeriod time_period,
+            double speed)
+    {
+        instance_.speed_matrix_[arc_category][time_period] = speed;
+    }
+
+    /** Build an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+        if (format == "" || format == "verbeeck2014") {
+            read_verbeeck2014(file, instance_path);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        return std::move(instance_);
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
+
     /** Read an instance from a file in 'verbeeck2014' format. */
     void read_verbeeck2014(
             std::ifstream& file,
-            std::string instance_path)
+            const std::string& instance_path)
     {
         std::string tmp;
+
         LocationId number_of_locations = -1;
-        file
-            >> tmp >> number_of_locations
-            >> tmp >> tmp
-            >> tmp >> maximum_duration_
-            ;
-        locations_ = std::vector<Location>(number_of_locations);
+        file >> tmp >> number_of_locations;
+        set_number_of_locations(number_of_locations);
+
+        Time maximum_duration = -1;
+        file >> tmp >> tmp >> tmp >> maximum_duration;
+        set_maximum_duration(maximum_duration);
+
+        double x = -1;
+        double y = -1;
+        Profit profit = -1;
         for (LocationId location_id = 0;
                 location_id < number_of_locations;
-                ++location_id)
-            file
-                >> locations_[location_id].x
-                >> locations_[location_id].y
-                >> locations_[location_id].profit;
-        arcs_ = std::vector<std::vector<Arc>>(number_of_locations, std::vector<Arc>(number_of_locations));
+                ++location_id) {
+            file >> x >> y >> profit;
+            set_location_coordinates(location_id, x, y);
+            set_location_profit(location_id, profit);
+        }
+
         for (LocationId location_id_1 = 0;
                 location_id_1 < number_of_locations;
                 ++location_id_1) {
             for (LocationId location_id_2 = 0;
                     location_id_2 < number_of_locations;
                     ++location_id_2) {
-                Length dx = locations_[location_id_1].x - locations_[location_id_2].x;
-                Length dy = locations_[location_id_1].y - locations_[location_id_2].y;
+                Length dx = instance_.location(location_id_1).x - instance_.location(location_id_2).x;
+                Length dy = instance_.location(location_id_1).y - instance_.location(location_id_2).y;
                 Length dxy = std::sqrt(dx * dx + dy * dy);
                 dxy /= 5;
-                arcs_[location_id_1][location_id_2].length = dxy;
+                set_arc_length(location_id_1, location_id_2, dxy);
             }
         }
 
@@ -335,13 +439,16 @@ private:
         auto speed_matrix_path = boost::filesystem::path(instance_path)
             .parent_path().parent_path().parent_path() /= "speedmatrix.txt";
         std::ifstream speed_matrix_file(speed_matrix_path.string());
-        speed_matrix_ = std::vector<std::vector<double>>(
-                5, std::vector<double>(4, 0.0));
-        for (ArcCategory arc_category = 0; arc_category < 5; ++arc_category)
-            for (TimePeriod time_period = 0; time_period < 4; ++time_period)
-                speed_matrix_file >> speed_matrix_[arc_category][time_period];
+        double speed = -1;
+        for (ArcCategory arc_category = 0; arc_category < 5; ++arc_category) {
+            for (TimePeriod time_period = 0; time_period < 4; ++time_period) {
+                speed_matrix_file >> speed;
+                set_speed(arc_category, time_period, speed);
+            }
+        }
 
         // Read arc category matrix.
+        ArcCategory arc_category;
         boost::filesystem::directory_iterator it_end;
         auto arc_category_directory = boost::filesystem::path(instance_path)
             .parent_path().parent_path();
@@ -360,11 +467,14 @@ private:
             std::ifstream arc_category_file(it->path().string());
             for (LocationId location_id_1 = 0;
                     location_id_1 < number_of_locations;
-                    ++location_id_1)
+                    ++location_id_1) {
                 for (LocationId location_id_2 = 0;
                         location_id_2 < number_of_locations;
-                        ++location_id_2)
-                    arc_category_file >> arcs_[location_id_1][location_id_2].category;
+                        ++location_id_2) {
+                    arc_category_file >> arc_category;
+                    set_arc_category(location_id_1, location_id_2, arc_category);
+                }
+            }
         }
     }
 
@@ -372,21 +482,10 @@ private:
      * Private attributes
      */
 
-    /** Locations. */
-    std::vector<Location> locations_;
-
-    /** Arcs. */
-    std::vector<std::vector<Arc>> arcs_;
-
-    /** Speed matrix. */
-    std::vector<std::vector<double>> speed_matrix_;
-
-    /** Maximum duration. */
-    Time maximum_duration_ = 0;
+    /** Instance. */
+    Instance instance_;
 
 };
 
 }
-
 }
-

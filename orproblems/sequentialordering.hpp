@@ -1,6 +1,6 @@
 /**
- * Sequential Ordering Problem.
- * (Asymmetric Traveling Salesman Problem with Precedence Constraints)
+ * Sequential ordering problem (asymmetric traveling salesman problem with
+ * precedence constraints)
  *
  * Input:
  * - n locations and an n×n matrix containing the distances between each pair of
@@ -28,7 +28,6 @@
 
 namespace orproblems
 {
-
 namespace sequentialordering
 {
 
@@ -55,65 +54,6 @@ class Instance
 public:
 
     /*
-     * Constructors and destructor
-     */
-
-    /** Constructor to build an instance manually. */
-    Instance(LocationId number_of_locations):
-        locations_(number_of_locations),
-        distances_(number_of_locations, std::vector<Distance>(number_of_locations, -1))
-    {
-        for (LocationId location_id = 0;
-                location_id < number_of_locations;
-                ++location_id)
-            distances_[location_id][location_id] = 0;
-    }
-
-    /** Set the distance between two locations. */
-    void set_distance(
-            LocationId location_id_1,
-            LocationId location_id_2,
-            Distance distance)
-    {
-        check_location_index(location_id_1);
-        check_location_index(location_id_2);
-        distances_[location_id_1][location_id_2] = distance;
-        distance_max_ = std::max(distance_max_, distance);
-    }
-
-    /** Add a predecessor to a location. */
-    void add_predecessor(
-            LocationId location_id_1,
-            LocationId location_id_2)
-    {
-        check_location_index(location_id_1);
-        check_location_index(location_id_2);
-        locations_[location_id_1].predecessors.push_back(location_id_2);
-    }
-
-    /** Create an instance from a file. */
-    Instance(
-            std::string instance_path,
-            std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-
-        if (format == "" || format == "tsplib") {
-            read_tsplib(file);
-        } else if (format == "soplib") {
-            read_soplib(file);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
-
-    /*
      * Getters
      */
 
@@ -131,19 +71,20 @@ public:
     /** Get the predecessors of location. */
     inline const std::vector<LocationId>& predecessors(LocationId location_id) const { return locations_[location_id].predecessors; }
 
-    /** Get the maximum distance between two locations. */
-    inline Distance maximum_distance() const { return distance_max_; }
+    /*
+     * Outputs
+     */
 
     /** Print the instance. */
-    std::ostream& print(
+    void format(
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os << "Number of locations:  " << number_of_locations() << std::endl;
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Loc. 1"
                 << std::setw(12) << "Loc. 2"
@@ -168,7 +109,7 @@ public:
             }
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Loc. 1"
                 << std::setw(12) << "Pred."
@@ -187,15 +128,13 @@ public:
                 }
             }
         }
-
-        return os;
     }
 
     /** Check a certificate. */
     std::pair<bool, Distance> check(
-            std::string certificate_path,
+            const std::string& certificate_path,
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
         std::ifstream file(certificate_path);
         if (!file.good()) {
@@ -203,7 +142,7 @@ public:
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Location"
                 << std::setw(12) << "Distance"
@@ -225,7 +164,7 @@ public:
             // Check duplicates.
             if (locations.contains(location_id)) {
                 number_of_duplicates++;
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os << "Location " << location_id
                         << " has already been visited." << std::endl;
                 }
@@ -236,7 +175,7 @@ public:
             for (LocationId location_id_predeceoor: predecessors(location_id)) {
                 if (!locations.contains(location_id_predeceoor)) {
                     number_of_precedence_violations++;
-                    if (verbose >= 2) {
+                    if (verbosity_level >= 2) {
                         os << std::endl << "Location " << location_id
                             << " depends on location "
                             << location_id_predeceoor
@@ -248,7 +187,7 @@ public:
 
             total_distance += distance(location_id_pred, location_id);
 
-            if (verbose >= 2) {
+            if (verbosity_level >= 2) {
                 os
                     << std::setw(12) << location_id
                     << std::setw(12) << total_distance
@@ -263,9 +202,9 @@ public:
             && (number_of_duplicates == 0)
             && (number_of_precedence_violations == 0);
 
-        if (verbose >= 2)
+        if (verbosity_level >= 2)
             os << std::endl;
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of Vertices:               " << locations.size() << " / " << number_of_locations() << std::endl
                 << "Number of duplicates:             " << number_of_duplicates << std::endl
@@ -293,6 +232,106 @@ private:
      * Private methods
      */
 
+    /** Constructor to build an instance manually. */
+    Instance() { }
+
+    /*
+     * Private attributes
+     */
+
+    /** Locations. */
+    std::vector<Location> locations_;
+
+    /** Distances. */
+    std::vector<std::vector<Distance>> distances_;
+
+    /*
+     * Computed attributes
+     */
+
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /**
+     * Set the number of locations.
+     *
+     * This method resets the whole instance.
+     */
+    void set_number_of_locations(LocationId number_of_locations)
+    {
+        instance_.locations_ = std::vector<Location>(number_of_locations),
+        instance_.distances_ = std::vector<std::vector<Distance>>(
+                number_of_locations,
+                std::vector<Distance>(number_of_locations, 0));
+    }
+
+    /** Set the distance between two locations. */
+    void set_distance(
+            LocationId location_id_1,
+            LocationId location_id_2,
+            Distance distance)
+    {
+        instance_.check_location_index(location_id_1);
+        instance_.check_location_index(location_id_2);
+        instance_.distances_[location_id_1][location_id_2] = distance;
+    }
+
+    /** Add a predecessor to a location. */
+    void add_predecessor(
+            LocationId location_id_1,
+            LocationId location_id_2)
+    {
+        instance_.check_location_index(location_id_1);
+        instance_.check_location_index(location_id_2);
+        instance_.locations_[location_id_1].predecessors.push_back(location_id_2);
+    }
+
+    /** Create an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+
+        if (format == "" || format == "tsplib") {
+            read_tsplib(file);
+        } else if (format == "soplib") {
+            read_soplib(file);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        return std::move(instance_);
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
+
     /** Read a file in 'tsplib' format. */
     void read_tsplib(std::ifstream& file)
     {
@@ -310,13 +349,11 @@ private:
             } else if (tmp.rfind("TYPE", 0) == 0) {
             } else if (tmp.rfind("DIMENSION", 0) == 0) {
                 number_of_locations = std::stol(line.back());
-                locations_ = std::vector<Location>(number_of_locations);
-                distances_ = std::vector<std::vector<Distance>>(
-                        number_of_locations, std::vector<Distance>(number_of_locations, -1));
+                set_number_of_locations(number_of_locations);
                 for (LocationId location_id = 0;
                         location_id < number_of_locations;
                         ++location_id)
-                    distances_[location_id][location_id]
+                    instance_.distances_[location_id][location_id]
                         = std::numeric_limits<Distance>::max();
             } else if (tmp.rfind("EDGE_WEIGHT_TYPE", 0) == 0) {
                 edge_weight_type = line.back();
@@ -345,12 +382,18 @@ private:
                         }
                     }
                 } else {
-                    std::cerr << "\033[31m" << "ERROR, EDGE_WEIGHT_FORMAT \"" << edge_weight_format << "\" not implemented." << "\033[0m" << std::endl;
+                    throw std::invalid_argument(
+                            "EDGE_WEIGHT_FORMAT \""
+                            + edge_weight_format
+                            + "\" not implemented.");
                 }
             } else if (tmp.rfind("EOF", 0) == 0) {
                 break;
             } else {
-                std::cerr << "\033[31m" << "ERROR, ENTRY \"" << line[0] << "\" not implemented." << "\033[0m" << std::endl;
+                throw std::invalid_argument(
+                        "Entry \""
+                        + line[0]
+                        + "\" not implemented.");
             }
         }
 
@@ -369,12 +412,11 @@ private:
         for (LocationId location_id_1 = 0; getline(file, tmp); ++location_id_1) {
             line = optimizationtools::split(tmp, '\t');
             if (location_id_1 == 0) {
-                LocationId n = line.size();
-                locations_ = std::vector<Location>(n);
-                distances_ = std::vector<std::vector<Distance>>(n, std::vector<Distance>(n, -1));
+                LocationId number_of_locations = line.size();
+                set_number_of_locations(number_of_locations);
             }
             for (LocationId location_id_2 = 0;
-                    location_id_2 < number_of_locations();
+                    location_id_2 < instance_.number_of_locations();
                     ++location_id_2) {
                 Distance distance = std::stol(line[location_id_2]);
                 if (distance == -1)
@@ -393,22 +435,10 @@ private:
      * Private attributes
      */
 
-    /** Locations. */
-    std::vector<Location> locations_;
-
-    /** Distances. */
-    std::vector<std::vector<Distance>> distances_;
-
-    /*
-     * Computed attributes
-     */
-
-    /** Maximum distance. */
-    Distance distance_max_ = 0;
+    /** Instance. */
+    Instance instance_;
 
 };
 
 }
-
 }
-

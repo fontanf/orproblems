@@ -1,5 +1,5 @@
 /**
- * Vehicle Routing Problem with Time Windows.
+ * Vehicle routing problem with time windows
  *
  * Input:
  * - m vehicles of capacity Q
@@ -35,7 +35,6 @@
 
 namespace orproblems
 {
-
 namespace vehicleroutingwithtimewindows
 {
 
@@ -78,75 +77,6 @@ class Instance
 public:
 
     /*
-     * Constructors and destructor
-     */
-
-    /** Constructor to build an instance manually. */
-    Instance(LocationId n):
-        locations_(n),
-        travel_times_(n, std::vector<Time>(n, -1)) { }
-
-    void set_number_of_vehicles(RouteId m) { number_of_vehicles_ = m; }
-
-    /** Set the capacity of the vehicles. */
-    void set_capacity(Demand capacity) { locations_[0].demand = capacity; }
-
-    /** Set the properties of a location. */
-    void set_location(
-            LocationId location_id,
-            Demand demand,
-            Time release_date,
-            Time deadline,
-            Time service_time)
-    {
-        locations_[location_id].demand = demand;
-        locations_[location_id].release_date = release_date;
-        locations_[location_id].deadline = deadline;
-        locations_[location_id].service_time = service_time;
-        maximum_service_time_ = std::max(maximum_service_time_, service_time);
-    }
-
-    /** Set the coordinates of a location. */
-    void set_coordinates(
-            LocationId location_id,
-            double x,
-            double y)
-    {
-        locations_[location_id].x = x;
-        locations_[location_id].y = y;
-    }
-
-    /** Set the travel time between two locations. */
-    void set_travel_time(
-            LocationId location_id_1,
-            LocationId location_id_2,
-            Time travel_time)
-    {
-        travel_times_[location_id_1][location_id_2] = travel_time;
-        travel_times_[location_id_2][location_id_1] = travel_time;
-        maximum_travel_time_ = std::max(maximum_travel_time_, travel_time);
-    }
-
-    /** Build an instance from a file. */
-    Instance(
-            std::string instance_path,
-            std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-        if (format == "" || format == "dimacs2021") {
-            read_dimacs2021(file);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
-
-    /*
      * Getters
      */
 
@@ -167,7 +97,7 @@ public:
             LocationId location_id_1,
             LocationId location_id_2) const
     {
-        return travel_times_[location_id_1][location_id_2];
+        return travel_times_[std::max(location_id_1, location_id_2)][std::min(location_id_1, location_id_2)];
     }
 
     /** Get the maximum travel time between two locations. */
@@ -176,12 +106,16 @@ public:
     /** Get the maximum service time between two locations. */
     inline Time maximum_service_time() const { return maximum_service_time_; }
 
+    /*
+     * Outputs
+     */
+
     /** Print the instance. */
-    std::ostream& print(
+    void format(
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of vehicles:   " << number_of_vehicles() << std::endl
                 << "Number of locations:  " << number_of_locations() << std::endl
@@ -189,7 +123,7 @@ public:
                 ;
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Location"
                 << std::setw(12) << "Demand"
@@ -203,7 +137,9 @@ public:
                 << std::setw(12) << "---------"
                 << std::setw(12) << "--------"
                 << std::endl;
-            for (LocationId location_id_1 = 0; location_id_1 < number_of_locations(); ++location_id_1) {
+            for (LocationId location_id_1 = 0;
+                    location_id_1 < number_of_locations();
+                    ++location_id_1) {
                 os << std::setw(12) << location_id_1
                     << std::setw(12) << location(location_id_1).demand
                     << std::setw(12) << location(location_id_1).service_time
@@ -213,7 +149,7 @@ public:
             }
         }
 
-        if (verbose >= 3) {
+        if (verbosity_level >= 3) {
             os << std::endl
                 << std::setw(12) << "Loc. 1"
                 << std::setw(12) << "Loc. 2"
@@ -237,15 +173,13 @@ public:
                 }
             }
         }
-
-        return os;
     }
 
     /** Check a certificate. */
     std::pair<bool, Time> check(
-            std::string certificate_path,
+            const std::string& certificate_path,
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
         std::ifstream file(certificate_path);
         if (!file.good()) {
@@ -253,7 +187,7 @@ public:
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl << std::right
                 << std::setw(10) << "Route"
                 << std::setw(10) << "Location"
@@ -295,7 +229,7 @@ public:
                     // Check duplicates.
                     if (visited_locations.contains(location_id)) {
                         number_of_duplicates++;
-                        if (verbose >= 2)
+                        if (verbosity_level >= 2)
                             os << "Location " << location_id
                                 << " has already been visited." << std::endl;
                     }
@@ -315,7 +249,7 @@ public:
 
                 route_travel_time += travel_time(location_id_prev, location_id);
 
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os
                         << std::setw(10) << route_id
                         << std::setw(10) << location_id
@@ -332,7 +266,7 @@ public:
                 route_travel_time += travel_time(location_id_prev, 0);
             total_travel_time += route_travel_time;
 
-            if (verbose >= 2) {
+            if (verbosity_level >= 2) {
                 os
                     << std::setw(10) << route_id
                     << std::setw(10) << 0
@@ -354,9 +288,9 @@ public:
             && (number_of_routes <= number_of_vehicles())
             && (number_of_overloaded_vehicles == 0)
             && (number_of_late_visits == 0);
-        if (verbose >= 2)
+        if (verbosity_level >= 2)
             os << std::endl;
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of visited locations:    " << visited_locations.size() << " / " << number_of_locations() - 1 << std::endl
                 << "Number of duplicates:           " << number_of_duplicates << std::endl
@@ -376,65 +310,8 @@ private:
      * Private methods
      */
 
-    /** Read an instance from a file in 'dimacs2021' format. */
-    void read_dimacs2021(std::ifstream& file)
-    {
-        std::string tmp;
-        file >> tmp >> tmp >> tmp >> tmp;
-
-        // Read number of locations.
-        RouteId m = -1;
-        file >> m;
-        set_number_of_vehicles(m);
-
-        // Read capacity.
-        Demand capacity = -1;
-        file >> capacity;
-
-        file
-            >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp
-            >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp
-            ;
-
-        // Read locations.
-        LocationId location_id;
-        double x = -1;
-        double y = -1;
-        Demand demand = -1;
-        Time release_date = -1;
-        Time deadline = -1;
-        Time service_time = -1;
-        while (file >> location_id >> x >> y >> demand >> release_date >> deadline >> service_time) {
-            locations_.push_back({});
-            set_coordinates(location_id, x, y);
-            //set_location(j, demand, release_date, deadline, service_time);
-            set_location(
-                    location_id,
-                    demand,
-                    10 * release_date,
-                    10 * deadline,
-                    10 * service_time);
-        }
-        set_capacity(capacity);
-        LocationId n = locations_.size();
-
-        // Compute times.
-        travel_times_.resize(n, std::vector<Time>(n, -1));
-        for (LocationId location_id_1 = 0;
-                location_id_1 < number_of_locations();
-                ++location_id_1) {
-            for (LocationId location_id_2 = location_id_1 + 1;
-                    location_id_2 < number_of_locations();
-                    ++location_id_2) {
-                double xd = location(location_id_2).x - location(location_id_1).x;
-                double yd = location(location_id_2).y - location(location_id_1).y;
-                double e = std::sqrt(xd * xd + yd * yd);
-                //Time d = std::round(e * 10) / 10;
-                Time d = std::floor(e * 10);
-                set_travel_time(location_id_1, location_id_2, d);
-            }
-        }
-    }
+    /** Constructor to build an instance manually. */
+    Instance() { }
 
     /*
      * Private attributes
@@ -459,8 +336,177 @@ private:
     /** Maximum service time. */
     Time maximum_service_time_ = 0;
 
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /** Set the number of vehicles. */
+    void set_number_of_vehicles(
+            RouteId number_of_vehicles)
+    {
+        instance_.number_of_vehicles_ = number_of_vehicles;
+    }
+
+    /** Set the capacity of the vehicles. */
+    void set_capacity(Demand capacity) { instance_.locations_[0].demand = capacity; }
+
+    /** Set the properties of a location. */
+    void add_location(
+            Demand demand,
+            Time release_date,
+            Time deadline,
+            Time service_time)
+    {
+        Location location;
+        location.demand = demand;
+        location.release_date = release_date;
+        location.deadline = deadline;
+        location.service_time = service_time;
+        instance_.locations_.push_back(location);
+
+        instance_.travel_times_.push_back(std::vector<Time>(instance_.locations_.size()));
+    }
+
+    /** Set the coordinates of a location. */
+    void set_location_coordinates(
+            LocationId location_id,
+            double x,
+            double y)
+    {
+        instance_.locations_[location_id].x = x;
+        instance_.locations_[location_id].y = y;
+    }
+
+    /** Set the travel time between two locations. */
+    void set_travel_time(
+            LocationId location_id_1,
+            LocationId location_id_2,
+            Time travel_time)
+    {
+        instance_.travel_times_[std::max(location_id_1, location_id_2)][std::min(location_id_1, location_id_2)] = travel_time;
+    }
+
+    /** Build an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+        if (format == "" || format == "dimacs2021") {
+            read_dimacs2021(file);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        // Compute maximum service time and maximum travel time.
+        for (LocationId location_id_1 = 0;
+                location_id_1 < instance_.number_of_locations();
+                ++location_id_1) {
+            instance_.maximum_service_time_ = std::max(
+                    instance_.maximum_service_time_,
+                    instance_.location(location_id_1).service_time);
+            for (LocationId location_id_2 = location_id_1 + 1;
+                    location_id_2 < instance_.number_of_locations();
+                    ++location_id_2) {
+                instance_.maximum_travel_time_ = std::max(
+                        instance_.maximum_travel_time_,
+                        instance_.travel_time(location_id_1, location_id_2));
+            }
+        }
+
+        return std::move(instance_);
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
+
+    /** Read an instance from a file in 'dimacs2021' format. */
+    void read_dimacs2021(std::ifstream& file)
+    {
+        std::string tmp;
+        file >> tmp >> tmp >> tmp >> tmp;
+
+        // Read number of locations.
+        RouteId number_of_vehicles = -1;
+        file >> number_of_vehicles;
+        set_number_of_vehicles(number_of_vehicles);
+
+        // Read capacity.
+        Demand capacity = -1;
+        file >> capacity;
+
+        file
+            >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp
+            >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp
+            ;
+
+        // Read locations.
+        LocationId location_id;
+        double x = -1;
+        double y = -1;
+        Demand demand = -1;
+        Time release_date = -1;
+        Time deadline = -1;
+        Time service_time = -1;
+        while (file >> location_id >> x >> y >> demand >> release_date >> deadline >> service_time) {
+            add_location(
+                    demand,
+                    10 * release_date,
+                    10 * deadline,
+                    10 * service_time);
+            set_location_coordinates(location_id, x, y);
+        }
+        set_capacity(capacity);
+
+        // Compute times.
+        for (LocationId location_id_1 = 0;
+                location_id_1 < instance_.number_of_locations();
+                ++location_id_1) {
+            for (LocationId location_id_2 = location_id_1 + 1;
+                    location_id_2 < instance_.number_of_locations();
+                    ++location_id_2) {
+                double xd = instance_.location(location_id_2).x - instance_.location(location_id_1).x;
+                double yd = instance_.location(location_id_2).y - instance_.location(location_id_1).y;
+                double e = std::sqrt(xd * xd + yd * yd);
+                //Time d = std::round(e * 10) / 10;
+                Time d = std::floor(e * 10);
+                set_travel_time(location_id_1, location_id_2, d);
+            }
+        }
+    }
+
+    /*
+     * Private attributes
+     */
+
+    /** Instance. */
+    Instance instance_;
+
 };
 
 }
-
 }

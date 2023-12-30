@@ -1,5 +1,5 @@
 /**
- * Cutting Stock Problem.
+ * Cutting stock problem
  *
  * Input:
  * - a capacity c
@@ -22,7 +22,6 @@
 
 namespace orproblems
 {
-
 namespace cuttingstock
 {
 
@@ -52,52 +51,6 @@ class Instance
 
 public:
 
-
-    /*
-     * Constructors and destructor
-     */
-
-    /** Constructor to build an instance manually. */
-    Instance() { }
-
-    /** Set the capacity of the bins. */
-    void set_capacity(Weight capacity) { capacity_ = capacity; }
-
-    /** Add an item. */
-    void add_item_type(
-            Weight weight,
-            Demand demand = 1)
-    {
-        ItemType item_type;
-        item_type.weight = weight;
-        item_type.demand = demand;
-        item_types_.push_back(item_type);
-
-        demand_max_ = std::max(demand_max_, demand);
-        demand_sum_ += demand;
-    }
-
-    /** Build an instance from a file. */
-    Instance(
-            std::string instance_path,
-            std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-        if (format == "" || format == "bpplib_bpp") {
-            read_bpplib_bpp(file);
-        } else if (format == "bpplib_csp") {
-            read_bpplib_csp(file);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
-
     /*
      * Getters
      */
@@ -117,19 +70,23 @@ public:
     /** Get the total demand. */
     Demand total_demand() const { return demand_sum_; }
 
+    /*
+     * Outputs
+     */
+
     /** Print the instance. */
-    std::ostream& print(
+    void format(
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of item types:  " << number_of_item_types() << std::endl
                 << "Capacity:              " << capacity() << std::endl
                 ;
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Item type"
                 << std::setw(12) << "Weight"
@@ -150,15 +107,13 @@ public:
                     << std::endl;
             }
         }
-
-        return os;
     }
 
     /** Check a certificate. */
     std::pair<bool, BinId> check(
-            std::string certificate_path,
+            const std::string& certificate_path,
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
         std::ifstream file(certificate_path);
         if (!file.good()) {
@@ -166,7 +121,7 @@ public:
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Bin"
                 << std::setw(12) << "Item type"
@@ -200,7 +155,7 @@ public:
                 demands[item_type_id] += bin_number_of_copies * item_copies;
                 bin_weight += item_copies * item_type(item_type_id).weight;
 
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os
                         << std::setw(12) << number_of_bins
                         << std::setw(12) << item_type_id
@@ -211,7 +166,7 @@ public:
 
             if (bin_weight > capacity()) {
                 number_of_overweighted_bins++;
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os << "Bin " << number_of_bins - 1
                         << " is overloaded." << std::endl;
                 }
@@ -223,7 +178,7 @@ public:
                 ++item_type_id) {
             if (demands[item_type_id] != item_type(item_type_id).demand) {
                 number_of_unsatisfied_demands++;
-                if (verbose >= 2)
+                if (verbosity_level >= 2)
                     os << "Item type " << item_type_id
                         << ", demand is not satisfied: "
                         << demands[item_type_id]
@@ -236,9 +191,9 @@ public:
             = (number_of_unsatisfied_demands == 0)
             && (number_of_overweighted_bins == 0);
 
-        if (verbose >= 2)
+        if (verbosity_level >= 2)
             os << std::endl;
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of unsatisfied demands:  " << number_of_unsatisfied_demands  << std::endl
                 << "Number of overweighted bins:    " << number_of_overweighted_bins << std::endl
@@ -247,6 +202,94 @@ public:
                 ;
         }
         return {feasible, number_of_bins};
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance() { }
+
+    /*
+     * Private attributes
+     */
+
+    /** Item types. */
+    std::vector<ItemType> item_types_;
+
+    /** Capacity. */
+    Weight capacity_;
+
+    /*
+     * Computed attributes
+     */
+
+    /** Maximum demand. */
+    Demand demand_max_ = 0;
+
+    /** Total demand. */
+    Demand demand_sum_ = 0;
+
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /** Set the capacity of the bins. */
+    void set_capacity(Weight capacity) { instance_.capacity_ = capacity; }
+
+    /** Add an item. */
+    void add_item_type(
+            Weight weight,
+            Demand demand = 1)
+    {
+        ItemType item_type;
+        item_type.weight = weight;
+        item_type.demand = demand;
+        instance_.item_types_.push_back(item_type);
+
+        instance_.demand_max_ = std::max(instance_.demand_max_, demand);
+        instance_.demand_sum_ += demand;
+    }
+
+    /** Build an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+        if (format == "" || format == "bpplib_bpp") {
+            read_bpplib_bpp(file);
+        } else if (format == "bpplib_csp") {
+            read_bpplib_csp(file);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        return std::move(instance_);
     }
 
 private:
@@ -288,24 +331,10 @@ private:
      * Private attributes
      */
 
-    /** Item types. */
-    std::vector<ItemType> item_types_;
-
-    /** Capacity. */
-    Weight capacity_;
-
-    /*
-     * Computed attributes
-     */
-
-    /** Maximum demand. */
-    Demand demand_max_ = 0;
-
-    /** Total demand. */
-    Demand demand_sum_ = 0;
+    /** Instance. */
+    Instance instance_;
 
 };
 
 }
-
 }

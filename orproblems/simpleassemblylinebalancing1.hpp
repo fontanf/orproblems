@@ -1,5 +1,5 @@
 /**
- * Simple Assembly Line Balancing Problem of Type 1.
+ * Simple assembly line balancing problem of type 1
  *
  * Input:
  * - n jobs; for each job j = 1..n, a processing time pⱼ
@@ -28,7 +28,6 @@
 
 namespace orproblems
 {
-
 namespace simpleassemblylinebalancing1
 {
 
@@ -60,61 +59,6 @@ class Instance
 
 public:
 
-
-    /*
-     * Constructors and destructor
-     */
-
-    /** Constructor to build an instance manually. */
-    Instance() { }
-
-    /** Add a job. */
-    void add_job(Time p)
-    {
-        Job job;
-        job.processing_time = p;
-        jobs_.push_back(job);
-        processing_time_sum_ += p;
-    }
-
-    /**
-     * Add a precedence constraint between two jobs.
-     *
-     * 'job_id_2' preceeds 'job_id_1'.
-     */
-    void add_predecessor(
-            JobId job_id_1,
-            JobId job_id_2)
-    {
-        jobs_[job_id_1].predecessors.push_back(job_id_2);
-        jobs_[job_id_2].successors.push_back(job_id_1);
-        number_of_precedences_++;
-    }
-
-    /** Set the cycle time. */
-    void set_cycle_time(Time cycle_time) { cycle_time_ = cycle_time; }
-
-    /** Build an instance from a file. */
-    Instance(
-            std::string instance_path,
-            std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-        if (format == "" || format == "scholl1993") {
-            read_scholl1993(file);
-        } else if (format == "otto2013") {
-            read_otto2013(file);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
-
     /*
      * Getters
      */
@@ -131,12 +75,16 @@ public:
     /** Get the sum of all processing times. */
     inline Time processing_time_sum() const { return processing_time_sum_; }
 
+    /*
+     * Outputs
+     */
+
     /** Print the instance. */
-    std::ostream& print(
+    void format(
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of jobs:             " << number_of_jobs() << std::endl
                 << "Cycle time:                 " << cycle_time() << std::endl
@@ -146,7 +94,7 @@ public:
             ;
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Job"
                 << std::setw(12) << "Proc. time"
@@ -171,7 +119,7 @@ public:
             }
         }
 
-        if (verbose >= 3) {
+        if (verbosity_level >= 3) {
             os << std::endl
                 << std::setw(12) << "Job"
                 << std::setw(12) << "Pred."
@@ -191,15 +139,13 @@ public:
                 }
             }
         }
-
-        return os;
     }
 
     /** Check a certificate. */
     std::pair<bool, Time> check(
-            std::string certificate_path,
+            const std::string& certificate_path,
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
         std::ifstream file(certificate_path);
         if (!file.good()) {
@@ -207,7 +153,7 @@ public:
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Job"
                 << std::setw(12) << "Station"
@@ -235,7 +181,7 @@ public:
                 // Check duplicates.
                 if (jobs.contains(job_id)) {
                     number_of_duplicates++;
-                    if (verbose >= 2) {
+                    if (verbosity_level >= 2) {
                         os << "Job " << job_id
                             << " has already been scheduled." << std::endl;
                     }
@@ -246,8 +192,8 @@ public:
                 for (JobId job_id_pred: job(job_id).predecessors) {
                     if (!jobs.contains(job_id_pred)) {
                         number_of_precedence_violations++;
-                        if (verbose >= 2) {
-                            std::cout << "Job " << job_id
+                        if (verbosity_level >= 2) {
+                            os << "Job " << job_id
                                 << " depends on job " << job_id_pred
                                 << " which has not been scheduled yet."
                                 << std::endl;
@@ -257,7 +203,7 @@ public:
 
                 time += job(job_id).processing_time;
 
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os
                         << std::setw(12) << number_of_stations - 1
                         << std::setw(12) << job_id
@@ -268,7 +214,7 @@ public:
 
             if (time > cycle_time()) {
                 number_of_overloaded_stations++;
-                if (verbose >= 2)
+                if (verbosity_level >= 2)
                     os << "Station " << number_of_stations - 1
                         << " is overloaded."
                         << std::endl;
@@ -280,9 +226,9 @@ public:
             && (number_of_duplicates == 0)
             && (number_of_precedence_violations == 0)
             && (number_of_overloaded_stations == 0);
-        if (verbose >= 2)
+        if (verbosity_level >= 2)
             os << std::endl;
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of jobs:                   " << jobs.size() << " / " << number_of_jobs() << std::endl
                 << "Number of duplicates:             " << number_of_duplicates << std::endl
@@ -293,6 +239,112 @@ public:
                 ;
         }
         return {feasible, number_of_stations};
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance() { }
+
+    /*
+     * Private attributes
+     */
+
+    /** Jobs. */
+    std::vector<Job> jobs_;
+
+    /** Cycle time. */
+    Time cycle_time_ = 0;
+
+    /*
+     * Computed attributes
+     */
+
+    /** Sum of all processing times. */
+    Time processing_time_sum_ = 0;
+
+    /** Number of precedences. */
+    JobPos number_of_precedences_ = 0;
+
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /** Add a job. */
+    void add_job(Time p)
+    {
+        Job job;
+        job.processing_time = p;
+        instance_.jobs_.push_back(job);
+    }
+
+    /**
+     * Add a precedence constraint between two jobs.
+     *
+     * 'job_id_2' preceeds 'job_id_1'.
+     */
+    void add_predecessor(
+            JobId job_id_1,
+            JobId job_id_2)
+    {
+        instance_.jobs_[job_id_1].predecessors.push_back(job_id_2);
+        instance_.jobs_[job_id_2].successors.push_back(job_id_1);
+    }
+
+    /** Set the cycle time. */
+    void set_cycle_time(Time cycle_time) { instance_.cycle_time_ = cycle_time; }
+
+    /** Build an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+        if (format == "" || format == "scholl1993") {
+            read_scholl1993(file);
+        } else if (format == "otto2013") {
+            read_otto2013(file);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        // Compute the number of precedences and the processing time sum.
+        instance_.number_of_precedences_ = 0;
+        instance_.processing_time_sum_ = 0;
+        for (JobId job_id = 0;
+                job_id < instance_.number_of_jobs();
+                ++job_id) {
+            const Job& job = instance_.job(job_id);
+            instance_.number_of_precedences_ += job.predecessors.size();
+            instance_.processing_time_sum_ += job.processing_time;
+        }
+
+        return std::move(instance_);
     }
 
 private:
@@ -371,25 +423,10 @@ private:
      * Private attributes
      */
 
-    /** Jobs. */
-    std::vector<Job> jobs_;
-
-    /** Cycle time. */
-    Time cycle_time_ = 0;
-
-    /*
-     * Computed attributes
-     */
-
-    /** Sum of all processing times. */
-    Time processing_time_sum_ = 0;
-
-    /** Number of precedences. */
-    JobPos number_of_precedences_ = 0;
+    /** Instance. */
+    Instance instance_;
 
 };
 
 }
-
 }
-

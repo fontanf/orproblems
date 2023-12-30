@@ -1,5 +1,5 @@
 /**
- * Bin Packing Problem with Conflicts.
+ * Bin packing problem with conflicts
  *
  * Input:
  * - a capacity c
@@ -26,7 +26,6 @@
 
 namespace orproblems
 {
-
 namespace binpackingwithconflicts
 {
 
@@ -55,57 +54,6 @@ class Instance
 public:
 
     /*
-     * Constructors and destructor
-     */
-
-    /** Constructor to build an instance manually. */
-    Instance() { }
-
-    /** Set the capacity of the bins. */
-    void set_capacity(Weight capacity) { capacity_ = capacity; }
-
-    /** Add an item. */
-    void add_item(Weight weight)
-    {
-        Item item;
-        item.weight = weight;
-        items_.push_back(item);
-    }
-
-    /** Add a conflict. */
-    void add_conflict(
-            ItemId item_id_1,
-            ItemId item_id_2)
-    {
-        assert(item_id_1 >= 0);
-        assert(item_id_2 >= 0);
-        assert(item_id_1 < number_of_items());
-        assert(item_id_2 < number_of_items());
-        items_[item_id_1].neighbors.push_back(item_id_2);
-        items_[item_id_2].neighbors.push_back(item_id_1);
-    }
-
-    /** Build an instance from a file. */
-    Instance(
-            std::string instance_path,
-            std::string format = "")
-    {
-        std::ifstream file(instance_path);
-        if (!file.good()) {
-            throw std::runtime_error(
-                    "Unable to open file \"" + instance_path + "\".");
-        }
-
-        if (format == "" || format == "default") {
-            read_default(file);
-        } else {
-            throw std::invalid_argument(
-                    "Unknown instance format \"" + format + "\".");
-        }
-        file.close();
-    }
-
-    /*
      * Getters
      */
 
@@ -118,18 +66,22 @@ public:
     /** Get the capacity of the bins. */
     Weight capacity() const { return capacity_; }
 
+    /*
+     * Outputs
+     */
+
     /** Print the instance. */
-    std::ostream& print(
+    void format(
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os << "Number of items:  " << number_of_items() << std::endl;
             os << "Capacity:         " << capacity() << std::endl;
         }
 
         // Print items.
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Item"
                 << std::setw(12) << "Weight"
@@ -150,7 +102,7 @@ public:
         }
 
         // Print conflicts.
-        if (verbose >= 3) {
+        if (verbosity_level >= 3) {
             os << std::endl
                 << std::setw(12) << "Item 1"
                 << std::setw(12) << "Item 2"
@@ -167,15 +119,13 @@ public:
                 }
             }
         }
-
-        return os;
     }
 
     /** Check a certificate. */
     std::pair<bool, BinId> check(
-            std::string certificate_path,
+            const std::string& certificate_path,
             std::ostream& os,
-            int verbose = 1) const
+            int verbosity_level = 1) const
     {
         std::ifstream file(certificate_path);
         if (!file.good()) {
@@ -183,7 +133,7 @@ public:
                     "Unable to open file \"" + certificate_path + "\".");
         }
 
-        if (verbose >= 2) {
+        if (verbosity_level >= 2) {
             os << std::endl
                 << std::setw(12) << "Bin"
                 << std::setw(12) << "Item"
@@ -220,7 +170,7 @@ public:
                 for (ItemId item_id_neighbor: item.neighbors) {
                     if (current_bin_items.contains(item_id_neighbor)) {
                         number_of_conflict_violations++;
-                        if (verbose >= 2) {
+                        if (verbosity_level >= 2) {
                             os << "Item " << item_id
                                 << " is packed with conflict item "
                                 << item_id_neighbor << "." << std::endl;
@@ -232,7 +182,7 @@ public:
                 // Check duplicates.
                 if (items.contains(item_id)) {
                     number_of_duplicates++;
-                    if (verbose >= 2) {
+                    if (verbosity_level >= 2) {
                         os << "Item " << item_id
                             << " has already been packed." << std::endl;
                     }
@@ -241,7 +191,7 @@ public:
 
                 weight += item.weight;
 
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os
                         << std::setw(12) << bin_pos
                         << std::setw(12) << item_id
@@ -253,7 +203,7 @@ public:
             // Check capacity.
             if (weight > capacity()) {
                 number_of_overweighted_bins++;
-                if (verbose >= 2) {
+                if (verbosity_level >= 2) {
                     os << "Bin " << bin_pos
                         << " is overweighted." << std::endl;
                 }
@@ -266,9 +216,9 @@ public:
             && (number_of_overweighted_bins == 0)
             && (number_of_conflict_violations == 0);
 
-        if (verbose >= 2)
+        if (verbosity_level >= 2)
             os << std::endl;
-        if (verbose >= 1) {
+        if (verbosity_level >= 1) {
             os
                 << "Number of items:                " << items.size() << " / " << this->number_of_items()  << std::endl
                 << "Number of duplicates:           " << number_of_duplicates << std::endl
@@ -282,6 +232,94 @@ public:
     }
 
 private:
+
+    /*
+     * Private methods
+     */
+
+    /** Constructor to build an instance manually. */
+    Instance() { }
+
+    /*
+     * Private attributes
+     */
+
+    /** Items. */
+    std::vector<Item> items_;
+
+    /** Capacity of the bins. */
+    Weight capacity_;
+
+    friend class InstanceBuilder;
+};
+
+class InstanceBuilder
+{
+
+public:
+
+    /** Constructor. */
+    InstanceBuilder() { }
+
+    /** Set the capacity of the bins. */
+    void set_capacity(Weight capacity) { instance_.capacity_ = capacity; }
+
+    /** Add an item. */
+    void add_item(Weight weight)
+    {
+        Item item;
+        item.weight = weight;
+        instance_.items_.push_back(item);
+    }
+
+    /** Add a conflict. */
+    void add_conflict(
+            ItemId item_id_1,
+            ItemId item_id_2)
+    {
+        assert(item_id_1 >= 0);
+        assert(item_id_2 >= 0);
+        assert(item_id_1 < instance_.number_of_items());
+        assert(item_id_2 < instance_.number_of_items());
+        instance_.items_[item_id_1].neighbors.push_back(item_id_2);
+        instance_.items_[item_id_2].neighbors.push_back(item_id_1);
+    }
+
+    /** Build an instance from a file. */
+    void read(
+            const std::string& instance_path,
+            const std::string& format = "")
+    {
+        std::ifstream file(instance_path);
+        if (!file.good()) {
+            throw std::runtime_error(
+                    "Unable to open file \"" + instance_path + "\".");
+        }
+
+        if (format == "" || format == "default") {
+            read_default(file);
+        } else {
+            throw std::invalid_argument(
+                    "Unknown instance format \"" + format + "\".");
+        }
+        file.close();
+    }
+
+    /*
+     * Build
+     */
+
+    /** Build the instance. */
+    Instance build()
+    {
+        return std::move(instance_);
+    }
+
+private:
+
+    /*
+     * Private methods
+     */
 
     /** Read an instance from a file in 'default' format. */
     void read_default(std::ifstream& file)
@@ -311,14 +349,10 @@ private:
      * Private attributes
      */
 
-    /** Items. */
-    std::vector<Item> items_;
-
-    /** Capacity of the bins. */
-    Weight capacity_;
+    /** Instance. */
+    Instance instance_;
 
 };
 
 }
-
 }

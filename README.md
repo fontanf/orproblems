@@ -35,7 +35,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [knapsackwithconflicts.7z](https://github.com/fontanf/orproblems/releases/download/data/knapsackwithconflicts.7z)
-* Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/knapsackwithconflicts.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/knapsackwithconflicts.hpp)
 
 
 [Multidimensional Multiple-choice Knapsack Problem](orproblems/multidimensionalmultiplechoiceknapsack.hpp)
@@ -61,7 +60,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [multidimensionalmultiplechoiceknapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/multidimensionalmultiplechoiceknapsack.7z)
-* Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/multidimensionalmultiplechoiceknapsack.hpp)
 
 
 [Quadratic Assignment Problem](orproblems/quadraticassignment.hpp)
@@ -184,7 +182,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [quadraticassignment.7z](https://github.com/fontanf/orproblems/releases/download/data/quadraticassignment.7z)
-* Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/quadraticassignment.hpp)
 
 
 [Cutting Stock Problem](orproblems/cuttingstock.hpp)
@@ -205,7 +202,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [cuttingstock.7z](https://github.com/fontanf/orproblems/releases/download/data/cuttingstock.7z)
-* Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/cuttingstock.hpp)
 
 
 [Multiple Knapsack Problem](orproblems/multipleknapsack.hpp)
@@ -234,7 +230,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [multipleknapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/multipleknapsack.7z)
-* Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/multipleknapsack.hpp)
 
 
 [Quadratic Multiple Knapsack Problem](orproblems/quadraticmultipleknapsack.hpp)
@@ -298,7 +293,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [binpackingwithconflicts.7z](https://github.com/fontanf/orproblems/releases/download/data/binpackingwithconflicts.7z)
-* Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/binpackingwithconflicts.hpp)
 
 
 ## Routing
@@ -339,7 +333,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [sequentialordering.7z](https://github.com/fontanf/orproblems/releases/download/data/sequentialordering.7z)
-* Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/sequentialordering.hpp)
 
 
 [Traveling salesman problem with release dates](orproblems/travelingsalesmanwithreleasedates.hpp)
@@ -402,7 +395,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [timedependentorienteering.7z](https://github.com/fontanf/orproblems/releases/download/data/timedependentorienteering.7z)
-* Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/timedependentorienteering.hpp)
 
 
 [Orienteering problem with hotel selection](orproblems/orienteeringwithhotelselection.hpp)
@@ -449,7 +441,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [capacitatedvehiclerouting.7z](https://github.com/fontanf/orproblems/releases/download/data/capacitatedvehiclerouting.7z)
-* Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/capacitatedvehiclerouting.hpp)
 
 
 [Vehicle Routing Problem with Time Windows](orproblems/vehicleroutingwithtimewindows.hpp)
@@ -471,7 +462,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [vehicleroutingwithtimewindows.7z](https://github.com/fontanf/orproblems/releases/download/data/vehicleroutingwithtimewindows.7z)
-* Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/vehicleroutingwithtimewindows.hpp)
 
 
 [Capacitated Open Vehicle Routing Problem](orproblems/capacitatedopenvehiclerouting.hpp)
@@ -494,7 +484,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [capacitatedopenvehiclerouting.7z](https://github.com/fontanf/orproblems/releases/download/data/capacitatedopenvehiclerouting.7z)
-* Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/capacitatedopenvehiclerouting.hpp)
 
 
 ## Scheduling
@@ -534,7 +523,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [schedulingwithsdsttwt.7z](https://github.com/fontanf/orproblems/releases/download/data/schedulingwithsdsttwt.7z)
-* Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/schedulingwithsdsttwt.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/schedulingwithsdsttwt.hpp)
 
 
 [Single machine order acceptance and scheduling problem with time windows and sequence-dependent setup times, Total weighted tardiness](orproblems/orderacceptanceandscheduling.hpp)
@@ -555,7 +543,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [orderacceptanceandscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/orderacceptanceandscheduling.7z)
-* Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/orderacceptanceandscheduling.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/orderacceptanceandscheduling.hpp)
 
 
 [Single machine batch scheduling problem, Total completion time](orproblems/batchschedulingtotalcompletiontime.hpp)
@@ -589,7 +576,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [batchschedulingtotalweightedtardiness.7z](https://github.com/fontanf/orproblems/releases/download/data/batchschedulingtotalweightedtardiness.7z)
-* Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/batchschedulingtotalweightedtardiness.hpp)
 
 
 ### (Unrelated) parallel machine scheduling
@@ -609,22 +595,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [parallelschedulingwithfamilysetuptimestwct.7z](https://github.com/fontanf/orproblems/releases/download/data/parallelschedulingwithfamilysetuptimestwct.7z)
-* Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/parallelschedulingwithfamilysetuptimestwct.hpp)
-
-
-[Star Observation Scheduling Problem](orproblems/starobservationscheduling.hpp)
-* Three field classification: `R | rⱼᵢ, 2 pⱼᵢ ≥ dⱼᵢ - rⱼᵢ | ∑wⱼUⱼ`
-
-<details><summary>Literature</summary>
-<p>
-
-* Catusse N, Cambazard H, Brauner N, et al (2016) A Branch-And-Price Algorithm for Scheduling Observations on a Telescope. In: Twenty-Fifth International Joint Conference on Artificial Intelligence (IJCAI-16). AAAI Press, pp 3060–3066
-
-</p>
-</details>
-
-* Data: [starobservationscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/starobservationscheduling.7z)
-* Algorithms: [fontanf/columngenerationsolver](https://github.com/fontanf/columngenerationsolver/blob/master/examples/starobservationscheduling.hpp)
 
 
 ### Flow shop scheduling
@@ -656,7 +626,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
-* Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/permutationflowshopschedulingmakespan.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/permutationflowshopschedulingmakespan.hpp)
 
 
 [Permutation flow shop scheduling problem, Total completion time](orproblems/permutationflowshopschedulingtct.hpp)
@@ -679,7 +648,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
-* Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/permutationflowshopschedulingtct.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/permutationflowshopschedulingtct.hpp)
 
 
 [Permutation flow shop scheduling problem, Total tardiness](orproblems/permutationflowshopschedulingtt.hpp)
@@ -705,7 +673,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
-* Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/permutationflowshopschedulingtt.hpp), [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/permutationflowshopschedulingtt.hpp)
 
 
 [Distributed permutation flow shop scheduling problem, Makespan](orproblems/distributedpfssmakespan.hpp)
@@ -782,7 +749,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [jobshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/jobshopscheduling.7z)
-* Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/nowaitjobshopschedulingmakespan.hpp)
 
 
 ### Assembly Line Balancing
@@ -805,7 +771,6 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [simpleassemblylinebalancing1.7z](https://github.com/fontanf/orproblems/releases/download/data/simpleassemblylinebalancing1.7z)
-* Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/simpleassemblylinebalancing1.hpp)
 
 
 [U-shaped Assembly Line Balancing Problem of Type 1 (UALBP-1)](orproblems/ushapedassemblylinebalancing1.hpp)
@@ -825,14 +790,3 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 * Data: [simpleassemblylinebalancing1.7z](https://github.com/fontanf/orproblems/releases/download/data/simpleassemblylinebalancing1.7z)
-* Algorithms: [fontanf/treesearchsolver](https://github.com/fontanf/treesearchsolver/blob/master/examples/ushapedassemblylinebalancing1.hpp)
-
-
-### Resource constrained scheduling
-
-
-[ROADEF/EURO Challenge 2020: Maintenance Planning Problem](orproblems/roadef2020.hpp)
-* Website: https://www.roadef.org/challenge/2020/en/
-* Data: [roadef2020.7z](https://github.com/fontanf/orproblems/releases/download/data/roadef2020.7z)
-* Algorithms: [fontanf/localsearchsolver](https://github.com/fontanf/localsearchsolver/blob/master/examples/roadef2020.hpp)
-
