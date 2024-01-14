@@ -18,8 +18,8 @@
 
 #pragma once
 
-#include "optimizationtools/utils/utils.hpp"
 #include "optimizationtools/containers/indexed_set.hpp"
+#include "optimizationtools/utils/utils.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -91,7 +91,7 @@ public:
     }
 
     /** Get the maximum distance between two locations. */
-    inline Distance maximum_distance() const { return distance_max_; }
+    inline Distance highest_distance() const { return highest_distance_; }
 
     /*
      * Outputs
@@ -108,6 +108,7 @@ public:
                 << "Capacity:             " << capacity() << std::endl
                 << "Total demand:         " << total_demand() << std::endl
                 << "Demand ratio:         " << (double)total_demand() / capacity() << std::endl
+                << "Highest distance:     " << highest_distance() << std::endl
                 ;
         }
 
@@ -295,7 +296,7 @@ private:
     Demand total_demand_ = 0;
 
     /** Maximum distance between two locations. */
-    Distance distance_max_ = 0;
+    Distance highest_distance_ = 0;
 
     friend class InstanceBuilder;
 };
@@ -388,16 +389,16 @@ public:
         }
 
         // Compute maximum distance.
-        instance_.distance_max_ = 0;
+        instance_.highest_distance_ = 0;
         for (LocationId location_id_1 = 0;
                 location_id_1 < instance_.number_of_locations();
                 ++location_id_1) {
             for (LocationId location_id_2 = location_id_1 + 1;
                     location_id_2 < instance_.number_of_locations();
                     ++location_id_2) {
-                instance_.distance_max_ = std::max(
-                        instance_.distance_max_,
-                        instance_.distance(location_id_2, location_id_2));
+                instance_.highest_distance_ = (std::max)(
+                        instance_.highest_distance_,
+                        instance_.distance(location_id_1, location_id_2));
             }
         }
 

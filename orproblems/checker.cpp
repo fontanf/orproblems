@@ -54,6 +54,7 @@ void check(
     }
     if (verbosity_level > 0) {
         std::cout
+            << std::endl
             << "Checker" << std::endl
             << "-------" << std::endl;
         instance.check(certificate_path, std::cout, verbosity_level);

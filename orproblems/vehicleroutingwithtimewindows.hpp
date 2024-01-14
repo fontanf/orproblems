@@ -101,10 +101,10 @@ public:
     }
 
     /** Get the maximum travel time between two locations. */
-    inline Time maximum_travel_time() const { return maximum_travel_time_; }
+    inline Time highest_travel_time() const { return highest_travel_time_; }
 
     /** Get the maximum service time between two locations. */
-    inline Time maximum_service_time() const { return maximum_service_time_; }
+    inline Time highest_service_time() const { return highest_service_time_; }
 
     /*
      * Outputs
@@ -331,10 +331,10 @@ private:
      */
 
     /** Maximum travel time. */
-    Time maximum_travel_time_ = 0;
+    Time highest_travel_time_ = 0;
 
     /** Maximum service time. */
-    Time maximum_service_time_ = 0;
+    Time highest_service_time_ = 0;
 
     friend class InstanceBuilder;
 };
@@ -423,14 +423,14 @@ public:
         for (LocationId location_id_1 = 0;
                 location_id_1 < instance_.number_of_locations();
                 ++location_id_1) {
-            instance_.maximum_service_time_ = std::max(
-                    instance_.maximum_service_time_,
+            instance_.highest_service_time_ = std::max(
+                    instance_.highest_service_time_,
                     instance_.location(location_id_1).service_time);
             for (LocationId location_id_2 = location_id_1 + 1;
                     location_id_2 < instance_.number_of_locations();
                     ++location_id_2) {
-                instance_.maximum_travel_time_ = std::max(
-                        instance_.maximum_travel_time_,
+                instance_.highest_travel_time_ = std::max(
+                        instance_.highest_travel_time_,
                         instance_.travel_time(location_id_1, location_id_2));
             }
         }

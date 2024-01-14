@@ -277,10 +277,6 @@ public:
             ItemId item_id_1,
             ItemId item_id_2)
     {
-        assert(item_id_1 >= 0);
-        assert(item_id_2 >= 0);
-        assert(item_id_1 < instance_.number_of_items());
-        assert(item_id_2 < instance_.number_of_items());
         instance_.items_[item_id_1].neighbors.push_back(item_id_2);
         instance_.items_[item_id_2].neighbors.push_back(item_id_1);
     }
