@@ -25,8 +25,11 @@
 #include "optimizationtools/utils/utils.hpp"
 #include "optimizationtools/containers/indexed_set.hpp"
 
+#include "travelingsalesmansolver/distances_builder.hpp"
+
 #include <iostream>
 #include <fstream>
+#include <memory>
 #include <iomanip>
 
 namespace orproblems
@@ -42,21 +45,6 @@ using Demand = int64_t;
 using Distance = double;
 
 /**
- * Structure for a location.
- */
-struct Location
-{
-    /** x-coordinate of the location. */
-    double x;
-
-    /** y-coordinate of the location. */
-    double y;
-
-    /** Demand of the location. */
-    Demand demand;
-};
-
-/**
  * Instance class for a 'capacitated_open_vehicle_routing' problem.
  */
 class Instance
@@ -69,39 +57,22 @@ public:
      */
 
     /** Get the number of vehicles. */
-    VehicleId number_of_vehicles() const { return number_of_vehicles_; }
+    inline VehicleId number_of_vehicles() const { return number_of_vehicles_; }
 
     /** Get the number of locations. */
-    LocationId number_of_locations() const { return locations_.size(); }
+    inline LocationId number_of_locations() const { return demands_.size(); }
 
     /** Get the maximum length of a route. */
-    Distance maximum_route_length() const { return maximum_route_length_; }
+    inline Distance maximum_route_length() const { return maximum_route_length_; }
 
     /** Get the capacity of the vehicles. */
-    Demand capacity() const { return locations_[0].demand; }
+    inline Demand capacity() const { return demands_[0]; }
 
     /** Get the demand of a location. */
-    Demand demand(LocationId location_id) const { return locations_[location_id].demand; }
+    inline Demand demand(LocationId location_id) const { return demands_[location_id]; }
 
-    /** Get the x-coordinate of a location. */
-    Distance x(LocationId location_id) const { return locations_[location_id].x; }
-
-    /** Get the y-coordinate of a location. */
-    Distance y(LocationId location_id) const { return locations_[location_id].y; }
-
-    /** Get the distance between two locations. */
-    Distance distance(
-            LocationId location_id_1,
-            LocationId location_id_2) const
-    {
-        return distances_[location_id_1][location_id_2];
-    }
-
-    /** Get the maximum distance between two locations. */
-    Distance maximum_distance() const { return distance_max_; }
-
-    /** Get a bound. */
-    Distance bound() const { return powf(10.0f, ceil(log10f(number_of_locations() * maximum_distance()))); }
+    /** Get distances. */
+    const travelingsalesmansolver::Distances& distances() const { return *distances_; }
 
     /*
      * Outputs
@@ -163,7 +134,7 @@ public:
                     os
                         << std::setw(12) << location_id_1
                         << std::setw(12) << location_id_2
-                        << std::setw(12) << distance(location_id_1, location_id_2)
+                        << std::setw(12) << distances().distance(location_id_1, location_id_2)
                         << std::endl;
                 }
             }
@@ -227,8 +198,8 @@ public:
                 visited_locations.add(location_id);
 
                 route_demand += demand(location_id);
-                route_distance += distance(location_id_prev, location_id);
-                total_distance += distance(location_id_prev, location_id);
+                route_distance += distances().distance(location_id_prev, location_id);
+                total_distance += distances().distance(location_id_prev, location_id);
 
                 if (verbosity_level >= 2) {
                     os
@@ -298,11 +269,11 @@ private:
      * Private attributes
      */
 
-    /** Locations. */
-    std::vector<Location> locations_;
+    /** Demands. */
+    std::vector<Demand> demands_;
 
     /** Distances. */
-    std::vector<std::vector<Distance>> distances_;
+    std::shared_ptr<const travelingsalesmansolver::Distances> distances_;
 
     /** Number of vehicles. */
     VehicleId number_of_vehicles_ = 0;
@@ -313,9 +284,6 @@ private:
     /*
      * Computed attributes
      */
-
-    /** Maximum distance. */
-    Distance distance_max_ = 0;
 
     friend class InstanceBuilder;
 };
@@ -335,10 +303,7 @@ public:
      */
     void set_number_of_locations(LocationId number_of_locations)
     {
-        instance_.locations_ = std::vector<Location>(number_of_locations),
-        instance_.distances_ = std::vector<std::vector<Distance>>(
-                number_of_locations,
-                std::vector<Distance>(number_of_locations, -1));
+        instance_.demands_ = std::vector<Demand>(number_of_locations);
         instance_.number_of_vehicles_ = number_of_locations;
     }
 
@@ -353,28 +318,14 @@ public:
             LocationId location_id,
             Demand demand)
     {
-        instance_.locations_[location_id].demand = demand;
+        instance_.demands_[location_id] = demand;
     }
 
-    /** Set the coordinates of a location. */
-    void set_coordinates(
-            LocationId location_id,
-            double x,
-            double y)
+    /** Set the distance between two cities. */
+    inline void set_distances(
+            const std::shared_ptr<const travelingsalesmansolver::Distances>& distances)
     {
-        instance_.locations_[location_id].x = x;
-        instance_.locations_[location_id].y = y;
-    }
-
-    /** Set the distance between two locations. */
-    void set_distance(
-            LocationId location_id_1,
-            LocationId location_id_2,
-            Distance distance)
-    {
-        instance_.distances_[location_id_1][location_id_2] = distance;
-        instance_.distances_[location_id_2][location_id_1] = distance;
-        instance_.distance_max_ = std::max(instance_.distance_max_, distance);
+        instance_.distances_ = distances;
     }
 
     /** Build an instance from a file. */
@@ -416,6 +367,8 @@ private:
     /** Read an instance from a file in 'vrplib' format. */
     void read_vrplib(std::ifstream& file)
     {
+        travelingsalesmansolver::DistancesBuilder distances_builder;
+
         std::string tmp;
         std::vector<std::string> line;
         LocationId number_of_locations = -1;
@@ -424,6 +377,7 @@ private:
             replace(begin(tmp), end(tmp), '\t', ' ');
             line = optimizationtools::split(tmp, ' ');
             if (line.empty()) {
+            } else if (distances_builder.read_tsplib(file, tmp, line)) {
             } else if (tmp.rfind("NAME", 0) == 0) {
             } else if (tmp.rfind("COMMENT", 0) == 0) {
             } else if (tmp.rfind("TYPE", 0) == 0) {
@@ -433,24 +387,13 @@ private:
             } else if (tmp.rfind("DIMENSION", 0) == 0) {
                 number_of_locations = std::stol(line.back());
                 set_number_of_locations(number_of_locations);
-            } else if (tmp.rfind("EDGE_WEIGHT_TYPE", 0) == 0) {
-                edge_weight_type = line.back();
+                distances_builder.add_vertices(number_of_locations);
             } else if (tmp.rfind("DISTANCE", 0) == 0) {
                 Distance l = std::stol(line.back());
                 set_maximum_route_length(l * 0.9);
             } else if (tmp.rfind("CAPACITY", 0) == 0) {
                 Demand c = std::stol(line.back());
                 set_demand(0, c);
-            } else if (tmp.rfind("NODE_COORD_SECTION", 0) == 0) {
-                LocationId location_id_tmp;
-                double x = -1;
-                double y = -1;
-                for (LocationId location_id = 0;
-                        location_id < number_of_locations;
-                        ++location_id) {
-                    file >> location_id_tmp >> x >> y;
-                    set_coordinates(location_id, x, y);
-                }
             } else if (tmp.rfind("DEMAND_SECTION", 0) == 0) {
                 LocationId location_id_tmp = -1;
                 Demand demand = -1;
@@ -464,31 +407,15 @@ private:
             } else if (line[0].rfind("EOF", 0) == 0) {
                 break;
             } else {
-                std::cerr << "\033[31m" << "ERROR, ENTRY \"" << line[0] << "\" not implemented." << "\033[0m" << std::endl;
+                throw std::invalid_argument(
+                        "Entry \""
+                        + line[0]
+                        + "\" not implemented.");
             }
         }
 
-        // Compute distances.
-        if (edge_weight_type == "EUC_2D") {
-            for (LocationId location_id_1 = 0;
-                    location_id_1 < number_of_locations;
-                    ++location_id_1) {
-                for (LocationId location_id_2 = location_id_1 + 1;
-                        location_id_2 < number_of_locations;
-                        ++location_id_2) {
-                    double xd = instance_.x(location_id_2) - instance_.x(location_id_1);
-                    double yd = instance_.y(location_id_2) - instance_.y(location_id_1);
-                    //Distance d = std::round(std::sqrt(xd * xd + yd * yd));
-                    Distance distance = std::sqrt(xd * xd + yd * yd);
-                    set_distance(location_id_1, location_id_2, distance);
-                }
-            }
-        } else {
-            throw std::invalid_argument(
-                    "EDGE_WEIGHT_TYPE \""
-                    + edge_weight_type
-                    + "\" not implemented.");
-        }
+        set_distances(std::shared_ptr<const travelingsalesmansolver::Distances>(
+                    new travelingsalesmansolver::Distances(distances_builder.build())));
     }
 
     /*

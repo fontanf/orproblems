@@ -35,6 +35,12 @@ local_repository(
     path = "../optimizationtools/",
 )
 
+git_repository(
+    name = "travelingsalesmansolver",
+    remote = "https://github.com/fontanf/travelingsalesmansolver.git",
+    commit = "97a12111e2d8dcdb2072570b09667ec9073f6000",
+)
+
 http_archive(
     name = "simdjson",
     build_file_content = """
