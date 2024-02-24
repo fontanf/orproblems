@@ -10,7 +10,7 @@ The data also include CSV files listing the instances for each problem and their
 ## Packing
 
 
-[Knapsack Problem with Conflicts / Disjunctively Constrained Knapsack Problem](orproblems/knapsack_with_conflicts.hpp)
+[Knapsack Problem with Conflicts / Disjunctively Constrained Knapsack Problem](orproblems/packing/knapsack_with_conflicts.hpp)
 
 <details><summary>Literature</summary>
 <p>
@@ -34,10 +34,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [knapsack_with_conflicts.7z](https://github.com/fontanf/orproblems/releases/download/data/knapsack_with_conflicts.7z)
+* Data: [knapsack\_with\_conflicts.7z](https://github.com/fontanf/orproblems/releases/download/data/knapsack_with_conflicts.7z)
 
 
-[Multidimensional Multiple-choice Knapsack Problem](orproblems/multidimensional_multiple_choice_knapsack.hpp)
+[Multidimensional Multiple-choice Knapsack Problem](orproblems/packing/multidimensional_multiple_choice_knapsack.hpp)
 
 <details><summary>Literature</summary>
 <p>
@@ -59,10 +59,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [multidimensional_multiple_choice_knapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/multidimensional_multiple_choice_knapsack.7z)
+* Data: [multidimensional\_multiple\_choice\_knapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/multidimensional_multiple_choice_knapsack.7z)
 
 
-[Quadratic Assignment Problem](orproblems/quadraticassignment.hpp)
+[Quadratic Assignment Problem](orproblems/assignment/quadratic_assignment.hpp)
 
 <details><summary>Literature</summary>
 <p>
@@ -181,10 +181,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [quadraticassignment.7z](https://github.com/fontanf/orproblems/releases/download/data/quadraticassignment.7z)
+* Data: [quadratic\_assignment.7z](https://github.com/fontanf/orproblems/releases/download/data/quadratic_assignment.7z)
 
 
-[Cutting Stock Problem](orproblems/cutting_stock.hpp)
+[Cutting Stock Problem](orproblems/packing/cutting_stock.hpp)
 
 <details><summary>Literature</summary>
 <p>
@@ -201,10 +201,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [cutting_stock.7z](https://github.com/fontanf/orproblems/releases/download/data/cutting_stock.7z)
+* Data: [cutting\_stock.7z](https://github.com/fontanf/orproblems/releases/download/data/cutting_stock.7z)
 
 
-[Multiple Knapsack Problem](orproblems/multipleknapsack.hpp)
+[Multiple Knapsack Problem](orproblems/packing/multiple_knapsack.hpp)
 
 <details><summary>Literature</summary>
 <p>
@@ -229,10 +229,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [multipleknapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/multipleknapsack.7z)
+* Data: [multiple\_knapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/multiple_knapsack.7z)
 
 
-[Quadratic Multiple Knapsack Problem](orproblems/quadraticmultipleknapsack.hpp)
+[Quadratic Multiple Knapsack Problem](orproblems/packing/quadratic_multiple_knapsack.hpp)
 
 <details><summary>Literature</summary>
 <p>
@@ -255,11 +255,11 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [quadraticmultipleknapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/quadraticmultipleknapsack.7z)
+* Data: [quadratic\_multiple\_knapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/quadratic_multiple_knapsack.7z)
 
 
 <!--
-[Generalized Quadratic Multiple Knapsack Problem](orproblems/generalizedquadraticmultipleknapsack.hpp)
+[Generalized Quadratic Multiple Knapsack Problem](orproblems/packing/generalized_quadratic_multiple_knapsack.hpp)
 
 <details><summary>Literature</summary>
 <p>
@@ -274,11 +274,11 @@ The data also include CSV files listing the instances for each problem and their
 </details>
 
 
-* Data: [generalizedquadraticmultipleknapsack.7z](https://github.com/fontanf/generalizedorproblems/releases/download/data/quadraticmultipleknapsack.7z)
+* Data: [generalized_quadratic_multiple_knapsack.7z](https://github.com/fontanf/generalizedorproblems/releases/download/data/quadratic_multiple_knapsack.7z)
 -->
 
 
-[Bin Packing Problem with Conflicts](orproblems/binpackingwithconflicts.hpp)
+[Bin Packing Problem with Conflicts](orproblems/packing/bin_packing_with_conflicts.hpp)
 
 <details><summary>Literature</summary>
 <p>
@@ -292,7 +292,7 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [binpackingwithconflicts.7z](https://github.com/fontanf/orproblems/releases/download/data/binpackingwithconflicts.7z)
+* Data: [bin\_packing\_with\_conflicts.7z](https://github.com/fontanf/orproblems/releases/download/data/bin_packing_with_conflicts.7z)
 
 
 ## Routing
@@ -301,7 +301,7 @@ The data also include CSV files listing the instances for each problem and their
 ### Single vehicle
 
 
-[Sequential Ordering Problem](orproblems/sequentialordering.hpp)
+[Sequential Ordering Problem](orproblems/scheduling/sequential_ordering.hpp)
 * Three field classification: `1 | sᵢⱼ, prec | Cₘₐₓ`
 
 <details><summary>Literature</summary>
@@ -332,10 +332,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [sequentialordering.7z](https://github.com/fontanf/orproblems/releases/download/data/sequentialordering.7z)
+* Data: [sequential\_ordering.7z](https://github.com/fontanf/orproblems/releases/download/data/sequential_ordering.7z)
 
 
-[Traveling salesman problem with release dates](orproblems/travelingsalesmanwithreleasedates.hpp)
+[Traveling salesman problem with release dates](orproblems/routing/traveling_salesman_with_release_dates.hpp)
 * Release dates for the arrival of goods to the depot, the solution may require multiple trips.
 
 <details><summary>Literature</summary>
@@ -346,10 +346,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [travelingsalesmanwithreleasedates.7z](https://github.com/fontanf/orproblems/releases/download/data/travelingsalesmanwithreleasedates.7z)
+* Data: [traveling\_salesman\_with\_release\_dates.7z](https://github.com/fontanf/orproblems/releases/download/data/traveling_salesman_with_release_dates.7z)
 
 
-[Traveling Repairman Problem / Minimum Latency Problem](orproblems/travelingrepairman.hpp)
+[Traveling Repairman Problem / Minimum Latency Problem](orproblems/routing/traveling_repairman.hpp)
 * Three field classification: `1 | sᵢⱼ | ∑Cⱼ`
 
 <details><summary>Literature</summary>
@@ -376,10 +376,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [travelingrepairman.7z](https://github.com/fontanf/orproblems/releases/download/data/travelingrepairman.7z)
+* Data: [traveling\_repairman.7z](https://github.com/fontanf/orproblems/releases/download/data/traveling_repairman.7z)
 
 
-[Time-dependent orienteering problem](orproblems/timedependentorienteering.hpp)
+[Time-dependent orienteering problem](orproblems/routing/time_dependent_orienteering.hpp)
 
 <details><summary>Literature</summary>
 <p>
@@ -394,10 +394,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [timedependentorienteering.7z](https://github.com/fontanf/orproblems/releases/download/data/timedependentorienteering.7z)
+* Data: [time\_dependent\_orienteering.7z](https://github.com/fontanf/orproblems/releases/download/data/time_dependent_orienteering.7z)
 
 
-[Orienteering problem with hotel selection](orproblems/orienteeringwithhotelselection.hpp)
+[Orienteering problem with hotel selection](orproblems/routing/orienteering_with_hotel_selection.hpp)
 
 <details><summary>Literature</summary>
 <p>
@@ -411,13 +411,13 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [orienteeringwithhotelselection.7z](https://github.com/fontanf/orproblems/releases/download/data/orienteeringwithhotelselection.7z)
+* Data: [orienteering\_with\_hotel\_selection.7z](https://github.com/fontanf/orproblems/releases/download/data/orienteering_with_hotel_selection.7z)
 
 
 ### Multiple vehicles
 
 
-[Capacitated Vehicle Routing Problem](orproblems/capacitatedvehiclerouting.hpp)
+[Capacitated Vehicle Routing Problem](orproblems/routing/capacitated_vehicle_routing.hpp)
 
 <details><summary>Literature</summary>
 <p>
@@ -440,10 +440,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [capacitatedvehiclerouting.7z](https://github.com/fontanf/orproblems/releases/download/data/capacitatedvehiclerouting.7z)
+* Data: [capacitated\_vehicle\_routing.7z](https://github.com/fontanf/orproblems/releases/download/data/capacitated_vehicle_routing.7z)
 
 
-[Vehicle Routing Problem with Time Windows](orproblems/vehicleroutingwithtimewindows.hpp)
+[Vehicle Routing Problem with Time Windows](orproblems/routing/vehicle_routing_with_time_windows.hpp)
 * Time windows / Capacity constraint / Maximum number of vehicles
 
 <details><summary>Literature</summary>
@@ -461,10 +461,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [vehicleroutingwithtimewindows.7z](https://github.com/fontanf/orproblems/releases/download/data/vehicleroutingwithtimewindows.7z)
+* Data: [vehicle\_routing\_with\_time\_windows.7z](https://github.com/fontanf/orproblems/releases/download/data/vehicle_routing_with_time_windows.7z)
 
 
-[Capacitated Open Vehicle Routing Problem](orproblems/capacitatedopenvehiclerouting.hpp)
+[Capacitated Open Vehicle Routing Problem](orproblems/routing/capacitated_open_vehicle_routing.hpp)
 * No need to return to the depot / Capacity constraint / Maximum route length / Maximum number of vehicles
 
 <details><summary>Literature</summary>
@@ -483,7 +483,7 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [capacitatedopenvehiclerouting.7z](https://github.com/fontanf/orproblems/releases/download/data/capacitatedopenvehiclerouting.7z)
+* Data: [capacitated\_open\_vehicle\_routing.7z](https://github.com/fontanf/orproblems/releases/download/data/capacitated_open_vehicle_routing.7z)
 
 
 ## Scheduling
@@ -492,7 +492,7 @@ The data also include CSV files listing the instances for each problem and their
 ### Single machine scheduling
 
 
-[Single machine scheduling problem with sequence-dependent setup times, Total weighted tardiness](orproblems/schedulingwithsdsttwt.hpp)
+[Single machine scheduling problem with sequence-dependent setup times, Total weighted tardiness](orproblems/scheduling/scheduling_with_sdst_twt.hpp)
 * Three field classification: `1 | sᵢⱼ | ∑wⱼTⱼ`
 
 <details><summary>Literature</summary>
@@ -522,10 +522,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [schedulingwithsdsttwt.7z](https://github.com/fontanf/orproblems/releases/download/data/schedulingwithsdsttwt.7z)
+* Data: [scheduling\_with\_sdst\_twt.7z](https://github.com/fontanf/orproblems/releases/download/data/scheduling_with_sdst_twt.7z)
 
 
-[Single machine order acceptance and scheduling problem with time windows and sequence-dependent setup times, Total weighted tardiness](orproblems/orderacceptanceandscheduling.hpp)
+[Single machine order acceptance and scheduling problem with time windows and sequence-dependent setup times, Total weighted tardiness](orproblems/scheduling/order_acceptance_and_scheduling.hpp)
 * Three field classification: `1 | rⱼ, sᵢⱼ, reject, đⱼ | ∑wⱼTⱼ - ∑vⱼ`
 
 <details><summary>Literature</summary>
@@ -542,10 +542,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [orderacceptanceandscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/orderacceptanceandscheduling.7z)
+* Data: [order\_acceptance\_and\_scheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/order_acceptance_and_scheduling.7z)
 
 
-[Single machine batch scheduling problem, Total completion time](orproblems/batchschedulingtotalcompletiontime.hpp)
+[Single machine batch scheduling problem, Total completion time](orproblems/scheduling/batch_scheduling_total_completion_time.hpp)
 * Three field classification: `1 | batch, sⱼ | ∑Cⱼ`
 
 <details><summary>Literature</summary>
@@ -558,10 +558,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [batchschedulingtotalcompletiontime.7z](https://github.com/fontanf/orproblems/releases/download/data/batchschedulingtotalcompletiontime.7z)
+* Data: [batch\_scheduling\_total\_completion\_time.7z](https://github.com/fontanf/orproblems/releases/download/data/batch_scheduling_total_completion_time.7z)
 
 
-[Single machine batch scheduling problem, Total weighted tardiness](orproblems/batchschedulingtotalweightedtardiness.hpp)
+[Single machine batch scheduling problem, Total weighted tardiness](orproblems/scheduling/batch_scheduling_total_weighted_tardiness.hpp)
 * Three field classification: `1 | batch, rⱼ, sⱼ, compt | ∑wⱼTⱼ`
 
 <details><summary>Literature</summary>
@@ -575,13 +575,13 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [batchschedulingtotalweightedtardiness.7z](https://github.com/fontanf/orproblems/releases/download/data/batchschedulingtotalweightedtardiness.7z)
+* Data: [batch\_scheduling\_total\_weighted\_tardiness.7z](https://github.com/fontanf/orproblems/releases/download/data/batch_scheduling_total_weighted_tardiness.7z)
 
 
 ### (Unrelated) parallel machine scheduling
 
 
-[Identical parallel machine scheduling problem with family setup times, Total weighted completion time](orproblems/parallelschedulingwithfamilysetuptimestwct.hpp)
+[Identical parallel machine scheduling problem with family setup times, Total weighted completion time](orproblems/scheduling/parallel_scheduling_with_family_setup_times_twct.hpp)
 * Three field classification: `P | sᵢ | ∑wⱼCⱼ`
 
 <details><summary>Literature</summary>
@@ -594,13 +594,13 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [parallelschedulingwithfamilysetuptimestwct.7z](https://github.com/fontanf/orproblems/releases/download/data/parallelschedulingwithfamilysetuptimestwct.7z)
+* Data: [parallel\_scheduling\_with\_family\_setup\_times\_twct.7z](https://github.com/fontanf/orproblems/releases/download/data/parallel_scheduling_with_family_setup_times_twct.7z)
 
 
 ### Flow shop scheduling
 
 
-[Permutation flow shop scheduling problem, Makespan](orproblems/permutationflowshopschedulingmakespan.hpp)
+[Permutation flow shop scheduling problem, Makespan](orproblems/scheduling/permutation_flowshop_scheduling_makespan.hpp)
 * Three field classification: `Fm | prmu | Cₘₐₓ`
 
 <details><summary>Literature</summary>
@@ -625,10 +625,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
+* Data: [flowshop\_scheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshop_scheduling.7z)
 
 
-[Permutation flow shop scheduling problem, Total completion time](orproblems/permutationflowshopschedulingtct.hpp)
+[Permutation flow shop scheduling problem, Total completion time](orproblems/scheduling/permutation_flowshop_scheduling_tct.hpp)
 * Three field classification: `Fm | prmu | ∑Cⱼ`
 
 <details><summary>Literature</summary>
@@ -647,10 +647,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
+* Data: [flowshop\_scheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshop_scheduling.7z)
 
 
-[Permutation flow shop scheduling problem, Total tardiness](orproblems/permutationflowshopschedulingtt.hpp)
+[Permutation flow shop scheduling problem, Total tardiness](orproblems/scheduling/permutationflowshop_schedulingtt.hpp)
 * Three field classification: `Fm | prmu | ∑Tⱼ`
 
 <details><summary>Literature</summary>
@@ -672,10 +672,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
+* Data: [flowshop\_scheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshop_scheduling.7z)
 
 
-[Distributed permutation flow shop scheduling problem, Makespan](orproblems/distributedpfssmakespan.hpp)
+[Distributed permutation flow shop scheduling problem, Makespan](orproblems/scheduling/distributed_pfss_makespan.hpp)
 * Three field classification: `DFm | prmu | Cₘₐₓ`
 
 <details><summary>Literature</summary>
@@ -694,10 +694,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
+* Data: [flowshop\_scheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshop_scheduling.7z)
 
 
-[Distributed permutation flow shop scheduling problem, Total completion time](orproblems/distributedpfsstct.hpp)
+[Distributed permutation flow shop scheduling problem, Total completion time](orproblems/scheduling/distributed_pfss_tct.hpp)
 * Three field classification: `DFm | prmu | ∑Cⱼ`
 
 <details><summary>Literature</summary>
@@ -709,13 +709,13 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [flowshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshopscheduling.7z)
+* Data: [flowshop\_scheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/flowshop_scheduling.7z)
 
 
 ### Job shop scheduling
 
 
-[No-wait job shop scheduling problem, Makespan](orproblems/nowaitjobshopschedulingmakespan.hpp)
+[No-wait job shop scheduling problem, Makespan](orproblems/scheduling/no_wait_job_shop_scheduling_makespan.hpp)
 * Three field classification: `Jm | no-wait | Cₘₐₓ`
 
 <details><summary>Literature</summary>
@@ -748,13 +748,13 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [jobshopscheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/jobshopscheduling.7z)
+* Data: [job\_shop\_scheduling.7z](https://github.com/fontanf/orproblems/releases/download/data/job_shop_scheduling.7z)
 
 
 ### Assembly Line Balancing
 
 
-[Simple Assembly Line Balancing Problem of Type 1 (SALBP-1)](orproblems/simpleassemblylinebalancing1.hpp)
+[Simple Assembly Line Balancing Problem of Type 1 (SALBP-1)](orproblems/scheduling/simple_assembly_line_balancing_1.hpp)
 * Bin Packing Problem with precedence constraints of the form `bin(j1) <= bin(j2) `
 
 <details><summary>Literature</summary>
@@ -770,10 +770,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [simpleassemblylinebalancing1.7z](https://github.com/fontanf/orproblems/releases/download/data/simpleassemblylinebalancing1.7z)
+* Data: [simple\_assembly\_line\_balancing\_1.7z](https://github.com/fontanf/orproblems/releases/download/data/simple_assembly_line_balancing_1.7z)
 
 
-[U-shaped Assembly Line Balancing Problem of Type 1 (UALBP-1)](orproblems/ushapedassemblylinebalancing1.hpp)
+[U-shaped Assembly Line Balancing Problem of Type 1 (UALBP-1)](orproblems/scheduling/u_shaped_assembly_line_balancing_1.hpp)
 
 <details><summary>Literature</summary>
 <p>
@@ -789,4 +789,4 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [simpleassemblylinebalancing1.7z](https://github.com/fontanf/orproblems/releases/download/data/simpleassemblylinebalancing1.7z)
+* Data: [simple\_assembly\_line\_balancing\_1.7z](https://github.com/fontanf/orproblems/releases/download/data/simple_assembly_line_balancing_1.7z)
