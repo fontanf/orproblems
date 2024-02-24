@@ -27,7 +27,7 @@
 
 namespace orproblems
 {
-namespace multidimensionalmultiplechoiceknapsack
+namespace multidimensional_multiple_choice_knapsack
 {
 
 using ItemId = int64_t;
@@ -49,7 +49,7 @@ struct Item
 };
 
 /**
- * Instance class for a 'multidimensionalmultiplechoiceknapsack' problem.
+ * Instance class for a 'multidimensional_multiple_choice_knapsack' problem.
  */
 class Instance
 {

@@ -23,7 +23,7 @@
 
 namespace orproblems
 {
-namespace travelingrepairman
+namespace traveling_repairman
 {
 
 using LocationId = int64_t;
@@ -43,7 +43,7 @@ struct Location
 };
 
 /**
- * Instance class for a 'travelingrepairman' problem.
+ * Instance class for a 'traveling_repairman' problem.
  */
 class Instance
 {

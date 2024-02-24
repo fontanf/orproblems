@@ -1,5 +1,5 @@
 /**
- * Permutation flow shop scheduling problem, total completion time
+ * Permutation flow shop scheduling problem, makespan
  *
  * Input:
  * - m machines
@@ -12,7 +12,7 @@
  *     the end of operation (j, i)
  *   - the job sequence is the same on all machines
  * Objective:
- * - Minimize the total completion time of the jobs
+ * - Minimize the makespan of the schedule
  *
  */
 
@@ -27,7 +27,7 @@
 
 namespace orproblems
 {
-namespace permutationflowshopschedulingtct
+namespace permutation_flowshop_scheduling_makespan
 {
 
 using JobId = int64_t;
@@ -36,7 +36,7 @@ using MachineId = int64_t;
 using Time = int64_t;
 
 /**
- * Instance class for a 'permutationflowshopschedulingtct' problem.
+ * Instance class for a 'permutation_flowshop_scheduling_makespan' problem.
  */
 class Instance
 {
@@ -116,19 +116,19 @@ public:
         if (verbosity_level >= 2) {
             os << std::endl << std::right
                 << std::setw(12) << "Job"
-                << std::setw(12) << "TCT"
+                << std::setw(12) << "Time"
                 << std::endl
                 << std::setw(12) << "---"
-                << std::setw(12) << "---"
+                << std::setw(12) << "----"
                 << std::endl;
         }
 
         std::vector<Time> times(number_of_machines(), 0);
-        JobId job_id = -1;
+        JobId job_id = 0;
         optimizationtools::IndexedSet jobs(number_of_jobs());
         JobPos number_of_duplicates = 0;
-        Time total_completion_time = 0;
         while (file >> job_id) {
+
             // Check duplicates.
             if (jobs.contains(job_id)) {
                 number_of_duplicates++;
@@ -151,12 +151,11 @@ public:
                         + processing_time(job_id, machine_id);
                 }
             }
-            total_completion_time += times[number_of_machines() - 1];
 
             if (verbosity_level >= 2) {
                 os
                     << std::setw(12) << job_id
-                    << std::setw(12) << total_completion_time
+                    << std::setw(12) << times[number_of_machines() - 1]
                     << std::endl;
             }
         }
@@ -169,13 +168,13 @@ public:
             os << std::endl;
         if (verbosity_level >= 1) {
             os
-                << "Number of jobs:         " << jobs.size() << " / " << number_of_jobs()  << std::endl
-                << "Number of duplicates:   " << number_of_duplicates << std::endl
-                << "Feasible:               " << feasible << std::endl
-                << "Total completion time:  " << total_completion_time << std::endl
+                << "Number of jobs:        " << jobs.size() << " / " << number_of_jobs()  << std::endl
+                << "Number of duplicates:  " << number_of_duplicates << std::endl
+                << "Feasible:              " << feasible << std::endl
+                << "Makespan:              " << times[number_of_machines() - 1] << std::endl
                 ;
         }
-        return {feasible, total_completion_time};
+        return {feasible, times[number_of_machines() - 1]};
     }
 
 private:
@@ -247,6 +246,7 @@ public:
             throw std::runtime_error(
                     "Unable to open file \"" + instance_path + "\".");
         }
+
         if (format == "" || format == "default") {
             read_default(file);
         } else {

@@ -37,7 +37,7 @@
 
 namespace orproblems
 {
-namespace orienteeringwithhotelselection
+namespace orienteering_with_hotel_selection
 {
 
 using LocationId = int64_t;
@@ -64,7 +64,7 @@ struct Location
 
 
 /**
- * Instance class for a 'orienteeringwithhotelselection' problem.
+ * Instance class for a 'orienteering_with_hotel_selection' problem.
  */
 class Instance
 {

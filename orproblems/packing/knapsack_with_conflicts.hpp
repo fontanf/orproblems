@@ -26,7 +26,7 @@
 
 namespace orproblems
 {
-namespace knapsackwithconflicts
+namespace knapsack_with_conflicts
 {
 
 using ItemId = int64_t;
@@ -50,7 +50,7 @@ struct Item
 };
 
 /**
- * Instance class for a 'knapsackwithconflicts' problem.
+ * Instance class for a 'knapsack_with_conflicts' problem.
  */
 class Instance
 {

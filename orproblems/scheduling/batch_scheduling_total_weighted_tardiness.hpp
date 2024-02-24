@@ -32,7 +32,7 @@
 
 namespace orproblems
 {
-namespace batchschedulingtotalweightedtardiness
+namespace batch_scheduling_total_weighted_tardiness
 {
 
 using JobId = int64_t;
@@ -64,7 +64,7 @@ struct Job
 };
 
 /**
- * Instance class for a 'batchschedulingtotalweightedtardiness' problem.
+ * Instance class for a 'batch_scheduling_total_weighted_tardiness' problem.
  */
 class Instance
 {

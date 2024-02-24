@@ -22,7 +22,7 @@
 
 namespace orproblems
 {
-namespace multipleknapsack
+namespace multiple_knapsack
 {
 
 using ItemId = int64_t;
@@ -44,7 +44,7 @@ struct Item
 };
 
 /**
- * Instance class for a 'multipleknapsack' problem.
+ * Instance class for a 'multiple_knapsack' problem.
  */
 class Instance
 {

@@ -25,7 +25,7 @@
 
 namespace orproblems
 {
-namespace quadraticmultipleknapsack
+namespace quadratic_multiple_knapsack
 {
 
 using ItemId = int64_t;
@@ -35,7 +35,7 @@ using Weight = int64_t;
 using Profit = int64_t;
 
 /**
- * Instance class for a 'quadraticmultipleknapsack' problem.
+ * Instance class for a 'quadratic_multiple_knapsack' problem.
  */
 class Instance
 {

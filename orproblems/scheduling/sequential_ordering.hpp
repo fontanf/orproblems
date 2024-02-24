@@ -28,7 +28,7 @@
 
 namespace orproblems
 {
-namespace sequentialordering
+namespace sequential_ordering
 {
 
 using LocationId = int64_t;
@@ -46,7 +46,7 @@ struct Location
 
 
 /**
- * Instance class for a 'sequentialordering' problem.
+ * Instance class for a 'sequential_ordering' problem.
  */
 class Instance
 {

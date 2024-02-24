@@ -25,7 +25,7 @@
 
 namespace orproblems
 {
-namespace travelingsalesmanwithreleasedates
+namespace traveling_salesman_with_release_dates
 {
 
 using LocationId = int64_t;
@@ -51,7 +51,7 @@ struct Location
 };
 
 /**
- * Instance class for a 'travelingsalesmanwithreleasedates' problem.
+ * Instance class for a 'traveling_salesman_with_release_dates' problem.
  */
 class Instance
 {

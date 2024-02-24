@@ -35,7 +35,7 @@
 
 namespace orproblems
 {
-namespace vehicleroutingwithtimewindows
+namespace vehicle_routing_with_time_windows
 {
 
 using LocationId = int64_t;
@@ -69,7 +69,7 @@ struct Location
 };
 
 /**
- * Instance class for a 'vehicleroutingwithtimewindows' problem.
+ * Instance class for a 'vehicle_routing_with_time_windows' problem.
  */
 class Instance
 {

@@ -1,6 +1,6 @@
 cc_library(
-        name = "knapsackwithconflicts",
-        hdrs = ["knapsackwithconflicts.hpp"],
+        name = "knapsack_with_conflicts",
+        hdrs = ["packing/knapsack_with_conflicts.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -9,8 +9,8 @@ cc_library(
 )
 
 cc_library(
-        name = "multidimensionalmultiplechoiceknapsack",
-        hdrs = ["multidimensionalmultiplechoiceknapsack.hpp"],
+        name = "multidimensional_multiple_choice_knapsack",
+        hdrs = ["packing/multidimensional_multiple_choice_knapsack.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -19,8 +19,8 @@ cc_library(
 )
 
 cc_library(
-        name = "quadraticassignment",
-        hdrs = ["quadraticassignment.hpp"],
+        name = "cutting_stock",
+        hdrs = ["packing/cutting_stock.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -29,8 +29,8 @@ cc_library(
 )
 
 cc_library(
-        name = "cuttingstock",
-        hdrs = ["cuttingstock.hpp"],
+        name = "multiple_knapsack",
+        hdrs = ["packing/multiple_knapsack.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -39,8 +39,8 @@ cc_library(
 )
 
 cc_library(
-        name = "multipleknapsack",
-        hdrs = ["multipleknapsack.hpp"],
+        name = "quadratic_multiple_knapsack",
+        hdrs = ["packing/quadratic_multiple_knapsack.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -49,8 +49,8 @@ cc_library(
 )
 
 cc_library(
-        name = "quadraticmultipleknapsack",
-        hdrs = ["quadraticmultipleknapsack.hpp"],
+        name = "generalized_quadratic_multiple_knapsack",
+        hdrs = ["packing/generalized_quadratic_multiple_knapsack.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -59,8 +59,30 @@ cc_library(
 )
 
 cc_library(
-        name = "generalizedquadraticmultipleknapsack",
-        hdrs = ["generalizedquadraticmultipleknapsack.hpp"],
+        name = "bin_packing_with_conflicts",
+        hdrs = ["packing/bin_packing_with_conflicts.hpp"],
+        deps = [
+                "@optimizationtools//optimizationtools/containers:containers",
+                "@optimizationtools//optimizationtools/utils:utils",
+        ],
+        visibility = ["//visibility:public"],
+)
+
+
+cc_library(
+        name = "quadratic_assignment",
+        hdrs = ["assignment/quadratic_assignment.hpp"],
+        deps = [
+                "@optimizationtools//optimizationtools/containers:containers",
+                "@optimizationtools//optimizationtools/utils:utils",
+        ],
+        visibility = ["//visibility:public"],
+)
+
+
+cc_library(
+        name = "traveling_salesman_with_release_dates",
+        hdrs = ["routing/traveling_salesman_with_release_dates.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -69,8 +91,8 @@ cc_library(
 )
 
 cc_library(
-        name = "binpackingwithconflicts",
-        hdrs = ["binpackingwithconflicts.hpp"],
+        name = "traveling_repairman",
+        hdrs = ["routing/traveling_repairman.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -79,38 +101,8 @@ cc_library(
 )
 
 cc_library(
-        name = "sequentialordering",
-        hdrs = ["sequentialordering.hpp"],
-        deps = [
-                "@optimizationtools//optimizationtools/containers:containers",
-                "@optimizationtools//optimizationtools/utils:utils",
-        ],
-        visibility = ["//visibility:public"],
-)
-
-cc_library(
-        name = "travelingsalesmanwithreleasedates",
-        hdrs = ["travelingsalesmanwithreleasedates.hpp"],
-        deps = [
-                "@optimizationtools//optimizationtools/containers:containers",
-                "@optimizationtools//optimizationtools/utils:utils",
-        ],
-        visibility = ["//visibility:public"],
-)
-
-cc_library(
-        name = "travelingrepairman",
-        hdrs = ["travelingrepairman.hpp"],
-        deps = [
-                "@optimizationtools//optimizationtools/containers:containers",
-                "@optimizationtools//optimizationtools/utils:utils",
-        ],
-        visibility = ["//visibility:public"],
-)
-
-cc_library(
-        name = "timedependentorienteering",
-        hdrs = ["timedependentorienteering.hpp"],
+        name = "time_dependent_orienteering",
+        hdrs = ["routing/time_dependent_orienteering.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -120,8 +112,8 @@ cc_library(
 )
 
 cc_library(
-        name = "orienteeringwithhotelselection",
-        hdrs = ["orienteeringwithhotelselection.hpp"],
+        name = "orienteering_with_hotel_selection",
+        hdrs = ["routing/orienteering_with_hotel_selection.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -130,8 +122,8 @@ cc_library(
 )
 
 cc_library(
-        name = "capacitatedvehiclerouting",
-        hdrs = ["capacitatedvehiclerouting.hpp"],
+        name = "capacitated_vehicle_routing",
+        hdrs = ["routing/capacitated_vehicle_routing.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -140,8 +132,8 @@ cc_library(
 )
 
 cc_library(
-        name = "vehicleroutingwithtimewindows",
-        hdrs = ["vehicleroutingwithtimewindows.hpp"],
+        name = "vehicle_routing_with_time_windows",
+        hdrs = ["routing/vehicle_routing_with_time_windows.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -150,8 +142,19 @@ cc_library(
 )
 
 cc_library(
-        name = "capacitatedopenvehiclerouting",
-        hdrs = ["capacitatedopenvehiclerouting.hpp"],
+        name = "capacitated_open_vehicle_routing",
+        hdrs = ["routing/capacitated_open_vehicle_routing.hpp"],
+        deps = [
+                "@optimizationtools//optimizationtools/containers:containers",
+                "@optimizationtools//optimizationtools/utils:utils",
+        ],
+        visibility = ["//visibility:public"],
+)
+
+
+cc_library(
+        name = "sequential_ordering",
+        hdrs = ["scheduling/sequential_ordering.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -160,8 +163,8 @@ cc_library(
 )
 
 cc_library(
-        name = "schedulingwithsdsttwt",
-        hdrs = ["schedulingwithsdsttwt.hpp"],
+        name = "scheduling_with_sdst_twt",
+        hdrs = ["scheduling/scheduling_with_sdst_twt.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -170,8 +173,8 @@ cc_library(
 )
 
 cc_library(
-        name = "orderacceptanceandscheduling",
-        hdrs = ["orderacceptanceandscheduling.hpp"],
+        name = "order_acceptance_and_scheduling",
+        hdrs = ["scheduling/order_acceptance_and_scheduling.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -180,8 +183,8 @@ cc_library(
 )
 
 cc_library(
-        name = "batchschedulingtotalcompletiontime",
-        hdrs = ["batchschedulingtotalcompletiontime.hpp"],
+        name = "batch_scheduling_total_completion_time",
+        hdrs = ["scheduling/batch_scheduling_total_completion_time.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -190,8 +193,8 @@ cc_library(
 )
 
 cc_library(
-        name = "batchschedulingtotalweightedtardiness",
-        hdrs = ["batchschedulingtotalweightedtardiness.hpp"],
+        name = "batch_scheduling_total_weighted_tardiness",
+        hdrs = ["scheduling/batch_scheduling_total_weighted_tardiness.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -200,8 +203,8 @@ cc_library(
 )
 
 cc_library(
-        name = "parallelschedulingwithfamilysetuptimestwct",
-        hdrs = ["parallelschedulingwithfamilysetuptimestwct.hpp"],
+        name = "parallel_scheduling_with_family_setup_times_twct",
+        hdrs = ["scheduling/parallel_scheduling_with_family_setup_times_twct.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -210,8 +213,8 @@ cc_library(
 )
 
 cc_library(
-        name = "permutationflowshopschedulingmakespan",
-        hdrs = ["permutationflowshopschedulingmakespan.hpp"],
+        name = "permutation_flowshop_scheduling_makespan",
+        hdrs = ["scheduling/permutation_flowshop_scheduling_makespan.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -220,8 +223,8 @@ cc_library(
 )
 
 cc_library(
-        name = "permutationflowshopschedulingtct",
-        hdrs = ["permutationflowshopschedulingtct.hpp"],
+        name = "permutation_flowshop_scheduling_tct",
+        hdrs = ["scheduling/permutation_flowshop_scheduling_tct.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -230,8 +233,8 @@ cc_library(
 )
 
 cc_library(
-        name = "permutationflowshopschedulingtt",
-        hdrs = ["permutationflowshopschedulingtt.hpp"],
+        name = "permutation_flowshop_scheduling_tt",
+        hdrs = ["scheduling/permutation_flowshop_scheduling_tt.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -240,8 +243,8 @@ cc_library(
 )
 
 cc_library(
-        name = "distributedpfssmakespan",
-        hdrs = ["distributedpfssmakespan.hpp"],
+        name = "distributed_pfss_makespan",
+        hdrs = ["scheduling/distributed_pfss_makespan.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -250,8 +253,8 @@ cc_library(
 )
 
 cc_library(
-        name = "distributedpfsstct",
-        hdrs = ["distributedpfsstct.hpp"],
+        name = "distributed_pfss_tct",
+        hdrs = ["scheduling/distributed_pfss_tct.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -260,8 +263,8 @@ cc_library(
 )
 
 cc_library(
-        name = "nowaitjobshopschedulingmakespan",
-        hdrs = ["nowaitjobshopschedulingmakespan.hpp"],
+        name = "no_wait_job_shop_scheduling_makespan",
+        hdrs = ["scheduling/no_wait_job_shop_scheduling_makespan.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -271,8 +274,8 @@ cc_library(
 )
 
 cc_library(
-        name = "simpleassemblylinebalancing1",
-        hdrs = ["simpleassemblylinebalancing1.hpp"],
+        name = "simple_assembly_line_balancing_1",
+        hdrs = ["scheduling/simple_assembly_line_balancing_1.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -281,8 +284,8 @@ cc_library(
 )
 
 cc_library(
-        name = "ushapedassemblylinebalancing1",
-        hdrs = ["ushapedassemblylinebalancing1.hpp"],
+        name = "u_shaped_assembly_line_balancing_1",
+        hdrs = ["scheduling/u_shaped_assembly_line_balancing_1.hpp"],
         deps = [
                 "@optimizationtools//optimizationtools/containers:containers",
                 "@optimizationtools//optimizationtools/utils:utils",
@@ -294,37 +297,38 @@ cc_binary(
         name = "checker",
         srcs = ["checker.cpp"],
         deps = [
-                ":knapsackwithconflicts",
-                ":multidimensionalmultiplechoiceknapsack",
-                ":quadraticassignment",
-                ":cuttingstock",
-                ":multipleknapsack",
-                ":quadraticmultipleknapsack",
-                ":generalizedquadraticmultipleknapsack",
-                ":binpackingwithconflicts",
+                ":knapsack_with_conflicts",
+                ":multidimensional_multiple_choice_knapsack",
+                ":cutting_stock",
+                ":multiple_knapsack",
+                ":quadratic_multiple_knapsack",
+                ":generalized_quadratic_multiple_knapsack",
+                ":bin_packing_with_conflicts",
 
-                ":sequentialordering",
-                ":travelingsalesmanwithreleasedates",
-                ":travelingrepairman",
-                ":timedependentorienteering",
-                ":orienteeringwithhotelselection",
-                ":capacitatedvehiclerouting",
-                ":vehicleroutingwithtimewindows",
-                ":capacitatedopenvehiclerouting",
+                ":quadratic_assignment",
 
-                ":schedulingwithsdsttwt",
-                ":orderacceptanceandscheduling",
-                ":batchschedulingtotalcompletiontime",
-                ":batchschedulingtotalweightedtardiness",
-                ":parallelschedulingwithfamilysetuptimestwct",
-                ":permutationflowshopschedulingmakespan",
-                ":permutationflowshopschedulingtct",
-                ":permutationflowshopschedulingtt",
-                ":distributedpfssmakespan",
-                ":distributedpfsstct",
-                ":nowaitjobshopschedulingmakespan",
-                ":simpleassemblylinebalancing1",
-                ":ushapedassemblylinebalancing1",
+                ":traveling_salesman_with_release_dates",
+                ":traveling_repairman",
+                ":time_dependent_orienteering",
+                ":orienteering_with_hotel_selection",
+                ":capacitated_vehicle_routing",
+                ":vehicle_routing_with_time_windows",
+                ":capacitated_open_vehicle_routing",
+
+                ":sequential_ordering",
+                ":scheduling_with_sdst_twt",
+                ":order_acceptance_and_scheduling",
+                ":batch_scheduling_total_completion_time",
+                ":batch_scheduling_total_weighted_tardiness",
+                ":parallel_scheduling_with_family_setup_times_twct",
+                ":permutation_flowshop_scheduling_makespan",
+                ":permutation_flowshop_scheduling_tct",
+                ":permutation_flowshop_scheduling_tt",
+                ":distributed_pfss_makespan",
+                ":distributed_pfss_tct",
+                ":no_wait_job_shop_scheduling_makespan",
+                ":simple_assembly_line_balancing_1",
+                ":u_shaped_assembly_line_balancing_1",
 
                 "@boost//:program_options",
         ],

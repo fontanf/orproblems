@@ -1,34 +1,35 @@
-#include "orproblems/knapsackwithconflicts.hpp"
-#include "orproblems/multidimensionalmultiplechoiceknapsack.hpp"
-#include "orproblems/quadraticassignment.hpp"
-#include "orproblems/cuttingstock.hpp"
-#include "orproblems/multipleknapsack.hpp"
-#include "orproblems/quadraticmultipleknapsack.hpp"
-#include "orproblems/generalizedquadraticmultipleknapsack.hpp"
-#include "orproblems/binpackingwithconflicts.hpp"
+#include "orproblems/packing/knapsack_with_conflicts.hpp"
+#include "orproblems/packing/multidimensional_multiple_choice_knapsack.hpp"
+#include "orproblems/packing/cutting_stock.hpp"
+#include "orproblems/packing/multiple_knapsack.hpp"
+#include "orproblems/packing/quadratic_multiple_knapsack.hpp"
+#include "orproblems/packing/generalized_quadratic_multiple_knapsack.hpp"
+#include "orproblems/packing/bin_packing_with_conflicts.hpp"
 
-#include "orproblems/sequentialordering.hpp"
-#include "orproblems/travelingsalesmanwithreleasedates.hpp"
-#include "orproblems/travelingrepairman.hpp"
-#include "orproblems/timedependentorienteering.hpp"
-#include "orproblems/orienteeringwithhotelselection.hpp"
-#include "orproblems/capacitatedvehiclerouting.hpp"
-#include "orproblems/vehicleroutingwithtimewindows.hpp"
-#include "orproblems/capacitatedopenvehiclerouting.hpp"
+#include "orproblems/assignment/quadratic_assignment.hpp"
 
-#include "orproblems/schedulingwithsdsttwt.hpp"
-#include "orproblems/orderacceptanceandscheduling.hpp"
-#include "orproblems/batchschedulingtotalcompletiontime.hpp"
-#include "orproblems/batchschedulingtotalweightedtardiness.hpp"
-#include "orproblems/parallelschedulingwithfamilysetuptimestwct.hpp"
-#include "orproblems/permutationflowshopschedulingmakespan.hpp"
-#include "orproblems/permutationflowshopschedulingtct.hpp"
-#include "orproblems/permutationflowshopschedulingtt.hpp"
-#include "orproblems/distributedpfssmakespan.hpp"
-#include "orproblems/distributedpfsstct.hpp"
-#include "orproblems/nowaitjobshopschedulingmakespan.hpp"
-#include "orproblems/simpleassemblylinebalancing1.hpp"
-#include "orproblems/ushapedassemblylinebalancing1.hpp"
+#include "orproblems/routing/traveling_salesman_with_release_dates.hpp"
+#include "orproblems/routing/traveling_repairman.hpp"
+#include "orproblems/routing/time_dependent_orienteering.hpp"
+#include "orproblems/routing/orienteering_with_hotel_selection.hpp"
+#include "orproblems/routing/capacitated_vehicle_routing.hpp"
+#include "orproblems/routing/vehicle_routing_with_time_windows.hpp"
+#include "orproblems/routing/capacitated_open_vehicle_routing.hpp"
+
+#include "orproblems/scheduling/sequential_ordering.hpp"
+#include "orproblems/scheduling/scheduling_with_sdst_twt.hpp"
+#include "orproblems/scheduling/order_acceptance_and_scheduling.hpp"
+#include "orproblems/scheduling/batch_scheduling_total_completion_time.hpp"
+#include "orproblems/scheduling/batch_scheduling_total_weighted_tardiness.hpp"
+#include "orproblems/scheduling/parallel_scheduling_with_family_setup_times_twct.hpp"
+#include "orproblems/scheduling/permutation_flowshop_scheduling_makespan.hpp"
+#include "orproblems/scheduling/permutation_flowshop_scheduling_tct.hpp"
+#include "orproblems/scheduling/permutation_flowshop_scheduling_tt.hpp"
+#include "orproblems/scheduling/distributed_pfss_makespan.hpp"
+#include "orproblems/scheduling/distributed_pfss_tct.hpp"
+#include "orproblems/scheduling/no_wait_job_shop_scheduling_makespan.hpp"
+#include "orproblems/scheduling/simple_assembly_line_balancing_1.hpp"
+#include "orproblems/scheduling/u_shaped_assembly_line_balancing_1.hpp"
 
 #include <boost/program_options.hpp>
 
@@ -93,233 +94,233 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    if (problem == "knapsackwithconflicts") {
+    if (problem == "knapsack_with_conflicts") {
         check(
-                knapsackwithconflicts::InstanceBuilder(),
+                knapsack_with_conflicts::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "multidimensionalmultiplechoiceknapsack") {
+    } else if (problem == "multidimensional_multiple_choice_knapsack") {
         check(
-                multidimensionalmultiplechoiceknapsack::InstanceBuilder(),
+                multidimensional_multiple_choice_knapsack::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "quadraticassignment") {
+    } else if (problem == "quadratic_assignment") {
         check(
-                quadraticassignment::InstanceBuilder(),
+                quadratic_assignment::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "cuttingstock") {
+    } else if (problem == "cutting_stock") {
         check(
-                cuttingstock::InstanceBuilder(),
+                cutting_stock::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "multipleknapsack") {
+    } else if (problem == "multiple_knapsack") {
         check(
-                multipleknapsack::InstanceBuilder(),
+                multiple_knapsack::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "quadraticmultipleknapsack") {
+    } else if (problem == "quadratic_multiple_knapsack") {
         check(
-                quadraticmultipleknapsack::InstanceBuilder(),
+                quadratic_multiple_knapsack::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "generalizedquadraticmultipleknapsack") {
+    } else if (problem == "generalized_quadratic_multiple_knapsack") {
         check(
-                generalizedquadraticmultipleknapsack::InstanceBuilder(),
+                generalized_quadratic_multiple_knapsack::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "binpackingwithconflicts") {
+    } else if (problem == "bin_packing_with_conflicts") {
         check(
-                binpackingwithconflicts::InstanceBuilder(),
+                bin_packing_with_conflicts::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "sequentialordering") {
+    } else if (problem == "sequential_ordering") {
         check(
-                sequentialordering::InstanceBuilder(),
+                sequential_ordering::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "travelingrepairman") {
+    } else if (problem == "traveling_repairman") {
         check(
-                travelingrepairman::InstanceBuilder(),
+                traveling_repairman::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "travelingsalesmanwithreleasedates") {
+    } else if (problem == "traveling_salesman_with_release_dates") {
         check(
-                travelingsalesmanwithreleasedates::InstanceBuilder(),
+                traveling_salesman_with_release_dates::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "timedependentorienteering") {
+    } else if (problem == "time_dependent_orienteering") {
         check(
-                timedependentorienteering::InstanceBuilder(),
+                time_dependent_orienteering::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "orienteeringwithhotelselection") {
+    } else if (problem == "orienteering_with_hotel_selection") {
         check(
-                orienteeringwithhotelselection::InstanceBuilder(),
+                orienteering_with_hotel_selection::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "capacitatedvehiclerouting") {
+    } else if (problem == "capacitated_vehicle_routing") {
         check(
-                capacitatedvehiclerouting::InstanceBuilder(),
+                capacitated_vehicle_routing::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "vehicleroutingwithtimewindows") {
+    } else if (problem == "vehicle_routing_with_time_windows") {
         check(
-                vehicleroutingwithtimewindows::InstanceBuilder(),
+                vehicle_routing_with_time_windows::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "capacitatedopenvehiclerouting") {
+    } else if (problem == "capacitated_open_vehicle_routing") {
         check(
-                capacitatedopenvehiclerouting::InstanceBuilder(),
+                capacitated_open_vehicle_routing::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "schedulingwithsdsttwt") {
+    } else if (problem == "scheduling_with_sdst_twt") {
         check(
-                schedulingwithsdsttwt::InstanceBuilder(),
+                scheduling_with_sdst_twt::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "orderacceptanceandscheduling") {
+    } else if (problem == "order_acceptance_and_scheduling") {
         check(
-                orderacceptanceandscheduling::InstanceBuilder(),
+                order_acceptance_and_scheduling::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "batchschedulingtotalcompletiontime") {
+    } else if (problem == "batch_scheduling_total_completion_time") {
         check(
-                batchschedulingtotalcompletiontime::InstanceBuilder(),
+                batch_scheduling_total_completion_time::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "batchschedulingtotalweightedtardiness") {
+    } else if (problem == "batch_scheduling_total_weighted_tardiness") {
         check(
-                batchschedulingtotalweightedtardiness::InstanceBuilder(),
+                batch_scheduling_total_weighted_tardiness::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "parallelschedulingwithfamilysetuptimestwct") {
+    } else if (problem == "parallel_scheduling_with_family_setup_times_twct") {
         check(
-                parallelschedulingwithfamilysetuptimestwct::InstanceBuilder(),
+                parallel_scheduling_with_family_setup_times_twct::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "permutationflowshopschedulingmakespan") {
+    } else if (problem == "permutation_flowshop_scheduling_makespan") {
         check(
-                permutationflowshopschedulingmakespan::InstanceBuilder(),
+                permutation_flowshop_scheduling_makespan::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "permutationflowshopschedulingtct") {
+    } else if (problem == "permutation_flowshop_scheduling_tct") {
         check(
-                permutationflowshopschedulingtct::InstanceBuilder(),
+                permutation_flowshop_scheduling_tct::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "permutationflowshopschedulingtt") {
+    } else if (problem == "permutation_flowshop_scheduling_tt") {
         check(
-                permutationflowshopschedulingtt::InstanceBuilder(),
+                permutation_flowshop_scheduling_tt::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "distributedpfssmakespan") {
+    } else if (problem == "distributed_pfss_makespan") {
         check(
-                distributedpfssmakespan::InstanceBuilder(),
+                distributed_pfss_makespan::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "distributedpfsstct") {
+    } else if (problem == "distributed_pfss_tct") {
         check(
-                distributedpfsstct::InstanceBuilder(),
+                distributed_pfss_tct::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "nowaitjobshopschedulingmakespan") {
+    } else if (problem == "no_wait_job_shop_scheduling_makespan") {
         check(
-                nowaitjobshopschedulingmakespan::InstanceBuilder(),
+                no_wait_job_shop_scheduling_makespan::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "simpleassemblylinebalancing1") {
+    } else if (problem == "simple_assembly_line_balancing_1") {
         check(
-                simpleassemblylinebalancing1::InstanceBuilder(),
+                simple_assembly_line_balancing_1::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
                 verbosity_level);
 
-    } else if (problem == "ushapedassemblylinebalancing1") {
+    } else if (problem == "u_shaped_assembly_line_balancing_1") {
         check(
-                ushapedassemblylinebalancing1::InstanceBuilder(),
+                u_shaped_assembly_line_balancing_1::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,

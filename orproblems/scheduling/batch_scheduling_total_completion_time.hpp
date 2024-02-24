@@ -28,7 +28,7 @@
 
 namespace orproblems
 {
-namespace batchschedulingtotalcompletiontime
+namespace batch_scheduling_total_completion_time
 {
 
 using JobId = int64_t;
@@ -50,7 +50,7 @@ struct Job
 };
 
 /**
- * Instance class for a 'batchschedulingtotalcompletiontime' problem.
+ * Instance class for a 'batch_scheduling_total_completion_time' problem.
  */
 class Instance
 {

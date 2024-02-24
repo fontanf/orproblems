@@ -30,7 +30,7 @@
 
 namespace orproblems
 {
-namespace parallelschedulingwithfamilysetuptimestwct
+namespace parallel_scheduling_with_family_setup_times_twct
 {
 
 using JobId = int64_t;
@@ -67,7 +67,7 @@ struct Job
 };
 
 /**
- * Instance class for a 'parallelschedulingwithfamilysetuptimestwct' problem.
+ * Instance class for a 'parallel_scheduling_with_family_setup_times_twct' problem.
  */
 class Instance
 {

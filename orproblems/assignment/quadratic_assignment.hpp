@@ -20,7 +20,7 @@
 
 namespace orproblems
 {
-namespace quadraticassignment
+namespace quadratic_assignment
 {
 
 using FacilityId = int64_t;
@@ -28,7 +28,7 @@ using LocationId = int64_t;
 using Cost = int64_t;
 
 /**
- * Instance class for a 'quadraticassignment' problem.
+ * Instance class for a 'quadratic_assignment' problem.
  */
 class Instance
 {

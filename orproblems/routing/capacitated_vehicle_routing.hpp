@@ -1,20 +1,16 @@
 /**
- * Capacitated open vehicle routing problem
+ * Capacitated vehicle routing problem
  *
  * Input:
- * - m vehicles of capacity Q
- * - A maximum route length L
+ * - vehicles of capacity Q
  * - 1 depot
- * - n - 1 customers; for each customer j = 2..n, a demand qⱼ
+ * - n - 1 customers; for each customer location_id = 2..n, a demand qⱼ
  * - A n×n symmetric matrix d specifying the distances to travel between each
  *   pair of locations
  * Problem:
- * - find a set of at most m paths that begin (but does not end) at the depot,
- *   such that
- *   - each customer is visited on exactly one path
- *   - the total demand by the customers assigned to a path does not exceed
- *     the vehicle capacity Q
- *   - the total length of each route does not exceed the maximum route length
+ * - find a set of routes that begin and end at the depot, such that each
+ *   customer is visited on exactly one route and the total demand by the
+ *   customers assigned to a route does not exceed the vehicle capacity Q.
  * Objective:
  * - minimize the total combined distance of the routes.
  *
@@ -22,8 +18,8 @@
 
 #pragma once
 
-#include "optimizationtools/utils/utils.hpp"
 #include "optimizationtools/containers/indexed_set.hpp"
+#include "optimizationtools/utils/utils.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -31,15 +27,14 @@
 
 namespace orproblems
 {
-namespace capacitatedopenvehiclerouting
+namespace capacitated_vehicle_routing
 {
 
 using LocationId = int64_t;
 using LocationPos = int64_t;
-using VehicleId = int64_t;
 using RouteId = int64_t;
 using Demand = int64_t;
-using Distance = double;
+using Distance = int64_t;
 
 /**
  * Structure for a location.
@@ -53,11 +48,11 @@ struct Location
     double y;
 
     /** Demand of the location. */
-    Demand demand;
+    Demand demand = 0;
 };
 
 /**
- * Instance class for a 'capacitatedopenvehiclerouting' problem.
+ * Instance class for a 'capacitated_vehicle_routing' problem.
  */
 class Instance
 {
@@ -68,29 +63,26 @@ public:
      * Getters
      */
 
-    /** Get the number of vehicles. */
-    VehicleId number_of_vehicles() const { return number_of_vehicles_; }
-
     /** Get the number of locations. */
-    LocationId number_of_locations() const { return locations_.size(); }
+    inline LocationId number_of_locations() const { return locations_.size(); }
 
-    /** Get the maximum length of a route. */
-    Distance maximum_route_length() const { return maximum_route_length_; }
+    /** Get the vehicle capacity. */
+    inline Demand capacity() const { return locations_[0].demand; }
 
-    /** Get the capacity of the vehicles. */
-    Demand capacity() const { return locations_[0].demand; }
+    /** Get the total demand. */
+    inline Demand total_demand() const { return total_demand_; }
 
     /** Get the demand of a location. */
-    Demand demand(LocationId location_id) const { return locations_[location_id].demand; }
+    inline Demand demand(LocationId location_id) const { return locations_[location_id].demand; }
 
     /** Get the x-coordinate of a location. */
-    Distance x(LocationId location_id) const { return locations_[location_id].x; }
+    inline Distance x(LocationId location_id) const { return locations_[location_id].x; }
 
     /** Get the y-coordinate of a location. */
-    Distance y(LocationId location_id) const { return locations_[location_id].y; }
+    inline Distance y(LocationId location_id) const { return locations_[location_id].y; }
 
     /** Get the distance between two locations. */
-    Distance distance(
+    inline Distance distance(
             LocationId location_id_1,
             LocationId location_id_2) const
     {
@@ -98,10 +90,7 @@ public:
     }
 
     /** Get the maximum distance between two locations. */
-    Distance maximum_distance() const { return distance_max_; }
-
-    /** Get a bound. */
-    Distance bound() const { return powf(10.0f, ceil(log10f(number_of_locations() * maximum_distance()))); }
+    inline Distance highest_distance() const { return highest_distance_; }
 
     /*
      * Outputs
@@ -114,10 +103,11 @@ public:
     {
         if (verbosity_level >= 1) {
             os
-                << "Number of vehicles:    " << number_of_vehicles() << std::endl
-                << "Number of locations:   " << number_of_locations() << std::endl
-                << "Maximum route length:  " << maximum_route_length() << std::endl
-                << "Capacity:              " << capacity() << std::endl
+                << "Number of locations:  " << number_of_locations() << std::endl
+                << "Capacity:             " << capacity() << std::endl
+                << "Total demand:         " << total_demand() << std::endl
+                << "Demand ratio:         " << (double)total_demand() / capacity() << std::endl
+                << "Highest distance:     " << highest_distance() << std::endl
                 ;
         }
 
@@ -125,15 +115,9 @@ public:
             os << std::endl
                 << std::setw(12) << "Location"
                 << std::setw(12) << "Demand"
-                << std::setw(12) << "Serv. time"
-                << std::setw(12) << "Rel. date"
-                << std::setw(12) << "Deadline"
                 << std::endl
                 << std::setw(12) << "--------"
                 << std::setw(12) << "----------"
-                << std::setw(12) << "------"
-                << std::setw(12) << "---------"
-                << std::setw(12) << "--------"
                 << std::endl;
             for (LocationId location_id_1 = 0;
                     location_id_1 < number_of_locations();
@@ -199,14 +183,16 @@ public:
         }
 
         optimizationtools::IndexedSet visited_locations(number_of_locations());
-        LocationPos number_of_duplicates = 0;
-        LocationPos route_number_of_locations = -1;
         RouteId number_of_routes = 0;
+        LocationPos route_number_of_locations = -1;
+
+        LocationPos number_of_duplicates = 0;
         RouteId number_of_overloaded_vehicles = 0;
-        RouteId number_of_route_maximum_length_violations = 0;
+
         Distance total_distance = 0;
         file >> number_of_routes;
         for (RouteId route_id = 0; route_id < number_of_routes; ++route_id) {
+            file >> route_number_of_locations;
             if (route_number_of_locations == 0)
                 continue;
             Distance route_distance = 0;
@@ -242,35 +228,32 @@ public:
 
                 location_id_prev = location_id;
             }
-
-            // Check route maximum length.
-            if (route_distance > maximum_route_length()) {
-                number_of_route_maximum_length_violations++;
-                if (verbosity_level >= 2) {
-                    os << "Route " << route_id
-                        << " is too long." << std::endl;
-                }
+            if (location_id_prev != 0) {
+                route_distance += distance(location_id_prev, 0);
+                total_distance += distance(location_id_prev, 0);
             }
 
-            // Check capacity.
-            if (route_demand > capacity()) {
+            if (verbosity_level >= 2) {
+                os
+                    << std::setw(10) << route_id
+                    << std::setw(10) << 0
+                    << std::setw(12) << route_demand
+                    << std::setw(12) << route_distance
+                    << std::setw(12) << total_distance
+                    << std::endl;
+            }
+
+            // Check vehicle capacity.
+            if (route_demand > capacity())
                 number_of_overloaded_vehicles++;
-                if (verbosity_level >= 2) {
-                    os << "Vehicle " << route_id
-                        << " is overloaded." << std::endl;
-                }
-            }
         }
 
         bool feasible
             = (visited_locations.size() == number_of_locations() - 1)
             && (!visited_locations.contains(0))
             && (number_of_duplicates == 0)
-            && (number_of_overloaded_vehicles == 0)
-            && (number_of_routes <= number_of_vehicles())
-            && (number_of_route_maximum_length_violations == 0);
-
-        if (verbosity_level == 2)
+            && (number_of_overloaded_vehicles == 0);
+        if (verbosity_level >= 2)
             os << std::endl;
         if (verbosity_level >= 1) {
             os
@@ -301,21 +284,18 @@ private:
     /** Locations. */
     std::vector<Location> locations_;
 
-    /** Distances. */
+    /** Distances between locations. */
     std::vector<std::vector<Distance>> distances_;
-
-    /** Number of vehicles. */
-    VehicleId number_of_vehicles_ = 0;
-
-    /** Maximum length of a rotue. */
-    Distance maximum_route_length_ = std::numeric_limits<Distance>::infinity();;
 
     /*
      * Computed attributes
      */
 
-    /** Maximum distance. */
-    Distance distance_max_ = 0;
+    /** Total demand. */
+    Demand total_demand_ = 0;
+
+    /** Maximum distance between two locations. */
+    Distance highest_distance_ = 0;
 
     friend class InstanceBuilder;
 };
@@ -339,17 +319,13 @@ public:
         instance_.distances_ = std::vector<std::vector<Distance>>(
                 number_of_locations,
                 std::vector<Distance>(number_of_locations, -1));
-        instance_.number_of_vehicles_ = number_of_locations;
     }
 
-    /** Set the number of vehicles. */
-    void set_number_of_vehicles(VehicleId number_of_vehicles) { instance_.number_of_vehicles_ = number_of_vehicles; }
-
-    /** Set the maximum route length. */
-    void set_maximum_route_length(Distance maximum_route_length) { instance_.maximum_route_length_ = maximum_route_length; }
+    /** Set the capacity of the vehicles. */
+    void set_capacity(Demand capacity) { instance_.locations_[0].demand = capacity; }
 
     /** Set the demand of a location. */
-    void set_demand(
+    void set_location_demand(
             LocationId location_id,
             Demand demand)
     {
@@ -357,7 +333,7 @@ public:
     }
 
     /** Set the coordinates of a location. */
-    void set_coordinates(
+    void set_location_coordinates(
             LocationId location_id,
             double x,
             double y)
@@ -374,7 +350,6 @@ public:
     {
         instance_.distances_[location_id_1][location_id_2] = distance;
         instance_.distances_[location_id_2][location_id_1] = distance;
-        instance_.distance_max_ = std::max(instance_.distance_max_, distance);
     }
 
     /** Build an instance from a file. */
@@ -389,7 +364,7 @@ public:
         }
 
         if (format == "" || format == "vrplib") {
-            read_vrplib(file);
+            read_cvrplib(file);
         } else {
             throw std::invalid_argument(
                     "Unknown instance format \"" + format + "\".");
@@ -404,6 +379,28 @@ public:
     /** Build the instance. */
     Instance build()
     {
+        // Compute total demand.
+        instance_.total_demand_ = 0;
+        for (LocationId location_id = 0;
+                location_id < instance_.number_of_locations();
+                ++location_id) {
+            instance_.total_demand_ += instance_.demand(location_id);
+        }
+
+        // Compute maximum distance.
+        instance_.highest_distance_ = 0;
+        for (LocationId location_id_1 = 0;
+                location_id_1 < instance_.number_of_locations();
+                ++location_id_1) {
+            for (LocationId location_id_2 = location_id_1 + 1;
+                    location_id_2 < instance_.number_of_locations();
+                    ++location_id_2) {
+                instance_.highest_distance_ = (std::max)(
+                        instance_.highest_distance_,
+                        instance_.distance(location_id_1, location_id_2));
+            }
+        }
+
         return std::move(instance_);
     }
 
@@ -413,12 +410,11 @@ private:
      * Private methods
      */
 
-    /** Read an instance from a file in 'vrplib' format. */
-    void read_vrplib(std::ifstream& file)
+    /** Read an instance from a file in 'cvrplib' format. */
+    void read_cvrplib(std::ifstream& file)
     {
         std::string tmp;
         std::vector<std::string> line;
-        LocationId number_of_locations = -1;
         std::string edge_weight_type;
         while (getline(file, tmp)) {
             replace(begin(tmp), end(tmp), '\t', ' ');
@@ -428,59 +424,58 @@ private:
             } else if (tmp.rfind("COMMENT", 0) == 0) {
             } else if (tmp.rfind("TYPE", 0) == 0) {
             } else if (tmp.rfind("DEPOT_SECTION", 0) == 0) {
-                LocationId location_id_tmp;
-                file >> location_id_tmp >> location_id_tmp;
+                LocationId j_tmp;
+                file >> j_tmp >> j_tmp;
             } else if (tmp.rfind("DIMENSION", 0) == 0) {
-                number_of_locations = std::stol(line.back());
+                LocationId number_of_locations = std::stol(line.back());
                 set_number_of_locations(number_of_locations);
             } else if (tmp.rfind("EDGE_WEIGHT_TYPE", 0) == 0) {
                 edge_weight_type = line.back();
-            } else if (tmp.rfind("DISTANCE", 0) == 0) {
-                Distance l = std::stol(line.back());
-                set_maximum_route_length(l * 0.9);
             } else if (tmp.rfind("CAPACITY", 0) == 0) {
                 Demand c = std::stol(line.back());
-                set_demand(0, c);
+                set_location_demand(0, c);
             } else if (tmp.rfind("NODE_COORD_SECTION", 0) == 0) {
-                LocationId location_id_tmp;
+                LocationId j_tmp;
                 double x = -1;
                 double y = -1;
                 for (LocationId location_id = 0;
-                        location_id < number_of_locations;
+                        location_id < instance_.number_of_locations();
                         ++location_id) {
-                    file >> location_id_tmp >> x >> y;
-                    set_coordinates(location_id, x, y);
+                    file >> j_tmp >> x >> y;
+                    set_location_coordinates(location_id, x, y);
                 }
             } else if (tmp.rfind("DEMAND_SECTION", 0) == 0) {
-                LocationId location_id_tmp = -1;
+                LocationId j_tmp = -1;
                 Demand demand = -1;
                 for (LocationId location_id = 0;
-                        location_id < number_of_locations;
+                        location_id < instance_.number_of_locations();
                         ++location_id) {
-                    file >> location_id_tmp >> demand;
+                    file >> j_tmp >> demand;
                     if (location_id != 0)
-                        set_demand(location_id, demand);
+                        set_location_demand(location_id, demand);
                 }
             } else if (line[0].rfind("EOF", 0) == 0) {
                 break;
             } else {
-                std::cerr << "\033[31m" << "ERROR, ENTRY \"" << line[0] << "\" not implemented." << "\033[0m" << std::endl;
+                throw std::invalid_argument(
+                        "Entry \""
+                        + line[0]
+                        + "\" not implemented.");
             }
         }
 
         // Compute distances.
         if (edge_weight_type == "EUC_2D") {
             for (LocationId location_id_1 = 0;
-                    location_id_1 < number_of_locations;
+                    location_id_1 < instance_.number_of_locations();
                     ++location_id_1) {
                 for (LocationId location_id_2 = location_id_1 + 1;
-                        location_id_2 < number_of_locations;
+                        location_id_2 < instance_.number_of_locations();
                         ++location_id_2) {
                     double xd = instance_.x(location_id_2) - instance_.x(location_id_1);
                     double yd = instance_.y(location_id_2) - instance_.y(location_id_1);
-                    //Distance d = std::round(std::sqrt(xd * xd + yd * yd));
-                    Distance distance = std::sqrt(xd * xd + yd * yd);
-                    set_distance(location_id_1, location_id_2, distance);
+                    Distance d = std::round(std::sqrt(xd * xd + yd * yd));
+                    set_distance(location_id_1, location_id_2, d);
                 }
             }
         } else {

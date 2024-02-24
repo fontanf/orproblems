@@ -29,7 +29,7 @@
 
 namespace orproblems
 {
-namespace timedependentorienteering
+namespace time_dependent_orienteering
 {
 
 using LocationId = int64_t;
@@ -68,7 +68,7 @@ struct Arc
 };
 
 /**
- * Instance class for a 'timedependentorienteering' problem.
+ * Instance class for a 'time_dependent_orienteering' problem.
  */
 class Instance
 {

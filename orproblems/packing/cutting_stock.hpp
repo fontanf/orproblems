@@ -14,15 +14,14 @@
 
 #pragma once
 
-#include "optimizationtools/containers/indexed_set.hpp"
-
 #include <fstream>
 #include <iostream>
+#include <vector>
 #include <iomanip>
 
 namespace orproblems
 {
-namespace cuttingstock
+namespace cutting_stock
 {
 
 using ItemTypeId = int64_t;
@@ -44,7 +43,7 @@ struct ItemType
 };
 
 /**
- * Instance class for a 'cuttingstock' problem.
+ * Instance class for a 'cutting_stock' problem.
  */
 class Instance
 {
@@ -301,29 +300,33 @@ private:
     /** Read an instance from a file in 'bpplib_bpp' format. */
     void read_bpplib_bpp(std::ifstream& file)
     {
-        ItemTypeId n;
-        Weight c;
-        file >> n >> c;
-        set_capacity(c);
-        Weight w;
-        for (ItemTypeId j = 0; j < n; ++j) {
-            file >> w;
-            add_item_type(w);
+        ItemTypeId number_of_item_types;
+        Weight capacity;
+        file >> number_of_item_types >> capacity;
+        set_capacity(capacity);
+        Weight weight;
+        for (ItemTypeId item_type_id = 0;
+                item_type_id < number_of_item_types;
+                ++item_type_id) {
+            file >> weight;
+            add_item_type(weight);
         }
     }
 
     /** Read an instance from a file in 'bpplib_csp' format. */
     void read_bpplib_csp(std::ifstream& file)
     {
-        ItemTypeId n;
-        Weight c;
-        file >> n >> c;
-        set_capacity(c);
-        Weight w;
-        Demand q;
-        for (ItemTypeId j = 0; j < n; ++j) {
-            file >> w >> q;
-            add_item_type(w, q);
+        ItemTypeId number_of_item_types;
+        Weight capacity;
+        file >> number_of_item_types >> capacity;
+        set_capacity(capacity);
+        Weight weight;
+        Demand demand;
+        for (ItemTypeId item_type_id = 0;
+                item_type_id < number_of_item_types;
+                ++item_type_id) {
+            file >> weight >> demand;
+            add_item_type(weight, demand);
         }
     }
 

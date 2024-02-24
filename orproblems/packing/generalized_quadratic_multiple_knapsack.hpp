@@ -34,7 +34,7 @@
 
 namespace orproblems
 {
-namespace generalizedquadraticmultipleknapsack
+namespace generalized_quadratic_multiple_knapsack
 {
 
 using ItemId = int64_t;
@@ -75,7 +75,7 @@ struct Item
 };
 
 /**
- * Instance class for a 'generalizedquadraticmultipleknapsack' problem.
+ * Instance class for a 'generalized_quadratic_multiple_knapsack' problem.
  */
 class Instance
 {

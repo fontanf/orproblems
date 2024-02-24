@@ -1,5 +1,5 @@
 /**
- * Distributed permutation flow shop scheduling problem, makespan
+ * Distributed permutation flow shop scheduling problem, total completion time
  *
  * Input:
  * - F factories
@@ -13,13 +13,12 @@
  *     the end of operation (j, i)
  *   - the job sequence is the same on all machines of a factory
  * Objective:
- * - Minimize the makespan of the schedule
+ * - Minimize the total completion time of the jobs
  *
  */
 
 #pragma once
 
-#include "optimizationtools/utils/utils.hpp"
 #include "optimizationtools/containers/indexed_set.hpp"
 
 #include <iostream>
@@ -28,7 +27,7 @@
 
 namespace orproblems
 {
-namespace distributedpfssmakespan
+namespace distributed_pfss_tct
 {
 
 using JobId = int64_t;
@@ -38,7 +37,7 @@ using FactoryId = int64_t;
 using Time = int64_t;
 
 /**
- * Instance class for a 'distributedpfssmakespan' problem.
+ * Instance class for a 'distributed_pfss_tct' problem.
  */
 class Instance
 {
@@ -124,16 +123,19 @@ public:
                 << std::setw(12) << "Factory"
                 << std::setw(12) << "Job"
                 << std::setw(12) << "Time"
+                << std::setw(12) << "TCT"
                 << std::endl
                 << std::setw(12) << "-------"
+                << std::setw(12) << "---"
                 << std::setw(12) << "----"
+                << std::setw(12) << "---"
                 << std::endl;
         }
 
         optimizationtools::IndexedSet jobs(number_of_jobs());
         JobPos number_of_duplicates = 0;
         JobPos factory_number_of_jobs = -1;
-        Time makespan = 0;
+        Time total_completion_time = 0;
         for (FactoryId factory_id = 0;
                 factory_id < number_of_factories();
                 ++factory_id) {
@@ -147,9 +149,10 @@ public:
                 // Check duplicates.
                 if (jobs.contains(job_id)) {
                     number_of_duplicates++;
-                    if (verbosity_level >= 2)
+                    if (verbosity_level >= 2) {
                         os << "Job " << job_id
                             << " has already been scheduled." << std::endl;
+                    }
                 }
                 jobs.add(job_id);
 
@@ -165,31 +168,32 @@ public:
                             + processing_time(job_id, machine_id);
                     }
                 }
+                total_completion_time += times[number_of_machines() - 1];
 
                 if (verbosity_level >= 2) {
                     os
                         << std::setw(12) << factory_id
                         << std::setw(12) << job_id
                         << std::setw(12) << times[number_of_machines() - 1]
+                        << std::setw(12) << total_completion_time
                         << std::endl;
                 }
             }
-            makespan = std::max(makespan, times[number_of_machines() - 1]);
         }
 
         bool feasible
             = (jobs.size() == number_of_jobs())
             && (number_of_duplicates == 0);
 
-        if (verbosity_level >= 2)
+        if (verbosity_level == 2)
             os << std::endl;
         if (verbosity_level >= 1) {
-            os << "Number of jobs:        " << jobs.size() << " / " << number_of_jobs() << std::endl;
-            os << "Number of duplicates:  " << number_of_duplicates << std::endl;
-            os << "Feasible:              " << feasible << std::endl;
-            os << "Makespan:              " << makespan << std::endl;
+            os << "Number of jobs:         " << jobs.size() << " / " << number_of_jobs() << std::endl;
+            os << "Number of duplicates:   " << number_of_duplicates << std::endl;
+            os << "Feasible:               " << feasible << std::endl;
+            os << "Total completion time:  " << total_completion_time << std::endl;
         }
-        return {feasible, makespan};
+        return {feasible, total_completion_time};
     }
 
 private:

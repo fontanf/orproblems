@@ -10,7 +10,7 @@ The data also include CSV files listing the instances for each problem and their
 ## Packing
 
 
-[Knapsack Problem with Conflicts / Disjunctively Constrained Knapsack Problem](orproblems/knapsackwithconflicts.hpp)
+[Knapsack Problem with Conflicts / Disjunctively Constrained Knapsack Problem](orproblems/knapsack_with_conflicts.hpp)
 
 <details><summary>Literature</summary>
 <p>
@@ -34,10 +34,10 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [knapsackwithconflicts.7z](https://github.com/fontanf/orproblems/releases/download/data/knapsackwithconflicts.7z)
+* Data: [knapsack_with_conflicts.7z](https://github.com/fontanf/orproblems/releases/download/data/knapsack_with_conflicts.7z)
 
 
-[Multidimensional Multiple-choice Knapsack Problem](orproblems/multidimensionalmultiplechoiceknapsack.hpp)
+[Multidimensional Multiple-choice Knapsack Problem](orproblems/multidimensional_multiple_choice_knapsack.hpp)
 
 <details><summary>Literature</summary>
 <p>
@@ -59,7 +59,7 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [multidimensionalmultiplechoiceknapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/multidimensionalmultiplechoiceknapsack.7z)
+* Data: [multidimensional_multiple_choice_knapsack.7z](https://github.com/fontanf/orproblems/releases/download/data/multidimensional_multiple_choice_knapsack.7z)
 
 
 [Quadratic Assignment Problem](orproblems/quadraticassignment.hpp)
@@ -184,7 +184,7 @@ The data also include CSV files listing the instances for each problem and their
 * Data: [quadraticassignment.7z](https://github.com/fontanf/orproblems/releases/download/data/quadraticassignment.7z)
 
 
-[Cutting Stock Problem](orproblems/cuttingstock.hpp)
+[Cutting Stock Problem](orproblems/cutting_stock.hpp)
 
 <details><summary>Literature</summary>
 <p>
@@ -201,7 +201,7 @@ The data also include CSV files listing the instances for each problem and their
 </p>
 </details>
 
-* Data: [cuttingstock.7z](https://github.com/fontanf/orproblems/releases/download/data/cuttingstock.7z)
+* Data: [cutting_stock.7z](https://github.com/fontanf/orproblems/releases/download/data/cutting_stock.7z)
 
 
 [Multiple Knapsack Problem](orproblems/multipleknapsack.hpp)

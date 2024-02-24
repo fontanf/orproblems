@@ -1,8 +1,8 @@
 /**
- * U-shaped assembly line balancing problem of type 1
+ * Simple assembly line balancing problem of type 1
  *
  * Input:
- * - n jobs; for each job j = 1..n,  a processing time pⱼ
+ * - n jobs; for each job j = 1..n, a processing time pⱼ
  * - a cycle time c (station capacity)
  * - a directed acyclic graph G such that each node corresponds to a job
  * Problem:
@@ -28,7 +28,7 @@
 
 namespace orproblems
 {
-namespace ushapedassemblylinebalancing1
+namespace simple_assembly_line_balancing_1
 {
 
 using JobId = int64_t;
@@ -52,7 +52,7 @@ struct Job
 };
 
 /**
- * Instance class for a 'ushapedassemblylinebalancing1' problem.
+ * Instance class for a 'simple_assembly_line_balancing_1' problem.
  */
 class Instance
 {
@@ -191,18 +191,13 @@ public:
                 // Check predecessors.
                 for (JobId job_id_pred: job(job_id).predecessors) {
                     if (!jobs.contains(job_id_pred)) {
-                        for (JobId job_id_succ: job(job_id).successors) {
-                            if (!jobs.contains(job_id_succ)) {
-                                number_of_precedence_violations++;
-                                if (verbosity_level >= 2) {
-                                    os << "Job " << job_id
-                                        << " violates precedence constraints."
-                                        << std::endl;
-                                }
-                                break;
-                            }
+                        number_of_precedence_violations++;
+                        if (verbosity_level >= 2) {
+                            os << "Job " << job_id
+                                << " depends on job " << job_id_pred
+                                << " which has not been scheduled yet."
+                                << std::endl;
                         }
-                        break;
                     }
                 }
 
@@ -320,7 +315,6 @@ public:
             throw std::runtime_error(
                     "Unable to open file \"" + instance_path + "\".");
         }
-
         if (format == "" || format == "scholl1993") {
             read_scholl1993(file);
         } else if (format == "otto2013") {

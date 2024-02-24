@@ -26,7 +26,7 @@
 
 namespace orproblems
 {
-namespace binpackingwithconflicts
+namespace bin_packing_with_conflicts
 {
 
 using ItemId = int64_t;
@@ -46,7 +46,7 @@ struct Item
 };
 
 /**
- * Instance class for a 'binpackingwithconflicts' problem.
+ * Instance class for a 'bin_packing_with_conflicts' problem.
  */
 class Instance
 {

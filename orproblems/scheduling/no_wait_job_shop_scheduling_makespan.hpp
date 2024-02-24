@@ -23,7 +23,7 @@
 
 namespace orproblems
 {
-namespace nowaitjobshopschedulingmakespan
+namespace no_wait_job_shop_scheduling_makespan
 {
 
 using JobId = int64_t;
@@ -45,7 +45,7 @@ struct Operation
 };
 
 /**
- * Instance class for a 'nowaitjobshopschedulingmakespan' problem.
+ * Instance class for a 'no_wait_job_shop_scheduling_makespan' problem.
  */
 class Instance
 {
