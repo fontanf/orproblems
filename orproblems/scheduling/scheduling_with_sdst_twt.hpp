@@ -18,8 +18,6 @@
 
 #pragma once
 
-#include "optimizationtools/utils/utils.hpp"
-#include "optimizationtools/containers/sorted_on_demand_array.hpp"
 #include "optimizationtools/containers/indexed_set.hpp"
 
 #include <iostream>
