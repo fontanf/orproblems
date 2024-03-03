@@ -185,6 +185,16 @@ cc_library(
 )
 
 cc_library(
+        name = "job_sequencing_and_tool_switching",
+        hdrs = ["scheduling/job_sequencing_and_tool_switching.hpp"],
+        deps = [
+                "@optimizationtools//optimizationtools/containers:containers",
+                "@optimizationtools//optimizationtools/utils:utils",
+        ],
+        visibility = ["//visibility:public"],
+)
+
+cc_library(
         name = "batch_scheduling_total_completion_time",
         hdrs = ["scheduling/batch_scheduling_total_completion_time.hpp"],
         deps = [
@@ -320,6 +330,7 @@ cc_binary(
                 ":sequential_ordering",
                 ":scheduling_with_sdst_twt",
                 ":order_acceptance_and_scheduling",
+                ":job_sequencing_and_tool_switching",
                 ":batch_scheduling_total_completion_time",
                 ":batch_scheduling_total_weighted_tardiness",
                 ":parallel_scheduling_with_family_setup_times_twct",

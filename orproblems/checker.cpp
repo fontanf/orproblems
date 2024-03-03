@@ -19,6 +19,7 @@
 #include "orproblems/scheduling/sequential_ordering.hpp"
 #include "orproblems/scheduling/scheduling_with_sdst_twt.hpp"
 #include "orproblems/scheduling/order_acceptance_and_scheduling.hpp"
+#include "orproblems/scheduling/job_sequencing_and_tool_switching.hpp"
 #include "orproblems/scheduling/batch_scheduling_total_completion_time.hpp"
 #include "orproblems/scheduling/batch_scheduling_total_weighted_tardiness.hpp"
 #include "orproblems/scheduling/parallel_scheduling_with_family_setup_times_twct.hpp"
@@ -233,6 +234,14 @@ int main(int argc, char *argv[])
     } else if (problem == "order_acceptance_and_scheduling") {
         check(
                 order_acceptance_and_scheduling::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
+
+    } else if (problem == "job_sequencing_and_tool_switching") {
+        check(
+                job_sequencing_and_tool_switching::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
