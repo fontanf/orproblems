@@ -21,7 +21,7 @@
 #include "optimizationtools/containers/indexed_set.hpp"
 #include "optimizationtools/utils/utils.hpp"
 
-#include "travelingsalesmansolver/distances_builder.hpp"
+#include "travelingsalesmansolver/distances/distances_builder.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -101,34 +101,27 @@ public:
             }
         }
 
-        if (verbosity_level >= 3) {
-            os << std::endl
-                << std::setw(12) << "Loc. 1"
-                << std::setw(12) << "Loc. 2"
-                << std::setw(12) << "Distance"
-                << std::endl
-                << std::setw(12) << "------"
-                << std::setw(12) << "------"
-                << std::setw(12) << "--------"
-                << std::endl;
-            for (LocationId location_id_1 = 0;
-                    location_id_1 < number_of_locations();
-                    ++location_id_1) {
-                for (LocationId location_id_2 = 0;
-                        location_id_2 < number_of_locations();
-                        ++location_id_2) {
-                    os
-                        << std::setw(12) << location_id_1
-                        << std::setw(12) << location_id_2
-                        << std::setw(12) << distances().distance(location_id_1, location_id_2)
-                        << std::endl;
-                }
-            }
-        }
+        distances().format(os, verbosity_level);
     }
 
     /** Check a certificate. */
     std::pair<bool, Distance> check(
+            const std::string& certificate_path,
+            std::ostream& os,
+            int verbosity_level = 1) const
+    {
+        return FUNCTION_WITH_DISTANCES(
+                (this->Instance::check),
+                *distances_,
+                certificate_path,
+                os,
+                verbosity_level);
+    }
+
+    /** Check a certificate. */
+    template <typename Distances>
+    std::pair<bool, Distance> check(
+            const Distances& distances,
             const std::string& certificate_path,
             std::ostream& os,
             int verbosity_level = 1) const
@@ -186,8 +179,8 @@ public:
                 visited_locations.add(location_id);
 
                 route_demand += demand(location_id);
-                route_distance += distances().distance(location_id_prev, location_id);
-                total_distance += distances().distance(location_id_prev, location_id);
+                route_distance += distances.distance(location_id_prev, location_id);
+                total_distance += distances.distance(location_id_prev, location_id);
 
                 if (verbosity_level >= 2) {
                     os
@@ -202,8 +195,8 @@ public:
                 location_id_prev = location_id;
             }
             if (location_id_prev != 0) {
-                route_distance += distances().distance(location_id_prev, 0);
-                total_distance += distances().distance(location_id_prev, 0);
+                route_distance += distances.distance(location_id_prev, 0);
+                total_distance += distances.distance(location_id_prev, 0);
             }
 
             if (verbosity_level >= 2) {
@@ -367,22 +360,22 @@ private:
             } else if (tmp.rfind("COMMENT", 0) == 0) {
             } else if (tmp.rfind("TYPE", 0) == 0) {
             } else if (tmp.rfind("DEPOT_SECTION", 0) == 0) {
-                LocationId j_tmp;
-                file >> j_tmp >> j_tmp;
+                LocationId location_id_tmp;
+                file >> location_id_tmp >> location_id_tmp;
             } else if (tmp.rfind("DIMENSION", 0) == 0) {
                 LocationId number_of_locations = std::stol(line.back());
                 set_number_of_locations(number_of_locations);
-                distances_builder.add_vertices(number_of_locations);
+                distances_builder.set_number_of_vertices(number_of_locations);
             } else if (tmp.rfind("CAPACITY", 0) == 0) {
                 Demand c = std::stol(line.back());
                 set_location_demand(0, c);
             } else if (tmp.rfind("DEMAND_SECTION", 0) == 0) {
-                LocationId j_tmp = -1;
+                LocationId location_id_tmp = -1;
                 Demand demand = -1;
                 for (LocationId location_id = 0;
                         location_id < instance_.number_of_locations();
                         ++location_id) {
-                    file >> j_tmp >> demand;
+                    file >> location_id_tmp >> demand;
                     if (location_id != 0)
                         set_location_demand(location_id, demand);
                 }

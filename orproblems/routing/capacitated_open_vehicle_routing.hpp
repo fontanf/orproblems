@@ -25,7 +25,7 @@
 #include "optimizationtools/utils/utils.hpp"
 #include "optimizationtools/containers/indexed_set.hpp"
 
-#include "travelingsalesmansolver/distances_builder.hpp"
+#include "travelingsalesmansolver/distances/distances_builder.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -115,34 +115,27 @@ public:
             }
         }
 
-        if (verbosity_level >= 3) {
-            os << std::endl
-                << std::setw(12) << "Loc. 1"
-                << std::setw(12) << "Loc. 2"
-                << std::setw(12) << "Distance"
-                << std::endl
-                << std::setw(12) << "------"
-                << std::setw(12) << "------"
-                << std::setw(12) << "--------"
-                << std::endl;
-            for (LocationId location_id_1 = 0;
-                    location_id_1 < number_of_locations();
-                    ++location_id_1) {
-                for (LocationId location_id_2 = 0;
-                        location_id_2 < number_of_locations();
-                        ++location_id_2) {
-                    os
-                        << std::setw(12) << location_id_1
-                        << std::setw(12) << location_id_2
-                        << std::setw(12) << distances().distance(location_id_1, location_id_2)
-                        << std::endl;
-                }
-            }
-        }
+        distances().format(os, verbosity_level);
     }
 
     /** Check a certificate. */
     std::pair<bool, Distance> check(
+            const std::string& certificate_path,
+            std::ostream& os,
+            int verbosity_level = 1) const
+    {
+        return FUNCTION_WITH_DISTANCES(
+                (this->Instance::check),
+                *distances_,
+                certificate_path,
+                os,
+                verbosity_level);
+    }
+
+    /** Check a certificate. */
+    template <typename Distances>
+    std::pair<bool, Distance> check(
+            const Distances& distances,
             const std::string& certificate_path,
             std::ostream& os,
             int verbosity_level = 1) const
@@ -198,8 +191,8 @@ public:
                 visited_locations.add(location_id);
 
                 route_demand += demand(location_id);
-                route_distance += distances().distance(location_id_prev, location_id);
-                total_distance += distances().distance(location_id_prev, location_id);
+                route_distance += distances.distance(location_id_prev, location_id);
+                total_distance += distances.distance(location_id_prev, location_id);
 
                 if (verbosity_level >= 2) {
                     os
@@ -387,7 +380,7 @@ private:
             } else if (tmp.rfind("DIMENSION", 0) == 0) {
                 number_of_locations = std::stol(line.back());
                 set_number_of_locations(number_of_locations);
-                distances_builder.add_vertices(number_of_locations);
+                distances_builder.set_number_of_vertices(number_of_locations);
             } else if (tmp.rfind("DISTANCE", 0) == 0) {
                 Distance l = std::stol(line.back());
                 set_maximum_route_length(l * 0.9);
