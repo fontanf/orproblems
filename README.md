@@ -1,4 +1,4 @@
-# Operations Research Problems
+# Operations research problems
 
 Data, C++ parsers and solution checkers for various operations research problems.
 
