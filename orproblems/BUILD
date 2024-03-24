@@ -153,6 +153,16 @@ cc_library(
         visibility = ["//visibility:public"],
 )
 
+cc_library(
+        name = "team_orienteering",
+        hdrs = ["routing/team_orienteering.hpp"],
+        deps = [
+                "@optimizationtools//optimizationtools/containers:containers",
+                "@optimizationtools//optimizationtools/utils:utils",
+        ],
+        visibility = ["//visibility:public"],
+)
+
 
 cc_library(
         name = "sequential_ordering",
@@ -326,6 +336,7 @@ cc_binary(
                 ":capacitated_vehicle_routing",
                 ":vehicle_routing_with_time_windows",
                 ":capacitated_open_vehicle_routing",
+                ":team_orienteering",
 
                 ":sequential_ordering",
                 ":scheduling_with_sdst_twt",

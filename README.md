@@ -34,6 +34,7 @@ Routing:
     * Time windows / Capacity constraint / Maximum number of vehicles
   * [Capacitated open vehicle routing problem](orproblems/routing/capacitated_open_vehicle_routing.hpp)
     * No need to return to the depot / Capacity constraint / Maximum route length / Maximum number of vehicles
+  * [Team orienteering problem](orproblems/routing/team_orienteering.hpp)
 
 Scheduling:
 

@@ -15,6 +15,7 @@
 #include "orproblems/routing/capacitated_vehicle_routing.hpp"
 #include "orproblems/routing/vehicle_routing_with_time_windows.hpp"
 #include "orproblems/routing/capacitated_open_vehicle_routing.hpp"
+#include "orproblems/routing/team_orienteering.hpp"
 
 #include "orproblems/scheduling/sequential_ordering.hpp"
 #include "orproblems/scheduling/scheduling_with_sdst_twt.hpp"
@@ -218,6 +219,14 @@ int main(int argc, char *argv[])
     } else if (problem == "capacitated_open_vehicle_routing") {
         check(
                 capacitated_open_vehicle_routing::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
+
+    } else if (problem == "team_orienteering") {
+        check(
+                team_orienteering::InstanceBuilder(),
                 instance_path,
                 instance_format,
                 certificate_path,
