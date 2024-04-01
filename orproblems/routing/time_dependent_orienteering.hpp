@@ -18,7 +18,6 @@
 #pragma once
 
 #include "optimizationtools/containers/indexed_set.hpp"
-#include "optimizationtools/utils/utils.hpp"
 
 #include <iostream>
 #include <fstream>
