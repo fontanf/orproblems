@@ -50,7 +50,7 @@ public:
     inline JobId number_of_jobs() const { return processing_times_.size(); }
 
     /** Get the number of machines. */
-    inline MachineId number_of_machines() const { return processing_times_[0].size(); }
+    inline MachineId number_of_machines() const { return number_of_machines_; }
 
     /** Get the processing-time of a job on a machine. */
     inline Time processing_time(

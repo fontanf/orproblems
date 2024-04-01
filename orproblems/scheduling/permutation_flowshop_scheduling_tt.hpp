@@ -59,7 +59,7 @@ public:
      */
 
     /** Get the number of machines. */
-    inline MachineId number_of_machines() const { return jobs_[0].processing_times.size(); }
+    inline MachineId number_of_machines() const { return number_of_machines_; }
 
     /** Get the number of jobs. */
     inline JobId number_of_jobs() const { return jobs_.size(); }

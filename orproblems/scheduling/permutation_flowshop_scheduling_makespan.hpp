@@ -50,7 +50,7 @@ public:
     inline JobId number_of_jobs() const { return processing_times_.size(); }
 
     /** Get the number of machines. */
-    inline MachineId number_of_machines() const { return processing_times_[0].size(); }
+    inline MachineId number_of_machines() const { return number_of_machines_; }
 
     /** Get the processing-time of a job on a machine. */
     inline Time processing_time(
@@ -211,15 +211,18 @@ public:
      *
      * This method resets all the jobs.
      */
-    void set_number_of_machines(MachineId number_of_machines)
+    void set_number_of_machines(
+            MachineId number_of_machines)
     {
         instance_.processing_times_.clear();
         instance_.number_of_machines_ = number_of_machines;
     }
 
     /** Add jobs. */
-    void add_jobs(JobId number_of_jobs)
+    void add_jobs(
+            JobId number_of_jobs)
     {
+        std::cout << "number_of_machines " << instance_.number_of_machines() << std::endl;
         instance_.processing_times_.insert(
                 instance_.processing_times_.end(),
                 number_of_jobs,
