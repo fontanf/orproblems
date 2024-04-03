@@ -265,11 +265,19 @@ public:
     void set_capacity(Weight capacity) { instance_.capacity_ = capacity; }
 
     /** Add an item. */
-    void add_item(Weight weight)
+    void add_item(Weight weight = 1)
     {
         Item item;
         item.weight = weight;
         instance_.items_.push_back(item);
+    }
+
+    /** Set the weight of an item. */
+    void set_item_weight(
+            ItemId item_id,
+            Weight weight)
+    {
+        instance_.items_[item_id].weight = weight;
     }
 
     /** Add a conflict. */
@@ -326,18 +334,24 @@ private:
         ItemId number_of_items;
         Weight capacity;
         file >> number_of_items >> capacity;
+        for (ItemId item_id = 0;
+                item_id < number_of_items;
+                ++item_id) {
+            add_item();
+        }
         set_capacity(capacity);
 
         Weight weight = -1;
         ItemId item_id_tmp = -1;
         for (ItemId item_id = 0; item_id < number_of_items; ++item_id) {
             file >> item_id_tmp >> weight;
-            add_item(weight);
+            set_item_weight(item_id, weight);
             getline(file, tmp);
             line = optimizationtools::split(tmp, ' ');
-            for (std::string s: line)
-                if (std::stol(s) - 1 < item_id)
-                    add_conflict(item_id, std::stol(s) - 1);
+            for (std::string s: line) {
+                ItemId item_id_2 = std::stol(s) - 1;
+                add_conflict(item_id, item_id_2);
+            }
         }
     }
 
