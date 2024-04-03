@@ -25,7 +25,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <memory>
 #include <iomanip>
 
 namespace orproblems
@@ -310,7 +309,7 @@ public:
                     "Unable to open file \"" + instance_path + "\".");
         }
 
-        if (format == "" || format == "vrplib") {
+        if (format == "" || format == "cvrplib") {
             read_cvrplib(file);
         } else {
             throw std::invalid_argument(
