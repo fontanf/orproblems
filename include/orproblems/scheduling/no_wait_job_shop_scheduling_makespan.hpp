@@ -15,7 +15,7 @@
 
 #include "optimizationtools/containers/indexed_set.hpp"
 
-#include "interval_tree.hpp"
+#include "interval-tree/interval_tree.hpp"
 
 #include <iostream>
 #include <fstream>

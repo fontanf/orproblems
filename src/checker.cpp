@@ -15,6 +15,7 @@
 #include "orproblems/routing/capacitated_vehicle_routing.hpp"
 #include "orproblems/routing/vehicle_routing_with_time_windows.hpp"
 #include "orproblems/routing/capacitated_open_vehicle_routing.hpp"
+#include "orproblems/routing/heterogeneous_fleet_vehicle_routing.hpp"
 #include "orproblems/routing/team_orienteering.hpp"
 
 #include "orproblems/scheduling/sequential_ordering.hpp"
@@ -224,6 +225,14 @@ int main(int argc, char *argv[])
                 certificate_path,
                 verbosity_level);
 
+    } else if (problem == "heterogeneous_fleet_vehicle_routing") {
+        check(
+                heterogeneous_fleet_vehicle_routing::InstanceBuilder(),
+                instance_path,
+                instance_format,
+                certificate_path,
+                verbosity_level);
+
     } else if (problem == "team_orienteering") {
         check(
                 team_orienteering::InstanceBuilder(),
@@ -352,4 +361,3 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-
