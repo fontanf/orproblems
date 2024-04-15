@@ -105,7 +105,7 @@ target_link_libraries(ORProblems_capacitated_vehicle_routing INTERFACE
     TravelingSalesmanSolver::distances)
 target_include_directories(ORProblems_capacitated_vehicle_routing INTERFACE
     ${PROJECT_SOURCE_DIR}/include)
-add_library(ORProblems::capacitated_vehicle_routing ALIAS ORProblems_knapsack_with_conflicts)
+add_library(ORProblems::capacitated_vehicle_routing ALIAS ORProblems_capacitated_vehicle_routing)
 
 add_library(ORProblems_vehicle_routing_with_time_windows INTERFACE)
 target_link_libraries(ORProblems_vehicle_routing_with_time_windows INTERFACE
