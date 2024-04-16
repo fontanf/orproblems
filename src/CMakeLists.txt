@@ -264,10 +264,10 @@ target_include_directories(ORProblems_u_shaped_assembly_line_balancing_1 INTERFA
 add_library(ORProblems::u_shaped_assembly_line_balancing_1 ALIAS ORProblems_u_shaped_assembly_line_balancing_1)
 
 
-add_executable(ORProblems_checker_main)
-target_sources(ORProblems_checker_main PRIVATE
+add_executable(ORProblems_checker)
+target_sources(ORProblems_checker PRIVATE
     checker.cpp)
-target_link_libraries(ORProblems_checker_main PUBLIC
+target_link_libraries(ORProblems_checker PUBLIC
     ORProblems_knapsack_with_conflicts
     ORProblems_multidimensional_multiple_choice_knapsack
     ORProblems_cutting_stock
@@ -305,5 +305,5 @@ target_link_libraries(ORProblems_checker_main PUBLIC
     ORProblems_u_shaped_assembly_line_balancing_1
 
     Boost::program_options)
-set_target_properties(ORProblems_checker_main PROPERTIES OUTPUT_NAME "orproblems_checker")
-install(TARGETS ORProblems_checker_main DESTINATION bin)
+set_target_properties(ORProblems_checker PROPERTIES OUTPUT_NAME "orproblems_checker")
+install(TARGETS ORProblems_checker)
