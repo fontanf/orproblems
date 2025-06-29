@@ -16,7 +16,7 @@ endif()
 FetchContent_Declare(
     optimizationtools
     GIT_REPOSITORY https://github.com/fontanf/optimizationtools.git
-    GIT_TAG 66f61a3e02c746c57584a5d5257e1b1455d4a9ae
+    GIT_TAG 5e0c59cb06c779d1950b31caa636998b37f5db1b
     #SOURCE_DIR "${PROJECT_SOURCE_DIR}/../optimizationtools/"
     EXCLUDE_FROM_ALL)
 FetchContent_MakeAvailable(optimizationtools)
@@ -25,7 +25,7 @@ FetchContent_MakeAvailable(optimizationtools)
 FetchContent_Declare(
     travelingsalesmansolver
     GIT_REPOSITORY https://github.com/fontanf/travelingsalesmansolver.git
-    GIT_TAG 034ec06a797451e05ee3b99a5885261b18ab229f
+    GIT_TAG 1be22ddae585e9e85d1682f528c5a5813b3ede4c
     #SOURCE_DIR "${PROJECT_SOURCE_DIR}/../travelingsalesmansolver/"
     EXCLUDE_FROM_ALL)
 FetchContent_MakeAvailable(travelingsalesmansolver)
