@@ -2,13 +2,15 @@
 include(FetchContent)
 
 # Fetch boost.
-set(BOOST_INCLUDE_LIBRARIES thread filesystem system program_options)
-set(BOOST_ENABLE_CMAKE ON)
-FetchContent_Declare(
-    Boost
-    URL https://github.com/boostorg/boost/releases/download/boost-1.84.0/boost-1.84.0.tar.xz
-    EXCLUDE_FROM_ALL)
-FetchContent_MakeAvailable(Boost)
+if(ORPROBLEMS_BUILD_TEST)
+  set(BOOST_INCLUDE_LIBRARIES thread filesystem system program_options)
+  set(BOOST_ENABLE_CMAKE ON)
+  FetchContent_Declare(
+      Boost
+      URL https://github.com/boostorg/boost/releases/download/boost-1.84.0/boost-1.84.0.tar.xz
+      EXCLUDE_FROM_ALL)
+  FetchContent_MakeAvailable(Boost)
+endif()
 
 # Fetch fontanf/optimizationtools.
 FetchContent_Declare(
