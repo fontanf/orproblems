@@ -13,6 +13,7 @@ if(ORPROBLEMS_BUILD_TEST)
 endif()
 
 # Fetch fontanf/optimizationtools.
+set(OPTIMIZATIONTOOLS_BUILD_TEST OFF)
 FetchContent_Declare(
     optimizationtools
     GIT_REPOSITORY https://github.com/fontanf/optimizationtools.git
@@ -22,6 +23,8 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(optimizationtools)
 
 # Fetch fontanf/travelingsalesmansolver.
+set(TRAVELINGSALESMANSOLVER_BUILD_MAIN OFF)
+set(TRAVELINGSALESMANSOLVER_BUILD_TEST OFF)
 FetchContent_Declare(
     travelingsalesmansolver
     GIT_REPOSITORY https://github.com/fontanf/travelingsalesmansolver.git
